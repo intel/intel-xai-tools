@@ -1,0 +1,14 @@
+format: jb-article
+root: intro
+title: Introduction
+options:
+  numbered: true
+sections:
+- file: definitions/index
+  title: Definitions
+- file: personas/index
+  title: Personas
+- file: usecases/index
+  title: Use Cases
+- file: userstories/index
+  title: User Stories

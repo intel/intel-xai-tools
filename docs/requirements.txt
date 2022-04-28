@@ -1,0 +1,7 @@
+jupyter-book
+matplotlib
+numpy
+ghp-import
+sphinx-inline-tabs
+sphinx-click
+myst-nb
