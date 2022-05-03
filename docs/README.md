@@ -18,7 +18,7 @@ A fully-rendered HTML version of the book will be built in `explainer/_build/htm
 
 ### Book is hosted on the gh-pages branch
 
-[Explainer](https://super-train-0c2ca0af.pages.github.io/)
+[Explainable-ai-tooling](https://kkasravi.github.io/explainable-ai-tooling/)
 
 ## Credits
 

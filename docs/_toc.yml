@@ -1,5 +1,5 @@
 format: jb-article
-root: intro
+root: index
 title: Introduction
 options:
   numbered: true
@@ -12,3 +12,5 @@ sections:
   title: Use Cases
 - file: userstories/index
   title: User Stories
+- file: design/index
+  title: Design

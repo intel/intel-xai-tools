@@ -12,14 +12,18 @@ logo                        : logo.png  # A path to the book logo
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
-execute:
-  execute_notebooks: force
+#execute:
+#  execute_notebooks: force
+jupyter_execute_notebooks: "off"
+
+extensions:
+  - myst_parser
+  - sphinxcontrib.mermaid
 
 parse:
   myst_enable_extensions:
-    # don't forget to list any other extensions you want enabled,
-    # including those that are enabled by default!
     - deflist
+    - colon_fence
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -32,7 +36,7 @@ bibtex_bibfiles:
 
 # Information about where the book exists on the web
 repository:
-  url: https://github.com/kkasravi/Explainer  # Online location of your book
+  url: https://github.com/kkasravi/explainable-ai-tooling # Online location of your book
   path_to_book: docs  # Optional path to your book, relative to the repository root
   branch: main  # Which branch of the repository should be used when creating links (optional)
 
@@ -60,9 +64,7 @@ sphinx:
       nbformat:
         - "https://nbformat.readthedocs.io/en/latest"
         - null
-      sphinx-panels:
-        - https://sphinx-panels.readthedocs.io/en/sphinx-book-theme/
-        - null
+    language: en
   extra_extensions:
     - sphinx_click.ext
     - sphinx_inline_tabs
