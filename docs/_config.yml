@@ -12,9 +12,14 @@ logo                        : logo.png  # A path to the book logo
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
-#execute:
-#  execute_notebooks: force
-jupyter_execute_notebooks: "off"
+execute:
+  execute_notebooks         : force
+  cache                     : ""
+  exclude_patterns          : []    # A list of patterns to *skip* in execution (e.g. a notebook that takes a really long time)
+  timeout                   : 30    # The maximum time (in seconds) each notebook cell is allowed to run.
+  run_in_temp               : false
+  allow_errors              : false # If `False`, when a code cell raises an error the execution is stopped, otherwise all cells are always run.
+  stderr_output             : show  # One of 'show', 'remove', 'remove-warn', 'warn', 'error', 'severe'
 
 extensions:
   - myst_parser
@@ -22,8 +27,14 @@ extensions:
 
 parse:
   myst_enable_extensions:
-    - deflist
-    - colon_fence
+  - deflist
+  - colon_fence
+  - linkify
+  - substitution
+  - tasklist
+  myst_url_schemes: [mailto, http, https]
+  myst_dmath_double_inline: true
+
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -50,21 +61,22 @@ sphinx:
   config:
     intersphinx_mapping:
       ebp:
-        - "https://executablebooks.org/en/latest/"
-        - null
+      - "https://executablebooks.org/en/latest/"
+      - null
       myst-parser:
-        - "https://myst-parser.readthedocs.io/en/latest/"
-        - null
+      - "https://myst-parser.readthedocs.io/en/latest/"
+      - null
       myst-nb:
-        - "https://myst-nb.readthedocs.io/en/latest/"
-        - null
+      - "https://myst-nb.readthedocs.io/en/latest/"
+      - null
       sphinx:
-        - "https://www.sphinx-doc.org/en/master"
-        - null
+      - "https://www.sphinx-doc.org/en/master"
+      - null
       nbformat:
-        - "https://nbformat.readthedocs.io/en/latest"
-        - null
+      - "https://nbformat.readthedocs.io/en/latest"
+      - null
     language: en
   extra_extensions:
-    - sphinx_click.ext
-    - sphinx_inline_tabs
+  - sphinx_click.ext
+  - sphinx_inline_tabs
+  - sphinxcontrib.mermaid

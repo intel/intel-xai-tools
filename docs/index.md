@@ -2,20 +2,6 @@
 
 ````{panels}
 
-```{link-button} definitions/index
-:text: Definitions
-:type: ref
-:classes: stretched-link
-```
-
----
-
-```{link-button} personas/index
-:text: Personas
-:type: ref
-:classes: stretched-link
-```
-
 ---
 
 ```{link-button} usecases/index

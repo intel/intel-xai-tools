@@ -1,7 +1,12 @@
 
+explainer::
+	pip install -e .
 
 docs::
 	jupyter-book build --all docs/
+
+
+serve-docs::
 
 
 build::
