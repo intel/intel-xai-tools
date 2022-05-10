@@ -76,8 +76,13 @@ sphinx:
       - "https://nbformat.readthedocs.io/en/latest"
       - null
     language: en
+    add_module_names: False
   extra_extensions:
   - sphinx_click.ext
   - sphinx_inline_tabs
   - sphinx.ext.autodoc
+  - sphinx.ext.autosummary
+  - sphinx.ext.napoleon
+  - sphinx.ext.viewcode
   - sphinxcontrib.mermaid
+  - sphinxcontrib_autodocgen

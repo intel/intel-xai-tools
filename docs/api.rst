@@ -1,6 +1,12 @@
-explainer package
-=================
+API Reference
+=============
 
 
-.. automodule:: explainer
+.. click:: explainer:cli
+  :prog: explainer
+  :show-nested:
+
+.. automodule:: explainer.ExplainerCLI
+  :members:
+
 

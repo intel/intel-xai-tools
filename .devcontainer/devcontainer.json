@@ -49,9 +49,9 @@
 
 	"features": {
 	  "jupyterlab": {
-            "version": "latest"
-          },
+      "version": "latest"
+    },
 	  "sshd": "latest",
-          "github-cli": "latest"
+    "github-cli": "latest"
 	}
 }
