@@ -174,7 +174,7 @@ class Explanation:
             s = u"\u2212" + s[1:]
         return s
 
-    def lch2lab(lch):
+    def lch2lab(self, lch):
         """CIE-LCH to CIE-LAB color space conversion.
         LCH is the cylindrical representation of the LAB (Cartesian) colorspace
         Parameters

@@ -15,13 +15,13 @@ class Environment:
         self.verbose = False
         self.home = os.getcwd()
 
-    def log(self, msg, *args):
+    def log(self, msg: str, *args):
         """Logs a message to stderr."""
         if args:
             msg %= args
         click.echo(msg, file=sys.stderr)
 
-    def vlog(self, msg, *args):
+    def vlog(self, msg: str, *args):
         """Logs a message to stderr only if verbose is enabled."""
         if self.verbose:
             self.log(msg, *args)
@@ -29,30 +29,30 @@ class Environment:
 pass_environment = click.make_pass_decorator(Environment, ensure=True)
 cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "commands"))
 
-class ComplexCLI(click.MultiCommand):
-    """_summary_
+class ExplainerCLI(click.MultiCommand):
+    """top entry point in click, context is passed down to subcommands
 
     Args:
         click (_type_): _description_
     """
-    def list_commands(self, ctx):
+    def list_commands(self, ctx: click.Context) -> list:
         """Return the subcommands under the subdir commands
 
         Args:
-            ctx (_type_): _description_
+            ctx (click.Context): dict that can be handed to subcommands
 
         Returns:
-            _type_: _description_
+            list: list of commands
         """
-        r_var = []
+        r_var: list = []
         for filename in os.listdir(cmd_folder):
             if filename.endswith(".py") and filename.startswith("cmd_"):
                 r_var.append(filename[4:-3])
         r_var.sort()
         return r_var
 
-    def get_command(self, ctx, cmd_name):
-        """_summary_
+    def get_command(self, ctx: click.Context, cmd_name: str):
+        """dynamically loads command if found under commands subdir
 
         Args:
             ctx (_type_): _description_
@@ -68,9 +68,8 @@ class ComplexCLI(click.MultiCommand):
         return mod.cli
 
 
-@click.command(cls=ComplexCLI, context_settings=CONTEXT_SETTINGS)
-@click.option("-v", "--verbose", is_flag=True, help="Enables verbose mode.")
+@click.command(cls=ExplainerCLI, context_settings=CONTEXT_SETTINGS)
 @pass_environment
-def cli(ctx, verbose):
+def cli(ctx):
     """explainer CLI."""
-    ctx.verbose = verbose
+    pass

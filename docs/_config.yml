@@ -79,4 +79,5 @@ sphinx:
   extra_extensions:
   - sphinx_click.ext
   - sphinx_inline_tabs
+  - sphinx.ext.autodoc
   - sphinxcontrib.mermaid

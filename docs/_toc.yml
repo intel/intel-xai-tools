@@ -10,3 +10,5 @@ sections:
   title: User Stories
 - file: design/index
   title: Design
+- file: api.rst
+  title: API

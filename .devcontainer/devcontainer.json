@@ -48,6 +48,10 @@
 	// "forwardPorts": [],
 
 	"features": {
-		"jupyterlab": "3.4.0"
+	  "jupyterlab": {
+            "version": "latest"
+          },
+	  "sshd": "latest",
+          "github-cli": "latest"
 	}
 }

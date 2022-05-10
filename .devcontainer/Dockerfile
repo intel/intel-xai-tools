@@ -8,6 +8,9 @@ USER root
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends direnv
 
-#RUN conda env create -f .devcontainer/config/environment.yml
-#
+COPY library-scripts/vgrep /usr/local/bin
+RUN chown root /usr/local/bin/vgrep && \
+    chgrp root /usr/local/bin/vgrep && \
+    chmod 777 /usr/local/bin/vgrep
+
 USER codespace
