@@ -1,4 +1,4 @@
-API Reference
+CLI Reference
 =============
 
 
@@ -9,5 +9,8 @@ API Reference
 .. automodule:: explainer.ExplainerCLI
   :members:
 
-.. automodule:: explainer.cli.explainer
+API Reference
+=============
+
+.. automodule:: explainer.api
   :members:
