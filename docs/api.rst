@@ -9,4 +9,5 @@ API Reference
 .. automodule:: explainer.ExplainerCLI
   :members:
 
-
+.. automodule:: explainer.cli.explainer
+  :members:
