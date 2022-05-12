@@ -1,7 +1,7 @@
 """Module that defines the explainer API and Explanation object
 """
 import os
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC
 from typing import Any
 from numpy.typing import ArrayLike
 import shap
@@ -9,7 +9,7 @@ import shap
 shap.initjs()
 
 
-class Explanation(ABC):
+class Explanation:
     """_summary_
 
     Raises:
@@ -43,17 +43,19 @@ explainers_folder = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "explainers"))
 
 
-class Explainer:
+class Explainer(ABC):
     """Explainer API base class
     """
 
-    def __init__(self,  model: Any) -> None:
-        """takes any type of model
+    def __init__(self,  model: Any = None) -> None:
+        """takes any type of model or None
 
         Args:
             model (Any): any instance of any type of model
         """
-        self._explainer = shap.Explainer(model)
+        self._explainer: shap.Explainer
+        if model is not None:
+            self._explainer = shap.Explainer(model)
 
     def explainers(self) -> list:
         """Return the explainers available for the model
@@ -87,7 +89,7 @@ class Explainer:
         return self._explainer.expected_value
 
     def explain(self, data: ArrayLike) -> Explanation:
-        """takes data and forwards to internal explainer 
+        """takes data and forwards to internal explainer
 
         Args:
             data (ArrayLike): _description_

@@ -3,17 +3,22 @@ Explainer entry point
 """
 import os
 import sys
+from typing import Any
 import click
+from explainer.api import Explainer
 
 CONTEXT_SETTINGS = dict(auto_envvar_prefix="EXPLAINER")
+
 
 class Environment:
     """
     Provides an Environment that can be passed to click subcommands
     """
+
     def __init__(self):
         self.verbose = False
         self.home = os.getcwd()
+        self.explainer = Explainer()
 
     def log(self, msg: str, *args):
         """Logs a message to stderr."""
@@ -26,8 +31,11 @@ class Environment:
         if self.verbose:
             self.log(msg, *args)
 
+
 pass_environment = click.make_pass_decorator(Environment, ensure=True)
-cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "commands"))
+cmd_folder = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), "commands"))
+
 
 class ExplainerCLI(click.MultiCommand):
     """top entry point in click, context is passed down to subcommands
@@ -35,7 +43,8 @@ class ExplainerCLI(click.MultiCommand):
     Args:
         click (_type_): _description_
     """
-    def list_commands(self, ctx: click.Context) -> list:
+
+    def list_commands(self, ctx: Environment) -> list:
         """Return the subcommands under the subdir commands
 
         Args:
@@ -51,18 +60,19 @@ class ExplainerCLI(click.MultiCommand):
         r_var.sort()
         return r_var
 
-    def get_command(self, ctx: click.Context, cmd_name: str):
+    def get_command(self, _env: Environment, cmd_name: str) -> Any:
         """dynamically loads command if found under commands subdir
 
         Args:
-            ctx (_type_): _description_
-            cmd_name (_type_): _description_
+            _env (Environment): _description_
+            cmd_name (str): _description_
 
         Returns:
-            _type_: _description_
+            Any: _description_
         """
         try:
-            mod = __import__(f"explainer.commands.cmd_{cmd_name}", None, None, ["cli"])
+            mod = __import__(
+                f"explainer.commands.cmd_{cmd_name}", None, None, ["cli"])
         except ImportError:
             return
         return mod.cli
@@ -70,6 +80,5 @@ class ExplainerCLI(click.MultiCommand):
 
 @click.command(cls=ExplainerCLI, context_settings=CONTEXT_SETTINGS)
 @pass_environment
-def cli(ctx):
+def cli(_env: Environment):
     """explainer CLI."""
-    pass
