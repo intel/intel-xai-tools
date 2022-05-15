@@ -4,11 +4,11 @@ title: Introduction
 options:
   numbered: true
 sections:
-- file: usecases/index
-  title: Use Cases
-- file: userstories/index
-  title: User Stories
-- file: design/index
-  title: Design
-- file: api.rst
-  title: API
+- title: Use Cases
+  file: usecases/index
+- title: Functional Requirements
+  file: functionalrequirements/index
+- title: Design
+  file: design/index
+- title: Bibliography
+  file: bibliography/index

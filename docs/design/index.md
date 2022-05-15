@@ -1,90 +1,110 @@
 # Design
 
-## Explainer CLI, API
+## Overview
 
-``````{tabbed} CLI
-`````{panels} 
-:container: +full-width
-:column: col-lg-4 px-2 py-2
-:card: rounded
-````{dropdown} Subcommands
-:open:
-* explain
-* visualize
-````
-`````
-``````
 
-``````{tabbed} API
-`````{panels} 
-:container: +full-width
-:column: col-lg-4 px-2 py-2
-:card: rounded
-````{dropdown} Methods
-:open:
-* explain
-* visualize
-````
-`````
-``````
+### Automating the selection of Models
 
-<details>
-<summary>Fold/Open</summary>
-Folded content
-</details>
+Auto Classes
+: The choice of a model within the huggingface transformers library is done by using [AutoClasses](https://huggingface.co/docs/transformers/main/en/model_doc/auto#auto-classes). For example the BertModel has the hierarchy shown below, where Module is a PyTorch Module.
 
-Future improvements:
-- [ ] Point 1
-- [ ] Point 2
-- [x] Point 3
 
-## Captum Attribution Hierarchy (partial)
+```{eval-rst}
 
-```{mermaid}
-graph TD;
-    Attribution-->GradientAttribution;
-    Attribution-->PerturbationAttribution;
-    Attribution-->InternalAttribution;
-    InternalAttribution-->LayerAttribution;
-    InternalAttribution-->NeuronAttribution;
-    GradientAttribution-->NeuronGradient;
-    NeuronAttribution-->NeuronGradient;
-    LayerAttribution-->LayerGradCam;
-    GradientAttribution-->LayerGradCam;
+.. autoclasstree:: transformers.models.bert.BertModel
+   :caption: Class Hierarchy of transformers.models.bert.BertModel
+   :full:
+
 ```
 
 
+
+
+generate counterfactuals
+
+What explainers are available is registered under explainers.
+
+* IntegratedGradients(model)
+* NoiseTunnel(ig)
+* DeepLift(model)
+* GradientShap(model)
+* FeatureAblation(model)
+
+<details>
+<summary>Explainability Approach based on Data</summary>
+
+
 ```{mermaid}
-stateDiagram-v2
-    state Email_Returned <<choice>>
-    state Phone_Call_Choice <<choice>>
-    state Interview_Choice <<choice>>
-    state Offer_Response <<choice>>
-    [*] --> Needs_Screening
-    Needs_Screening --> Email_Sent
-    Email_Sent --> Email_Returned
-    Email_Returned --> Needs_Phone_Call: ✅ reply
-    Email_Returned --> [*]: ❎ declines
-    Email_Returned --> [*] : ❎ no reply
-    Needs_Phone_Call --> Phone_Call_Scheduled
-    Phone_Call_Scheduled --> Phone_Call
-    Phone_Call --> Phone_Call_Choice
-    Phone_Call_Choice --> Needs_Interview: ✅ passes
-    Phone_Call_Choice --> [*]: ❎ fails
-    Needs_Interview --> Interview_Scheduled
-    Interview_Scheduled --> Interview
-    Interview --> Interview_Choice
-    Interview_Choice --> Extend_Offer: ✅ passes
-    Interview_Choice --> Reject: ❎ fails
-    Interview_Choice --> Hold: ❎ undecided
-    Reject --> [*]
-    Hold --> [*]
-    Extend_Offer --> Offer_Extended
-    Offer_Extended --> Offer_Response
-    Offer_Response --> Offer_Accepted: ✅ accepts
-    Offer_Response --> Pending_Visa: ✅ accepts
-    Offer_Response --> Declined: ❎ declines
-    Offer_Accepted --> [*]
-    Pending_Visa --> [*]
-    Declined --> [*]
+:caption: "Explainability based on Data"
+
+%%{
+  init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
+}%%
+
+flowchart TD
+    A[Start] --> B{Tabular Data?}
+    B -->|Yes| C{Interactive\nExplanation?}
+    B -->|No| E{Text Data?}
+    C -->|Yes| D["Logic Tensor Networks"]
+    C -->|No| G{CounterFactual\nExplanation?}
+    E -->|Yes| F["Transformer Interpret"]
+    E -->|No| J["Image Data?"]
+    J -->|Yes| K["Grad Cam"]
+    J -->|No| L["LDP"]
+    G -->|Yes| H["DICE"]
+    G -->|No| I["SHAP"]
+```
+
+* Logic Tensor Networks: See {cite}`bennetot2021practical`
+* See {cite}`logictensornetworks`
+* See {cite}`mothilal2020explaining`
+
+</details>
+
+<details>
+<summary>Explainability Approach based on Models</summary>
+
+```{mermaid}
+flowchart LR
+    A[Hard edge] -->|Link text| B(Round edge)
+    B --> C{Decision}
+    C -->|One| D[Result one]
+    C -->|Two| E[Result two]
+```
+
+</details>
+
+<details>
+<summary>Explainer API</summary>
+
+```{eval-rst}
+.. include:: ./api.rst
+```
+
+</details>
+
+<details>
+<summary>Explainer CLI</summary>
+
+```{eval-rst}
+.. include:: ./cli.rst
+```
+
+</details>
+
+## References:
+
+* [Logic Tensor Networks](https://github.com/logictensornetworks/logictensornetworks)
+* [COUNTERFACTUAL EXPLANATIONS WITHOUT OPENING THE BLACK BOX: AUTOMATED DECISIONS AND THE GDPR](https://arxiv.org/pdf/1711.00399.pdf)
+* [Generating Counterfactual Explanations with Natural Language](https://arxiv.org/pdf/1806.09809.pdf)
+* [transformers-interpret](https://github.com/cdpierse/transformers-interpret)
+* [path-explain](https://github.com/suinleelab/path_explain)
+
+
+```{mermaid}
+flowchart TD
+    B["fa:fa-twitter for peace"]
+    B-->C[fa:fa-ban forbidden]
+    B-->D(fa:fa-spinner);
+    B-->E(A fa:fa-camera-retro perhaps?)
 ```

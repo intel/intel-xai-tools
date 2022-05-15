@@ -3,12 +3,15 @@ Explainer entry point
 """
 import os
 import sys
+from importlib import import_module
 from typing import Any
 import click
+import click_completion
 from explainer.api import Explainer
 
 CONTEXT_SETTINGS = dict(auto_envvar_prefix="EXPLAINER")
 
+click_completion.init()
 
 class Environment:
     """
@@ -38,17 +41,14 @@ cmd_folder = os.path.abspath(os.path.join(
 
 
 class ExplainerCLI(click.MultiCommand):
-    """top entry point in click, context is passed down to subcommands
-
-    Args:
-        click (_type_): _description_
+    """ExplainerCLI inherits from click.MultiCommand
     """
 
-    def list_commands(self, ctx: Environment) -> list:
-        """Return the subcommands under the subdir commands
+    def list_commands(self, _env: Environment) -> list:
+        """Return the subcommands under the subdir commands/
 
         Args:
-            ctx (click.Context): dict that can be handed to subcommands
+            _env (Environment): environment that holds context
 
         Returns:
             list: list of commands
@@ -64,15 +64,14 @@ class ExplainerCLI(click.MultiCommand):
         """dynamically loads command if found under commands subdir
 
         Args:
-            _env (Environment): _description_
-            cmd_name (str): _description_
+            _env (Environment): environment that holds context
+            cmd_name (str): the name of the command to load
 
         Returns:
-            Any: _description_
+            Any: cli
         """
         try:
-            mod = __import__(
-                f"explainer.commands.cmd_{cmd_name}", None, None, ["cli"])
+            mod = import_module(f"explainer.commands.cmd_{cmd_name}", "cli")
         except ImportError:
             return
         return mod.cli
@@ -81,4 +80,4 @@ class ExplainerCLI(click.MultiCommand):
 @click.command(cls=ExplainerCLI, context_settings=CONTEXT_SETTINGS)
 @pass_environment
 def cli(_env: Environment):
-    """explainer CLI."""
+    """explainer entry point."""

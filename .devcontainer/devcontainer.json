@@ -43,7 +43,6 @@
 		"njpwerner.autodocstring",
 		"eamodio.gitlens"
 	],
-	"postCreateCommand": "conda activate explainer",
 	
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],

@@ -29,6 +29,13 @@ The ML Engineer is responsible for deploying the selected model into production 
 * As a Data Scientist, I want to be able to better evaluate a confusion matrix using XAI
 * As a Data Scientist, I want to be able to select a type of XAI from a choice of XAI methods that will use my model, dataset and features.
 * As a ML Engineer, I want an easy way to create and deploy a workflow using a Data Scientist's notebook
-* As a MLOps engineer, i want to be able to run explainer so that it monitors data drift for a model in production.
+* As a Business Owner I need to assess the risk around fairness, interpretability, privacy, and security for a model.
+* As a Data Scientist, I need a way to (1) identify problematic errors my model is making before deployment; and (2) understand why predictions are being made through visualizations, so I can fix them.
+* As a Data Scientist, when using tabular data, I need identify the effect each feature is attributing to a model’s prediction.
+* As a Data Scientist, when using tabular data, I need identify which features impact a model’s prediction most in aggregate.
+* As a Data Scientist, when using image data, I need identify the effect each pixel is attributing to a model’s prediction.
+* As a Data Scientist, I need to explore how different features values for a datapoint effects a model’s decision.
+* As an ML /MLOps Engineer, I need a way to (1) detect problematic errors my model is making in real-time after deployment and (2) understand and interpret predictions made by your machine learning models in production through visualizations.
+* * As a MLOps engineer, i want to be able to run explainer so that it monitors data drift for a model in production.
 ````
 

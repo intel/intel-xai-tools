@@ -17,5 +17,5 @@ docs-build::
 	pip install -U -r docs/requirements.txt
 
 
-clean::
+docs-clean::
 	rm -rf docs/_build

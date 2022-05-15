@@ -2,38 +2,12 @@
 """
 import os
 from abc import ABC
-from typing import Any
+from typing import Any, Callable
 from numpy.typing import ArrayLike
-import shap
-
-shap.initjs()
-
 
 class Explanation:
-    """_summary_
-
-    Raises:
-        Exception: _description_
-        ValueError: _description_
-
-    Returns:
-        _type_: _description_
+    """An Explanation object which holds the result of an explanation
     """
-    labels = {
-        "MAIN_EFFECT": "SHAP main effect value for\n%s",
-        "INTERACTION_VALUE": "SHAP interaction value",
-        "INTERACTION_EFFECT": "SHAP interaction value for\n%s and %s",
-        "VALUE": "SHAP value (impact on model output)",
-        "GLOBAL_VALUE": "mean(|SHAP value|) (average impact on model output magnitude)",
-        "VALUE_FOR": "SHAP value for\n%s",
-        "PLOT_FOR": "SHAP plot for %s",
-        "FEATURE": "Feature %s",
-        "FEATURE_VALUE": "Feature value",
-        "FEATURE_VALUE_LOW": "Low",
-        "FEATURE_VALUE_HIGH": "High",
-        "JOINT_VALUE": "Joint SHAP value",
-        "MODEL_OUTPUT": "Model output value",
-    }
 
     def __init__(self, shap_values: Any, max_display=10):
         pass
@@ -53,9 +27,14 @@ class Explainer(ABC):
         Args:
             model (Any): any instance of any type of model
         """
-        self._explainer: shap.Explainer
-        if model is not None:
-            self._explainer = shap.Explainer(model)
+        self._explainer: Callable = None
+        self._model: Any = model
+
+    def __call__(self, **kwargs):
+        if "model" in kwargs:
+            self._model = kwargs["model"]
+
+        return self
 
     def explainers(self) -> list:
         """Return the explainers available for the model
@@ -71,11 +50,20 @@ class Explainer(ABC):
         return r_var
 
     @property
-    def explainer(self):
-        """_summary_
+    def model(self):
+        """returns the model
 
         Returns:
-            _type_: _description_
+            Any: protected model
+        """
+        return self._model
+
+    @property
+    def explainer(self) -> Any:
+        """Loads the explainer and returns it
+
+        Returns:
+            Any: any explainer for now
         """
         return self._explainer
 
@@ -88,16 +76,16 @@ class Explainer(ABC):
         """
         return self._explainer.expected_value
 
-    def explain(self, data: ArrayLike) -> Explanation:
-        """takes data and forwards to internal explainer
+    def explain(self, _data: ArrayLike) -> Explanation:
+        """takes _data and forwards to internal explainer
 
         Args:
-            data (ArrayLike): _description_
+            data (ArrayLike): any type of array
 
         Returns:
             Explanation: explainable objects
         """
-        return self.explainer(data)
+        return self.explainer
 
     def visualize(self, *args: str, **kwargs: str) -> None:
         """_summary_
