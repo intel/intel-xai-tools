@@ -31,6 +31,11 @@ class Explainer(ABC):
         self._model: Any = model
 
     def __call__(self, **kwargs):
+        """allows arguments to be curried into a context
+
+        Returns:
+            _type_: _description_
+        """
         if "model" in kwargs:
             self._model = kwargs["model"]
 

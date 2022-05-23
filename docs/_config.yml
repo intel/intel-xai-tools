@@ -34,6 +34,12 @@ parse:
   - tasklist
   myst_url_schemes: [mailto, http, https]
   myst_dmath_double_inline: true
+  myst_substitutions:
+    AutoClasses: <a href="https://huggingface.co/docs/transformers/main/en/model_doc/auto#auto-classes" target="_blank">AutoClasses</a>
+    Glue: <a href="http://docs.glueviz.org/en/stable" target="_blank">Glue</a>
+    TransformersInterpret: <a href="https://github.com/cdpierse/transformers-interpret" target="_blank">transfomers-interpret</a>
+    PathExplain: <a href="https://github.com/suinleelab/path_explain" target="_blank">path-explain</a>
+    PyYaml: <a href="https://matthewpburruss.com/post/yaml/" target="_blank">PyYaml</a>
 
 
 # Define the name of the latex output file for PDF builds
