@@ -3,7 +3,7 @@ XAI Tools, Explainer
 """
 from setuptools import find_packages, setup
 
-dependencies = ['click', 'shap']
+dependencies = ['click==8.1.3', 'click_completion==0.5.2', 'shap==0.40.0', 'dalex==1.4.1', 'transformers-interpret==0.6.0', 'pybaobabdt==1.0.1', 'pygraphviz==1.9', 'xgboost==1.6.1', 'tensorflow==2.9.0', 'torch==1.11.0', 'torchvision==0.12.0', 'captum==0.5.0', 'seaborn==0.11.2']
 
 setup(
     name='explainable_ai_tooling',
@@ -12,7 +12,7 @@ setup(
     license='BSD',
     author='Kam Kasravi',
     author_email='kam.d.kasravi@intel.com',
-    description='XAI Tools',
+    description='Explainer invokes an explainer given a model, dataset and features',
     long_description=__doc__,
     py_modules=["explainer", "explainer.cli"],
     include_package_data=True,

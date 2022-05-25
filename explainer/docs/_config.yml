@@ -40,6 +40,7 @@ parse:
     TransformersInterpret: <a href="https://github.com/cdpierse/transformers-interpret" target="_blank">transfomers-interpret</a>
     PathExplain: <a href="https://github.com/suinleelab/path_explain" target="_blank">path-explain</a>
     PyYaml: <a href="https://matthewpburruss.com/post/yaml/" target="_blank">PyYaml</a>
+    DICEExample: <a href="https://matthewpburruss.com/post/yaml/" target="_blank">PyYaml</a>
 
 
 # Define the name of the latex output file for PDF builds
