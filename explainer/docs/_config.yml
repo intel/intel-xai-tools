@@ -37,10 +37,13 @@ parse:
   myst_substitutions:
     AutoClasses: <a href="https://huggingface.co/docs/transformers/main/en/model_doc/auto#auto-classes" target="_blank">AutoClasses</a>
     Glue: <a href="http://docs.glueviz.org/en/stable" target="_blank">Glue</a>
-    TransformersInterpret: <a href="https://github.com/cdpierse/transformers-interpret" target="_blank">transfomers-interpret</a>
-    PathExplain: <a href="https://github.com/suinleelab/path_explain" target="_blank">path-explain</a>
+    TransformersInterpret: <a href="https://github.com/cdpierse/transformers-interpret" target="_blank">(link)</a>
+    PathExplain: <a href="https://github.com/suinleelab/path_explain" target="_blank">(link)</a>
     PyYaml: <a href="https://matthewpburruss.com/post/yaml/" target="_blank">PyYaml</a>
     DICEExample: <a href="https://matthewpburruss.com/post/yaml/" target="_blank">PyYaml</a>
+    YANG202229: <a href="https://www.sciencedirect.com/science/article/pii/S1566253521001597" target="_blank">Unbox the black-box for the medical explainable AI via multi-modal and multi-centre data fusion&colon; A mini-review, two showcases and beyond</a> {cite}`YANG202229`
+    ZHU202253: <a href="https://www.sciencedirect.com/science/article/pii/S1566253521001548" target="_blank">Interpretable learning based Dynamic Graph Convolutional Networks for Alzheimer’s Disease analysis</a> {cite}`ZHU202253`
+    HOLZINGER202128: <a href="https://www.sciencedirect.com/science/article/pii/S1566253521000142" target="_blank">Towards multi-modal causability with Graph Neural Networks enabling information fusion for explainable AI</a> {cite}`ZHU202253`
 
 
 # Define the name of the latex output file for PDF builds

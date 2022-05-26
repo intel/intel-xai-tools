@@ -1,14 +1,15 @@
-format: jb-article
+format: jb-book
 root: index
-title: Introduction
-options:
-  numbered: true
-sections:
-- title: Use Cases
-  file: usecases/index
-- title: Functional Requirements
-  file: functionalrequirements/index
-- title: Design
-  file: design/index
-- title: Bibliography
-  file: bibliography/index
+chapters:
+- file: usecases/index
+- file: functionalrequirements/index
+- file: examples/index
+  sections:
+  - file: examples/House_Prices_Regression_Interpret.ipynb
+  - file: examples/multiclass_classification_example.ipynb
+- file: design/index
+  sections:
+  - file: design/plugin
+  - file: design/cli
+  - file: design/api
+- file: bibliography/index

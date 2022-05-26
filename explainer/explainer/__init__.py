@@ -1,5 +1,4 @@
 """module init for explainer cli"""
-import json
 import os
 import sys
 from importlib.abc import Loader, MetaPathFinder
@@ -7,14 +6,12 @@ from importlib.machinery import ModuleSpec
 from importlib.util import spec_from_loader
 from types import ModuleType
 
+import yaml
+
 from .api import Explainer
 from .cli import ExplainerCLI, cli
 
 EXT_YAML = '.yaml'
-
-__all__ = []
-
-
 class ExplainerLoader(Loader):
     """Loads yaml files that hold ModuleSpec definitions
     """
@@ -25,8 +22,8 @@ class ExplainerLoader(Loader):
 
     def create_module(self, spec):
         try:
-            with open(self._full_path, encoding="UTF-8") as json_file:
-                self._data = json.load(json_file)
+            with open(self._full_path, encoding="UTF-8") as yaml_file:
+                self._data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
         except Exception as error:
             raise ImportError from error
         return None
@@ -42,6 +39,26 @@ class ExplainerLoader(Loader):
         """
         module.__dict__.update({"data": self._data})
         return None
+
+# import csv
+# from importlib import resources
+
+# def read_population_file(year, variant="Medium"):
+#     population = {}
+
+#     print(f"Reading population data for {year}, {variant} scenario")
+#     with resources.open_text(
+#         "data", "WPP2019_TotalPopulationBySex.csv"
+#     ) as fid:
+#         rows = csv.DictReader(fid)
+
+#         # Read data, filter the correct year
+#         for row in rows:
+#             if row["Time"] == year and row["Variant"] == variant:
+#                 pop = round(float(row["PopTotal"]) * 1000)
+#                 population[row["Location"]] = pop
+
+#     return population
 
 
 class ExplainerMetaPathFinder(MetaPathFinder):

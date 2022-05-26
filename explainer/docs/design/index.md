@@ -14,10 +14,72 @@ kernelspec:
 
 ## Overview
 
-<details open>
-<summary>Explainability Flow Diagram</summary>
 
-The choice of explainability algorithms depends on the model as well as the data{cite}`YANG202229`. 
+<details>
+<summary>Open source approaches to integrate explanations</summary>
+
+### transformer-interpret and path-explain
+
+transformer-interpret
+: {{TransformersInterpret}} This library adds an explainer to any hugging face transformer. The library combines both HuggingFace and Captum. The choice of a model within the huggingface transformers library is done by using {{AutoClasses}}. For example, the BertModel differs depending on whether PyTorch or TensorFlow is being used (see figures below).
+
+```{eval-rst}
+
+.. autoclasstree:: transformers.models.bert.BertModel
+   :caption: Class Hierarchy of transformers.models.bert.BertModel for pytorch
+   :full:
+
+```
+
+```{eval-rst}
+
+.. autoclasstree:: transformers.models.bert.TFBertModel
+   :caption: Class Hierarchy of transformers.models.bert.TFBertModel for tensorflow
+   :full:
+
+```
+
+path-explain
+: {{PathExplain}} This library adds an explainer that can also accept either a PyTorch or TensorFlow model. The library explains feature importances and feature interactions in deep neural networks using path attribution methods.
+
+
+
+</details>
+
+## Algorithms and Data Flows
+
+<details>
+<summary>Algorithms</summary>
+
+
+```{mermaid}
+:caption: "Explainability based on Algorithms{cite}`chou2022counterfactuals`"
+
+%%{
+  init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
+}%%
+
+flowchart LR
+    A[Algorithm] --> B[Instance\nCentric]
+    A[Algorithm] --> C[Constraint\nCentric]
+    A[Algorithm] --> D[Genetic\nCentric]
+    A[Algorithm] --> E[Regression\nCentric]
+    A[Algorithm] --> F[Game Theory\nCentric]
+    A[Algorithm] --> G[Case-based\nCentric]
+    A[Algorithm] --> H[Probabilistic\nCentric]
+    classDef leafName fill:#00f,color:#fff;
+    class B,C,D,E,F,G,H leafName;
+```
+
+* {{YANG202229}}
+* {{ZHU202253}}
+* {{HOLZINGER202128}}
+
+</details>
+
+<details>
+<summary>Data Flows</summary>
+
 
 ```{mermaid}
 :caption: "Explainable Data{cite}`bennetot2021practical`"
@@ -48,35 +110,22 @@ flowchart LR
 
 </details>
 
-<details open>
-<summary>Explainability Approaches based on Algorithms</summary>
+## Using native python features to integrate explanations
 
-```{mermaid}
-:caption: "Explainability based on Algorithms{cite}`chou2022counterfactuals`"
+<details>
+<summary>The python plugin architecture</summary>
 
-%%{
-  init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
-}%%
+Python Plugins
+: A plugin package is a collection of related plugins corresponding to a Python package. An example is {{Glue}}
 
-flowchart LR
-    A[Algorithm] --> B[Instance\nCentric]
-    A[Algorithm] --> C[Constraint\nCentric]
-    A[Algorithm] --> D[Genetic\nCentric]
-    A[Algorithm] --> E[Regression\nCentric]
-    A[Algorithm] --> F[Game Theory\nCentric]
-    A[Algorithm] --> G[Case-based\nCentric]
-    A[Algorithm] --> H[Probabilistic\nCentric]
-    classDef leafName fill:#00f,color:#fff;
-    class B,C,D,E,F,G,H leafName;
-```
+The native python plugin architecture provides a way to add specific functionality to a framework that is required to be extensible. In this case there are many explainers that needs to be added to a general workflow framework. 
 
-</details>
 
-<details open>
-<summary>Leveraging the python plugin architecture
+Explainer uses python's Loader so that different explainable implementations can be loaded into the current environment.
+It does so by just-in-time loading of python dependencies and explainable inputs that are defined in a yaml file. 
 
-Explainer provides an extension to python's Loader that allows explainable implementations to be loaded into the current environment.
-It does so by just-in-time loading of python dependencies and explainable inputs that are within a yaml file. 
+PyYaml
+: The plugin architecture can be combined with {{PyYaml}} so that imports of yaml files can do customized loading
 
 ```{eval-rst}
 
@@ -94,83 +143,13 @@ It does so by just-in-time loading of python dependencies and explainable inputs
 
 ```
 
-</details>
-
-
-
-How would one add an explainer to a Jupyter Notebook or CI/CD pipeline? Below are several github repositories where this is done:
-
-* {{TransformersInterpret}} - adds an explainer to a hugging face model
-* {{PathExplain}} - adds an explainers that can either accept Pytorch or TensorFlow models.
-
-The transformer-interpret library leverages both Captum and HuggingFace
-
-
-Python Plugins
-: A plugin package is a collection of related plugins corresponding to a Python package. An example is {{Glue}}
-
-The plugin architecture provides a way to add specific functionality to a framework that is required to be extensible. In this case there are many explainers that needs to be added to a general explainer framework. 
-
-
-PyYaml
-: The plugin architecture can be combined with {{PyYaml}} so that imports of yaml files can do customized loading
-
-
-### Automating the selection of Models
-
-Auto Classes
-: The choice of a model within the huggingface transformers library is done by using {{AutoClasses}} For example the BertModel has the hierarchy shown below, where Module is a PyTorch Module.
-
-
-```{eval-rst}
-
-.. autoclasstree:: transformers.models.bert.BertModel
-   :caption: Class Hierarchy of transformers.models.bert.BertModel
-   :full:
-
-```
-
-```{eval-rst}
-
-.. autoclasstree:: transformers.models.bert.TFBertModel
-   :caption: Class Hierarchy of transformers.models.bert.TFBertModel
-   :full:
-
-```
-
-
-### Extending python's ModuleSpec to accomodate explainer dependencies, dataclasses and features.
-
-
-generate counterfactuals
-
-What explainers are available is registered under explainers.
-
-* IntegratedGradients(model)
-* NoiseTunnel(ig)
-* DeepLift(model)
-* GradientShap(model)
-* FeatureAblation(model)
-
-<details open>
-<summary>Explainer Plugin Classes</summary>
-
 ```{eval-rst}
 .. include:: ./plugin.rst
 ```
 
 </details>
 
-<details open>
-<summary>Explainer API</summary>
-
-```{eval-rst}
-.. include:: ./api.rst
-```
-
-</details>
-
-<details open>
+<details>
 <summary>Explainer CLI</summary>
 
 ```{eval-rst}
@@ -179,9 +158,23 @@ What explainers are available is registered under explainers.
 
 </details>
 
-## References:
+<details>
+<summary>Explainer API</summary>
+
+```{eval-rst}
+.. include:: ./api.rst
+```
+
+</details>
+
+
+## References
+
+<details>
+<summary>misc references</summary>
 
 * [Logic Tensor Networks](https://github.com/logictensornetworks/logictensornetworks)
 * [COUNTERFACTUAL EXPLANATIONS WITHOUT OPENING THE BLACK BOX: AUTOMATED DECISIONS AND THE GDPR](https://arxiv.org/pdf/1711.00399.pdf)
 * [Generating Counterfactual Explanations with Natural Language](https://arxiv.org/pdf/1806.09809.pdf)
 
+</details>
