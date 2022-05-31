@@ -5,17 +5,15 @@ from abc import ABC
 from typing import Any, Callable
 from numpy.typing import ArrayLike
 
-class Explanation:
-    """An Explanation object which holds the result of an explanation
-    """
-
-    def __init__(self, shap_values: Any, max_display=10):
-        pass
-
-
 explainers_folder = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "explainers"))
 
+
+class Explanation:
+    """_summary_
+    """
+    def __init__(self):
+        pass
 
 class Explainer(ABC):
     """Explainer API base class

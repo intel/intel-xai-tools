@@ -1,0 +1,7 @@
+--- !ExplainerSpec
+name: foo
+data: winequality-red.csv
+dependencies:
+- a
+- b
+model: XGBoost

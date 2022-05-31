@@ -2,7 +2,6 @@
 import pickle
 import click
 import pandas as pd
-import shap
 import yaml
 from explainer.cli import (pass_environment, Environment)
 
@@ -19,8 +18,4 @@ def cli(env: Environment, datapath: str, outputpath: str):
         outputpath (str): _description_
     """
     click.echo(f"data is {datapath}")
-    data = pd.read_pickle(datapath)
-    shap_values = shap.TreeExplainer(env.explainer.model).shap_values(data)
-    shap_values_json = yaml.dump(shap_values)
-    if outputpath is not None:
-        pickle.dump(shap_values_json, open(outputpath, "wb"))
+    _data = pd.read_pickle(datapath)

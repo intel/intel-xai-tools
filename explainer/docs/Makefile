@@ -9,7 +9,8 @@ build:: clean
 serve::
 	python -m http.server --directory ./_build/html 9010
 
-
 install::
 	pip install -U -r ./requirements.txt
 
+autodoc::
+	sphinx-apidoc -o /tmp explainer

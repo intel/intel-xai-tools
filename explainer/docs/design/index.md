@@ -21,7 +21,16 @@ kernelspec:
 ### transformer-interpret and path-explain
 
 transformer-interpret
-: {{TransformersInterpret}} This library adds an explainer to any hugging face transformer. The library combines both HuggingFace and Captum. The choice of a model within the huggingface transformers library is done by using {{AutoClasses}}. For example, the BertModel differs depending on whether PyTorch or TensorFlow is being used (see figures below).
+: This library{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. For example, the BertModel differs depending on whether PyTorch or TensorFlow is being used (see figures below).
+
+
+```{eval-rst}
+
+.. autoclasstree:: transformers.AutoModelForSequenceClassification
+   :caption: Class Hierarchy of transformers.AutoModelForSequenceClassification
+   :full:
+
+```
 
 ```{eval-rst}
 
@@ -40,7 +49,7 @@ transformer-interpret
 ```
 
 path-explain
-: {{PathExplain}} This library adds an explainer that can also accept either a PyTorch or TensorFlow model. The library explains feature importances and feature interactions in deep neural networks using path attribution methods.
+: This library{{PathExplain}} adds an explainer that can also accept either a PyTorch or TensorFlow model. The library explains feature importances and feature interactions in deep neural networks using path attribution methods.
 
 
 
@@ -110,10 +119,10 @@ flowchart LR
 
 </details>
 
-## Using native python features to integrate explanations
+## Explainer Components
 
 <details>
-<summary>The python plugin architecture</summary>
+<summary>Bootstrap</summary>
 
 Python Plugins
 : A plugin package is a collection of related plugins corresponding to a Python package. An example is {{Glue}}
@@ -150,7 +159,7 @@ PyYaml
 </details>
 
 <details>
-<summary>Explainer CLI</summary>
+<summary>Command Line Interface (CLI)</summary>
 
 ```{eval-rst}
 .. include:: ./cli.rst
@@ -159,7 +168,7 @@ PyYaml
 </details>
 
 <details>
-<summary>Explainer API</summary>
+<summary>Application Programming Interface (API)</summary>
 
 ```{eval-rst}
 .. include:: ./api.rst
