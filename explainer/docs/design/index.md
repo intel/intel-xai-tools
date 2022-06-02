@@ -14,14 +14,18 @@ kernelspec:
 
 ## Overview
 
-
 <details>
-<summary>Open source approaches to integrate explanations</summary>
+<summary>State-of-the-art approaches to integrate explanations into workflows</summary>
 
 ### transformer-interpret and path-explain
 
 transformer-interpret
-: This library{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. For example, the BertModel differs depending on whether PyTorch or TensorFlow is being used (see figures below).
+: This library{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. An example of the API is shown below:
+
+> model = AutoModel.from_pretrained("bert-base-cased")
+
+
+In this case, the pretrained model "bert-base-cased" will be downloaded from the HuggingFace model repo on huggingface.co, added to a local python class cache and imported into the current python environment. The type of framework used with the pretained model is determined by the path or an additional boolean parameter in the method of from_tf. The bert model returned from the method differs depending on whether PyTorch or TensorFlow is used (see figures below).
 
 
 ```{eval-rst}
@@ -68,16 +72,24 @@ path-explain
   init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
 }%%
 
+%%{
+  init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
+}%%
+
 flowchart LR
-    A[Algorithm] --> B[Instance\nCentric]
-    A[Algorithm] --> C[Constraint\nCentric]
-    A[Algorithm] --> D[Genetic\nCentric]
-    A[Algorithm] --> E[Regression\nCentric]
-    A[Algorithm] --> F[Game Theory\nCentric]
-    A[Algorithm] --> G[Case-based\nCentric]
-    A[Algorithm] --> H[Probabilistic\nCentric]
+    A[Algorithm] --> B{Is\nyour\nmodel\ninterpretable?}
+    B -->|Yes| C[Use\nIntrinsic\nmethods]
+    B -->|No| D{Explain\nindividual\npredictions\nor\nentire\nmodel?}
+    D -->|Entire Model| F{"Does\nyour\nmodel\nhave\na\nstandard\narchitecture?"}
+    D -->|Individual Predictions| J{"Does\nyour\nmodel\nhave\na\nstandard\narchitecture?"}
+    D -->|Both| E
+    F -->|No| K["Model\nagnostic\nmethods\nlike\nPartial\nDependence\nplots"]
+    F -->|Yes| L["Use\nModel\nspecific\nglobal\nmethods\nlike\nXGBoost"]
+    J -->|Yes| M["Model\nspecific\nlocal\nmethods\nlike\nGrad-CAM</b>"]
+    J -->|No| E
+    E["SHAP\nor\nLIME"]
     classDef leafName fill:#00f,color:#fff;
-    class B,C,D,E,F,G,H leafName;
+    class C,E,K,L,M leafName;
 ```
 
 * {{YANG202229}}
@@ -122,7 +134,7 @@ flowchart LR
 ## Explainer Components
 
 <details>
-<summary>Bootstrap</summary>
+<summary>Plugin Design</summary>
 
 Python Plugins
 : A plugin package is a collection of related plugins corresponding to a Python package. An example is {{Glue}}
@@ -132,6 +144,9 @@ The native python plugin architecture provides a way to add specific functionali
 
 Explainer uses python's Loader so that different explainable implementations can be loaded into the current environment.
 It does so by just-in-time loading of python dependencies and explainable inputs that are defined in a yaml file. 
+
+
+from explainer.explainers import noisetunnel
 
 PyYaml
 : The plugin architecture can be combined with {{PyYaml}} so that imports of yaml files can do customized loading
@@ -159,7 +174,7 @@ PyYaml
 </details>
 
 <details>
-<summary>Command Line Interface (CLI)</summary>
+<summary>CLI Design</summary>
 
 ```{eval-rst}
 .. include:: ./cli.rst
@@ -168,7 +183,7 @@ PyYaml
 </details>
 
 <details>
-<summary>Application Programming Interface (API)</summary>
+<summary>API Design</summary>
 
 ```{eval-rst}
 .. include:: ./api.rst

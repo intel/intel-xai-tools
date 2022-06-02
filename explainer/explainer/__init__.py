@@ -4,8 +4,13 @@ import sys
 from importlib.abc import Loader, MetaPathFinder
 from importlib.machinery import ModuleSpec
 from importlib.util import spec_from_loader
+from dataclasses import dataclass
 from types import ModuleType
+<<<<<<< HEAD
+from typing import Any, Type, List
+=======
 from typing import Type, List
+>>>>>>> 51dbb1cc6bebf8fde3feb7750a26f2d905afe7bc
 
 import yaml
 
@@ -15,9 +20,24 @@ from .cli import ExplainerCLI, cli
 EXT_YAML = '.yaml'
 
 
+<<<<<<< HEAD
+@dataclass
+class TabularData:
+    """TabularData structure"""
+    name: str
+    path: str
+    data: Any
+
+
 class ExplainerSpec:
     """An ExplainerSpec which holds name, data, model, dependencies
     """
+
+=======
+class ExplainerSpec:
+    """An ExplainerSpec which holds name, data, model, dependencies
+    """
+>>>>>>> 51dbb1cc6bebf8fde3feb7750a26f2d905afe7bc
     def __init__(self, name: str, data: str, dependencies: List[str], model: str):
         self.name = name
         self.data = data
@@ -28,12 +48,36 @@ class ExplainerSpec:
         return f"name={self.name} data={self.data} "\
             f"dependencies={self.dependencies} model={self.model}"
 
+<<<<<<< HEAD
+
+class ExplainerModuleSpec(ModuleSpec):
+    """Extends the ModuleSpec to add ExplainerModuleSpec specific fields
+    """
+
+    def __init__(self, spec: ExplainerSpec, loader: Loader):
+        super().__init__(spec.name, loader=loader)
+        self.config = spec
+
+    def __repr__(self):
+        args = [f"name={self.name}",
+                f"loader={self.loader}"]
+        if self.origin is not None:
+            args.append(f"origin={self.origin}")
+        if self.submodule_search_locations is not None:
+            args.append(f"submodule_search_locations={self.submodule_search_locations}")
+        if self.config is not None:
+            args.append(f"config={self.config}")
+        return f"{self.__class__.__name__}, ".join(args)
+
+
+=======
 class ExplainerModuleSpec(ModuleSpec):
     def __init__(self, spec: ExplainerSpec, loader):
         super().__init__(spec.name, loader=loader)
         self.spec = spec
         #self.data = spec.data
         #self.model = spec.m
+>>>>>>> 51dbb1cc6bebf8fde3feb7750a26f2d905afe7bc
 
 class ExplainerLoader(Loader):
     """Loads yaml files that hold ModuleSpec definitions
@@ -41,18 +85,34 @@ class ExplainerLoader(Loader):
 
     def __init__(self, full_path: str):
         self._full_path = full_path
-        self._data = None
 
     def create_module(self, spec: ModuleSpec) -> ModuleSpec | None:
+<<<<<<< HEAD
+        """Return a module to initialize and into which to load.
+
+        Args:
+            spec (ModuleSpec): Provided ModuleSpec 
+
+        Raises:
+            ImportError: Unable to create a ModuleSpec
+
+        Returns:
+            ModuleSpec | None: 
+        """
+        try:
+            with open(self._full_path, encoding="UTF-8") as yaml_file:
+                yamldata = yaml.load(yaml_file, Loader=self.get_yaml_loader())
+=======
         try:
             with open(self._full_path, encoding="UTF-8") as yaml_file:
                 yamldata = yaml.load(yaml_file, Loader=self.get_loader())
+>>>>>>> 51dbb1cc6bebf8fde3feb7750a26f2d905afe7bc
                 return ExplainerModuleSpec(yamldata, spec.loader)
         except Exception as error:
             raise ImportError from error
 
-    def exec_module(self, module: ModuleSpec):
-        """_summary_
+    def exec_module(self, _module: ModuleSpec):
+        """needs to reify parts of _module.config and add them to _module
 
         Args:
             module (ModuleSpec): _description_
@@ -60,9 +120,24 @@ class ExplainerLoader(Loader):
         Returns:
             _type_: _description_
         """
-        module.__dict__.update({"data": self._data})
         return None
 
+<<<<<<< HEAD
+    def spec(self, loader: yaml.SafeLoader,
+             node: yaml.nodes.MappingNode) -> ExplainerSpec:
+        """Construct a ExplainerSpec"""
+        return ExplainerSpec(**loader.construct_mapping(node))
+
+    def get_yaml_loader(self) -> Type[yaml.SafeLoader]:
+        """Returns the yaml loader for the tag !ExplainerSpec
+
+        Returns:
+            Type[SafeLoader]: !ExplainerSpec
+        """
+        loader = yaml.SafeLoader
+        loader.add_constructor(
+            "!ExplainerSpec", self.spec)
+=======
     def explainerspec_constructor(self, loader: yaml.SafeLoader,
                                   node: yaml.nodes.MappingNode) -> ExplainerSpec:
         """Construct a ExplainerSpec"""
@@ -77,6 +152,7 @@ class ExplainerLoader(Loader):
         loader = yaml.SafeLoader
         loader.add_constructor(
             "!ExplainerSpec", self.explainerspec_constructor)
+>>>>>>> 51dbb1cc6bebf8fde3feb7750a26f2d905afe7bc
         return loader
 
 # import csv
@@ -158,13 +234,15 @@ class ExplainerLoader(Loader):
 
 class ExplainerMetaPathFinder(MetaPathFinder):
     """_summary_
-
-    Args:
-        MetaPathFinder (_type_): _description_
+    ExplainerMetaPathFinder imports yaml files that define a explanation's model, data and dependencies within a zip file
     """
 
     def find_spec(self, fullname: str, path: str, _target: ModuleType = None) -> ModuleSpec | None:
+<<<<<<< HEAD
+        """Returns ExplainerLoader if the path is a yaml file that includes a !ExplainerSpec tag
+=======
         """_summary_
+>>>>>>> 51dbb1cc6bebf8fde3feb7750a26f2d905afe7bc
 
         Args:
             fullname (str): _description_

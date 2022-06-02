@@ -1,5 +1,5 @@
-Plugin Reference
-================
+Plugin Design
+=============
 
 
 .. autoclass:: explainer.ExplainerLoader

@@ -1,5 +1,5 @@
-CLI Reference
-=============
+CLI Design
+==========
 
 
 .. click:: explainer:cli

@@ -1,5 +1,5 @@
 --- !ExplainerSpec
-name: foo
+name: integratedgradients
 data: winequality-red.csv
 dependencies:
 - a

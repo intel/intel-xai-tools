@@ -1,5 +1,5 @@
-API Reference
-=============
+API Design
+==========
 
 
 .. automodule:: explainer.api
