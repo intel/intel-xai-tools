@@ -1,0 +1,8 @@
+--- !ExplainerSpec
+name: zero_shot_learning
+data:
+dependencies:
+- numpy
+- shap
+- transformers
+model: AutoModelForSequenceClassification

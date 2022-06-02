@@ -13,10 +13,9 @@ logo                        : logo.png  # A path to the book logo
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks         : force
-  cache                     : ""
+  execute_notebooks         : cache
   exclude_patterns          : []    # A list of patterns to *skip* in execution (e.g. a notebook that takes a really long time)
-  timeout                   : 30    # The maximum time (in seconds) each notebook cell is allowed to run.
+  timeout                   : 60    # The maximum time (in seconds) each notebook cell is allowed to run.
   run_in_temp               : false
   allow_errors              : false # If `False`, when a code cell raises an error the execution is stopped, otherwise all cells are always run.
   stderr_output             : show  # One of 'show', 'remove', 'remove-warn', 'warn', 'error', 'severe'

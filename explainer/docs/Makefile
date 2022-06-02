@@ -2,7 +2,7 @@
 clean::
 	jupyter-book clean --all .
 
-build:: clean
+html::
 	jupyter-book config sphinx . && \
 	sphinx-build . ./_build/html -b html
 
