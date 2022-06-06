@@ -1,0 +1,6 @@
+--- !ExplainerSpec
+name: multiclass classification
+data:
+dependencies:
+- transformers
+model:

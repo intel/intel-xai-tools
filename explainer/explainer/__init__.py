@@ -3,7 +3,7 @@ import os
 import sys
 from importlib.abc import Loader, MetaPathFinder
 from importlib.machinery import ModuleSpec
-from importlib.util import spec_from_loader
+from importlib.util import spec_from_loader, module_from_spec, LazyLoader, find_spec
 from dataclasses import dataclass
 from types import ModuleType
 from typing import Any, Type, List
@@ -46,6 +46,25 @@ class ExplainerModuleSpec(ModuleSpec):
     def __init__(self, spec: ExplainerSpec, loader: Loader):
         super().__init__(spec.name, loader=loader)
         self.config = spec
+        #for module in self.config.dependencies:
+        #    self._lazy_import(module)
+
+    def _lazy_import(self, name: str) -> ModuleSpec:
+        """Calls importlib.util.LazyImport
+
+        Args:
+            name (str): name of the module to lazy import
+
+        Returns:
+            ModuleSpec: a dummy modulespec
+        """
+        spec = find_spec(name)
+        loader = LazyLoader(spec.loader)
+        spec.loader = loader
+        module = module_from_spec(spec)
+        sys.modules[name] = module
+        loader.exec_module(module)
+        return module
 
     def __repr__(self):
         args = [f"name={self.name}",
@@ -53,11 +72,11 @@ class ExplainerModuleSpec(ModuleSpec):
         if self.origin is not None:
             args.append(f"origin={self.origin}")
         if self.submodule_search_locations is not None:
-            args.append(f"submodule_search_locations={self.submodule_search_locations}")
+            args.append(
+                f"submodule_search_locations={self.submodule_search_locations}")
         if self.config is not None:
             args.append(f"config={self.config}")
         return f"{self.__class__.__name__}, ".join(args)
-
 
 
 class ExplainerLoader(Loader):
@@ -71,13 +90,13 @@ class ExplainerLoader(Loader):
         """Return a module to initialize and into which to load.
 
         Args:
-            spec (ModuleSpec): Provided ModuleSpec 
+            spec (ModuleSpec): Provided ModuleSpec
 
         Raises:
             ImportError: Unable to create a ModuleSpec
 
         Returns:
-            ModuleSpec | None: 
+            ModuleSpec | None:
         """
         try:
             with open(self._full_path, encoding="UTF-8") as yaml_file:
@@ -192,7 +211,8 @@ class ExplainerLoader(Loader):
 
 class ExplainerMetaPathFinder(MetaPathFinder):
     """_summary_
-    ExplainerMetaPathFinder imports yaml files that define a explanation's model, data and dependencies within a zip file
+    ExplainerMetaPathFinder imports yaml files that define a
+    explanation's model, data and python dependencies within a zip file
     """
 
     def find_spec(self, fullname: str, path: str, _target: ModuleType = None) -> ModuleSpec | None:

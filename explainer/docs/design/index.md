@@ -14,8 +14,10 @@ kernelspec:
 
 ## Overview
 
+Explainer implements a plugin architecture in order to accommodate a wide variety of explainer types which work with different platforms (pytorch, tensorflow). The mechanism of importing leverages PEP 451 which defines a ModuleSpec type and how the python interpreter imports python code and resources. The explainer CLI provides a way to import and export a given explainer so that arbitrary explainers can be injected into a pipeline. 
+
 <details>
-<summary>State-of-the-art approaches to integrate explanations into workflows</summary>
+<summary>State-of-the-art approaches integrating explanations into workflows</summary>
 
 ### transformer-interpret and path-explain
 

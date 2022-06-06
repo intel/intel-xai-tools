@@ -1,7 +1,0 @@
---- !ExplainerSpec
-name: noisetunnel
-data: winequality-red.csv
-dependencies:
-- a
-- b
-model: LinearRegression

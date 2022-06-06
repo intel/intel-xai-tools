@@ -1,5 +1,5 @@
 --- !ExplainerSpec
-name: zero_shot_learning
+name: zero shot learning
 data:
 dependencies:
 - numpy

@@ -19,9 +19,9 @@ class Environment:
     """
 
     def __init__(self):
-        self.verbose = False
-        self.home = os.getcwd()
-        self.explainer = Explainer()
+        self.verbose: bool = False
+        self.home: str = os.getcwd()
+        self.explainer: Explainer = Explainer()
 
     def log(self, msg: str, *args):
         """Logs a message to stderr."""
@@ -42,6 +42,11 @@ cmd_folder = os.path.abspath(os.path.join(
 
 class ExplainerCLI(click.MultiCommand):
     """ExplainerCLI inherits from click.MultiCommand
+
+
+    ExplainerCLI will import explainable resources as defined by a yaml file.
+    The yaml file has fields for model, data, python resources,
+    and a Callable entry point
     """
 
     def list_commands(self, _env: Environment) -> list:

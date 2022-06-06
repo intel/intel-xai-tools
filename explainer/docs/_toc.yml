@@ -3,14 +3,14 @@ root: index
 chapters:
 - file: usecases/index
 - file: functionalrequirements/index
-- file: examples/index
-  sections:
-  - file: examples/multiclass_classification_example.ipynb
-  - file: examples/zero_shot_learning.ipynb
-  - file: examples/House_Prices_Regression_Interpret.ipynb
 - file: design/index
   sections:
   - file: design/plugin
   - file: design/cli
   - file: design/api
+- file: examples/index
+  sections:
+  - file: examples/house_prices_regression.ipynb
+  - file: examples/multiclass_classification.ipynb
+  - file: examples/zero_shot_learning.ipynb
 - file: bibliography/index
