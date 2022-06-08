@@ -1,37 +1,26 @@
 # Content
 
-````{panels}
+`````{grid}
 
----
+````{grid-item} usercases/index
 
-```{link-button} usecases/index
-:text: Use Cases
-:type: ref
-:classes: stretched-link
-```
 
----
+````
 
-```{link-button} functionalrequirements/index
-:text: Functional Requirements
-:type: ref
-:classes: stretched-link
-```
+````{grid-item} functionalrequirements/index
 
----
-
-```{link-button} design/index
-:text: Design
-:type: ref
-:classes: stretched-link
-```
-
----
-
-```{link-button} bibliography/index
-:text: Bibliography
-:type: ref
-:classes: stretched-link
 ```
 
 ````
+
+````{grid-item} design/index
+
+```
+
+````
+
+````{grid-item} bibliography/index
+
+````
+
+`````

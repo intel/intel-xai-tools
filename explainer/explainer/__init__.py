@@ -86,7 +86,7 @@ class ExplainerLoader(Loader):
     def __init__(self, full_path: str):
         self._full_path = full_path
 
-    def create_module(self, spec: ModuleSpec) -> ModuleSpec | None:
+    def create_module(self, spec: ModuleSpec) -> ModuleSpec:
         """Return a module to initialize and into which to load.
 
         Args:
@@ -96,7 +96,7 @@ class ExplainerLoader(Loader):
             ImportError: Unable to create a ModuleSpec
 
         Returns:
-            ModuleSpec | None:
+            ModuleSpec:
         """
         try:
             with open(self._full_path, encoding="UTF-8") as yaml_file:
@@ -215,7 +215,7 @@ class ExplainerMetaPathFinder(MetaPathFinder):
     explanation's model, data and python dependencies within a zip file
     """
 
-    def find_spec(self, fullname: str, path: str, _target: ModuleType = None) -> ModuleSpec | None:
+    def find_spec(self, fullname: str, path: str, _target: ModuleType = None) -> ModuleSpec:
         """Returns ExplainerLoader if the path is a yaml file that includes a !ExplainerSpec tag
 
         Args:
@@ -224,7 +224,7 @@ class ExplainerMetaPathFinder(MetaPathFinder):
             _target (ModuleType, optional): _description_. Defaults to None.
 
         Returns:
-            ModuleSpec|None: _description_
+            ModuleSpec: _description_
         """
         mod_name = fullname.split('.')[-1]
         paths = path if path else [os.path.abspath(os.curdir)]

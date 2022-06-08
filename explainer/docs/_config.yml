@@ -21,8 +21,9 @@ execute:
   stderr_output             : show  # One of 'show', 'remove', 'remove-warn', 'warn', 'error', 'severe'
 
 extensions:
-  - myst_parser
   - sphinxcontrib.mermaid
+  - myst_parser
+  - sphinx_design
 
 parse:
   myst_enable_extensions:
@@ -88,12 +89,13 @@ sphinx:
       - null
     language: en
     add_module_names: False
+    html_js_files: 
+    - https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js
   extra_extensions:
+  - sphinxcontrib.mermaid
   - sphinx_click.ext
-  - sphinx_inline_tabs
   - sphinx.ext.autodoc
   - sphinx.ext.autosummary
   - sphinx.ext.napoleon
   - sphinx.ext.viewcode
-  - sphinxcontrib.mermaid
   - sphinxcontrib_autodocgen

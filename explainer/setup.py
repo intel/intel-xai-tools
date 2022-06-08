@@ -3,7 +3,7 @@ XAI Tools, Explainer
 """
 from setuptools import find_packages, setup
 
-dependencies = ['click==8.1.3', 'click_completion==0.5.2', 'transformers-interpret==0.6.0', 'pybaobabdt==1.0.1', 'pygraphviz==1.9', 'resnet==0.1', 'shap==0.40.0', 'tensorflow==2.9.0', 'torch==1.11.0', 'torchvision==0.12.0', 'captum==0.5.0', 'seaborn==0.11.2']
+dependencies = ['click==8.1.3', 'click_completion==0.5.2', 'transformers-interpret==0.6.0', 'nb-js-diagrammers==0.0.7', 'pybaobabdt==1.0.1', 'pygraphviz==1.9', 'resnet==0.1', 'shap==0.40.0', 'tensorflow==2.9.0', 'torch==1.11.0', 'torchvision==0.12.0', 'captum==0.5.0', 'seaborn==0.11.2']
 
 setup(
     name='explainable_ai_tooling',

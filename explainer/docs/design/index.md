@@ -1,65 +1,9 @@
----
-jupytext:
-  formats: md:myst
-  text_representation:
-    extension: .md
-    format_name: myst
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
----
-
 # Design
 
 ## Overview
 
 Explainer implements a plugin architecture in order to accommodate a wide variety of explainer types which work with different platforms (pytorch, tensorflow). The mechanism of importing leverages PEP 451 which defines a ModuleSpec type and how the python interpreter imports python code and resources. The explainer CLI provides a way to import and export a given explainer so that arbitrary explainers can be injected into a pipeline. 
 
-<details>
-<summary>State-of-the-art approaches integrating explanations into workflows</summary>
-
-### transformer-interpret and path-explain
-
-transformer-interpret
-: This library{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. An example of the API is shown below:
-
-> model = AutoModel.from_pretrained("bert-base-cased")
-
-
-In this case, the pretrained model "bert-base-cased" will be downloaded from the HuggingFace model repo on huggingface.co, added to a local python class cache and imported into the current python environment. The type of framework used with the pretained model is determined by the path or an additional boolean parameter in the method of from_tf. The bert model returned from the method differs depending on whether PyTorch or TensorFlow is used (see figures below).
-
-
-```{eval-rst}
-
-.. autoclasstree:: transformers.AutoModelForSequenceClassification
-   :caption: Class Hierarchy of transformers.AutoModelForSequenceClassification
-   :full:
-
-```
-
-```{eval-rst}
-
-.. autoclasstree:: transformers.models.bert.BertModel
-   :caption: Class Hierarchy of transformers.models.bert.BertModel for pytorch
-   :full:
-
-```
-
-```{eval-rst}
-
-.. autoclasstree:: transformers.models.bert.TFBertModel
-   :caption: Class Hierarchy of transformers.models.bert.TFBertModel for tensorflow
-   :full:
-
-```
-
-path-explain
-: This library{{PathExplain}} adds an explainer that can also accept either a PyTorch or TensorFlow model. The library explains feature importances and feature interactions in deep neural networks using path attribution methods.
-
-
-
-</details>
 
 ## Algorithms and Data Flows
 
@@ -69,10 +13,6 @@ path-explain
 
 ```{mermaid}
 :caption: "Explainability based on Algorithms{cite}`chou2022counterfactuals`"
-
-%%{
-  init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
-}%%
 
 %%{
   init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
@@ -130,6 +70,58 @@ flowchart LR
 * Logic Tensor Networks: See {cite}`bennetot2021practical`
 * See {cite}`logictensornetworks`
 * See {cite}`mothilal2020explaining`
+
+</details>
+
+<details>
+<summary>State-of-the-art approaches integrating explanations into workflows</summary>
+
+### transformer-interpret and path-explain
+
+transformer-interpret
+: This library{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. An example of the API is shown below:
+
+> model = AutoModel.from_pretrained("bert-base-cased")
+
+
+In this case, the pretrained model "bert-base-cased" will be downloaded from the HuggingFace model repo on huggingface.co, added to a local python class cache and imported into the current python environment. The type of framework used with the pretained model is determined by the path or an additional boolean parameter in the method of from_tf. The bert model returned from the method differs depending on whether PyTorch or TensorFlow is used (see figures below).
+
+
+```{eval-rst}
+
+.. autoclasstree:: transformers.AutoModelForSequenceClassification
+   :caption: Class Hierarchy of transformers.AutoModelForSequenceClassification
+   :full:
+
+```
+
+```{eval-rst}
+
+.. autoclasstree:: transformers.models.bert.BertModel
+   :caption: Class Hierarchy of transformers.models.bert.BertModel for pytorch
+   :full:
+
+```
+
+```{eval-rst}
+
+.. autoclasstree:: transformers.models.bert.TFBertModel
+   :caption: Class Hierarchy of transformers.models.bert.TFBertModel for tensorflow
+   :full:
+
+```
+
+path-explain
+: This library{{PathExplain}} adds an explainer that can also accept either a PyTorch or TensorFlow model. The library explains feature importances and feature interactions in deep neural networks using path attribution methods.
+
+
+```{eval-rst}
+
+.. autoclasstree:: path_explain.explainers.embedding_explainer_tf.EmbeddingExplainerTF
+   :caption: Class Hierarchy of path_explain.explainers.embedding_explainer_tf.EmbeddingExplainerTF
+   :full:
+
+```
 
 </details>
 
