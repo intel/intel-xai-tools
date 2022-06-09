@@ -1,3 +1,4 @@
+(design)=
 # Design
 
 ## Overview
@@ -23,6 +24,12 @@ An Explainer YAML that includes python dependencies as a URI allows the explaine
 
 The explainer CLI provides both import and export subcommands so that development of a given explainer can be decoupled from using the explainer. 
 
+
+### Version Compatibilities
+
+
+Because there is a strong likelyhood that different explainers may require different versions of python packages, isolating these package dependencies within the explainer plugin avoids runtime errors related to version incompatabilities.
+
 ## Plugin Design
 
 The native python plugin architecture provides a way to add specific functionality to a framework at runtime. In this case there are many different types of explainers that need to be added to a general workflow framework. Explainer uses python's Loader so that different explainable implementations can be loaded into the current environment.
@@ -31,6 +38,19 @@ It does so by loading python code and resources defined in a YAML file.
 
 Explainer adds a customized Loader and MetaPathLoader class shown below so that YAML files are imported. These YAML files leverage {{PyYaml}} to do customized loading.
 
+
+```{mermaid}
+:caption: "ExplainerSpec"
+
+classDiagram
+    class ExplainerSpec
+    ExplainerSpec: +String name
+    ExplainerSpec: +String data 
+    ExplainerSpec: +String entry_point
+    ExplainerSpec: +String model
+    ExplainerSpec: +String plugin
+
+```
 
 ```{eval-rst}
 
@@ -49,7 +69,18 @@ Explainer adds a customized Loader and MetaPathLoader class shown below so that 
 ```
 
 ```{eval-rst}
-.. include:: ./plugin.rst
+
+.. autoclass:: explainer.ExplainerLoader
+   :noindex:
+   :members:
+   :inherited-members:
+
+
+.. autoclass:: explainer.ExplainerMetaPathFinder
+   :noindex:
+   :members:
+   :inherited-members:
+
 ```
 
 ```{eval-rst}

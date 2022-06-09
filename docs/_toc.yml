@@ -5,7 +5,6 @@ chapters:
 - file: functionalrequirements/index
 - file: design/index
   sections:
-  - file: design/plugin
   - file: design/cli
   - file: design/api
 - file: examples/index
