@@ -39,6 +39,7 @@ parse:
     Glue: <a href="http://docs.glueviz.org/en/stable" target="_blank">Glue</a>
     Captum: <a href="https://captum.ai/" target="_blank">Captum</a>
     PathExplain: <a href="https://github.com/suinleelab/path_explain" target="_blank"><i class="fa fa-external-link-alt"></i></a>
+    PEP451: <a href="https://peps.python.org/pep-0451/" target="_blank">PEP451</i></a>
     PyYaml: <a href="https://matthewpburruss.com/post/yaml/" target="_blank">PyYaml</a>
     Transformers: <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a>
     TransformersInterpret: <a href="https://github.com/cdpierse/transformers-interpret" target="_blank"><i class="fa fa-external-link-alt"></i></a>

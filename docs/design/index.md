@@ -2,8 +2,64 @@
 
 ## Overview
 
-Explainer implements a plugin architecture in order to accommodate a wide variety of explainer types which work with different platforms (pytorch, tensorflow). The mechanism of importing leverages PEP 451 which defines a ModuleSpec type and how the python interpreter imports python code and resources. The explainer CLI provides a way to import and export a given explainer so that arbitrary explainers can be injected into a pipeline. 
+Explainer implements a plugin architecture in order to accommodate a wide variety of explainer types which work with different platforms (pytorch, tensorflow). The mechanism of importing leverages {{PEP451}} which defines a ModuleSpec type and how the python interpreter imports python code and resources. The explainer CLI provides a way to import and export a given explainer so that arbitrary explainers can be injected into a pipeline. 
 
+### Optimizations
+
+By using a customized loader, explainer can insure disparite explanations are added to underlying python environments that have all the necessary optimized libraries. 
+
+
+### Scalability
+
+Isolating different explainers by plugin allows a large number of explainers to be included in workflows without ballooning the underlying container.
+
+
+### Security
+
+An Explainer YAML that includes python dependencies as a URI allows the explainer component to be located locally in the container, on a local volume mount or in a registry. The URI would allows for these different locations to be specified.
+
+
+### Portability
+
+The explainer CLI provides both import and export subcommands so that development of a given explainer can be decoupled from using the explainer. 
+
+## Plugin Design
+
+The native python plugin architecture provides a way to add specific functionality to a framework at runtime. In this case there are many different types of explainers that need to be added to a general workflow framework. Explainer uses python's Loader so that different explainable implementations can be loaded into the current environment.
+It does so by loading python code and resources defined in a YAML file.
+
+
+Explainer adds a customized Loader and MetaPathLoader class shown below so that YAML files are imported. These YAML files leverage {{PyYaml}} to do customized loading.
+
+
+```{eval-rst}
+
+.. autoclasstree:: explainer.ExplainerLoader
+   :caption: Class Hierarchy of explainer.ExplainerLoader
+   :full:
+
+```
+
+```{eval-rst}
+
+.. autoclasstree:: explainer.ExplainerMetaPathFinder
+   :caption: Class Hierarchy of explainer.ExplainerMetaPathFinder
+   :full:
+
+```
+
+```{eval-rst}
+.. include:: ./plugin.rst
+```
+
+```{eval-rst}
+.. include:: ./cli.rst
+```
+
+
+```{eval-rst}
+.. include:: ./api.rst
+```
 
 ## Algorithms and Data Flows
 
@@ -125,65 +181,6 @@ path-explain
 
 </details>
 
-## Explainer Components
-
-<details>
-<summary>Plugin Design</summary>
-
-Python Plugins
-: A plugin package is a collection of related plugins corresponding to a Python package. An example is {{Glue}}
-
-The native python plugin architecture provides a way to add specific functionality to a framework that is required to be extensible. In this case there are many explainers that needs to be added to a general workflow framework. 
-
-
-Explainer uses python's Loader so that different explainable implementations can be loaded into the current environment.
-It does so by just-in-time loading of python dependencies and explainable inputs that are defined in a yaml file. 
-
-
-from explainer.explainers import noisetunnel
-
-PyYaml
-: The plugin architecture can be combined with {{PyYaml}} so that imports of yaml files can do customized loading
-
-```{eval-rst}
-
-.. autoclasstree:: explainer.ExplainerLoader
-   :caption: Class Hierarchy of explainer.ExplainerLoader
-   :full:
-
-```
-
-```{eval-rst}
-
-.. autoclasstree:: explainer.ExplainerMetaPathFinder
-   :caption: Class Hierarchy of explainer.ExplainerMetaPathFinder
-   :full:
-
-```
-
-```{eval-rst}
-.. include:: ./plugin.rst
-```
-
-</details>
-
-<details>
-<summary>CLI Design</summary>
-
-```{eval-rst}
-.. include:: ./cli.rst
-```
-
-</details>
-
-<details>
-<summary>API Design</summary>
-
-```{eval-rst}
-.. include:: ./api.rst
-```
-
-</details>
 
 
 ## References

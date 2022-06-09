@@ -1,10 +1,6 @@
 --- !ExplainerSpec
 name: house prices regression
 data:
-dependencies:
-- captum
-- matplotlib
-- numpy
-- sklearn
-- torch
+entry_point:
 model: BostonModel
+plugin: 

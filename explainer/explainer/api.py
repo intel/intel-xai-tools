@@ -1,4 +1,4 @@
-"""Module that defines the explainer API and Explanation object
+"""Defines the Explainer API
 """
 import os
 from abc import ABC

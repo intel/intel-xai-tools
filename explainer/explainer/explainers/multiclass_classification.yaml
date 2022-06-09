@@ -1,6 +1,6 @@
 --- !ExplainerSpec
 name: multiclass classification
 data:
-dependencies:
-- transformers
+entry_point:
 model:
+plugin:

@@ -25,18 +25,19 @@ class TabularData:
 
 
 class ExplainerSpec:
-    """An ExplainerSpec which holds name, data, model, dependencies
+    """An ExplainerSpec which holds name, data, model, entry_point and plugin path
     """
 
-    def __init__(self, name: str, data: str, dependencies: List[str], model: str):
+    def __init__(self, name: str, data: str, entry_point: List[str], plugin: str, model: str):
         self.name = name
         self.data = data
-        self.dependencies = dependencies
+        self.entry_point = entry_point
         self.model = model
+        self.plugin = plugin
 
     def __repr__(self):
         return f"name={self.name} data={self.data} "\
-            f"dependencies={self.dependencies} model={self.model}"
+            f"entry_point={self.entry_point} model={self.model} plugin={self.plugin}"
 
 
 class ExplainerModuleSpec(ModuleSpec):
@@ -80,7 +81,7 @@ class ExplainerModuleSpec(ModuleSpec):
 
 
 class ExplainerLoader(Loader):
-    """Loads yaml files that hold ModuleSpec definitions
+    """Loads yaml files that hold ExplainerSpec definitions
     """
 
     def __init__(self, full_path: str):
@@ -212,7 +213,7 @@ class ExplainerLoader(Loader):
 class ExplainerMetaPathFinder(MetaPathFinder):
     """_summary_
     ExplainerMetaPathFinder imports yaml files that define a
-    explanation's model, data and python dependencies within a zip file
+    explanation's model, data, entry_point and plugin path
     """
 
     def find_spec(self, fullname: str, path: str, _target: ModuleType = None) -> ModuleSpec:
