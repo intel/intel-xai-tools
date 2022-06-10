@@ -3,34 +3,112 @@
 
 ## Overview
 
+{{XAI}} is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model's training or inference workflow. As shown below, explainability and interpretability are tighly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.
+
+```{figure} ../images/explain1.png
+---
+name: interpretability-methods
+---
+Various interpretability methods
+```
+
+Viewed as more of a state diagram, types of explanations are shown in the figure below, where the state is shown as a decision tree. For example, if the model is already interpretable then there are many metrics available that can show the accuracy of the prediction or classification. On the other hand, if the model is too complex to be interpretable such as deep learning models, then different options exist depending on what the user is exploring.
+
+
+```{figure} ../images/explain5.png
+---
+name: explainable-algos
+---
+Explaination based on Algorithm
+```
+
+Based on data alone, a similar state diagram is shown below, where a data-centric approach is used that leverages explainations that are tuned to image or text. Based on the model topology, these types of explanations would be added to object detection or nlp models. 
+
+```{mermaid}
+:caption: "Explainable Data{cite}`bennetot2021practical`"
+
+%%{
+  init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
+}%%
+
+flowchart LR
+    A[Data] --> B{Tabular Data?}
+    B -->|Yes| C{Interactive\nExplanation?}
+    B -->|No| E{Text Data?}
+    C -->|Yes| D["Logic\nTensor\nNetworks\n(<b>LTN</b>)"]
+    C -->|No| G{CounterFactual\nExplanation?}
+    E -->|Yes| F["Transformer\nInterpret"]
+    E -->|No| J{"Image Data?"}
+    J -->|Yes| K["Gradient-weighted\nClass\nActivation\nMapping\n(<b>Grad-CAM)</b>"]
+    J -->|No| L["Layer-wise\nRelevance\nPropagation\n(<b>LDP</b>)"]
+    G -->|Yes| H["Diverse\nCounterfactual\nExplanations\n(<b>DICE</b>) fa:fa-external-link-alt"]
+    G -->|No| I["Shapley\nAdditive\nExplanations\n(<b>SHAP</b>)"]
+    classDef leafName fill:#eee;
+    class D,F,H,I,K,L leafName;
+```
+
+### Explosion of Explainable Approaches
+
+The types of approaches that can be used to better explain a model as shown below are growing.
+
+```{figure} ../images/explain2.png
+---
+name: explainable-approaches
+---
+Various approaches to explainability
+
+```
+
+As the table below shows, explainable toolkits abound and are growing rapidly.
+
+```{figure} ../images/explain4.png
+---
+name: explainable-toolkits
+---
+Various Toolkits available from 2021
+
+```
+
+
+## Toolkit Strategy Constraints
+
+Given the rapid availability of new explainability techniques as well as how different explainations can be inserted throughout a model's lifecycle for both training and inference, the challenge is how does one go about providing new explainable techniques within workflows? Additionally, how does one keep up with the myriad of explainable techniques and remain compatible with existing workflows that have already been published? This seems difficult if not impossible functionality for a toolkit to provide especially in light of hard requirements noted below:
+
+Ensure Intel Optimizations are included
+: Any explainable method needs to leverage Intel libraries and configurations that provide optimizations.
+
+
+Keep containers slim and lightweight
+: Adding new explainations shouldn't require new containers to be built or should result in adding to the container size. A large suite of explainations should be available where specific ones can be included depending on the notebooks being shown. 
+
+Don't forsake security
+: An Explainer YAML that includes python dependencies as a URI allows the explainer component to be located locally in the container, on a local volume mount or in a registry. The URI would allows for these different locations to be specified.
+
+Be portable
+: Adding an explaination to an existing workflow shouldn't require a new virtual environment, or pip installs in a current environment since that virtual environment is now changed and may be a shared environment across many workflows.
+
+Be repeatable
+: An explanation that has dependencies on the model, data or features should ensure that these dependencies are version compatible.
+
+
+## Python's Plugin Architecture
+
+
+Python's {{PEP451}}, introduced in python-3.4 transformed a brittle and error prone import mechanism to one that is extensible and secure. Moreover, it introduced a type called ModuleSpec that the import machinery instantiates whenever a new module is loaded. Finally, {{PEP451}} expanded the types of Loaders and MetaPathLoaders that are allowed. The way to find and load python classes and resources such as csv's was outlined specifically to provide new extensibility architectures, known as plugin architectures. As noted in the article {{PluginArchitectureinPython}}:
+
+
+> At its core, a plugin architecture consists of two components: a core system and plug-in modules. The main key design here is to allow adding additional features that are called plugins modules to our core system, providing extensibility, flexibility, and isolation to our application features. This will provide us with the ability to add, remove, and change the behaviour of the application with little or no effect on the core system or other plug-in modules making our code very modular and extensible .
+
+
+This architecture is specifically geared to meet the functionality required by XAI explainations. Injecting explanations within a workflow is synonomous with providing "extensibility, flexibility, and isolation to our application features". Yet there are many ways to do this, specifically what approach makes sense for the common use cases that add explanations?  The upcoming {{PEP690}}, due in python-3.12 further enhances how imports work, by allowing imports to be lazily loaded.
+
+### How is an explanation typically added to a notebook?
+
+
+
+## Existing Approaches to Add Explainations
+
 Explainer implements a plugin architecture in order to accommodate a wide variety of explainer types which work with different platforms (pytorch, tensorflow). The mechanism of importing leverages {{PEP451}} which defines a ModuleSpec type and how the python interpreter imports python code and resources. The explainer CLI provides a way to import and export a given explainer so that arbitrary explainers can be injected into a pipeline. 
-
-### Optimizations
-
-By using a customized loader, explainer can insure disparite explanations are added to underlying python environments that have all the necessary optimized libraries. 
-
-
-### Scalability
-
-Isolating different explainers by plugin allows a large number of explainers to be included in workflows without ballooning the underlying container.
-
-
-### Security
-
-An Explainer YAML that includes python dependencies as a URI allows the explainer component to be located locally in the container, on a local volume mount or in a registry. The URI would allows for these different locations to be specified.
-
-
-### Portability
-
-The explainer CLI provides both import and export subcommands so that development of a given explainer can be decoupled from using the explainer. 
-
-
-### Version Compatibilities
-
-
-Because there is a strong likelyhood that different explainers may require different versions of python packages, isolating these package dependencies within the explainer plugin avoids runtime errors related to version incompatabilities.
-
-## Plugin Design
 
 The native python plugin architecture provides a way to add specific functionality to a framework at runtime. In this case there are many different types of explainers that need to be added to a general workflow framework. Explainer uses python's Loader so that different explainable implementations can be loaded into the current environment.
 It does so by loading python code and resources defined in a YAML file.
@@ -84,12 +162,19 @@ classDiagram
 ```
 
 ```{eval-rst}
-.. include:: ./cli.rst
+
+.. click:: explainer:cli
+  :prog: explainer
+  :nested: full
+
 ```
 
 
 ```{eval-rst}
-.. include:: ./api.rst
+.. automodule:: explainer.api
+   :noindex:
+   :members:
+
 ```
 
 ## Algorithms and Data Flows
@@ -121,10 +206,6 @@ flowchart LR
     class C,E,K,L,M leafName;
 ```
 
-* {{YANG202229}}
-* {{ZHU202253}}
-* {{HOLZINGER202128}}
-
 </details>
 
 <details>
@@ -150,7 +231,7 @@ flowchart LR
     J -->|No| L["Layer-wise\nRelevance\nPropagation\n(<b>LDP</b>)"]
     G -->|Yes| H["Diverse\nCounterfactual\nExplanations\n(<b>DICE</b>) fa:fa-external-link-alt"]
     G -->|No| I["Shapley\nAdditive\nExplanations\n(<b>SHAP</b>)"]
-    classDef leafName fill:#00f,color:#fff;
+    classDef leafName fill:#eee;
     class D,F,H,I,K,L leafName;
 ```
 
@@ -212,6 +293,9 @@ path-explain
 
 </details>
 
+* {{YANG202229}}
+* {{ZHU202253}}
+* {{HOLZINGER202128}}
 
 
 ## References

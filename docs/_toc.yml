@@ -4,9 +4,6 @@ chapters:
 - file: usecases/index
 - file: functionalrequirements/index
 - file: design/index
-  sections:
-  - file: design/cli
-  - file: design/api
 - file: examples/index
   sections:
   - file: examples/house_prices_regression.ipynb

@@ -2,24 +2,35 @@
 
 `````{grid}
 
-````{grid-item} usercases/index
+````{grid-item-card} usecases
+:link: usecases
+:link-type: ref
 
-
-````
-
-````{grid-item} functionalrequirements/index
-
-```
+See all usecases
 
 ````
 
-````{grid-item} design/index
+````{grid-item-card} functionalrequirements
+:link: usecases
+:link-type: ref
 
-```
+See functional requirements
 
 ````
 
-````{grid-item} bibliography/index
+````{grid-item-card} design
+:link: design
+:link-type: ref
+
+See design
+
+````
+
+````{grid-item-card} bibliography
+:link: bibliography
+:link-type: ref
+
+See Bibliography/
 
 ````
 
