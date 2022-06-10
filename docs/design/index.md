@@ -9,7 +9,7 @@
 ---
 name: interpretability-methods
 ---
-Various interpretability methods
+Various interpretability methods {cite}`e23010018`
 ```
 
 Viewed as more of a state diagram, types of explanations are shown in the figure below, where the state is shown as a decision tree. For example, if the model is already interpretable then there are many metrics available that can show the accuracy of the prediction or classification. On the other hand, if the model is too complex to be interpretable such as deep learning models, then different options exist depending on what the user is exploring.
@@ -35,17 +35,18 @@ flowchart LR
     A[Data] --> B{Tabular Data?}
     B -->|Yes| C{Interactive\nExplanation?}
     B -->|No| E{Text Data?}
-    C -->|Yes| D["Logic\nTensor\nNetworks\n(<b>LTN</b>)"]
+    C -->|Yes| D["Logic\nTensor\nNetworks\n(LTN)"]
     C -->|No| G{CounterFactual\nExplanation?}
     E -->|Yes| F["Transformer\nInterpret"]
     E -->|No| J{"Image Data?"}
-    J -->|Yes| K["Gradient-weighted\nClass\nActivation\nMapping\n(<b>Grad-CAM)</b>"]
-    J -->|No| L["Layer-wise\nRelevance\nPropagation\n(<b>LDP</b>)"]
-    G -->|Yes| H["Diverse\nCounterfactual\nExplanations\n(<b>DICE</b>) fa:fa-external-link-alt"]
-    G -->|No| I["Shapley\nAdditive\nExplanations\n(<b>SHAP</b>)"]
+    J -->|Yes| K["Gradient-weighted\nClass\nActivation\nMapping\n(Grad-CAM)"]
+    J -->|No| L["Layer-wise\nRelevance\nPropagation\n(LDP)"]
+    G -->|Yes| H["Diverse\nCounterfactual\nExplanations\n(DICE)"]
+    G -->|No| I["Shapley\nAdditive\nExplanations\n(SHAP)"]
     classDef leafName fill:#eee;
     class D,F,H,I,K,L leafName;
 ```
+
 
 ### Explosion of Explainable Approaches
 
@@ -72,11 +73,10 @@ Various Toolkits available from 2021
 
 ## Toolkit Strategy Constraints
 
-Given the rapid availability of new explainability techniques as well as how different explainations can be inserted throughout a model's lifecycle for both training and inference, the challenge is how does one go about providing new explainable techniques within workflows? Additionally, how does one keep up with the myriad of explainable techniques and remain compatible with existing workflows that have already been published? This seems difficult if not impossible functionality for a toolkit to provide especially in light of hard requirements noted below:
+Given the rapid availability of new explainability techniques as well as how different explainations can be inserted throughout a model's lifecycle for both training and inference, the challenge is how does one go about providing new explainable techniques within workflows? Additionally, how does one keep up with the myriad of explainable techniques and remain compatible with existing workflows that have already been published? This seems difficult if not impossible functionality for a toolkit to provide especially in light of functional requirements noted below:
 
 Ensure Intel Optimizations are included
 : Any explainable method needs to leverage Intel libraries and configurations that provide optimizations.
-
 
 Keep containers slim and lightweight
 : Adding new explainations shouldn't require new containers to be built or should result in adding to the container size. A large suite of explainations should be available where specific ones can be included depending on the notebooks being shown. 
@@ -90,164 +90,66 @@ Be portable
 Be repeatable
 : An explanation that has dependencies on the model, data or features should ensure that these dependencies are version compatible.
 
+Do not wrap native APIs
+: Providing a wrapper around an existing XAI toolkit does not scale
 
-## Python's Plugin Architecture
+Do not mandate a particular platform (tensorflow, pytorch, etc)
+: Explainable techniques and methods that are specific to a platform should be filtered out when that platform is not in the workflow
 
+Do not mandate a type of model
+: Explainable techniques and methods that expect a specific model class should be filtered out when that class is not available
 
-Python's {{PEP451}}, introduced in python-3.4 transformed a brittle and error prone import mechanism to one that is extensible and secure. Moreover, it introduced a type called ModuleSpec that the import machinery instantiates whenever a new module is loaded. Finally, {{PEP451}} expanded the types of Loaders and MetaPathLoaders that are allowed. The way to find and load python classes and resources such as csv's was outlined specifically to provide new extensibility architectures, known as plugin architectures. As noted in the article {{PluginArchitectureinPython}}:
-
-
-> At its core, a plugin architecture consists of two components: a core system and plug-in modules. The main key design here is to allow adding additional features that are called plugins modules to our core system, providing extensibility, flexibility, and isolation to our application features. This will provide us with the ability to add, remove, and change the behaviour of the application with little or no effect on the core system or other plug-in modules making our code very modular and extensible .
-
-
-This architecture is specifically geared to meet the functionality required by XAI explainations. Injecting explanations within a workflow is synonomous with providing "extensibility, flexibility, and isolation to our application features". Yet there are many ways to do this, specifically what approach makes sense for the common use cases that add explanations?  The upcoming {{PEP690}}, due in python-3.12 further enhances how imports work, by allowing imports to be lazily loaded.
-
-### How is an explanation typically added to a notebook?
-
-
+Do not mandate a type of data
+: Explainable techniques and methods that expect a data format class should be filtered out when that format is not available
 
 ## Existing Approaches to Add Explainations
 
-Explainer implements a plugin architecture in order to accommodate a wide variety of explainer types which work with different platforms (pytorch, tensorflow). The mechanism of importing leverages {{PEP451}} which defines a ModuleSpec type and how the python interpreter imports python code and resources. The explainer CLI provides a way to import and export a given explainer so that arbitrary explainers can be injected into a pipeline. 
+### Explicit/Manual Approach (typical)
 
-The native python plugin architecture provides a way to add specific functionality to a framework at runtime. In this case there are many different types of explainers that need to be added to a general workflow framework. Explainer uses python's Loader so that different explainable implementations can be loaded into the current environment.
-It does so by loading python code and resources defined in a YAML file.
+In the example cells below, taken from a typical ML workflow that includes shap explanations, the shap module is installed into the current jupyter kernel, then imported into the notebook along with other imports.
 
+```python
 
-Explainer adds a customized Loader and MetaPathLoader class shown below so that YAML files are imported. These YAML files leverage {{PyYaml}} to do customized loading.
-
-
-```{mermaid}
-:caption: "ExplainerSpec"
-
-classDiagram
-    class ExplainerSpec
-    ExplainerSpec: +String name
-    ExplainerSpec: +String data 
-    ExplainerSpec: +String entry_point
-    ExplainerSpec: +String model
-    ExplainerSpec: +String plugin
+#!pip install shap
 
 ```
 
-```{eval-rst}
-
-.. autoclasstree:: explainer.ExplainerLoader
-   :caption: Class Hierarchy of explainer.ExplainerLoader
-   :full:
-
+```python
+import numpy as np
+import matplotlib
+# SHAP explanation
+import shap
 ```
 
-```{eval-rst}
+Next, the notebook will load a dataset and split the dataset into train and test partitions ...
 
-.. autoclasstree:: explainer.ExplainerMetaPathFinder
-   :caption: Class Hierarchy of explainer.ExplainerMetaPathFinder
-   :full:
-
+```python
+boston = datasets.load_boston()
+X_train, X_test, y_train, y_test = model_selection.train_test_split(boston.data, boston.target, random_state=0)
 ```
 
-```{eval-rst}
-
-.. autoclass:: explainer.ExplainerLoader
-   :noindex:
-   :members:
-   :inherited-members:
+After the data part of the pipeline, the model is created and trained on the trained data split
 
 
-.. autoclass:: explainer.ExplainerMetaPathFinder
-   :noindex:
-   :members:
-   :inherited-members:
-
+```python
+regressor = ensemble.RandomForestRegressor()
+regressor.fit(X_train, y_train);
 ```
 
-```{eval-rst}
+Post training, the notebook creates an explainer, passing it the model and trained data split.
 
-.. click:: explainer:cli
-  :prog: explainer
-  :nested: full
 
+```python
+explainer = shap.TreeExplainer(regressor)
+# Calculate Shap values
+shap_values = explainer.shap_values(X_train)
 ```
 
+### State-of-the-art Approaches
 
-```{eval-rst}
-.. automodule:: explainer.api
-   :noindex:
-   :members:
+#### transformer-interpret
 
-```
-
-## Algorithms and Data Flows
-
-<details>
-<summary>Algorithms</summary>
-
-
-```{mermaid}
-:caption: "Explainability based on Algorithms{cite}`chou2022counterfactuals`"
-
-%%{
-  init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
-}%%
-
-flowchart LR
-    A[Algorithm] --> B{Is\nyour\nmodel\ninterpretable?}
-    B -->|Yes| C[Use\nIntrinsic\nmethods]
-    B -->|No| D{Explain\nindividual\npredictions\nor\nentire\nmodel?}
-    D -->|Entire Model| F{"Does\nyour\nmodel\nhave\na\nstandard\narchitecture?"}
-    D -->|Individual Predictions| J{"Does\nyour\nmodel\nhave\na\nstandard\narchitecture?"}
-    D -->|Both| E
-    F -->|No| K["Model\nagnostic\nmethods\nlike\nPartial\nDependence\nplots"]
-    F -->|Yes| L["Use\nModel\nspecific\nglobal\nmethods\nlike\nXGBoost"]
-    J -->|Yes| M["Model\nspecific\nlocal\nmethods\nlike\nGrad-CAM</b>"]
-    J -->|No| E
-    E["SHAP\nor\nLIME"]
-    classDef leafName fill:#00f,color:#fff;
-    class C,E,K,L,M leafName;
-```
-
-</details>
-
-<details>
-<summary>Data Flows</summary>
-
-
-```{mermaid}
-:caption: "Explainable Data{cite}`bennetot2021practical`"
-
-%%{
-  init: { "flowchart": { "htmlLabels": true, "curve": "linear" } }
-}%%
-
-flowchart LR
-    A[Data] --> B{Tabular Data?}
-    B -->|Yes| C{Interactive\nExplanation?}
-    B -->|No| E{Text Data?}
-    C -->|Yes| D["Logic\nTensor\nNetworks\n(<b>LTN</b>)"]
-    C -->|No| G{CounterFactual\nExplanation?}
-    E -->|Yes| F["Transformer\nInterpret"]
-    E -->|No| J{"Image Data?"}
-    J -->|Yes| K["Gradient-weighted\nClass\nActivation\nMapping\n(<b>Grad-CAM)</b>"]
-    J -->|No| L["Layer-wise\nRelevance\nPropagation\n(<b>LDP</b>)"]
-    G -->|Yes| H["Diverse\nCounterfactual\nExplanations\n(<b>DICE</b>) fa:fa-external-link-alt"]
-    G -->|No| I["Shapley\nAdditive\nExplanations\n(<b>SHAP</b>)"]
-    classDef leafName fill:#eee;
-    class D,F,H,I,K,L leafName;
-```
-
-* Logic Tensor Networks: See {cite}`bennetot2021practical`
-* See {cite}`logictensornetworks`
-* See {cite}`mothilal2020explaining`
-
-</details>
-
-<details>
-<summary>State-of-the-art approaches integrating explanations into workflows</summary>
-
-### transformer-interpret and path-explain
-
-transformer-interpret
-: This library{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. An example of the API is shown below:
+This library{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. An example of the API is shown below:
 
 > model = AutoModel.from_pretrained("bert-base-cased")
 
@@ -279,8 +181,9 @@ In this case, the pretrained model "bert-base-cased" will be downloaded from the
 
 ```
 
-path-explain
-: This library{{PathExplain}} adds an explainer that can also accept either a PyTorch or TensorFlow model. The library explains feature importances and feature interactions in deep neural networks using path attribution methods.
+#### path-explain
+
+This library{{PathExplain}} adds an explainer that can also accept either a PyTorch or TensorFlow model. The library explains feature importances and feature interactions in deep neural networks using path attribution methods.
 
 
 ```{eval-rst}
@@ -291,8 +194,126 @@ path-explain
 
 ```
 
-</details>
+## Python's Plugin Architecture
 
+
+Python's {{PEP451}}, introduced in python-3.4 transformed a brittle and error prone import mechanism to one that is extensible and secure. Moreover, it introduced a type called ModuleSpec that the import machinery instantiates whenever a new module is loaded. Finally, {{PEP451}} expanded the types of Loaders and MetaPathLoaders that are allowed. The way to find and load python classes and resources such as csv's specifically provides new extensibility architectures, known as plugin architectures. As noted in the article {{PluginArchitectureinPython}}:
+
+
+> At its core, a plugin architecture consists of two components: a core system and plug-in modules. The main key design here is to allow adding additional features that are called plugins modules to our core system, providing extensibility, flexibility, and isolation to our application features. This will provide us with the ability to add, remove, and change the behaviour of the application with little or no effect on the core system or other plug-in modules making our code very modular and extensible .
+
+
+This architecture is specifically geared to meet the functionality required by XAI explainations. Injecting explanations within a workflow is synonomous with providing "extensibility, flexibility, and isolation to our application features". Yet there are many ways to do this, specifically what approach makes sense for the many use cases that add explanations?  The upcoming {{PEP690}}, due in python-3.12 further enhances how imports work, by allowing imports to be lazily loaded.
+
+
+### Explainer and Explainable Resources
+
+#### Explainer implicit injection of an Explainable Resource
+
+By leveraging the python import machinery, explainer can implicitly load and import an explainable resource. In this case, Explainer adds customized Loader and MetaPathLoader classes as shown below. 
+
+```{eval-rst}
+
+.. autoclasstree:: explainer.ExplainerLoader
+   :caption: Class Hierarchy of explainer.ExplainerLoader
+   :full:
+
+.. autoclasstree:: explainer.ExplainerMetaPathFinder
+   :caption: Class Hierarchy of explainer.ExplainerMetaPathFinder
+   :full:
+
+```
+
+These classes are called when python resolves imports. As described in {{MetaPathFinders}}, a yaml file can be directly loaded by the import machinary so that the following import statement:
+
+```python
+from explainer.explainers import zero_shot_learning
+```
+
+resolves to a yaml file named zero_shot_learing.yaml (rather than a python file) located in the explainer.explainers package. This yaml file is shown below:
+
+
+```{card}
+:class-card: sd-text-black
+zero_shot_learning.yaml
+^^^
+--- !ExplainerSpec<br/>
+name: zero shot learning<br/>
+entry_point:Plugin<br/>
+plugin:zero_shot_learning.zip<br/>
+```
+
+The first line is a YAML annotation that used {{PyYaml}} to reify the yaml file as an ExplainerSpec dataclass, shown below.
+
+```{mermaid}
+:caption: "ExplainerSpec"
+
+classDiagram
+    class ExplainerSpec
+    ExplainerSpec: +String name
+    ExplainerSpec: +String data 
+    ExplainerSpec: +String entry_point
+    ExplainerSpec: +String model
+    ExplainerSpec: +String plugin
+
+```
+
+The set are steps to inject an explainable resource are shown in the sequence diagram below:
+
+
+```{mermaid}
+:caption: "Explainer sequence diagram when resolving a yaml file"
+
+sequenceDiagram
+    participant ExplainerLoader
+    participant zero_shot_learning.yaml
+    participant ExplainerSpec
+    ExplainerLoader->>zero_shot_learning.yaml: find yaml file
+    zero_shot_learning.yaml->>ExplainerLoader: load yaml file
+    ExplainerLoader->>ExplainerSpec: create
+    ExplainerSpec->>ExplainerLoader: fields initialized from yaml file
+    ExplainerLoader->>zero_shot_learning.zip: find zip file
+    zero_shot_learning.zip->>ExplainerLoader: load zip file
+
+```
+
+
+
+
+
+```{eval-rst}
+
+.. autoclass:: explainer.ExplainerLoader
+   :noindex:
+   :members:
+   :inherited-members:
+
+
+.. autoclass:: explainer.ExplainerMetaPathFinder
+   :noindex:
+   :members:
+   :inherited-members:
+
+```
+
+```{eval-rst}
+.. automodule:: explainer.cli
+   :noindex:
+   :members:
+
+```
+
+
+```{eval-rst}
+.. automodule:: explainer.api
+   :noindex:
+   :members:
+
+```
+
+* Logic Tensor Networks: See {cite}`bennetot2021practical`
+* See {cite}`logictensornetworks`
+* See {cite}`mothilal2020explaining`
 * {{YANG202229}}
 * {{ZHU202253}}
 * {{HOLZINGER202128}}

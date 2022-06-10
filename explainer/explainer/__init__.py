@@ -1,4 +1,8 @@
-"""module init for explainer cli"""
+"""module init for explainer
+
+This module init registers a finder and loader to
+import yaml files and create a ModuleSpec
+"""
 import os
 import sys
 from importlib.abc import Loader, MetaPathFinder
@@ -10,19 +14,13 @@ from typing import Any, Type, List
 
 import yaml
 
-from .api import Explainer
-from .cli import ExplainerCLI, cli
-
 EXT_YAML = '.yaml'
-
-
 @dataclass
 class TabularData:
     """TabularData structure"""
     name: str
     path: str
     data: Any
-
 
 class ExplainerSpec:
     """An ExplainerSpec which holds name, data, model, entry_point and plugin path
@@ -37,7 +35,7 @@ class ExplainerSpec:
 
     def __repr__(self):
         return f"name={self.name} data={self.data} "\
-            f"entry_point={self.entry_point} model={self.model} plugin={self.plugin}"
+            "entry_point={self.entry_point} model={self.model} plugin={self.plugin}"
 
 
 class ExplainerModuleSpec(ModuleSpec):
@@ -211,9 +209,8 @@ class ExplainerLoader(Loader):
 
 
 class ExplainerMetaPathFinder(MetaPathFinder):
-    """_summary_
-    ExplainerMetaPathFinder imports yaml files that define a
-    explanation's model, data, entry_point and plugin path
+    """ExplainerMetaPathFinder imports yaml files that define a
+       explanation's model, data, entry_point and plugin path
     """
 
     def find_spec(self, fullname: str, path: str, _target: ModuleType = None) -> ModuleSpec:

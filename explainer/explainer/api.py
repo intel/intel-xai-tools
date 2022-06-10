@@ -4,16 +4,10 @@ import os
 from abc import ABC
 from typing import Any, Callable
 from numpy.typing import ArrayLike
+from . import ExplainerSpec, ExplainerModuleSpec
 
 explainers_folder = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "explainers"))
-
-
-class Explanation:
-    """_summary_
-    """
-    def __init__(self):
-        pass
 
 class Explainer(ABC):
     """Explainer API base class
@@ -25,7 +19,7 @@ class Explainer(ABC):
         Args:
             model (Any): any instance of any type of model
         """
-        self._explainer: Callable = None
+        self._explainer: Callable
         self._model: Any = model
 
     def __call__(self, **kwargs):
@@ -53,15 +47,6 @@ class Explainer(ABC):
         return r_var
 
     @property
-    def model(self):
-        """returns the model
-
-        Returns:
-            Any: protected model
-        """
-        return self._model
-
-    @property
     def explainer(self) -> Any:
         """Loads the explainer and returns it
 
@@ -70,25 +55,40 @@ class Explainer(ABC):
         """
         return self._explainer
 
-    @property
-    def expected_value(self):
-        """_summary_
+    def import_from(self, _yamlpath: str) -> ExplainerModuleSpec:
+        """import a yaml file using ExplainerLoader
+
+        Args:
+            _yamlpath (str): path to the yaml file
 
         Returns:
-            _type_: _description_
+            ExplainerModuleSpec: A ModuleSpec subclass
         """
-        return self._explainer.expected_value
+        return None
 
-    def explain(self, _data: ArrayLike) -> Explanation:
+
+    def export_to(self, _yamlspec: ExplainerSpec) -> ExplainerModuleSpec:
+        """create a yaml file using ExplainerSpec
+
+        Args:
+            _yamlpath (str): _description_
+
+        Returns:
+            ExplainerModuleSpec: _description_
+        """
+        return None
+
+    def explain(self, data: ArrayLike) -> None:
         """takes _data and forwards to internal explainer
 
         Args:
             data (ArrayLike): any type of array
 
         Returns:
-            Explanation: explainable objects
+            None
         """
-        return self.explainer
+        if self._explainer is not None:
+            self._explainer(data)
 
     def visualize(self, *args: str, **kwargs: str) -> None:
         """_summary_

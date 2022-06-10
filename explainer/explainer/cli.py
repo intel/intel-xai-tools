@@ -14,9 +14,7 @@ CONTEXT_SETTINGS = dict(auto_envvar_prefix="EXPLAINER")
 click_completion.init()
 
 class Environment:
-    """
-    Provides an Environment that can be passed to click subcommands
-    """
+    """ Provides an Environment that can be passed to click subcommands"""
 
     def __init__(self):
         self.verbose: bool = False
@@ -82,7 +80,11 @@ class ExplainerCLI(click.MultiCommand):
         return mod.cli
 
 
-@click.command(cls=ExplainerCLI, context_settings=CONTEXT_SETTINGS)
+@click.group()
+def explainercli():
+    """The explainer command group."""
+
+@explainercli.command(cls=ExplainerCLI, context_settings=CONTEXT_SETTINGS)
 @pass_environment
 def cli(_env: Environment):
     """explainer entry point."""

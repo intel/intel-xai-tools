@@ -41,6 +41,7 @@ parse:
     PluginArchitectureinPython: <a href="https://dev.to/charlesw001/plugin-architecture-in-python-jla" target="_blank">Plugin Architecture in Python</a>
     Glue: <a href="http://docs.glueviz.org/en/stable" target="_blank">Glue</a>
     Captum: <a href="https://captum.ai/" target="_blank">Captum</a>
+    MetaPathFinders:  <a href="https://python.plainenglish.io/metapathfinders-or-how-to-change-python-import-behavior-a1cf3b5a13ec" target="_blank">How to Change Python Import Behavior with MetaPathFinders</a>
     PathExplain: <a href="https://github.com/suinleelab/path_explain" target="_blank"><i class="fa fa-external-link-alt"></i></a>
     PEP451: <a href="https://peps.python.org/pep-0451/" target="_blank">PEP451</i></a>
     PEP690: <a href="https://peps.python.org/pep-0690/" target="_blank">PEP690</i></a>
@@ -96,10 +97,10 @@ sphinx:
     html_js_files: 
     - https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js
   extra_extensions:
-  - sphinxcontrib.mermaid
-  - sphinx_click.ext
   - sphinx.ext.autodoc
   - sphinx.ext.autosummary
   - sphinx.ext.napoleon
   - sphinx.ext.viewcode
   - sphinxcontrib_autodocgen
+  - sphinxcontrib.mermaid
+  - sphinx_click.ext

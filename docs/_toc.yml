@@ -2,7 +2,7 @@ format: jb-book
 root: index
 chapters:
 - file: usecases/index
-- file: functionalrequirements/index
+- file: requirements/index
 - file: design/index
 - file: examples/index
   sections:

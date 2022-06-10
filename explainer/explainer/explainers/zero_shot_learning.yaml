@@ -1,6 +1,4 @@
 --- !ExplainerSpec
 name: zero shot learning
-data:
-entry_point:
-model: AutoModelForSequenceClassification
-plugin:
+entry_point: plugin
+plugin: zero_shot_learning.zip

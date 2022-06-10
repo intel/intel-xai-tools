@@ -10,7 +10,7 @@ See all usecases
 
 ````
 
-````{grid-item-card} functionalrequirements
+````{grid-item-card} requirements
 :link: usecases
 :link-type: ref
 
