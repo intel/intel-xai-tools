@@ -55,7 +55,7 @@ class Explainer(ABC):
         """
         return self._explainer
 
-    def import_from(self, _yamlpath: str) -> ExplainerModuleSpec:
+    def import_from(self, _path: str) -> ExplainerModuleSpec:
         """import a yaml file using ExplainerLoader
 
         Args:

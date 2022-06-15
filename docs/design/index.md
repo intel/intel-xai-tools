@@ -258,7 +258,7 @@ classDiagram
 
 ```
 
-The set are steps to inject an explainable resource are shown in the sequence diagram below:
+The set of steps to inject an explainable resource are shown in the sequence diagram below:
 
 
 ```{mermaid}
@@ -277,7 +277,12 @@ sequenceDiagram
 
 ```
 
+Note that loading the zip file uses {{ZipImporter}}. Once the zip is loaded, an optional entry_point specified in the yml is executed. If no entry_point is specified, then the API looks for a default module of __main__.py in the archive. It passes this to zipimporter.exec_module. Finally, this archive is prepended to sys.path so that subsequent imports include the archive in the find module algorithm. 
 
+#### Explainer explicit injection of an Explainable Resource (CLI/API)
+
+The Explainer CLI provides an import subcommand that takes a path to the explainable yaml file. The CLI will instantiate the Explainer API and call its import_from, passing 
+in the yaml path. This is then delegated to the ExplainerLoader, which then follows the sequence diagram noted in the implicit use case.
 
 
 

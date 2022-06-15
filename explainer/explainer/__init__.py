@@ -5,6 +5,7 @@ import yaml files and create a ModuleSpec
 """
 import os
 import sys
+import zipapp
 from importlib.abc import Loader, MetaPathFinder
 from importlib.machinery import ModuleSpec
 from importlib.util import spec_from_loader, module_from_spec, LazyLoader, find_spec
@@ -99,7 +100,10 @@ class ExplainerLoader(Loader):
         """
         try:
             with open(self._full_path, encoding="UTF-8") as yaml_file:
-                yamldata = yaml.load(yaml_file, Loader=self.get_yaml_loader())
+                yamldata: ExplainerSpec = yaml.load(yaml_file, Loader=self.get_yaml_loader())
+                if yamldata.plugin is not None:
+                    #explainable_importer: zipimporter = zipimporter(yamldata.plugin)
+                    sys.path.insert(0, yamldata.plugin)
                 return ExplainerModuleSpec(yamldata, spec.loader)
         except Exception as error:
             raise ImportError from error
