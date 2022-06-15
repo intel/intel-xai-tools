@@ -21,8 +21,8 @@ html_favicon = ''
 html_js_files = ['https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js']
 html_logo = 'logo.png'
 html_sourcelink_suffix = ''
-html_theme = 'sphinx_book_theme'
-html_theme_options = {'search_bar_text': 'Search this book...', 'launch_buttons': {'notebook_interface': 'classic', 'binderhub_url': 'https://mybinder.org', 'jupyterhub_url': '', 'thebe': False, 'colab_url': ''}, 'path_to_docs': 'docs', 'repository_url': 'https://github.com/kkasravi/explainable-ai-tooling', 'repository_branch': 'main', 'google_analytics_id': '', 'extra_navbar': 'Powered by <a href="https://jupyterbook.org">Jupyter Book</a>', 'extra_footer': '', 'home_page_in_toc': True, 'announcement': '', 'use_repository_button': True, 'use_edit_page_button': False, 'use_issues_button': True}
+html_theme = 'sphinx_rtd_theme'
+html_theme_options = {'logo_only': True}
 html_title = 'Explainer'
 intersphinx_mapping = {'ebp': ['https://executablebooks.org/en/latest/', None], 'myst-parser': ['https://myst-parser.readthedocs.io/en/latest/', None], 'myst-nb': ['https://myst-nb.readthedocs.io/en/latest/', None], 'sphinx': ['https://www.sphinx-doc.org/en/master', None], 'nbformat': ['https://nbformat.readthedocs.io/en/latest', None]}
 jupyter_cache = ''

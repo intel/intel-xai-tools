@@ -76,6 +76,9 @@ html:
 
 sphinx:
   config:
+    html_theme: sphinx_rtd_theme
+    html_theme_options:
+      logo_only: True
     intersphinx_mapping:
       ebp:
       - "https://executablebooks.org/en/latest/"
