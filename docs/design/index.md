@@ -234,7 +234,7 @@ resolves to a yaml file named zero_shot_learing.yaml (rather than a python file)
 
 
 ```{card}
-:class-card: sd-text-black
+:class-card: sd-text-black, sd-bg-light
 zero_shot_learning.yaml
 ^^^
 --- !ExplainerSpec<br/>
@@ -243,7 +243,7 @@ entry_point:Plugin<br/>
 plugin:zero_shot_learning.zip<br/>
 ```
 
-The first line is a YAML annotation that used {{PyYaml}} to reify the yaml file as an ExplainerSpec dataclass, shown below.
+The first line is a YAML annotation that uses {{PyYaml}} to reify the yaml file as an ExplainerSpec dataclass, shown below.
 
 ```{mermaid}
 :caption: "ExplainerSpec"
@@ -251,7 +251,7 @@ The first line is a YAML annotation that used {{PyYaml}} to reify the yaml file 
 classDiagram
     class ExplainerSpec
     ExplainerSpec: +String name
-    ExplainerSpec: +String data 
+    ExplainerSpec: +String dataset
     ExplainerSpec: +String entry_point
     ExplainerSpec: +String model
     ExplainerSpec: +String plugin
@@ -279,12 +279,6 @@ sequenceDiagram
 
 Note that loading the zip file uses {{ZipImporter}}. Once the zip is loaded, an optional entry_point specified in the yml is executed. If no entry_point is specified, then the API looks for a default module of __main__.py in the archive. It passes this to zipimporter.exec_module. Finally, this archive is prepended to sys.path so that subsequent imports include the archive in the find module algorithm. 
 
-#### Explainer explicit injection of an Explainable Resource (CLI/API)
-
-The Explainer CLI provides an import subcommand that takes a path to the explainable yaml file. The CLI will instantiate the Explainer API and call its import_from, passing 
-in the yaml path. This is then delegated to the ExplainerLoader, which then follows the sequence diagram noted in the implicit use case.
-
-
 
 ```{eval-rst}
 
@@ -300,6 +294,12 @@ in the yaml path. This is then delegated to the ExplainerLoader, which then foll
    :inherited-members:
 
 ```
+
+#### Explainer explicit injection of an Explainable Resource (CLI/API)
+
+The Explainer CLI provides an import subcommand that takes a path to the explainable yaml file. The CLI will instantiate the Explainer API and call its import_from, passing 
+in the yaml path. This is then delegated to the ExplainerLoader, which then follows the sequence diagram noted in the implicit use case.
+
 
 ```{eval-rst}
 .. automodule:: explainer.cli

@@ -6,16 +6,20 @@ import yaml files and create a ModuleSpec
 import os
 import sys
 import zipapp
+from pathlib import Path
 from importlib.abc import Loader, MetaPathFinder
 from importlib.machinery import ModuleSpec
 from importlib.util import spec_from_loader, module_from_spec, LazyLoader, find_spec
 from dataclasses import dataclass
 from types import ModuleType
-from typing import Any, Type, List
-
+from typing import Any, Type
+from zipimport import zipimporter
 import yaml
+from yaml import YAMLError
 
 EXT_YAML = '.yaml'
+
+
 @dataclass
 class TabularData:
     """TabularData structure"""
@@ -23,20 +27,22 @@ class TabularData:
     path: str
     data: Any
 
+
 class ExplainerSpec:
     """An ExplainerSpec which holds name, data, model, entry_point and plugin path
     """
 
-    def __init__(self, name: str, data: str, entry_point: List[str], plugin: str, model: str):
-        self.name = name
-        self.data = data
-        self.entry_point = entry_point
-        self.model = model
-        self.plugin = plugin
+    def __init__(self, name: str, plugin: str, dataset: str = None,
+                 entry_point: str = None, model: str = None):
+        self.name: str = name
+        self.dataset: str = dataset
+        self.entry_point: str = entry_point
+        self.model: str = model
+        self.plugin: str = plugin
 
     def __repr__(self):
-        return f"name={self.name} data={self.data} "\
-            "entry_point={self.entry_point} model={self.model} plugin={self.plugin}"
+        return f"{self.__class__.__name__}(name={self.name}, dataset={self.dataset}, "\
+            f"entry_point={self.entry_point}, model={self.model}, plugin={self.plugin}"
 
 
 class ExplainerModuleSpec(ModuleSpec):
@@ -46,7 +52,7 @@ class ExplainerModuleSpec(ModuleSpec):
     def __init__(self, spec: ExplainerSpec, loader: Loader):
         super().__init__(spec.name, loader=loader)
         self.config = spec
-        #for module in self.config.dependencies:
+        # for module in self.config.dependencies:
         #    self._lazy_import(module)
 
     def _lazy_import(self, name: str) -> ModuleSpec:
@@ -100,11 +106,18 @@ class ExplainerLoader(Loader):
         """
         try:
             with open(self._full_path, encoding="UTF-8") as yaml_file:
-                yamldata: ExplainerSpec = yaml.load(yaml_file, Loader=self.get_yaml_loader())
+                yamldata: ExplainerSpec = yaml.load(
+                    yaml_file, Loader=self.get_yaml_loader())
                 if yamldata.plugin is not None:
-                    #explainable_importer: zipimporter = zipimporter(yamldata.plugin)
-                    sys.path.insert(0, yamldata.plugin)
+                    path = Path(yamldata.plugin)
+                    if path.is_file():
+                        _explainable_importer: zipimporter = zipimporter(yamldata.plugin)
+                        #sys.path.insert(0, yamldata.plugin)
                 return ExplainerModuleSpec(yamldata, spec.loader)
+        except YAMLError as exc:
+            if hasattr(exc, 'problem_mark'):
+                mark = exc.problem_mark
+                print(f"Error position: ({mark.line+1}:{mark.column+1})")
         except Exception as error:
             raise ImportError from error
 
@@ -130,7 +143,7 @@ class ExplainerLoader(Loader):
         Returns:
             Type[SafeLoader]: !ExplainerSpec
         """
-        loader = yaml.SafeLoader
+        loader = yaml.FullLoader
         loader.add_constructor(
             "!ExplainerSpec", self.spec)
         return loader

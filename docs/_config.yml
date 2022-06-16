@@ -51,6 +51,7 @@ parse:
     TransformersInterpret: <a href="https://github.com/cdpierse/transformers-interpret" target="_blank"><i class="fa fa-external-link-alt"></i></a>
     XAI: <a href="https://en.wikipedia.org/wiki/Explainable_artificial_intelligence" target="_blank">Explainable AI</a>
     YANG202229: <a href="https://www.sciencedirect.com/science/article/pii/S1566253521001597" target="_blank">Unbox the black-box for the medical explainable AI via multi-modal and multi-centre data fusion&colon; A mini-review, two showcases and beyond</a> {cite}`YANG202229`
+    YamlMissingBattery: <a href="https://realpython.com/python-yaml/" target="_blank">YAML</a>
     ZHU202253: <a href="https://www.sciencedirect.com/science/article/pii/S1566253521001548" target="_blank">Interpretable learning based Dynamic Graph Convolutional Networks for Alzheimer’s Disease analysis</a> {cite}`ZHU202253`
     ZipImporter: <a href="https://docs.python.org/3/library/zipimport.html#zipimporter-objects" target="_blank">zipimport.zipimporter</a>
 

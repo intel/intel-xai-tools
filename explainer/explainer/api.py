@@ -3,8 +3,11 @@
 import os
 from abc import ABC
 from typing import Any, Callable
+
+import yaml
 from numpy.typing import ArrayLike
-from . import ExplainerSpec, ExplainerModuleSpec
+
+from . import ExplainerModuleSpec, ExplainerSpec
 
 explainers_folder = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "explainers"))
@@ -67,7 +70,7 @@ class Explainer(ABC):
         return None
 
 
-    def export_to(self, _yamlspec: ExplainerSpec) -> ExplainerModuleSpec:
+    def export_to(self, yamlspec: ExplainerSpec) -> ExplainerModuleSpec:
         """create a yaml file using ExplainerSpec
 
         Args:
@@ -76,6 +79,8 @@ class Explainer(ABC):
         Returns:
             ExplainerModuleSpec: _description_
         """
+        with open("/path/to/file.yaml", mode="wt", encoding="utf-8") as file:
+            yaml.dump(yamlspec, file)
         return None
 
     def explain(self, data: ArrayLike) -> None:
