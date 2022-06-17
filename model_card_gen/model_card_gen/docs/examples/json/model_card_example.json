@@ -1,0 +1,164 @@
+{
+    "schema_version": "0.0.1",
+    "model_details": {
+        "name": "dolore",
+        "path": "elit do incididunt",
+        "version": {
+            "name": "adipisicing",
+            "diff": "sit pariatur ex Lorem dolore",
+            "date": "2011-03-31"
+        },
+        "graphics": {},
+        "licenses": [
+            {
+                "custom_text": "ut in anim eu cillum"
+            },
+            {
+                "custom_text": "proident irure"
+            },
+            {
+                "custom_text": "ipsum"
+            },
+            {
+                "custom_text": "eu labore est"
+            },
+            {
+                "custom_text": "culpa deserunt consequat"
+            }
+        ],
+        "citations": [
+            {},
+            {
+                "style": "deserunt irure minim sed",
+                "citation": "ipsum"
+            },
+            {
+                "style": "dolor eu cillum cupidatat",
+                "citation": "sed adipisicing"
+            }
+        ],
+        "owners": [
+            {},
+            {
+                "name": "sunt quis cupidatat magna",
+                "contact": "pariatur exercitation laborum"
+            },
+            {
+                "name": "irure culpa magna in ut",
+                "contact": "sint do adipisicing"
+            },
+            {
+                "contact": "consequat exercitation laboris"
+            }
+        ],
+        "references": [
+            {
+                "reference": "http://iSBXJGAsbJHeCBdssh.jwzRpPaEie0Dj4UQriouRcbtfyHNG5a0FZ9,6R225phVfAt14"
+            },
+            {
+                "reference": "http://eyyFAitFSbPnEZBKpAdQcGEpezg.duCFSt0lWCI7C"
+            },
+            {
+                "reference": "http://bxjozryWRuFMVWwGTNbdufTTdzadJhzK.uhppGXIgHN+pwxvG6-9Azg"
+            },
+            {
+                "reference": "https://WsFZssxtZMggJNeAjGOm.onlpfCu8iISB2UWf1WqX."
+            }
+        ],
+        "overview": "amet qui non dolor",
+        "documentation": "ut"
+    },
+    "quantitative_analysis": {
+        "performance_metrics": [
+            {
+                "value": "voluptate",
+                "type": "Lorem",
+                "confidence_interval": {
+                    "upper_bound": "aliquip exercitation anim ut in",
+                    "lower_bound": "cupidatat aliqua nostrud"
+                }
+            },
+            {
+                "value": "reprehenderit ut do",
+                "type": "Excepteur est occaecat",
+                "slice": "sint est dolor",
+                "confidence_interval": {
+                    "lower_bound": "voluptate Excepteur ea enim ad"
+                }
+            },
+            {
+                "type": "nostrud labore veniam amet",
+                "slice": "sit est ex eu nostrud",
+                "value": "elit",
+                "confidence_interval": {
+                    "lower_bound": "Ut ad",
+                    "upper_bound": "mollit dolore in officia qui"
+                }
+            },
+            {
+                "value": "dolore eu Excepteur tempor aliquip",
+                "type": "eiusmod dolore est",
+                "confidence_interval": {
+                    "upper_bound": "labore",
+                    "lower_bound": "aute tempor pariatur amet et"
+                },
+                "slice": "sint mollit"
+            },
+            {
+                "confidence_interval": {},
+                "value": "quis non amet ad laboris",
+                "type": "ad culpa fugiat enim",
+                "slice": "cillum velit in veniam cupidatat"
+            }
+        ]
+    },
+    "model_parameters": {
+        "input_format": "qui irure ut",
+        "data": [
+            {},
+            {},
+            {
+                "description": "fugiat sit dolor exercitation",
+                "name": "in minim Excepteur",
+                "link": "https://fCklQ.scYlFaE50Bfxx5LgtIgNoCfeBE8z442FjLfAQzy4GMVefwsofvIfh0Ak8"
+            },
+            {
+                "description": "commodo sit irure consequat",
+                "sensitive": {
+                    "sensitive_data": [
+                        "Excepteur reprehenderit voluptate"
+                    ]
+                }
+            }
+        ]
+    },
+    "considerations": {
+        "tradeoffs": [
+            {
+                "description": "culpa consectetur incididunt ut occaecat"
+            },
+            {
+                "description": "dolor incididunt ullamco adipisicing Ut"
+            },
+            {
+                "description": "quis"
+            },
+            {
+                "description": "sunt dolor id"
+            }
+        ],
+        "use_cases": [
+            {
+                "description": "ullamco proident sit Duis id"
+            },
+            {
+                "description": "non deserunt culpa"
+            },
+            {
+                "description": "eiusmod dolor nulla cillum"
+            },
+            {},
+            {}
+        ]
+    }
+}
