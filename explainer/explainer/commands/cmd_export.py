@@ -4,9 +4,9 @@ from explainer.cli import (pass_environment, Environment)
 
 
 @click.command("export", short_help="exports packaages to a zip file")
+@click.argument("path", required=True, type=click.Path(resolve_path=True))
 @pass_environment
-def cli(_env: Environment):
-    """Processes the model and data and return values to stdout
-
+def cli(env: Environment, path):
+    """Passes the path to explainer.export_to
     """
-    click.echo("export")
+    env.explainer.export_to(path)

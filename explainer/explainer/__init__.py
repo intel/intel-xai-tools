@@ -28,9 +28,11 @@ class TabularData:
     data: Any
 
 
-class ExplainerSpec:
+class ExplainerSpec(yaml.YAMLObject):
     """An ExplainerSpec which holds name, data, model, entry_point and plugin path
     """
+    yaml_tag = "!ExplainerSpec"
+    yaml_loader = yaml.SafeLoader
 
     def __init__(self, name: str, plugin: str, dataset: str = None,
                  entry_point: str = None, model: str = None):
@@ -39,10 +41,24 @@ class ExplainerSpec:
         self.entry_point: str = entry_point
         self.model: str = model
         self.plugin: str = plugin
+        if self.plugin is not None:
+            path = os.path.abspath(self.plugin)
+            if Path(path).is_file():
+                _explainable_importer: zipimporter = zipimporter(path)
+                #sys.path.insert(0, yamldata.plugin)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(name={self.name}, dataset={self.dataset}, "\
-            f"entry_point={self.entry_point}, model={self.model}, plugin={self.plugin}"
+        info = f'{self.__class__.__name__}(name="{self.name}"'
+        if hasattr(self, 'dataset'):
+            info += f', dataset="{self.dataset}"'
+        if hasattr(self, 'entry_point'):
+            info += f', entry_point="{self.entry_point}"'
+        if hasattr(self, 'model'):
+            info += f', model="{self.model}"'
+        if hasattr(self, 'plugin'):
+            info += f', plugin="{self.plugin}"'
+        info += ")"
+        return info
 
 
 class ExplainerModuleSpec(ModuleSpec):
@@ -106,14 +122,8 @@ class ExplainerLoader(Loader):
         """
         try:
             with open(self._full_path, encoding="UTF-8") as yaml_file:
-                yamldata: ExplainerSpec = yaml.load(
-                    yaml_file, Loader=self.get_yaml_loader())
-                if yamldata.plugin is not None:
-                    path = Path(yamldata.plugin)
-                    if path.is_file():
-                        _explainable_importer: zipimporter = zipimporter(yamldata.plugin)
-                        #sys.path.insert(0, yamldata.plugin)
-                return ExplainerModuleSpec(yamldata, spec.loader)
+                yamlspec = yaml.safe_load(yaml_file)
+                return ExplainerModuleSpec(yamlspec, spec.loader)
         except YAMLError as exc:
             if hasattr(exc, 'problem_mark'):
                 mark = exc.problem_mark

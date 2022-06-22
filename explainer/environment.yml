@@ -326,8 +326,9 @@ dependencies:
     - oauthlib==3.2.0
     - opt-einsum==3.3.0
     - path-explain==0.0.7
+    - pipdeptree==2.2.1
     - pipx==1.0.0
-    - plotly==5.8.0
+    - plotly==5.8.2
     - pockets==0.9.1
     - protobuf==3.20.1
     - pyasn1==0.4.8
@@ -360,7 +361,6 @@ dependencies:
     - sphinx-inline-tabs==2022.1.2b11
     - sphinx-jupyterbook-latex==0.4.6
     - sphinx-multitoc-numbering==0.1.3
-    - sphinx-panels==0.6.0
     - sphinx-rtd-theme==1.0.0
     - sphinx-thebe==0.1.2
     - sphinx-togglebutton==0.3.1

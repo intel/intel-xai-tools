@@ -36,16 +36,18 @@ class Explainer(ABC):
 
         return self
 
-    def explainers(self) -> list:
-        """Return the explainers available for the model
+    @property
+    def explainables(self) -> list[str]:
+        """Return the explainable yaml files
 
         Returns:
-            list: list of explainers
+            list: list of explainables
         """
+        suffix = ".yaml"
         r_var: list = []
         for filename in os.listdir(explainers_folder):
-            if filename.endswith(".py"):
-                r_var.append(filename[4:-3])
+            if filename.endswith(suffix):
+                r_var.append(filename[0:-len(suffix)])
         r_var.sort()
         return r_var
 
@@ -58,8 +60,12 @@ class Explainer(ABC):
         """
         return self._explainer
 
-    def import_from(self, _path: str) -> ExplainerModuleSpec:
+    def import_from(self, _archive: str) -> ExplainerModuleSpec:
         """import a yaml file using ExplainerLoader
+
+        import sys
+        sys.path.insert(0, _archive)
+        call __main__
 
         Args:
             _yamlpath (str): path to the yaml file
@@ -70,17 +76,34 @@ class Explainer(ABC):
         return None
 
 
-    def export_to(self, yamlspec: ExplainerSpec) -> ExplainerModuleSpec:
-        """create a yaml file using ExplainerSpec
+    def export_to(self, _yamlpath: str) -> ExplainerModuleSpec:
+        """create a yaml file under explainer/explainers along with
+            artifacts specified in the yaml file
 
         Args:
-            _yamlpath (str): _description_
+            yamlpath (str): the yaml file path
 
         Returns:
             ExplainerModuleSpec: _description_
         """
-        with open("/path/to/file.yaml", mode="wt", encoding="utf-8") as file:
-            yaml.dump(yamlspec, file)
+        #if os.path.exists(yamlpath):
+        #    with open(yamlpath, mode="wt", encoding="utf-8") as file:
+        #        yaml.dump(yamlspec, file)
+
+        #import zipapp
+        #import io
+        #temp = io.BytesIO()
+        #zipapp.create_archive('myapp.pyz', temp, '/usr/bin/python2')
+        #with open('myapp.pyz', 'wb') as f:
+        #    f.write(temp.getvalue())
+        #
+        # logic
+        # create a directory 
+        # create a __main__.py that imports the yaml
+        # create a requirements.txt
+        # run 'python -m pip install -r requirements.txt --target myapp"
+        # run 'python -m zipapp myapp'
+
         return None
 
     def explain(self, data: ArrayLike) -> None:
