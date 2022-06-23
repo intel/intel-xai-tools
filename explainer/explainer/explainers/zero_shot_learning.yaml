@@ -1,4 +1,5 @@
 --- !ExplainerSpec
 name: zero shot learning
-entry_point: plugin
 plugin: zero_shot_learning.zip
+dependencies:
+- shap==0.40.0

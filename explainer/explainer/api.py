@@ -1,13 +1,14 @@
 """Defines the Explainer API
 """
 import os
+import sys
+import subprocess
+import shutil
 from abc import ABC
 from typing import Any, Callable
-
-import yaml
 from numpy.typing import ArrayLike
 
-from . import ExplainerModuleSpec, ExplainerSpec
+from . import ExplainerLoader, ExplainerModuleSpec, ExplainerSpec
 
 explainers_folder = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "explainers"))
@@ -60,7 +61,7 @@ class Explainer(ABC):
         """
         return self._explainer
 
-    def import_from(self, _archive: str) -> ExplainerModuleSpec:
+    def import_from(self, yamlpath: str) -> ExplainerModuleSpec:
         """import a yaml file using ExplainerLoader
 
         import sys
@@ -68,15 +69,19 @@ class Explainer(ABC):
         call __main__
 
         Args:
-            _yamlpath (str): path to the yaml file
+            yamlpath (str): path to the yaml file
 
         Returns:
             ExplainerModuleSpec: A ModuleSpec subclass
         """
-        return None
+        fullpath = os.path.abspath(yamlpath)
+        module: ExplainerModuleSpec = None
+        if os.path.exists(fullpath):
+            el=ExplainerLoader(fullpath)
+            module=el.create_module()
+        return module
 
-
-    def export_to(self, _yamlpath: str) -> ExplainerModuleSpec:
+    def export_to(self, yamlpath: str) -> ExplainerModuleSpec:
         """create a yaml file under explainer/explainers along with
             artifacts specified in the yaml file
 
@@ -86,25 +91,32 @@ class Explainer(ABC):
         Returns:
             ExplainerModuleSpec: _description_
         """
-        #if os.path.exists(yamlpath):
-        #    with open(yamlpath, mode="wt", encoding="utf-8") as file:
-        #        yaml.dump(yamlspec, file)
-
-        #import zipapp
-        #import io
-        #temp = io.BytesIO()
-        #zipapp.create_archive('myapp.pyz', temp, '/usr/bin/python2')
-        #with open('myapp.pyz', 'wb') as f:
-        #    f.write(temp.getvalue())
-        #
-        # logic
-        # create a directory 
-        # create a __main__.py that imports the yaml
-        # create a requirements.txt
-        # run 'python -m pip install -r requirements.txt --target myapp"
-        # run 'python -m zipapp myapp'
-
-        return None
+        fullpath = os.path.abspath(yamlpath)
+        module: ExplainerModuleSpec = None
+        if os.path.exists(fullpath):
+            el=ExplainerLoader(fullpath)
+            module=el.create_module()
+            spec=module.spec
+            if hasattr(spec, "plugin"):
+                if hasattr(spec, "dependencies"):
+                    dirname=os.path.splitext(spec.plugin)[0]
+                    dirpath=os.path.join(os.curdir,dirname)
+                    os.mkdir(dirpath)
+                    if os.path.exists(dirpath):
+                        cmd = f"{sys.executable} -m pip install "
+                        cmd += " ".join(str(x) for x in spec.dependencies)
+                        cmd += f" --target {dirpath}"
+                        print(cmd)
+                        try:
+                            subprocess.run(cmd.split(), check=True)
+                        except subprocess.CalledProcessError as cpe:
+                            print(f"process error {cpe}")
+                        try:
+                            shutil.make_archive(dirname, format="zip", root_dir=dirpath)
+                            shutil.rmtree(dirpath, ignore_errors=True)
+                        except ValueError as vae:
+                            print(f"error {vae}")
+        return module
 
     def explain(self, data: ArrayLike) -> None:
         """takes _data and forwards to internal explainer

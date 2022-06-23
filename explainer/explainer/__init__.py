@@ -5,15 +5,14 @@ import yaml files and create a ModuleSpec
 """
 import os
 import sys
-import zipapp
+import zipfile
 from pathlib import Path
 from importlib.abc import Loader, MetaPathFinder
 from importlib.machinery import ModuleSpec
 from importlib.util import spec_from_loader, module_from_spec, LazyLoader, find_spec
 from dataclasses import dataclass
 from types import ModuleType
-from typing import Any, Type
-from zipimport import zipimporter
+from typing import Any, Callable, Type, TypedDict
 import yaml
 from yaml import YAMLError
 
@@ -32,25 +31,22 @@ class ExplainerSpec(yaml.YAMLObject):
     """An ExplainerSpec which holds name, data, model, entry_point and plugin path
     """
     yaml_tag = "!ExplainerSpec"
-    yaml_loader = yaml.SafeLoader
 
     def __init__(self, name: str, plugin: str, dataset: str = None,
-                 entry_point: str = None, model: str = None):
+                 dependencies: list[str] = None, entry_point: str = None, model: str = None):
         self.name: str = name
         self.dataset: str = dataset
+        self.dependencies: list[str] = dependencies
         self.entry_point: str = entry_point
         self.model: str = model
         self.plugin: str = plugin
-        if self.plugin is not None:
-            path = os.path.abspath(self.plugin)
-            if Path(path).is_file():
-                _explainable_importer: zipimporter = zipimporter(path)
-                #sys.path.insert(0, yamldata.plugin)
 
     def __repr__(self):
         info = f'{self.__class__.__name__}(name="{self.name}"'
         if hasattr(self, 'dataset'):
             info += f', dataset="{self.dataset}"'
+        if hasattr(self, 'dependencies'):
+            info += f', dependencies="{self.dependencies}"'
         if hasattr(self, 'entry_point'):
             info += f', entry_point="{self.entry_point}"'
         if hasattr(self, 'model'):
@@ -67,8 +63,8 @@ class ExplainerModuleSpec(ModuleSpec):
 
     def __init__(self, spec: ExplainerSpec, loader: Loader):
         super().__init__(spec.name, loader=loader)
-        self.config = spec
-        # for module in self.config.dependencies:
+        self.spec = spec
+        # for module in self.spec.dependencies:
         #    self._lazy_import(module)
 
     def _lazy_import(self, name: str) -> ModuleSpec:
@@ -89,16 +85,16 @@ class ExplainerModuleSpec(ModuleSpec):
         return module
 
     def __repr__(self):
-        args = [f"name={self.name}",
-                f"loader={self.loader}"]
+        args = ['name={!r}'.format(self.name),
+                'loader={!r}'.format(self.loader)]
         if self.origin is not None:
-            args.append(f"origin={self.origin}")
+            args.append('origin={!r}'.format(self.origin))
         if self.submodule_search_locations is not None:
-            args.append(
-                f"submodule_search_locations={self.submodule_search_locations}")
-        if self.config is not None:
-            args.append(f"config={self.config}")
-        return f"{self.__class__.__name__}, ".join(args)
+            args.append('submodule_search_locations={}'
+                        .format(self.submodule_search_locations))
+        if self.spec is not None:
+            args.append('spec={!r}'.format(self.spec))
+        return '{}({})'.format(self.__class__.__name__, ', '.join(args))
 
 
 class ExplainerLoader(Loader):
@@ -108,7 +104,7 @@ class ExplainerLoader(Loader):
     def __init__(self, full_path: str):
         self._full_path = full_path
 
-    def create_module(self, spec: ModuleSpec) -> ModuleSpec:
+    def create_module(self, spec: ModuleSpec=None) -> ModuleSpec:
         """Return a module to initialize and into which to load.
 
         Args:
@@ -120,19 +116,33 @@ class ExplainerLoader(Loader):
         Returns:
             ModuleSpec:
         """
+        loader = self
+        module: ModuleSpec = None
+        if spec is not None and hasattr(spec, 'loader'):
+            loader = spec.loader
         try:
             with open(self._full_path, encoding="UTF-8") as yaml_file:
-                yamlspec = yaml.safe_load(yaml_file)
-                return ExplainerModuleSpec(yamlspec, spec.loader)
+                yamlspec = yaml.load(yaml_file, self.get_yaml_loader())
+                module = ExplainerModuleSpec(yamlspec, loader)
+                spec=module.spec
+                if hasattr(spec, "plugin"):
+                    zipname=spec.plugin
+                    zippath=os.path.join(os.curdir,zipname)
+                    dirname=os.path.splitext(zippath)[0]
+                    if os.path.exists(zippath):
+                        with zipfile.ZipFile(zippath, mode="r") as archive:
+                            archive.extractall(dirname)
+                            sys.path.insert(0, dirname)
         except YAMLError as exc:
             if hasattr(exc, 'problem_mark'):
                 mark = exc.problem_mark
                 print(f"Error position: ({mark.line+1}:{mark.column+1})")
         except Exception as error:
             raise ImportError from error
+        return module
 
     def exec_module(self, _module: ModuleSpec):
-        """needs to reify parts of _module.config and add them to _module
+        """needs to reify parts of _module.spec and add them to _module
 
         Args:
             module (ModuleSpec): _description_
@@ -259,5 +269,66 @@ class ExplainerMetaPathFinder(MetaPathFinder):
                 return spec_from_loader(fullname,  ExplainerLoader(full_path))
         return None
 
+
+class MonkeypatchOnImportHook(MetaPathFinder, Loader):
+    """imports a module dyanmically
+    """
+    def __init__(self, module_to_monkeypatch):
+        self._modules_to_monkeypatch: TypedDict[str, Callable[[Any], None]] = module_to_monkeypatch
+        self._in_create_module = False
+
+    def find_module(self, fullname, path=None):
+        spec = self.find_spec(fullname, path)
+        if spec is None:
+            return None
+        return spec
+
+    def create_module(self, spec: ModuleSpec):
+        self._in_create_module = True
+
+        real_spec = find_spec(spec.name)
+
+        real_module = module_from_spec(real_spec)
+        real_spec.loader.exec_module(real_module)
+
+        self._modules_to_monkeypatch[spec.name](real_module)
+
+        self._in_create_module = False
+        return real_module
+
+    def exec_module(self, module: ModuleType):
+        """inherits from Loader
+
+        Args:
+            module (_type_): _description_
+        """
+        try:
+            _ = sys.modules.pop(module.__name__)
+        except KeyError:
+            print(f"module {module.__name__} is not in sys.modules")
+        sys.modules[module.__name__] = module
+        globals()[module.__name__] = module
+
+    def find_spec(self, fullname: str, _path=None, _target=None):
+        """finds the ModuleSpec
+
+        Args:
+            fullname (str): fullname of module
+            _path (_type_, optional): _description_. Defaults to None.
+            _target (_type_, optional): _description_. Defaults to None.
+
+        Returns:
+            _type_: _description_
+        """
+        if fullname not in self._modules_to_monkeypatch:
+            return None
+
+        if self._in_create_module:
+            # if we are in the create_module function,
+            # we return the real module (return None)
+            return None
+
+        spec = ModuleSpec(fullname, self)
+        return spec
 
 sys.meta_path.insert(0, ExplainerMetaPathFinder())

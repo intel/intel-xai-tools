@@ -181,19 +181,6 @@ In this case, the pretrained model "bert-base-cased" will be downloaded from the
 
 ```
 
-#### path-explain
-
-This library{{PathExplain}} adds an explainer that can also accept either a PyTorch or TensorFlow model. The library explains feature importances and feature interactions in deep neural networks using path attribution methods.
-
-
-```{eval-rst}
-
-.. autoclasstree:: path_explain.explainers.embedding_explainer_tf.EmbeddingExplainerTF
-   :caption: Class Hierarchy of path_explain.explainers.embedding_explainer_tf.EmbeddingExplainerTF
-   :full:
-
-```
-
 ## Python's Plugin Architecture
 
 
