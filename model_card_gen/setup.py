@@ -2,7 +2,8 @@ from distutils.command import build
 from setuptools import setup
 
 REQUIRED_PACKAGES = [
-    'absl-py>=0.9,<0.11',
+    'absl-py>=1.0.0',
+    'joblib<0.15,>=0.12',
     'semantic-version>=2.8.0,<3',
     'jinja2>=3,<4',
     'jsonschema>=3.2.0,<4',
@@ -15,6 +16,7 @@ REQUIRED_PACKAGES = [
 
 TEST_PACKAGES = [
     'pytest',
+    'httplib2<0.19.1'
     'tensorflow-hub',
 ]
 
@@ -52,8 +54,7 @@ setup(
     packages=[
         'model_card_gen',
         'model_card_gen.docs',
-        'model_card_gen.docs.examples',
-        'model_card_gen.utils'
+        'model_card_gen.docs.examples'
     ],
     package_data={
         'model_card_gen': ['schema/**/*.json', 'template/**/*.jinja'],
