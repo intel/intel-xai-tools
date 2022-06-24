@@ -5,8 +5,6 @@ import yaml files and create a ModuleSpec
 """
 import os
 import sys
-import zipfile
-from pathlib import Path
 from importlib.abc import Loader, MetaPathFinder
 from importlib.machinery import ModuleSpec
 from importlib.util import spec_from_loader, module_from_spec, LazyLoader, find_spec
@@ -85,16 +83,16 @@ class ExplainerModuleSpec(ModuleSpec):
         return module
 
     def __repr__(self):
-        args = ['name={!r}'.format(self.name),
-                'loader={!r}'.format(self.loader)]
-        if self.origin is not None:
-            args.append('origin={!r}'.format(self.origin))
-        if self.submodule_search_locations is not None:
-            args.append('submodule_search_locations={}'
-                        .format(self.submodule_search_locations))
-        if self.spec is not None:
-            args.append('spec={!r}'.format(self.spec))
-        return '{}({})'.format(self.__class__.__name__, ', '.join(args))
+        info = f'{self.name}(name="{self.name}"'
+        if hasattr(self, 'loader'):
+            info += f', loader="{self.loader}"'
+        if hasattr(self, 'origin'):
+            info += f', origin="{self.origin}"'
+        if hasattr(self, 'submodule_search_locations'):
+            info += f', submodule_search_locations="{self.submodule_search_locations}"'
+        if hasattr(self, 'spec'):
+            info += f', spec="{self.spec}"'
+        return info
 
 
 class ExplainerLoader(Loader):
@@ -124,15 +122,6 @@ class ExplainerLoader(Loader):
             with open(self._full_path, encoding="UTF-8") as yaml_file:
                 yamlspec = yaml.load(yaml_file, self.get_yaml_loader())
                 module = ExplainerModuleSpec(yamlspec, loader)
-                spec=module.spec
-                if hasattr(spec, "plugin"):
-                    zipname=spec.plugin
-                    zippath=os.path.join(os.curdir,zipname)
-                    dirname=os.path.splitext(zippath)[0]
-                    if os.path.exists(zippath):
-                        with zipfile.ZipFile(zippath, mode="r") as archive:
-                            archive.extractall(dirname)
-                            sys.path.insert(0, dirname)
         except YAMLError as exc:
             if hasattr(exc, 'problem_mark'):
                 mark = exc.problem_mark

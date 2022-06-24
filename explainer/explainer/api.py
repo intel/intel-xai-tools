@@ -3,12 +3,13 @@
 import os
 import sys
 import subprocess
+import zipfile
 import shutil
 from abc import ABC
 from typing import Any, Callable
 from numpy.typing import ArrayLike
 
-from . import ExplainerLoader, ExplainerModuleSpec, ExplainerSpec
+from . import ExplainerLoader, ExplainerModuleSpec
 
 explainers_folder = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "explainers"))
@@ -77,8 +78,20 @@ class Explainer(ABC):
         fullpath = os.path.abspath(yamlpath)
         module: ExplainerModuleSpec = None
         if os.path.exists(fullpath):
-            el=ExplainerLoader(fullpath)
-            module=el.create_module()
+            exl=ExplainerLoader(fullpath)
+            module=exl.create_module()
+            spec=module.spec
+            if hasattr(spec, "plugin"):
+                zipname=spec.plugin
+                zippath=os.path.join(os.path.dirname(fullpath), zipname)
+                dirname=os.path.splitext(zippath)[0]
+                print(f"create_module zippath={zippath} dirname={dirname}")
+                if os.path.exists(dirname) is False and os.path.exists(zippath) is True:
+                    with zipfile.ZipFile(zippath, mode="r") as archive:
+                        archive.extractall(dirname)
+                if os.path.exists(dirname) is True:
+                    sys.path.insert(0, dirname)
+
         return module
 
     def export_to(self, yamlpath: str) -> ExplainerModuleSpec:
@@ -94,28 +107,34 @@ class Explainer(ABC):
         fullpath = os.path.abspath(yamlpath)
         module: ExplainerModuleSpec = None
         if os.path.exists(fullpath):
-            el=ExplainerLoader(fullpath)
-            module=el.create_module()
+            exl=ExplainerLoader(fullpath)
+            module=exl.create_module()
             spec=module.spec
             if hasattr(spec, "plugin"):
                 if hasattr(spec, "dependencies"):
                     dirname=os.path.splitext(spec.plugin)[0]
-                    dirpath=os.path.join(os.curdir,dirname)
-                    os.mkdir(dirpath)
-                    if os.path.exists(dirpath):
-                        cmd = f"{sys.executable} -m pip install "
-                        cmd += " ".join(str(x) for x in spec.dependencies)
-                        cmd += f" --target {dirpath}"
-                        print(cmd)
-                        try:
-                            subprocess.run(cmd.split(), check=True)
-                        except subprocess.CalledProcessError as cpe:
-                            print(f"process error {cpe}")
-                        try:
-                            shutil.make_archive(dirname, format="zip", root_dir=dirpath)
-                            shutil.rmtree(dirpath, ignore_errors=True)
-                        except ValueError as vae:
-                            print(f"error {vae}")
+                    dirpath=os.path.join(os.path.dirname(fullpath),dirname)
+                    if os.path.exists(dirpath) is False:
+                        os.mkdir(dirpath)
+                        if os.path.exists(dirpath):
+                            cmd = f"{sys.executable} -m pip install "
+                            cmd += " ".join(str(x) for x in spec.dependencies)
+                            cmd += f" --target {dirpath}"
+                            print(f"export_to dirname={dirname} dirpath={dirpath}")
+                            try:
+                                subprocess.run(cmd.split(), check=True)
+                                shutil.make_archive(dirname, format="zip", root_dir=dirpath)
+                                shutil.rmtree(dirpath, ignore_errors=True)
+                                currentfile = dirname+".zip"
+                                currentlocation: str = os.path.join(os.curdir, currentfile)
+                                targetlocation: str = os.path.join(os.path.dirname(fullpath),
+                                                                   currentfile)
+                                print(f"moving {currentlocation} to {targetlocation}")
+                                shutil.move(currentlocation, targetlocation)
+                            except subprocess.CalledProcessError as cpe:
+                                print(f"process error {cpe}")
+                            except ValueError as vae:
+                                print(f"error {vae}")
         return module
 
     def explain(self, data: ArrayLike) -> None:
