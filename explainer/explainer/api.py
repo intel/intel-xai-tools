@@ -2,8 +2,7 @@
 """
 import os
 import sys
-import subprocess
-import zipfile
+from subprocess import run, CalledProcessError, PIPE
 import shutil
 from abc import ABC
 from typing import Any, Callable
@@ -80,18 +79,6 @@ class Explainer(ABC):
         if os.path.exists(fullpath):
             exl=ExplainerLoader(fullpath)
             module=exl.create_module()
-            spec=module.spec
-            if hasattr(spec, "plugin"):
-                zipname=spec.plugin
-                zippath=os.path.join(os.path.dirname(fullpath), zipname)
-                dirname=os.path.splitext(zippath)[0]
-                print(f"create_module zippath={zippath} dirname={dirname}")
-                if os.path.exists(dirname) is False and os.path.exists(zippath) is True:
-                    with zipfile.ZipFile(zippath, mode="r") as archive:
-                        archive.extractall(dirname)
-                if os.path.exists(dirname) is True:
-                    sys.path.insert(0, dirname)
-
         return module
 
     def export_to(self, yamlpath: str) -> ExplainerModuleSpec:
@@ -122,16 +109,18 @@ class Explainer(ABC):
                             cmd += f" --target {dirpath}"
                             print(f"export_to dirname={dirname} dirpath={dirpath}")
                             try:
-                                subprocess.run(cmd.split(), check=True)
+                                install_cmd = run(cmd.split(), check=True, stdout=PIPE, stderr=PIPE)
+                                if install_cmd.returncode != 0:
+                                    error = install_cmd.stderr.decode()
+                                    print(f"error in running {cmd}: {error}")
                                 shutil.make_archive(dirname, format="zip", root_dir=dirpath)
                                 shutil.rmtree(dirpath, ignore_errors=True)
                                 currentfile = dirname+".zip"
                                 currentlocation: str = os.path.join(os.curdir, currentfile)
                                 targetlocation: str = os.path.join(os.path.dirname(fullpath),
                                                                    currentfile)
-                                print(f"moving {currentlocation} to {targetlocation}")
                                 shutil.move(currentlocation, targetlocation)
-                            except subprocess.CalledProcessError as cpe:
+                            except CalledProcessError as cpe:
                                 print(f"process error {cpe}")
                             except ValueError as vae:
                                 print(f"error {vae}")

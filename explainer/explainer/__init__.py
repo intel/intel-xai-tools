@@ -5,12 +5,15 @@ import yaml files and create a ModuleSpec
 """
 import os
 import sys
+import zipfile
+from dataclasses import dataclass
 from importlib.abc import Loader, MetaPathFinder
 from importlib.machinery import ModuleSpec
-from importlib.util import spec_from_loader, module_from_spec, LazyLoader, find_spec
-from dataclasses import dataclass
+from importlib.util import (LazyLoader, find_spec, module_from_spec,
+                            spec_from_loader)
 from types import ModuleType
 from typing import Any, Callable, Type, TypedDict
+
 import yaml
 from yaml import YAMLError
 
@@ -122,6 +125,20 @@ class ExplainerLoader(Loader):
             with open(self._full_path, encoding="UTF-8") as yaml_file:
                 yamlspec = yaml.load(yaml_file, self.get_yaml_loader())
                 module = ExplainerModuleSpec(yamlspec, loader)
+                spec=module.spec
+                if hasattr(spec, "plugin"):
+                    zipname=spec.plugin
+                    zippath=os.path.join(os.path.dirname(self._full_path), zipname)
+                    dirname=os.path.splitext(zippath)[0]
+                    print(f"ExplainerLoader.create_module zippath={zippath} dirname={dirname}")
+                    if not os.path.exists(dirname) and os.path.exists(zippath):
+                        with zipfile.ZipFile(zippath, mode="r") as archive:
+                            print(f"extracting all to {dirname}")
+                            archive.extractall(dirname)
+                            os.remove(zippath)
+                    if os.path.exists(dirname) and dirname not in sys.path:
+                        print(f"*** inserting into sys.path {dirname} ***")
+                        sys.path.insert(0, dirname)
         except YAMLError as exc:
             if hasattr(exc, 'problem_mark'):
                 mark = exc.problem_mark
@@ -319,5 +336,19 @@ class MonkeypatchOnImportHook(MetaPathFinder, Loader):
 
         spec = ModuleSpec(fullname, self)
         return spec
+
+def test_perform_mpl_monkeypatch():
+    """test function
+    """
+    def perform_mpl_monkeypatch(_pyplot):
+        print(f"Monkeypatching pyplot {_pyplot}")
+    # Install monkeypatcher
+    sys.meta_path.insert(
+        0, MonkeypatchOnImportHook({
+            "matplotlib.pyplot": perform_mpl_monkeypatch
+        })
+    )
+    import matplotlib.pyplot
+
 
 sys.meta_path.insert(0, ExplainerMetaPathFinder())

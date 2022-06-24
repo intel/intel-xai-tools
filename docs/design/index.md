@@ -181,23 +181,17 @@ In this case, the pretrained model "bert-base-cased" will be downloaded from the
 
 ```
 
-## Python's Plugin Architecture
+## Python's importlib
 
 
-Python's {{PEP451}}, introduced in python-3.4 transformed a brittle and error prone import mechanism to one that is extensible and secure. Moreover, it introduced a type called ModuleSpec that the import machinery instantiates whenever a new module is loaded. Finally, {{PEP451}} expanded the types of Loaders and MetaPathLoaders that are allowed. The way to find and load python classes and resources such as csv's specifically provides new extensibility architectures, known as plugin architectures. As noted in the article {{PluginArchitectureinPython}}:
-
-
-> At its core, a plugin architecture consists of two components: a core system and plug-in modules. The main key design here is to allow adding additional features that are called plugins modules to our core system, providing extensibility, flexibility, and isolation to our application features. This will provide us with the ability to add, remove, and change the behaviour of the application with little or no effect on the core system or other plug-in modules making our code very modular and extensible .
-
-
-This architecture is specifically geared to meet the functionality required by XAI explainations. Injecting explanations within a workflow is synonomous with providing "extensibility, flexibility, and isolation to our application features". Yet there are many ways to do this, specifically what approach makes sense for the many use cases that add explanations?  The upcoming {{PEP690}}, due in python-3.12 further enhances how imports work, by allowing imports to be lazily loaded.
+Python's {{PEP451}}, introduced in python-3.4 enhanced the import mechanism to be extensible and secure by introducing a type called ModuleSpec that the import machinery instantiates whenever a new module is loaded. This PEP expanded the types of Loaders and MetaPathLoaders that are allowed. Directly importing resources such as yaml is leveraged by the XAI explainer. When a yaml file is imported, the explainer will dynamically inject explanations within a workflow as described below.
 
 
 ### Explainer and Explainable Resources
 
 #### Explainer implicit injection of an Explainable Resource
 
-By leveraging the python import machinery, explainer can implicitly load and import an explainable resource. In this case, Explainer adds customized Loader and MetaPathLoader classes as shown below. 
+By leveraging the python import machinery, explainer can implicitly load and import an explainable resource. Explainer adds customized Loader and MetaPathLoader classes noted below. 
 
 ```{eval-rst}
 
@@ -226,8 +220,9 @@ zero_shot_learning.yaml
 ^^^
 --- !ExplainerSpec<br/>
 name: zero shot learning<br/>
-entry_point:Plugin<br/>
 plugin:zero_shot_learning.zip<br/>
+dependencies:
+- shap==0.40.0
 ```
 
 The first line is a YAML annotation that uses {{PyYaml}} to reify the yaml file as an ExplainerSpec dataclass, shown below.
@@ -239,13 +234,14 @@ classDiagram
     class ExplainerSpec
     ExplainerSpec: +String name
     ExplainerSpec: +String dataset
+    ExplainerSpec: +List dependencies
     ExplainerSpec: +String entry_point
     ExplainerSpec: +String model
     ExplainerSpec: +String plugin
 
 ```
 
-The set of steps to inject an explainable resource are shown in the sequence diagram below:
+The set of steps that implicitly injects an explainable resource are shown in the sequence diagram below:
 
 
 ```{mermaid}
@@ -260,11 +256,10 @@ sequenceDiagram
     ExplainerLoader->>ExplainerSpec: create
     ExplainerSpec->>ExplainerLoader: fields initialized from yaml file
     ExplainerLoader->>zero_shot_learning.zip: find zip file
-    zero_shot_learning.zip->>ExplainerLoader: load zip file
+    zero_shot_learning.zip->>ExplainerLoader: extract zip file
+    ExplainerLoader->>ExplainerLoader: add path to sys.path
 
 ```
-
-Note that loading the zip file uses {{ZipImporter}}. Once the zip is loaded, an optional entry_point specified in the yml is executed. If no entry_point is specified, then the API looks for a default module of __main__.py in the archive. It passes this to zipimporter.exec_module. Finally, this archive is prepended to sys.path so that subsequent imports include the archive in the find module algorithm. 
 
 
 ```{eval-rst}
@@ -284,8 +279,7 @@ Note that loading the zip file uses {{ZipImporter}}. Once the zip is loaded, an 
 
 #### Explainer explicit injection of an Explainable Resource (CLI/API)
 
-The Explainer CLI provides an import subcommand that takes a path to the explainable yaml file. The CLI will instantiate the Explainer API and call its import_from, passing 
-in the yaml path. This is then delegated to the ExplainerLoader, which then follows the sequence diagram noted in the implicit use case.
+The Explainer CLI provides export and import subcommands. Each command requires a path to an explainable yaml file. The CLI will instantiate the Explainer API and call its export_to or import_from, passing in the yaml path. This is then delegated to the ExplainerLoader, which then follows the sequence diagram noted in the implicit use case above.
 
 
 ```{eval-rst}
