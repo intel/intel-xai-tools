@@ -114,19 +114,27 @@ Model Card Generator allows users to create interactive HTML reports of containi
 
 Step 1: Clone repo
 
-`git clone https://github.com/IntelAI/intel-xai-tools.git`
+```shell
+git clone https://github.com/IntelAI/intel-xai-tools.git
+```
 
 Step 2: Navigate to `model-card-generator` package
 
-`cd intel-xai-tools/model_card_gen`
+```shell
+cd intel-xai-tools/model_card_gen
+```
 
 Step 3: Intall with pip
 
-`pip install .`
+```shell
+pip install .
+```
 
 For notebook dependencies install with
 
-`pip install ".[notebook]"`
+```shell
+pip install ".[notebook]"
+```
 
 
 ### Run
@@ -177,7 +185,7 @@ _eval_config = os.path.join(_project_path, 'eval_config.proto')
 ```
 
 **Create Model Card**
-````python
+```python
 from model_card_gen.model_card_gen import ModelCardGen
 mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config, model_card=mc)
 ```
@@ -186,8 +194,12 @@ mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config, model_card=m
 
 Step 1: Test by installing test dependencies:
 
-`pip install ".[test]"`
+```shell
+pip install ".[test]"
+```
 
 Step 2: Run tests
 
-`python -m pytest model_card_gen/tests/`
+```shell
+python -m pytest model_card_gen/tests/
+```
