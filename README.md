@@ -4,4 +4,4 @@ This repository provides tools for data scientists and MLOps engineers that have
 
 Currently the following tool(s) are provided by this project:
 
-- [Model Card Genreator](/model_card_gen)
+- [Model Card Generator](/model_card_gen)

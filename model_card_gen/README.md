@@ -1,6 +1,6 @@
 # Intel® Explainable AI Tools
 
-## Model Card Genreator
+## Model Card Generator
 
 Model Card Generator allows users to create interactive HTML reports of containing model performance and fairness metrics
 
