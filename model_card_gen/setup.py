@@ -74,7 +74,8 @@ setup(
     packages=[
         'model_card_gen',
         'model_card_gen.docs',
-        'model_card_gen.docs.examples'
+        'model_card_gen.docs.examples',
+        'model_card_gen.graphics'
     ],
     package_data={
         'model_card_gen': ['schema/**/*.json', 'template/**/*.jinja'],
