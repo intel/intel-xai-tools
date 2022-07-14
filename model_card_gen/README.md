@@ -110,7 +110,7 @@ Model Card Generator allows users to create interactive HTML reports of containi
 </tbody>
 </table>
 
-### Intall
+### Install
 
 Step 1: Clone repo
 
@@ -124,7 +124,7 @@ Step 2: Navigate to `model-card-generator` package
 cd intel-xai-tools/model_card_gen
 ```
 
-Step 3: Intall with pip
+Step 3: Install with pip
 
 ```shell
 pip install .
