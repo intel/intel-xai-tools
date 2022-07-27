@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explaining text classifications &mdash; Explainer</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-thebe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+        <script src="../_static/design-tabs.js"></script>
+        <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+        <script async="async" src="../_static/sphinx-thebe.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Explaining zero shot learning" href="zero_shot_learning.html" />
+    <link rel="prev" title="Explaining house prices" href="house_prices_regression.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="house_prices_regression.html">Explaining house prices</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Explaining text classifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zero_shot_learning.html">Explaining zero shot learning</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Examples</a> &raquo;</li>
+      <li>Explaining text classifications</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/multiclass_classification.ipynb" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="explaining-text-classifications">
+<h1>Explaining text classifications<a class="headerlink" href="#explaining-text-classifications" title="Permalink to this headline"></a></h1>
+<p>See <a class="reference external" href="https://github.com/cdpierse/transformers-interpret/blob/master/notebooks/multiclass_classification_example.ipynb">Transformers Interpret Multiclass Classification Example</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Adds multiclass_classification.pkz to sys.path which includes a captum entry_point for explaining integrated gradients. See multclass_classification.yaml</span>
+<span class="c1"># To create the multiclass_classification.pkz run &#39;explainer export multiclass_classification&#39;</span>
+
+<span class="kn">from</span> <span class="nn">explainer.explainers</span> <span class="kn">import</span> <span class="n">multiclass_classification</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModelForSequenceClassification</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="import-industry-classification-mode">
+<h2>Import Industry Classification Mode<a class="headerlink" href="#import-industry-classification-mode" title="Permalink to this headline"></a></h2>
+<p>This finetuned model by &#64;sampathkethineedi uses a distilbert base to predict the professional industry a text is referring to.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;sampathkethineedi/industry-classification&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;sampathkethineedi/industry-classification&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s explore the classes, there are 62 unique classes. Many of these are overlapping/related industries such as <strong>Health Care Equipment</strong> and <strong>Health Care Supplies</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">id2label</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{0: &#39;Advertising&#39;,
+ 1: &#39;Aerospace &amp; Defense&#39;,
+ 2: &#39;Apparel Retail&#39;,
+ 3: &#39;Apparel, Accessories &amp; Luxury Goods&#39;,
+ 4: &#39;Application Software&#39;,
+ 5: &#39;Asset Management &amp; Custody Banks&#39;,
+ 6: &#39;Auto Parts &amp; Equipment&#39;,
+ 7: &#39;Biotechnology&#39;,
+ 8: &#39;Building Products&#39;,
+ 9: &#39;Casinos &amp; Gaming&#39;,
+ 10: &#39;Commodity Chemicals&#39;,
+ 11: &#39;Communications Equipment&#39;,
+ 12: &#39;Construction &amp; Engineering&#39;,
+ 13: &#39;Construction Machinery &amp; Heavy Trucks&#39;,
+ 14: &#39;Consumer Finance&#39;,
+ 15: &#39;Data Processing &amp; Outsourced Services&#39;,
+ 16: &#39;Diversified Metals &amp; Mining&#39;,
+ 17: &#39;Diversified Support Services&#39;,
+ 18: &#39;Electric Utilities&#39;,
+ 19: &#39;Electrical Components &amp; Equipment&#39;,
+ 20: &#39;Electronic Equipment &amp; Instruments&#39;,
+ 21: &#39;Environmental &amp; Facilities Services&#39;,
+ 22: &#39;Gold&#39;,
+ 23: &#39;Health Care Equipment&#39;,
+ 24: &#39;Health Care Facilities&#39;,
+ 25: &#39;Health Care Services&#39;,
+ 26: &#39;Health Care Supplies&#39;,
+ 27: &#39;Health Care Technology&#39;,
+ 28: &#39;Homebuilding&#39;,
+ 29: &#39;Hotels, Resorts &amp; Cruise Lines&#39;,
+ 30: &#39;Human Resource &amp; Employment Services&#39;,
+ 31: &#39;IT Consulting &amp; Other Services&#39;,
+ 32: &#39;Industrial Machinery&#39;,
+ 33: &#39;Integrated Telecommunication Services&#39;,
+ 34: &#39;Interactive Media &amp; Services&#39;,
+ 35: &#39;Internet &amp; Direct Marketing Retail&#39;,
+ 36: &#39;Internet Services &amp; Infrastructure&#39;,
+ 37: &#39;Investment Banking &amp; Brokerage&#39;,
+ 38: &#39;Leisure Products&#39;,
+ 39: &#39;Life Sciences Tools &amp; Services&#39;,
+ 40: &#39;Movies &amp; Entertainment&#39;,
+ 41: &#39;Oil &amp; Gas Equipment &amp; Services&#39;,
+ 42: &#39;Oil &amp; Gas Exploration &amp; Production&#39;,
+ 43: &#39;Oil &amp; Gas Refining &amp; Marketing&#39;,
+ 44: &#39;Oil &amp; Gas Storage &amp; Transportation&#39;,
+ 45: &#39;Packaged Foods &amp; Meats&#39;,
+ 46: &#39;Personal Products&#39;,
+ 47: &#39;Pharmaceuticals&#39;,
+ 48: &#39;Property &amp; Casualty Insurance&#39;,
+ 49: &#39;Real Estate Operating Companies&#39;,
+ 50: &#39;Regional Banks&#39;,
+ 51: &#39;Research &amp; Consulting Services&#39;,
+ 52: &#39;Restaurants&#39;,
+ 53: &#39;Semiconductors&#39;,
+ 54: &#39;Specialty Chemicals&#39;,
+ 55: &#39;Specialty Stores&#39;,
+ 56: &#39;Steel&#39;,
+ 57: &#39;Systems Software&#39;,
+ 58: &#39;Technology Distributors&#39;,
+ 59: &#39;Technology Hardware, Storage &amp; Peripherals&#39;,
+ 60: &#39;Thrifts &amp; Mortgage Finance&#39;,
+ 61: &#39;Trading Companies &amp; Distributors&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Import <strong>SequenceClassificationExplainer</strong> from transformers interpret. This class should work with most if not all language models with a sequence classification head from the transformers package.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Stocks ended a choppy session mixed as investors digested a host of corporate earnings results and considered policymakers’ next moves to support the still virus-stricken economy.</span>
+<span class="s2">The S&amp;P 500 shook off earlier declines to narrowly eke out a record closing high.The Dow ended a tick below its recent record closing level.&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">entry_point</span>
+<span class="n">multiclass_explainer</span> <span class="o">=</span> <span class="n">entry_point</span><span class="o">.</span><span class="n">entry_point</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># call the exlplainer</span>
+<span class="n">word_attributions</span> <span class="o">=</span> <span class="n">multiclass_explainer</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">sample_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># seems to be an appropriate prediction</span>
+<span class="n">multiclass_explainer</span><span class="o">.</span><span class="n">predicted_class_name</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Investment Banking &amp; Brokerage&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># look the the raw word attributions</span>
+<span class="n">word_attributions</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;[CLS]&#39;, 0.0),
+ (&#39;stocks&#39;, 0.17552726310233607),
+ (&#39;ended&#39;, -0.038503090711732704),
+ (&#39;a&#39;, 0.005213849882699535),
+ (&#39;chop&#39;, -0.3711210736862698),
+ (&#39;##py&#39;, 0.0547408919244658),
+ (&#39;session&#39;, 0.11222962157097703),
+ (&#39;mixed&#39;, 0.04523504182457808),
+ (&#39;as&#39;, 0.008543752839572896),
+ (&#39;investors&#39;, 0.22552279940165373),
+ (&#39;digest&#39;, 0.09217338299811242),
+ (&#39;##ed&#39;, 0.1464443040425804),
+ (&#39;a&#39;, -0.10249613330509676),
+ (&#39;host&#39;, -0.07218371648238972),
+ (&#39;of&#39;, 0.22421010032188932),
+ (&#39;corporate&#39;, 0.2789596257839014),
+ (&#39;earnings&#39;, 0.6027407244671367),
+ (&#39;results&#39;, -0.0996496017223695),
+ (&#39;and&#39;, -0.01712193120579429),
+ (&#39;considered&#39;, 0.24777286314104055),
+ (&#39;policy&#39;, 0.1037566231158218),
+ (&#39;##makers&#39;, 0.011601823072946571),
+ (&#39;’&#39;, 0.01130267825568464),
+ (&#39;next&#39;, -0.046363195294348646),
+ (&#39;moves&#39;, -0.004164080534027568),
+ (&#39;to&#39;, 0.08991352552802684),
+ (&#39;support&#39;, 0.07168823763478642),
+ (&#39;the&#39;, 0.027829731902619767),
+ (&#39;still&#39;, 0.07106038609355107),
+ (&#39;virus&#39;, 0.1065563701692622),
+ (&#39;-&#39;, -0.07300296139081117),
+ (&#39;stricken&#39;, 0.03878559072539113),
+ (&#39;economy&#39;, 0.20197413950812196),
+ (&#39;.&#39;, 0.018359815784006004),
+ (&#39;the&#39;, 0.030505522771937837),
+ (&#39;s&#39;, 0.015674834662892292),
+ (&#39;&amp;&#39;, 0.041975711335050396),
+ (&#39;p&#39;, -0.033973984838821226),
+ (&#39;500&#39;, 0.06954813448651105),
+ (&#39;shook&#39;, -0.0002870996899143928),
+ (&#39;off&#39;, 0.07757456205341723),
+ (&#39;earlier&#39;, -0.01443114728250422),
+ (&#39;declines&#39;, 0.04088894882484938),
+ (&#39;to&#39;, 0.03806441931897532),
+ (&#39;narrowly&#39;, 0.023090021063891783),
+ (&#39;ek&#39;, 0.018481878865946523),
+ (&#39;##e&#39;, 0.015685354632167282),
+ (&#39;out&#39;, 0.038165195777981345),
+ (&#39;a&#39;, 0.027856161551200187),
+ (&#39;record&#39;, 0.0032875483807048105),
+ (&#39;closing&#39;, 0.03280436390252108),
+ (&#39;high&#39;, 0.05969036339178966),
+ (&#39;.&#39;, 0.02243629268587111),
+ (&#39;the&#39;, 9.880077479837574e-06),
+ (&#39;dow&#39;, 0.15086799914331603),
+ (&#39;ended&#39;, 0.048504801641335575),
+ (&#39;a&#39;, 0.019763523029682206),
+ (&#39;tick&#39;, 0.014249493652564806),
+ (&#39;below&#39;, 0.048071153743793414),
+ (&#39;its&#39;, 0.06881026015862841),
+ (&#39;recent&#39;, 0.00812501929460816),
+ (&#39;record&#39;, 0.023538167608826186),
+ (&#39;closing&#39;, 0.027084717596113035),
+ (&#39;level&#39;, 0.014935523650386005),
+ (&#39;.&#39;, 0.006821018337177563),
+ (&#39;[SEP]&#39;, 0.0)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualizating-explanations">
+<h2>Visualizating Explanations<a class="headerlink" href="#visualizating-explanations" title="Permalink to this headline"></a></h2>
+<p>With a single call to the <code class="docutils literal notranslate"><span class="pre">visualize()</span></code> method we get a nice inline display of what inputs are causing the activations to fire that led to this prediction. <strong>Note the alogirthm used to calcualte attributions are Layer Integreated Gradients to read more about them click <a class="reference external" href="https://captum.ai/docs/algorithms">here</a></strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">html</span> <span class="o">=</span> <span class="n">multiclass_explainer</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table width: 100%><div style="border-top: 1px solid; margin-top: 5px;             padding-top: 5px; display: inline-block"><b>Legend: </b><span style="display: inline-block; width: 10px; height: 10px;                 border: 1px solid; background-color:                 hsl(0, 75%, 60%)"></span> Negative  <span style="display: inline-block; width: 10px; height: 10px;                 border: 1px solid; background-color:                 hsl(0, 75%, 100%)"></span> Neutral  <span style="display: inline-block; width: 10px; height: 10px;                 border: 1px solid; background-color:                 hsl(120, 75%, 50%)"></span> Positive  </div><tr><th>True Label</th><th>Predicted Label</th><th>Attribution Label</th><th>Attribution Score</th><th>Word Importance</th><tr><td><text style="padding-right:2em"><b>37</b></text></td><td><text style="padding-right:2em"><b>Investment Banking & Brokerage (0.78)</b></text></td><td><text style="padding-right:2em"><b>Investment Banking & Brokerage</b></text></td><td><text style="padding-right:2em"><b>3.09</b></text></td><td><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> [CLS]                    </font></mark><mark style="background-color: hsl(120, 75%, 92%); opacity:1.0;                     line-height:1.75"><font color="black"> stocks                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> ended                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(0, 75%, 86%); opacity:1.0;                     line-height:1.75"><font color="black"> chop                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> ##py                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> session                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> mixed                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> as                    </font></mark><mark style="background-color: hsl(120, 75%, 89%); opacity:1.0;                     line-height:1.75"><font color="black"> investors                    </font></mark><mark style="background-color: hsl(120, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> digest                    </font></mark><mark style="background-color: hsl(120, 75%, 93%); opacity:1.0;                     line-height:1.75"><font color="black"> ##ed                    </font></mark><mark style="background-color: hsl(0, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> host                    </font></mark><mark style="background-color: hsl(120, 75%, 89%); opacity:1.0;                     line-height:1.75"><font color="black"> of                    </font></mark><mark style="background-color: hsl(120, 75%, 87%); opacity:1.0;                     line-height:1.75"><font color="black"> corporate                    </font></mark><mark style="background-color: hsl(120, 75%, 70%); opacity:1.0;                     line-height:1.75"><font color="black"> earnings                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> results                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> and                    </font></mark><mark style="background-color: hsl(120, 75%, 88%); opacity:1.0;                     line-height:1.75"><font color="black"> considered                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> policy                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> ##makers                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> ’                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> next                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> moves                    </font></mark><mark style="background-color: hsl(120, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> to                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> support                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> the                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> still                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> virus                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> -                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> stricken                    </font></mark><mark style="background-color: hsl(120, 75%, 90%); opacity:1.0;                     line-height:1.75"><font color="black"> economy                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> .                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> the                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> s                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> &                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> p                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> 500                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> shook                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> off                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> earlier                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> declines                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> to                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> narrowly                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> ek                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> ##e                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> out                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> record                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> closing                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> high                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> .                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> the                    </font></mark><mark style="background-color: hsl(120, 75%, 93%); opacity:1.0;                     line-height:1.75"><font color="black"> dow                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> ended                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> tick                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> below                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> its                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> recent                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> record                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> closing                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> level                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> .                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> [SEP]                    </font></mark></td><tr></table></div></div>
+</div>
+</section>
+<section id="explaining-the-same-text-for-a-different-class">
+<h2>Explaining The Same Text For A Different Class<a class="headerlink" href="#explaining-the-same-text-for-a-different-class" title="Permalink to this headline"></a></h2>
+<p>Lets say we think this text could also fall somewhat under the class of <strong>Asset Management &amp; Custody Banks</strong> If we want it is also possible to get an explantion/attributions for the text with that class</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">word_attributions</span> <span class="o">=</span> <span class="n">multiclass_explainer</span><span class="p">(</span><span class="n">sample_text</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s2">&quot;Asset Management &amp; Custody Banks&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># look the the raw word attributions</span>
+<span class="n">word_attributions</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;[CLS]&#39;, 0.0),
+ (&#39;stocks&#39;, -0.14385777183491444),
+ (&#39;ended&#39;, 0.17111795657175347),
+ (&#39;a&#39;, -0.06059827675821222),
+ (&#39;chop&#39;, 0.5140052958408691),
+ (&#39;##py&#39;, -0.08750464917399801),
+ (&#39;session&#39;, -0.07754135127683912),
+ (&#39;mixed&#39;, 0.036185013338416054),
+ (&#39;as&#39;, -0.009426752579071787),
+ (&#39;investors&#39;, 0.49884473676649377),
+ (&#39;digest&#39;, -0.21302128337432716),
+ (&#39;##ed&#39;, -0.06429115723373122),
+ (&#39;a&#39;, 0.1777262852180482),
+ (&#39;host&#39;, 0.15808861100676133),
+ (&#39;of&#39;, -0.06705092596928693),
+ (&#39;corporate&#39;, -0.1500207797714331),
+ (&#39;earnings&#39;, -0.23341496761815866),
+ (&#39;results&#39;, 0.12625867570460297),
+ (&#39;and&#39;, 0.05719577984387228),
+ (&#39;considered&#39;, -0.11990910725910534),
+ (&#39;policy&#39;, 0.14461768427548477),
+ (&#39;##makers&#39;, 0.15514263156393673),
+ (&#39;’&#39;, -0.02760065974180801),
+ (&#39;next&#39;, 0.02122594440663125),
+ (&#39;moves&#39;, 0.10101869817226436),
+ (&#39;to&#39;, -0.05263526480133935),
+ (&#39;support&#39;, -0.0014980582591976766),
+ (&#39;the&#39;, 0.08523796705426279),
+ (&#39;still&#39;, 0.003591138970311294),
+ (&#39;virus&#39;, 0.008249709450432019),
+ (&#39;-&#39;, -0.0556109561591312),
+ (&#39;stricken&#39;, -0.09735112107559374),
+ (&#39;economy&#39;, -0.0026865136688008994),
+ (&#39;.&#39;, -0.07815703671047403),
+ (&#39;the&#39;, -0.0009057640792249937),
+ (&#39;s&#39;, -0.03456817607879928),
+ (&#39;&amp;&#39;, -0.00960190968119417),
+ (&#39;p&#39;, -0.017651805773843093),
+ (&#39;500&#39;, -0.07352572671081269),
+ (&#39;shook&#39;, 0.012893402293879669),
+ (&#39;off&#39;, -0.12706059025588345),
+ (&#39;earlier&#39;, 0.1079345584278265),
+ (&#39;declines&#39;, 0.1110080082756417),
+ (&#39;to&#39;, -0.08501154236044933),
+ (&#39;narrowly&#39;, 0.04431433312228114),
+ (&#39;ek&#39;, -0.023362521809873794),
+ (&#39;##e&#39;, -0.07166174772137149),
+ (&#39;out&#39;, -0.055237273900075115),
+ (&#39;a&#39;, -0.059716248976105474),
+ (&#39;record&#39;, 0.04167558305120165),
+ (&#39;closing&#39;, 0.026847334622065868),
+ (&#39;high&#39;, -0.01445095563832263),
+ (&#39;.&#39;, -0.05304710029979428),
+ (&#39;the&#39;, -0.06889799231820516),
+ (&#39;dow&#39;, 0.07790869378401365),
+ (&#39;ended&#39;, -0.00773063557119292),
+ (&#39;a&#39;, -0.025381548098565083),
+ (&#39;tick&#39;, 0.12743084874669608),
+ (&#39;below&#39;, -0.04931733328486233),
+ (&#39;its&#39;, -0.07667529389350147),
+ (&#39;recent&#39;, 0.010878520817254034),
+ (&#39;record&#39;, 0.0228139138857284),
+ (&#39;closing&#39;, -0.026389900764951357),
+ (&#39;level&#39;, 0.012265908337057523),
+ (&#39;.&#39;, -0.007097902680889049),
+ (&#39;[SEP]&#39;, 0.0)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The results are close to the first visualization, a good sign that the model is generalizing well for both of these related classes</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">html</span> <span class="o">=</span> <span class="n">multiclass_explainer</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table width: 100%><div style="border-top: 1px solid; margin-top: 5px;             padding-top: 5px; display: inline-block"><b>Legend: </b><span style="display: inline-block; width: 10px; height: 10px;                 border: 1px solid; background-color:                 hsl(0, 75%, 60%)"></span> Negative  <span style="display: inline-block; width: 10px; height: 10px;                 border: 1px solid; background-color:                 hsl(0, 75%, 100%)"></span> Neutral  <span style="display: inline-block; width: 10px; height: 10px;                 border: 1px solid; background-color:                 hsl(120, 75%, 50%)"></span> Positive  </div><tr><th>True Label</th><th>Predicted Label</th><th>Attribution Label</th><th>Attribution Score</th><th>Word Importance</th><tr><td><text style="padding-right:2em"><b>5</b></text></td><td><text style="padding-right:2em"><b>Investment Banking & Brokerage (0.19)</b></text></td><td><text style="padding-right:2em"><b>Asset Management & Custody Banks</b></text></td><td><text style="padding-right:2em"><b>0.43</b></text></td><td><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> [CLS]                    </font></mark><mark style="background-color: hsl(0, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> stocks                    </font></mark><mark style="background-color: hsl(120, 75%, 92%); opacity:1.0;                     line-height:1.75"><font color="black"> ended                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(120, 75%, 75%); opacity:1.0;                     line-height:1.75"><font color="black"> chop                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> ##py                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> session                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> mixed                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> as                    </font></mark><mark style="background-color: hsl(120, 75%, 76%); opacity:1.0;                     line-height:1.75"><font color="black"> investors                    </font></mark><mark style="background-color: hsl(0, 75%, 92%); opacity:1.0;                     line-height:1.75"><font color="black"> digest                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> ##ed                    </font></mark><mark style="background-color: hsl(120, 75%, 92%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(120, 75%, 93%); opacity:1.0;                     line-height:1.75"><font color="black"> host                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> of                    </font></mark><mark style="background-color: hsl(0, 75%, 94%); opacity:1.0;                     line-height:1.75"><font color="black"> corporate                    </font></mark><mark style="background-color: hsl(0, 75%, 91%); opacity:1.0;                     line-height:1.75"><font color="black"> earnings                    </font></mark><mark style="background-color: hsl(120, 75%, 94%); opacity:1.0;                     line-height:1.75"><font color="black"> results                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> and                    </font></mark><mark style="background-color: hsl(0, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> considered                    </font></mark><mark style="background-color: hsl(120, 75%, 93%); opacity:1.0;                     line-height:1.75"><font color="black"> policy                    </font></mark><mark style="background-color: hsl(120, 75%, 93%); opacity:1.0;                     line-height:1.75"><font color="black"> ##makers                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> ’                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> next                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> moves                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> to                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> support                    </font></mark><mark style="background-color: hsl(120, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> the                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> still                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> virus                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> -                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> stricken                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> economy                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> .                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> the                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> s                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> &                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> p                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> 500                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> shook                    </font></mark><mark style="background-color: hsl(0, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> off                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> earlier                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> declines                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> to                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> narrowly                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> ek                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> ##e                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> out                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> record                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> closing                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> high                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> .                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> the                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> dow                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> ended                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(120, 75%, 94%); opacity:1.0;                     line-height:1.75"><font color="black"> tick                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> below                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> its                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> recent                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> record                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> closing                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> level                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> .                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> [SEP]                    </font></mark></td><tr></table></div></div>
+</div>
+<p>What if we get attributions for class that makes no sense in this context such as <strong>Restaurants</strong>?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">word_attributions</span> <span class="o">=</span> <span class="n">multiclass_explainer</span><span class="p">(</span><span class="n">sample_text</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s2">&quot;Restaurants&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>There isn’t much to this prediction, it is worth nothing however that the words “choppy” had a more positive impact in this instance which seems plausible given the industry.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">html</span> <span class="o">=</span> <span class="n">multiclass_explainer</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table width: 100%><div style="border-top: 1px solid; margin-top: 5px;             padding-top: 5px; display: inline-block"><b>Legend: </b><span style="display: inline-block; width: 10px; height: 10px;                 border: 1px solid; background-color:                 hsl(0, 75%, 60%)"></span> Negative  <span style="display: inline-block; width: 10px; height: 10px;                 border: 1px solid; background-color:                 hsl(0, 75%, 100%)"></span> Neutral  <span style="display: inline-block; width: 10px; height: 10px;                 border: 1px solid; background-color:                 hsl(120, 75%, 50%)"></span> Positive  </div><tr><th>True Label</th><th>Predicted Label</th><th>Attribution Label</th><th>Attribution Score</th><th>Word Importance</th><tr><td><text style="padding-right:2em"><b>52</b></text></td><td><text style="padding-right:2em"><b>Investment Banking & Brokerage (0.00)</b></text></td><td><text style="padding-right:2em"><b>Restaurants</b></text></td><td><text style="padding-right:2em"><b>-0.93</b></text></td><td><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> [CLS]                    </font></mark><mark style="background-color: hsl(0, 75%, 73%); opacity:1.0;                     line-height:1.75"><font color="black"> stocks                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> ended                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> chop                    </font></mark><mark style="background-color: hsl(0, 75%, 92%); opacity:1.0;                     line-height:1.75"><font color="black"> ##py                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> session                    </font></mark><mark style="background-color: hsl(0, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> mixed                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> as                    </font></mark><mark style="background-color: hsl(0, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> investors                    </font></mark><mark style="background-color: hsl(0, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> digest                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> ##ed                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> host                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> of                    </font></mark><mark style="background-color: hsl(120, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> corporate                    </font></mark><mark style="background-color: hsl(120, 75%, 91%); opacity:1.0;                     line-height:1.75"><font color="black"> earnings                    </font></mark><mark style="background-color: hsl(120, 75%, 87%); opacity:1.0;                     line-height:1.75"><font color="black"> results                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> and                    </font></mark><mark style="background-color: hsl(120, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> considered                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> policy                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> ##makers                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> ’                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> next                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> moves                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> to                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> support                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> the                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> still                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> virus                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> -                    </font></mark><mark style="background-color: hsl(0, 75%, 88%); opacity:1.0;                     line-height:1.75"><font color="black"> stricken                    </font></mark><mark style="background-color: hsl(120, 75%, 93%); opacity:1.0;                     line-height:1.75"><font color="black"> economy                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> .                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> the                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> s                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> &                    </font></mark><mark style="background-color: hsl(0, 75%, 96%); opacity:1.0;                     line-height:1.75"><font color="black"> p                    </font></mark><mark style="background-color: hsl(0, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> 500                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> shook                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> off                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> earlier                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> declines                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> to                    </font></mark><mark style="background-color: hsl(120, 75%, 95%); opacity:1.0;                     line-height:1.75"><font color="black"> narrowly                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> ek                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> ##e                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> out                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> record                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> closing                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> high                    </font></mark><mark style="background-color: hsl(120, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> .                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> the                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> dow                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> ended                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> a                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> tick                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> below                    </font></mark><mark style="background-color: hsl(0, 75%, 99%); opacity:1.0;                     line-height:1.75"><font color="black"> its                    </font></mark><mark style="background-color: hsl(120, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> recent                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> record                    </font></mark><mark style="background-color: hsl(120, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> closing                    </font></mark><mark style="background-color: hsl(120, 75%, 97%); opacity:1.0;                     line-height:1.75"><font color="black"> level                    </font></mark><mark style="background-color: hsl(0, 75%, 98%); opacity:1.0;                     line-height:1.75"><font color="black"> .                    </font></mark><mark style="background-color: hsl(0, 75%, 100%); opacity:1.0;                     line-height:1.75"><font color="black"> [SEP]                    </font></mark></td><tr></table></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">word_attributions</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;[CLS]&#39;, 0.0),
+ (&#39;stocks&#39;, -0.6854856776699227),
+ (&#39;ended&#39;, -0.029031903529460487),
+ (&#39;a&#39;, 0.11090255712178287),
+ (&#39;chop&#39;, 0.006652041990268798),
+ (&#39;##py&#39;, -0.2062490196552602),
+ (&#39;session&#39;, -0.07065543435255575),
+ (&#39;mixed&#39;, -0.13288207672076993),
+ (&#39;as&#39;, 0.07492878699001666),
+ (&#39;investors&#39;, -0.12119271331548742),
+ (&#39;digest&#39;, -0.1244596117883646),
+ (&#39;##ed&#39;, -0.09281783829031225),
+ (&#39;a&#39;, 0.04926226759885049),
+ (&#39;host&#39;, 0.0024580264792544724),
+ (&#39;of&#39;, -0.04181013614866942),
+ (&#39;corporate&#39;, 0.09596872076394984),
+ (&#39;earnings&#39;, 0.1978076717838316),
+ (&#39;results&#39;, 0.2649823840552865),
+ (&#39;and&#39;, 0.10765583459325372),
+ (&#39;considered&#39;, 0.08802602452816315),
+ (&#39;policy&#39;, 0.11527477012595103),
+ (&#39;##makers&#39;, -0.09797674433730999),
+ (&#39;’&#39;, -0.04952405611933375),
+ (&#39;next&#39;, -0.08798394731928101),
+ (&#39;moves&#39;, 0.016330798640794356),
+ (&#39;to&#39;, -0.013984953425966241),
+ (&#39;support&#39;, -0.07466644958978419),
+ (&#39;the&#39;, 0.018439054280971545),
+ (&#39;still&#39;, -0.07228693535812657),
+ (&#39;virus&#39;, 0.07444844928005309),
+ (&#39;-&#39;, -0.06880426073770393),
+ (&#39;stricken&#39;, -0.30193835772065036),
+ (&#39;economy&#39;, 0.1504533564915486),
+ (&#39;.&#39;, 0.01823703078081936),
+ (&#39;the&#39;, 0.028005822967647958),
+ (&#39;s&#39;, -0.038166475236399613),
+ (&#39;&amp;&#39;, -0.068483977553463),
+ (&#39;p&#39;, -0.12387080264162886),
+ (&#39;500&#39;, -0.0891962824035669),
+ (&#39;shook&#39;, -0.0476472994017939),
+ (&#39;off&#39;, -0.06956395419134101),
+ (&#39;earlier&#39;, 0.026289153634604743),
+ (&#39;declines&#39;, 0.03188770872233065),
+ (&#39;to&#39;, 0.1045047655244019),
+ (&#39;narrowly&#39;, 0.10333147243508721),
+ (&#39;ek&#39;, -0.007689519566887361),
+ (&#39;##e&#39;, -0.011903556378300038),
+ (&#39;out&#39;, -0.05851738940261981),
+ (&#39;a&#39;, -0.05305166839026465),
+ (&#39;record&#39;, -0.01611635567076364),
+ (&#39;closing&#39;, 0.014736131382077),
+ (&#39;high&#39;, 0.022852223340420696),
+ (&#39;.&#39;, 0.02406893771625353),
+ (&#39;the&#39;, 0.009041129508343525),
+ (&#39;dow&#39;, 0.00014128419272929675),
+ (&#39;ended&#39;, -0.043120544645633335),
+ (&#39;a&#39;, 0.05653952077602819),
+ (&#39;tick&#39;, 0.06762847126835006),
+ (&#39;below&#39;, 0.07857622812105534),
+ (&#39;its&#39;, -0.04907989879706385),
+ (&#39;recent&#39;, 0.04659544133765118),
+ (&#39;record&#39;, -0.0016475180912597885),
+ (&#39;closing&#39;, 0.003744720808821908),
+ (&#39;level&#39;, 0.06222265633687149),
+ (&#39;.&#39;, -0.05602449013123467),
+ (&#39;[SEP]&#39;, 0.0)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./examples"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="house_prices_regression.html" class="btn btn-neutral float-left" title="Explaining house prices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zero_shot_learning.html" class="btn btn-neutral float-right" title="Explaining zero shot learning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

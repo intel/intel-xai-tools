@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use Cases &mdash; Explainer</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-thebe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+        <script src="../_static/design-tabs.js"></script>
+        <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+        <script async="async" src="../_static/sphinx-thebe.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Requirements" href="../requirements/index.html" />
+    <link rel="prev" title="Content" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Python</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Use Cases</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/usecases/index.md" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="use-cases">
+<span id="usecases"></span><h1>Use Cases<a class="headerlink" href="#use-cases" title="Permalink to this headline"></a></h1>
+<div class="sd-tab-set docutils">
+<input id="b3d720d5-60e8-4941-bed1-73303f0e86a3" name="d4f8689e-9d7a-4a1d-abc4-03866861496f" type="radio">
+</input><label class="sd-tab-label" for="b3d720d5-60e8-4941-bed1-73303f0e86a3">
+Definitions</label><div class="sd-tab-content docutils">
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row docutils">
+<div class="sd-col sd-d-flex-column docutils">
+<p><strong>Business Owner</strong></p>
+<p>The business owner has a dataset (e.g. labelled images, videos, or product reviews) and a deployed model the data work with. They need to quickly need access using no code or very low code interface to get metrics and visualization informing the model’s behavior. They are a subject matter expert in their business domain and want to monitor whether their application has inherent risk around fairness, interpretability, privacy, and security. They need to quickly identify potential risk on a small data set to in their business area.</p>
+</div>
+<div class="sd-col sd-d-flex-column docutils">
+<p><strong>Data Scientist</strong></p>
+<p>The Data Scientist understands the general data modeling workflow and knows their dataset very well. They may or may not be an expert in deep learning, but they are versed in the mathematics behind machine learning and are tasked with developing a model that balances high accuracy and good performance. They are responsible for selecting a model, training algorithm, and hyperparameters and they will be comfortable with programming languages and environments. They need to be able to experiment and iterate quickly and see detailed metrics reports.</p>
+</div>
+<div class="sd-col sd-d-flex-column docutils">
+<p><strong>MLOps Engineer</strong></p>
+<p>The ML Engineer is responsible for deploying the selected model into production and updating the model if it is to be fine-tuned with new data on a regular basis. They will scale the training and/or production environment if required by the business. They might need to take a training workflow from a Data Scientist with most or all parameters defined and run it to convergence as efficiently as possible.</p>
+</div>
+</div>
+</div>
+</div>
+<input checked="checked" id="e7968341-dde2-49c5-95f5-e3f23cc02c60" name="d4f8689e-9d7a-4a1d-abc4-03866861496f" type="radio">
+</input><label class="sd-tab-label" for="e7968341-dde2-49c5-95f5-e3f23cc02c60">
+Use Cases</label><div class="sd-tab-content docutils">
+<details>
+<summary>As a data scientist...</summary>
+<br/>
+<ul class="simple">
+<li><p>As a Data Scientist, i want to be able to see a set of features rated their relative importance for my model and dataset.</p></li>
+<li><p>As a Data Scientist, i want to be able to generate counterfactuals using XAI for my model and features.</p></li>
+<li><p>As a Data Scientist, i want to be able to detect and isolate bias in a model’s prediction using XAI</p></li>
+<li><p>As a Data Scientist, I want to be able to better evaluate a confusion matrix using XAI</p></li>
+<li><p>As a Data Scientist, I want to be able to select a type of XAI from a choice of XAI methods that will use my model, dataset and features.</p></li>
+<li><p>As a Data Scientist, I need a way to (1) identify problematic errors my model is making before deployment; and (2) understand why predictions are being made through visualizations, so I can fix them.</p></li>
+<li><p>As a Data Scientist, when using tabular data, I need identify the effect each feature is attributing to a model’s prediction.</p></li>
+<li><p>As a Data Scientist, when using tabular data, I need identify which features impact a model’s prediction most in aggregate.</p></li>
+<li><p>As a Data Scientist, when using image data, I need identify the effect each pixel is attributing to a model’s prediction.</p></li>
+<li><p>As a Data Scientist, I need to explore how different features values for a datapoint effects a model’s decision.</p></li>
+</ul>
+</details>
+<details>
+<summary>As a MLOps engineer...</summary>
+<br/>
+<ul class="simple">
+<li><p>As a MLOps Engineer, I want an easy way to create and deploy a workflow using a Data Scientist’s notebook</p></li>
+<li><p>As a MLOps Engineer, I need a way to (1) detect problematic errors my model is making in real-time after deployment and (2) understand and interpret predictions made by your machine learning models in production through visualizations.</p></li>
+<li><p>As a MLOps engineer, i want to be able to run explainer so that it monitors data drift for a model in production.</p></li>
+</ul>
+</details>
+<details>
+<summary>As a business owner...</summary>
+<br/>
+<ul class="simple">
+<li><p>As a Business Owner I need to assess the risk around fairness, interpretability, privacy, and security for a model.</p></li>
+</ul>
+</details>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./usecases"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Content" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../requirements/index.html" class="btn btn-neutral float-right" title="Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
