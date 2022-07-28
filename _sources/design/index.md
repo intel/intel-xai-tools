@@ -113,7 +113,7 @@ Don't forsake security
 : An Explainer YAML that includes python dependencies as a URI allows the explainer component to be located locally in the container, on a local volume mount or in a registry. The URI would allows for these different locations to be specified.
 
 Be portable
-: Adding an explaination to an existing workflow shouldn't require a new virtual environment, or pip installs in a current environment since that virtual environment is now changed and may be a shared environment across many workflows.
+: Adding an explanation to an existing workflow shouldn't require a new virtual environment, or force the user to do pip installs in the current python environment since that environment is now changed and may be a shared environment across many workflows.
 
 Be repeatable
 : An explanation that has dependencies on the model, data or features should ensure that these dependencies are version compatible.
@@ -159,7 +159,7 @@ classDiagram
 
 **Utilizing python's import machinery**
 
-Python's {{PEP451}} (introduced in python-3.4) enhances the import mechanism to be extensible and secure by introducing a type called ModuleSpec that the import machinery instantiates whenever a new module is loaded. This PEP expanded the types of Loaders and MetaPathLoaders that are allowed. Directly importing resources such as yaml is leveraged by the XAI explainer. When a yaml file is imported, the explainer will dynamically inject explainable resources within a workflow by using customized Loader and MetaPathLoader classes.
+Python's {{PEP451}} (introduced in python-3.4) enhances the import mechanism to be extensible and secure by introducing a type called ModuleSpec that the import machinery instantiates whenever a new module is loaded. This PEP expanded the types of Loaders and MetaPathLoaders that are allowed. Directly importing resources such as yaml is leveraged by the XAI explainer. When a yaml file is imported, the explainer will dynamically inject explainable resources within the current python environemnt by using customized its Loader and MetaPathLoader classes.
 
 ```{eval-rst}
 
@@ -233,6 +233,20 @@ sequenceDiagram
 </details>
 
 <details>
+<summary>Explainer <b>ModuleSpec</b></summary>
+<br/>
+
+```{eval-rst}
+
+.. autoclass:: explainer.ExplainerModuleSpec
+   :noindex:
+   :members:
+   :inherited-members:
+
+```
+
+</details>
+<details>
 <summary>Explainer <b>Loader</b></summary>
 <br/>
 
@@ -246,7 +260,6 @@ sequenceDiagram
 ```
 
 </details>
-
 <details>
 <summary>Explainer <b>MetaPathFinder</b></summary>
 <br/>
@@ -261,7 +274,6 @@ sequenceDiagram
 ```
 
 </details>
-
 <details>
 <summary>Explainer <b>CLI</b></summary>
 <br/>

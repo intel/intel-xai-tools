@@ -35,8 +35,6 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
         <script async="async" src="../_static/sphinx-thebe.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
         <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
         <script>mermaid.initialize({startOnLoad:true});</script>
     <script src="../_static/js/theme.js"></script>
@@ -197,8 +195,8 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="k">return</span> <span class="n">info</span>
 
 
-<span class="k">class</span> <span class="nc">ExplainerModuleSpec</span><span class="p">(</span><span class="n">ModuleSpec</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Extends the ModuleSpec to add ExplainerModuleSpec specific fields</span>
+<div class="viewcode-block" id="ExplainerModuleSpec"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerModuleSpec">[docs]</a><span class="k">class</span> <span class="nc">ExplainerModuleSpec</span><span class="p">(</span><span class="n">ModuleSpec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extends the ModuleSpec to add a **spec: ExplainerSpec** field</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">ExplainerSpec</span><span class="p">,</span> <span class="n">loader</span><span class="p">:</span> <span class="n">Loader</span><span class="p">):</span>
@@ -234,7 +232,7 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="n">info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;, submodule_search_locations=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">submodule_search_locations</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;spec&#39;</span><span class="p">):</span>
             <span class="n">info</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;, spec=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
-        <span class="k">return</span> <span class="n">info</span>
+        <span class="k">return</span> <span class="n">info</span></div>
 
 
 <div class="viewcode-block" id="ExplainerLoader"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerLoader">[docs]</a><span class="k">class</span> <span class="nc">ExplainerLoader</span><span class="p">(</span><span class="n">Loader</span><span class="p">):</span>
