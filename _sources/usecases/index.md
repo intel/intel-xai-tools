@@ -33,7 +33,7 @@ The ML Engineer is responsible for deploying the selected model into production 
 :selected:
 
 
-<details>
+<details open>
 <summary>As a data scientist...</summary>
 <br/>
 
@@ -49,7 +49,7 @@ The ML Engineer is responsible for deploying the selected model into production 
 * As a Data Scientist, I need to explore how different features values for a datapoint effects a model’s decision.
 
 </details>
-<details>
+<details open>
 <summary>As a MLOps engineer...</summary>
 <br/>
 
@@ -59,7 +59,7 @@ The ML Engineer is responsible for deploying the selected model into production 
 
 </details>
 
-<details>
+<details open>
 <summary>As a business owner...</summary>
 <br/>
 
