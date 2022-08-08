@@ -47,8 +47,7 @@ const thebe_selector_output = ".output, .cell_output"
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html">
-            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+            <a href="../../index.html" class="icon icon-home"> Explainer
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -72,7 +71,7 @@ const thebe_selector_output = ".output, .cell_output"
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Python</a>
+          <a href="../../index.html">Explainer</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -101,7 +100,6 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
-<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">ExplainerLoader</span><span class="p">,</span> <span class="n">ExplainerModuleSpec</span><span class="p">,</span> <span class="n">EXT_YAML</span>
 
@@ -213,6 +211,8 @@ const thebe_selector_output = ".output, .cell_output"
                                 <span class="n">check_for_errors</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">install_cmd</span><span class="p">,</span> <span class="n">vae</span><span class="p">)</span>
                             <span class="k">finally</span><span class="p">:</span>
                                 <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fullpath</span><span class="si">}</span><span class="s2">: does not exit&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">module</span></div>
 
@@ -230,6 +230,8 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fullpath</span><span class="p">):</span>
             <span class="n">exl</span> <span class="o">=</span> <span class="n">ExplainerLoader</span><span class="p">(</span><span class="n">fullpath</span><span class="p">)</span>
             <span class="n">module</span> <span class="o">=</span> <span class="n">exl</span><span class="o">.</span><span class="n">create_module</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fullpath</span><span class="si">}</span><span class="s2">: does not exit&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">module</span></div>
 
 <div class="viewcode-block" id="Explainer.info"><a class="viewcode-back" href="../../design/index.html#explainer.api.Explainer.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExplainerModuleSpec</span><span class="p">:</span>
@@ -248,11 +250,11 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="n">module</span> <span class="o">=</span> <span class="n">exl</span><span class="o">.</span><span class="n">create_module</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">module</span></div>
 
-<div class="viewcode-block" id="Explainer.explain"><a class="viewcode-back" href="../../design/index.html#explainer.api.Explainer.explain">[docs]</a>    <span class="k">def</span> <span class="nf">explain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Explainer.explain"><a class="viewcode-back" href="../../design/index.html#explainer.api.Explainer.explain">[docs]</a>    <span class="k">def</span> <span class="nf">explain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;takes _data and forwards to internal explainer</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            data (ArrayLike): any type of array</span>
+<span class="sd">            data: any type of array</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            None</span>

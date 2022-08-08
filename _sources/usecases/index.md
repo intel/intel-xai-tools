@@ -7,11 +7,6 @@
 
 ````{grid}
 
-```{grid-item} **Business Owner**
-
-The business owner has a dataset (e.g. labelled images, videos, or product reviews) and a deployed model the data work with. They need to quickly need access using no code or very low code interface to get metrics and visualization informing the model’s behavior. They are a subject matter expert in their business domain and want to monitor whether their application has inherent risk around fairness, interpretability, privacy, and security. They need to quickly identify potential risk on a small data set to in their business area.
-
-```
 
 ```{grid-item} **Data Scientist**
 
@@ -56,14 +51,6 @@ The ML Engineer is responsible for deploying the selected model into production 
 * As a MLOps Engineer, I want an easy way to create and deploy a workflow using a Data Scientist's notebook
 * As a MLOps Engineer, I need a way to (1) detect problematic errors my model is making in real-time after deployment and (2) understand and interpret predictions made by your machine learning models in production through visualizations.
 * As a MLOps engineer, i want to be able to run explainer so that it monitors data drift for a model in production.
-
-</details>
-
-<details open>
-<summary>As a business owner...</summary>
-<br/>
-
-* As a Business Owner I need to assess the risk around fairness, interpretability, privacy, and security for a model.
 
 </details>
 
