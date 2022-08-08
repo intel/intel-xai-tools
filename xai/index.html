@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explainable AI Concepts &mdash; Explainer</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-thebe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+        <script src="../_static/design-tabs.js"></script>
+        <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+        <script async="async" src="../_static/sphinx-thebe.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Use Cases" href="../usecases/index.html" />
+    <link rel="prev" title="Content" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Explainable AI Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Explainable AI Concepts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/xai/index.md" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="explainable-ai-concepts">
+<span id="xai"></span><h1>Explainable AI Concepts<a class="headerlink" href="#explainable-ai-concepts" title="Permalink to this headline"></a></h1>
+<details>
+<summary>What is Explainable AI?</summary>
+<br/>
+<p><a href="https://en.wikipedia.org/wiki/Explainable_artificial_intelligence" target="_blank">Explainable AI</a> (also known by the acronym XAI) is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model’s training or inference workflow. As shown below, explainability and interpretability are tighly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.</p>
+<figure class="align-default" id="interpretability-methods">
+<img alt="../_images/explain1.png" src="../_images/explain1.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Various interpretability methods <span id="id1">[<a class="reference internal" href="../bibliography/index.html#id10" title="Pantelis Linardatos, Vasilis Papastefanopoulos, and Sotiris Kotsiantis. Explainable ai: a review of machine learning interpretability methods. Entropy, 2021. URL: https://www.mdpi.com/1099-4300/23/1/18, doi:10.3390/e23010018.">LPK21</a>]</span></span><a class="headerlink" href="#interpretability-methods" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Viewed as more of a state diagram, types of explanations are shown in the figure below, where the state is shown as a decision tree. For example, if the model is already interpretable then there are many metrics available that can show the accuracy of the prediction or classification. On the other hand, if the model is too complex to be interpretable such as deep learning models, then different options exist depending on what the user is exploring.</p>
+<figure class="align-default" id="explainable-algos">
+<img alt="../_images/explain5.png" src="../_images/explain5.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Explaination based on Algorithm</span><a class="headerlink" href="#explainable-algos" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Based on data alone, a similar state diagram is shown below, where a data-centric approach is used that leverages explainations that are tuned to image or text. Based on the model topology, these types of explanations would be added to object detection or nlp models.</p>
+<figure class="align-default" id="id4">
+<div class="mermaid">
+            %%{
+  init: { &quot;flowchart&quot;: { &quot;htmlLabels&quot;: true, &quot;curve&quot;: &quot;linear&quot; } }
+}%%
+
+flowchart LR
+    A[Data] --&gt; B{Tabular Data?}
+    B --&gt;|Yes| C{Interactive\nExplanation?}
+    B --&gt;|No| E{Text Data?}
+    C --&gt;|Yes| D[&quot;Logic\nTensor\nNetworks\n(LTN)&quot;]
+    C --&gt;|No| G{CounterFactual\nExplanation?}
+    E --&gt;|Yes| F[&quot;Transformer\nInterpret&quot;]
+    E --&gt;|No| J{&quot;Image Data?&quot;}
+    J --&gt;|Yes| K[&quot;Gradient-weighted\nClass\nActivation\nMapping\n(Grad-CAM)&quot;]
+    J --&gt;|No| L[&quot;Layer-wise\nRelevance\nPropagation\n(LDP)&quot;]
+    G --&gt;|Yes| H[&quot;Diverse\nCounterfactual\nExplanations\n(DICE)&quot;]
+    G --&gt;|No| I[&quot;Shapley\nAdditive\nExplanations\n(SHAP)&quot;]
+    classDef leafName fill:#eee;
+    class D,F,H,I,K,L leafName;
+        </div><figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Explainable Data<span id="id2">[<a class="reference internal" href="../bibliography/index.html#id3" title="Adrien Bennetot, Ivan Donadello, Ayoub El Qadi, Mauro Dragoni, Thomas Frossard, Benedikt Wagner, Anna Saranti, Silvia Tulli, Maria Trocan, Raja Chatila, and others. A practical tutorial on explainable ai techniques. arXiv preprint arXiv:2111.14260, 2021.">BDQ+21</a>]</span></span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</details>
+<details>
+<summary>XAI Approaches</summary>
+<br/>
+<p>The types of approaches that can be used to better explain a model as shown below are growing.</p>
+<figure class="align-default" id="explainable-approaches">
+<img alt="../_images/explain2.png" src="../_images/explain2.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Various approaches to explainability</span><a class="headerlink" href="#explainable-approaches" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>As the table below shows, explainable toolkits abound and are growing rapidly.</p>
+<figure class="align-default" id="explainable-toolkits">
+<img alt="../_images/explain4.png" src="../_images/explain4.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Various Toolkits available from 2021</span><a class="headerlink" href="#explainable-toolkits" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</details>
+<details>
+<summary>Toolkits that work well with transformers</summary>
+<br/>
+<p><strong>transformer-interpret</strong></p>
+<p>This library<a href="https://github.com/cdpierse/transformers-interpret" target="_blank"><i class="fa fa-external-link-alt"></i></a> adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> and <a href="https://captum.ai/" target="_blank">Captum</a>. The choice of a model within the HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> library is done by using <a href="https://huggingface.co/docs/transformers/main/en/model_doc/auto#auto-classes" target="_blank">AutoClasses</a>. An example of the API is shown below:</p>
+<blockquote>
+<div><p>model = AutoModel.from_pretrained(“bert-base-cased”)</p>
+</div></blockquote>
+<p>In this case, the pretrained model “bert-base-cased” will be downloaded from the HuggingFace model repo on <a class="reference external" href="http://huggingface.com">huggingface.com</a>, added to a local python class cache and imported into the current python environment. The type of framework used with the pretained model is determined by the path or an additional boolean parameter in the method of from_tf. The bert model returned from the method differs depending on whether PyTorch or TensorFlow.</p>
+<p><strong>path-explain</strong></p>
+<p>This library<a href="https://github.com/suinleelab/path_explain" target="_blank"><i class="fa fa-external-link-alt"></i></a> explains machine learning and deep learning models models based on the author’s paper<span id="id3">[<a class="reference internal" href="../bibliography/index.html#id11" title="Joseph D. Janizek, Pascal Sturmfels, and Su-In Lee. Explaining explanations: axiomatic feature interactions for deep networks. Journal of Machine Learning Research, 22(104):1-54, 2021. URL: http://jmlr.org/papers/v22/20-1223.html.">JSL21</a>]</span> and is well integrated with HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> library. The library explains both feature attributions and feature interactions</p>
+</details>
+<br/>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./xai"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Content" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../usecases/index.html" class="btn btn-neutral float-right" title="Use Cases" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Design &mdash; Explainer</title>
+  <title>Explainer Design &mdash; Explainer</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
@@ -50,7 +50,7 @@ const thebe_selector_output = ".output, .cell_output"
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> Explainer
+            <a href="../index.html" class="icon icon-home"> Intel® Explainable AI Tools
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -61,9 +61,10 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Explainable AI Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Design</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Explainer Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
 </ul>
@@ -74,7 +75,7 @@ const thebe_selector_output = ".output, .cell_output"
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">Explainer</a>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -82,7 +83,7 @@ const thebe_selector_output = ".output, .cell_output"
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Design</li>
+      <li>Explainer Design</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/design/index.md" rel="nofollow"> View page source</a>
       </li>
@@ -92,87 +93,10 @@ const thebe_selector_output = ".output, .cell_output"
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="design">
-<span id="id1"></span><h1>Design<a class="headerlink" href="#design" title="Permalink to this headline"></a></h1>
-<section id="xai-overview">
-<h2>XAI Overview<a class="headerlink" href="#xai-overview" title="Permalink to this headline"></a></h2>
+  <section id="explainer-design">
+<span id="design"></span><h1>Explainer Design<a class="headerlink" href="#explainer-design" title="Permalink to this headline"></a></h1>
 <details>
-<summary>What is XAI?</summary>
-<br/>
-<p><a href="https://en.wikipedia.org/wiki/Explainable_artificial_intelligence" target="_blank">Explainable AI</a> is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model’s training or inference workflow. As shown below, explainability and interpretability are tighly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.</p>
-<figure class="align-default" id="interpretability-methods">
-<img alt="../_images/explain1.png" src="../_images/explain1.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Various interpretability methods <span id="id2">[<a class="reference internal" href="../bibliography/index.html#id10" title="Pantelis Linardatos, Vasilis Papastefanopoulos, and Sotiris Kotsiantis. Explainable ai: a review of machine learning interpretability methods. Entropy, 2021. URL: https://www.mdpi.com/1099-4300/23/1/18, doi:10.3390/e23010018.">LPK21</a>]</span></span><a class="headerlink" href="#interpretability-methods" title="Permalink to this image"></a></p>
-</figcaption>
-</figure>
-<p>Viewed as more of a state diagram, types of explanations are shown in the figure below, where the state is shown as a decision tree. For example, if the model is already interpretable then there are many metrics available that can show the accuracy of the prediction or classification. On the other hand, if the model is too complex to be interpretable such as deep learning models, then different options exist depending on what the user is exploring.</p>
-<figure class="align-default" id="explainable-algos">
-<img alt="../_images/explain5.png" src="../_images/explain5.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Explaination based on Algorithm</span><a class="headerlink" href="#explainable-algos" title="Permalink to this image"></a></p>
-</figcaption>
-</figure>
-<p>Based on data alone, a similar state diagram is shown below, where a data-centric approach is used that leverages explainations that are tuned to image or text. Based on the model topology, these types of explanations would be added to object detection or nlp models.</p>
-<figure class="align-default" id="id4">
-<div class="mermaid">
-            %%{
-  init: { &quot;flowchart&quot;: { &quot;htmlLabels&quot;: true, &quot;curve&quot;: &quot;linear&quot; } }
-}%%
-
-flowchart LR
-    A[Data] --&gt; B{Tabular Data?}
-    B --&gt;|Yes| C{Interactive\nExplanation?}
-    B --&gt;|No| E{Text Data?}
-    C --&gt;|Yes| D[&quot;Logic\nTensor\nNetworks\n(LTN)&quot;]
-    C --&gt;|No| G{CounterFactual\nExplanation?}
-    E --&gt;|Yes| F[&quot;Transformer\nInterpret&quot;]
-    E --&gt;|No| J{&quot;Image Data?&quot;}
-    J --&gt;|Yes| K[&quot;Gradient-weighted\nClass\nActivation\nMapping\n(Grad-CAM)&quot;]
-    J --&gt;|No| L[&quot;Layer-wise\nRelevance\nPropagation\n(LDP)&quot;]
-    G --&gt;|Yes| H[&quot;Diverse\nCounterfactual\nExplanations\n(DICE)&quot;]
-    G --&gt;|No| I[&quot;Shapley\nAdditive\nExplanations\n(SHAP)&quot;]
-    classDef leafName fill:#eee;
-    class D,F,H,I,K,L leafName;
-        </div><figcaption>
-<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Explainable Data<span id="id3">[<a class="reference internal" href="../bibliography/index.html#id3" title="Adrien Bennetot, Ivan Donadello, Ayoub El Qadi, Mauro Dragoni, Thomas Frossard, Benedikt Wagner, Anna Saranti, Silvia Tulli, Maria Trocan, Raja Chatila, and others. A practical tutorial on explainable ai techniques. arXiv preprint arXiv:2111.14260, 2021.">BDQ+21</a>]</span></span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
-</figcaption>
-</figure>
-</details>
-<details>
-<summary>XAI Approaches</summary>
-<br/>
-<p>The types of approaches that can be used to better explain a model as shown below are growing.</p>
-<figure class="align-default" id="explainable-approaches">
-<img alt="../_images/explain2.png" src="../_images/explain2.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Various approaches to explainability</span><a class="headerlink" href="#explainable-approaches" title="Permalink to this image"></a></p>
-</figcaption>
-</figure>
-<p>As the table below shows, explainable toolkits abound and are growing rapidly.</p>
-<figure class="align-default" id="explainable-toolkits">
-<img alt="../_images/explain4.png" src="../_images/explain4.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Various Toolkits available from 2021</span><a class="headerlink" href="#explainable-toolkits" title="Permalink to this image"></a></p>
-</figcaption>
-</figure>
-</details>
-<details>
-<summary>External Toolkits</summary>
-<br/>
-<p><strong>transformer-interpret</strong></p>
-<p>This library<a href="https://github.com/cdpierse/transformers-interpret" target="_blank"><i class="fa fa-external-link-alt"></i></a> adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> and <a href="https://captum.ai/" target="_blank">Captum</a>. The choice of a model within the HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> library is done by using <a href="https://huggingface.co/docs/transformers/main/en/model_doc/auto#auto-classes" target="_blank">AutoClasses</a>. An example of the API is shown below:</p>
-<blockquote>
-<div><p>model = AutoModel.from_pretrained(“bert-base-cased”)</p>
-</div></blockquote>
-<p>In this case, the pretrained model “bert-base-cased” will be downloaded from the HuggingFace model repo on <a class="reference external" href="http://huggingface.co">huggingface.co</a>, added to a local python class cache and imported into the current python environment. The type of framework used with the pretained model is determined by the path or an additional boolean parameter in the method of from_tf. The bert model returned from the method differs depending on whether PyTorch or TensorFlow.</p>
-</details>
-<br/>
-</section>
-<section id="explainer-toolkit">
-<h2>Explainer Toolkit<a class="headerlink" href="#explainer-toolkit" title="Permalink to this headline"></a></h2>
-<details>
-<summary>Mandates</summary>
+<summary>Overview</summary>
 <br/>
 <p>Explainer adheres to a set of principles, itemized below, based on software best practices and architectural design patterns. These guideposts allow explainer to keep pace with the rapid rate of innovation within XAI by keeping implementation agnostic. Explainer uses a data centric approach of passing data artifacts such as models, features and datasets into resource related entry points so that specific XAI implementations can be called. Explainer’s CLI/API provides import/export mechanisms to bundle XAI functionality as python archives. The python archives are loaded at runtime either implicitly using python’s import statement or explicitly using explainer’s CLI/API. Details are provided in subsequent sections.</p>
 <dl class="simple myst">
@@ -205,7 +129,7 @@ Within this package are yaml files that explainer uses to load and invoke specif
 <div><p>explainer list</p>
 </div></blockquote>
 <p>returns a list of yaml files, where each yaml file has attributes that specify what resource to load, along with optional attributes such as the entry_point to call once the resource is loaded. The first line in each yaml files is a YAML annotation that reifies the yaml file as an ExplainerSpec dataclass (see <a href="https://matthewpburruss.com/post/yaml/" target="_blank">PyYaml</a>). The ExplainerSpec dataclass has the following structure show below:</p>
-<figure class="align-default" id="id5">
+<figure class="align-default" id="id1">
 <div class="mermaid">
             classDiagram
     class ExplainerSpec
@@ -216,25 +140,25 @@ Within this package are yaml files that explainer uses to load and invoke specif
     ExplainerSpec: +String model
     ExplainerSpec: +String plugin
         </div><figcaption>
-<p><span class="caption-number">Fig. 6 </span><span class="caption-text">ExplainerSpec</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">ExplainerSpec</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <p><strong>Utilizing python’s import machinery</strong></p>
 <p>Python’s <a href="https://peps.python.org/pep-0451/" target="_blank">PEP451</i></a> (introduced in python-3.4) enhances the import mechanism to be extensible and secure by introducing a type called ModuleSpec that the import machinery instantiates whenever a new module is loaded. This PEP expanded the types of Loaders and MetaPathLoaders that are allowed. Directly importing resources such as yaml is leveraged by the XAI explainer. When a yaml file is imported, the explainer will dynamically inject explainable resources within the current python environemnt by using customized its Loader and MetaPathLoader classes.</p>
-<figure class="align-default" id="id6">
+<figure class="align-default" id="id2">
 <div class="mermaid">
             classDiagram
   Loader &lt;|-- ExplainerLoader
         </div><figcaption>
-<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Class Hierarchy of explainer.ExplainerLoader</span><a class="headerlink" href="#id6" title="Permalink to this image"></a></p>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Class Hierarchy of explainer.ExplainerLoader</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="id7">
+<figure class="align-default" id="id3">
 <div class="mermaid">
             classDiagram
   MetaPathFinder &lt;|-- ExplainerMetaPathFinder
         </div><figcaption>
-<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Class Hierarchy of explainer.ExplainerMetaPathFinder</span><a class="headerlink" href="#id7" title="Permalink to this image"></a></p>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Class Hierarchy of explainer.ExplainerMetaPathFinder</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <p>These classes are called when python resolves imports. As described in <a href="https://python.plainenglish.io/metapathfinders-or-how-to-change-python-import-behavior-a1cf3b5a13ec" target="_blank">How to Change Python Import Behavior with MetaPathFinders</a>, a yaml file can be directly loaded by the import machinary so that the following import statement:</p>
@@ -271,7 +195,7 @@ Within this package are yaml files that explainer uses to load and invoke specif
 </div>
 </div>
 <p>The set of steps that implicitly injects an explainable resource are shown in the sequence diagram below:</p>
-<figure class="align-default" id="id8">
+<figure class="align-default" id="id4">
 <div class="mermaid">
             sequenceDiagram
     participant ExplainerLoader
@@ -286,7 +210,7 @@ Within this package are yaml files that explainer uses to load and invoke specif
     ExplainerLoader-&gt;&gt;ExplainerLoader: add path to sys.path
     ExplainerLoader-&gt;&gt;ExplainerLoader: call entry_point 
         </div><figcaption>
-<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Explainer sequence diagram when resolving a yaml file</span><a class="headerlink" href="#id8" title="Permalink to this image"></a></p>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Explainer sequence diagram when resolving a yaml file</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 </details>
@@ -661,7 +585,6 @@ and a Callable entry point</p>
 
 </details>
 <br/>
-</section>
 </section>
 
     <script type="text/x-thebe-config">
