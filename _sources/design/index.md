@@ -1,40 +1,13 @@
 (design)=
 # Explainer Design
 
-<details>
-<summary>Overview</summary>
-<br/>
+Explainer adheres to a set of principles based on [best practices](bestpractices) and {{PythonInteroperabilitySpecifications}}. These guideposts allow explainer to keep pace with the rapid rate of innovation within XAI by allowing different types of explanations to be packaged independently of one another. It also allows explainer to be multi-toolkit agnostic by providing explanations that may call specific toolkit implementations without binding to these toolkits APIs. Explainer uses the python entry points specification in order to achieve these goals. As noted in the {{PythonEntryPointsSpecification}}:
 
-Explainer adheres to a set of principles, itemized below, based on software best practices and architectural design patterns. These guideposts allow explainer to keep pace with the rapid rate of innovation within XAI by keeping implementation agnostic. Explainer uses a data centric approach of passing data artifacts such as models, features and datasets into resource related entry points so that specific XAI implementations can be called. Explainer's CLI/API provides import/export mechanisms to bundle XAI functionality as python archives. The python archives are loaded at runtime either implicitly using python's import statement or explicitly using explainer's CLI/API. Details are provided in subsequent sections.
+> _Entry points are a way for Python packages to advertise objects with some common interface. The most common examples are console_scripts entry points, which define shell commands by identifying a Python function to run. The entrypoints module contains functions to find and load entry points._
 
-Ensure Intel Optimizations are included
-: Any explainable method needs to leverage Intel libraries and configurations that provide optimizations.
+Explainer uses python's entry point specification's {{PythonEntryPointsDataModel}} to define what XAI explanation (as well as the specific implementation) will be loaded and called. Explainer's CLI/API provides import/export mechanisms to bundle XAI functionality as python archives. The python archives are loaded at runtime either implicitly using python's import statement or explicitly using explainer's CLI/API. Details are provided in subsequent sections.
 
-Keep containers slim and lightweight
-: Adding new explainations shouldn't require new containers to be built or should result in adding to the container size. Leverage explanations suites so that specific explainables can be included depending on the notebook or pipeline being run.
 
-Don't forsake security
-: An Explainer YAML that includes python dependencies as a URI allows the explainer component to be located locally in the container, on a local volume mount or in a registry. The URI would allows for these different locations to be specified.
-
-Be portable
-: Adding an explanation to an existing workflow shouldn't require a new virtual environment, or force the user to do pip installs in the current python environment since that environment is now changed and may be a shared environment across many workflows.
-
-Be repeatable
-: An explanation that has dependencies on the model, data or features should ensure that these dependencies are version compatible.
-
-Do not wrap native APIs
-: Providing a wrapper around an existing XAI toolkit does not scale
-
-Do not mandate a particular platform (tensorflow, pytorch, etc)
-: Explainable techniques and methods that are specific to a platform should be filtered out when that platform is not in the workflow
-
-Do not mandate a type of model
-: Explainable techniques and methods that expect a specific model class should be filtered out when that class is not available
-
-Do not mandate a type of data
-: Explainable techniques and methods that expect a data format class should be filtered out when that format is not available
-
-</details>
 
 <details>
 <summary>Explainer <b>Resources</b></summary>

@@ -64,7 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Explainable AI Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bestpractices/index.html">Best Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Explainer Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
 </ul>
@@ -98,7 +99,7 @@ const thebe_selector_output = ".output, .cell_output"
 <details>
 <summary>What is Explainable AI?</summary>
 <br/>
-<p><a href="https://en.wikipedia.org/wiki/Explainable_artificial_intelligence" target="_blank">Explainable AI</a> (also known by the acronym XAI) is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model’s training or inference workflow. As shown below, explainability and interpretability are tighly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.</p>
+<p><a href="https://en.wikipedia.org/wiki/Explainable_artificial_intelligence" target="_blank">Explainable AI</a> (also known by the acronym XAI) is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model’s training or inference workflow. As shown below, explainability and interpretability are tightly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.</p>
 <figure class="align-default" id="interpretability-methods">
 <img alt="../_images/explain1.png" src="../_images/explain1.png" />
 <figcaption>
@@ -112,7 +113,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p><span class="caption-number">Fig. 2 </span><span class="caption-text">Explaination based on Algorithm</span><a class="headerlink" href="#explainable-algos" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
-<p>Based on data alone, a similar state diagram is shown below, where a data-centric approach is used that leverages explainations that are tuned to image or text. Based on the model topology, these types of explanations would be added to object detection or nlp models.</p>
+<p>Based on data alone, a similar state diagram is shown below, where a data-centric approach is used that leverages explanations that are tuned to image or text. Based on the model topology, these types of explanations would be added to object detection or nlp models.</p>
 <figure class="align-default" id="id4">
 <div class="mermaid">
             %%{
@@ -139,7 +140,7 @@ flowchart LR
 </figure>
 </details>
 <details>
-<summary>XAI Approaches</summary>
+<summary>Explainable AI Approaches</summary>
 <br/>
 <p>The types of approaches that can be used to better explain a model as shown below are growing.</p>
 <figure class="align-default" id="explainable-approaches">
@@ -157,16 +158,16 @@ flowchart LR
 </figure>
 </details>
 <details>
-<summary>Toolkits that work well with transformers</summary>
+<summary>Explainable AI packages that work well with transformers</summary>
 <br/>
 <p><strong>transformer-interpret</strong></p>
-<p>This library<a href="https://github.com/cdpierse/transformers-interpret" target="_blank"><i class="fa fa-external-link-alt"></i></a> adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> and <a href="https://captum.ai/" target="_blank">Captum</a>. The choice of a model within the HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> library is done by using <a href="https://huggingface.co/docs/transformers/main/en/model_doc/auto#auto-classes" target="_blank">AutoClasses</a>. An example of the API is shown below:</p>
+<p>This package<a href="https://github.com/cdpierse/transformers-interpret" target="_blank"><i class="fa fa-external-link-alt"></i></a> adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> and <a href="https://captum.ai/" target="_blank">Captum</a>. The choice of a model within the HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> library is done by using <a href="https://huggingface.co/docs/transformers/main/en/model_doc/auto#auto-classes" target="_blank">AutoClasses</a>. An example of the API is shown below:</p>
 <blockquote>
 <div><p>model = AutoModel.from_pretrained(“bert-base-cased”)</p>
 </div></blockquote>
 <p>In this case, the pretrained model “bert-base-cased” will be downloaded from the HuggingFace model repo on <a class="reference external" href="http://huggingface.com">huggingface.com</a>, added to a local python class cache and imported into the current python environment. The type of framework used with the pretained model is determined by the path or an additional boolean parameter in the method of from_tf. The bert model returned from the method differs depending on whether PyTorch or TensorFlow.</p>
 <p><strong>path-explain</strong></p>
-<p>This library<a href="https://github.com/suinleelab/path_explain" target="_blank"><i class="fa fa-external-link-alt"></i></a> explains machine learning and deep learning models models based on the author’s paper<span id="id3">[<a class="reference internal" href="../bibliography/index.html#id11" title="Joseph D. Janizek, Pascal Sturmfels, and Su-In Lee. Explaining explanations: axiomatic feature interactions for deep networks. Journal of Machine Learning Research, 22(104):1-54, 2021. URL: http://jmlr.org/papers/v22/20-1223.html.">JSL21</a>]</span> and is well integrated with HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> library. The library explains both feature attributions and feature interactions</p>
+<p>This package<a href="https://github.com/suinleelab/path_explain" target="_blank"><i class="fa fa-external-link-alt"></i></a> explains machine learning and deep learning models models based on the author’s paper<span id="id3">[<a class="reference internal" href="../bibliography/index.html#id11" title="Joseph D. Janizek, Pascal Sturmfels, and Su-In Lee. Explaining explanations: axiomatic feature interactions for deep networks. Journal of Machine Learning Research, 22(104):1-54, 2021. URL: http://jmlr.org/papers/v22/20-1223.html.">JSL21</a>]</span> and is well integrated with HuggingFace <a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a> library. This package explains both feature attributions and feature interactions</p>
 </details>
 <br/>
 </section>

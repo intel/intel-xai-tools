@@ -42,7 +42,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Examples" href="../examples/index.html" />
-    <link rel="prev" title="Requirements" href="../requirements/index.html" /> 
+    <link rel="prev" title="Best Practices" href="../bestpractices/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -64,6 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Explainable AI Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bestpractices/index.html">Best Practices</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Explainer Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
@@ -95,31 +96,11 @@ const thebe_selector_output = ".output, .cell_output"
              
   <section id="explainer-design">
 <span id="design"></span><h1>Explainer Design<a class="headerlink" href="#explainer-design" title="Permalink to this headline"></a></h1>
-<details>
-<summary>Overview</summary>
-<br/>
-<p>Explainer adheres to a set of principles, itemized below, based on software best practices and architectural design patterns. These guideposts allow explainer to keep pace with the rapid rate of innovation within XAI by keeping implementation agnostic. Explainer uses a data centric approach of passing data artifacts such as models, features and datasets into resource related entry points so that specific XAI implementations can be called. Explainer’s CLI/API provides import/export mechanisms to bundle XAI functionality as python archives. The python archives are loaded at runtime either implicitly using python’s import statement or explicitly using explainer’s CLI/API. Details are provided in subsequent sections.</p>
-<dl class="simple myst">
-<dt>Ensure Intel Optimizations are included</dt><dd><p>Any explainable method needs to leverage Intel libraries and configurations that provide optimizations.</p>
-</dd>
-<dt>Keep containers slim and lightweight</dt><dd><p>Adding new explainations shouldn’t require new containers to be built or should result in adding to the container size. Leverage explanations suites so that specific explainables can be included depending on the notebook or pipeline being run.</p>
-</dd>
-<dt>Don’t forsake security</dt><dd><p>An Explainer YAML that includes python dependencies as a URI allows the explainer component to be located locally in the container, on a local volume mount or in a registry. The URI would allows for these different locations to be specified.</p>
-</dd>
-<dt>Be portable</dt><dd><p>Adding an explanation to an existing workflow shouldn’t require a new virtual environment, or force the user to do pip installs in the current python environment since that environment is now changed and may be a shared environment across many workflows.</p>
-</dd>
-<dt>Be repeatable</dt><dd><p>An explanation that has dependencies on the model, data or features should ensure that these dependencies are version compatible.</p>
-</dd>
-<dt>Do not wrap native APIs</dt><dd><p>Providing a wrapper around an existing XAI toolkit does not scale</p>
-</dd>
-<dt>Do not mandate a particular platform (tensorflow, pytorch, etc)</dt><dd><p>Explainable techniques and methods that are specific to a platform should be filtered out when that platform is not in the workflow</p>
-</dd>
-<dt>Do not mandate a type of model</dt><dd><p>Explainable techniques and methods that expect a specific model class should be filtered out when that class is not available</p>
-</dd>
-<dt>Do not mandate a type of data</dt><dd><p>Explainable techniques and methods that expect a data format class should be filtered out when that format is not available</p>
-</dd>
-</dl>
-</details>
+<p>Explainer adheres to a set of principles based on <a class="reference internal" href="../bestpractices/index.html#bestpractices"><span class="std std-ref">best practices</span></a> and <a href="https://packaging.python.org/en/latest/specifications/" target="_blank">python interoperability specifications</a>. These guideposts allow explainer to keep pace with the rapid rate of innovation within XAI by allowing different types of explanations to be packaged independently of one another. It also allows explainer to be multi-toolkit agnostic by providing explanations that may call specific toolkit implementations without binding to these toolkits APIs. Explainer uses the python entry points specification in order to achieve these goals. As noted in the <a href="https://packaging.python.org/en/latest/specifications/entry-points/" target="_blank">python entry points specification</a>:</p>
+<blockquote>
+<div><p><em>Entry points are a way for Python packages to advertise objects with some common interface. The most common examples are console_scripts entry points, which define shell commands by identifying a Python function to run. The entrypoints module contains functions to find and load entry points.</em></p>
+</div></blockquote>
+<p>Explainer uses python’s entry point specification’s <a href="https://packaging.python.org/en/latest/specifications/entry-points/#data-model" target="_blank">Data Model</a> to define what XAI explanation (as well as the specific implementation) will be loaded and called. Explainer’s CLI/API provides import/export mechanisms to bundle XAI functionality as python archives. The python archives are loaded at runtime either implicitly using python’s import statement or explicitly using explainer’s CLI/API. Details are provided in subsequent sections.</p>
 <details>
 <summary>Explainer <b>Resources</b></summary>
 <br/>
@@ -610,7 +591,7 @@ and a Callable entry point</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../requirements/index.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../bestpractices/index.html" class="btn btn-neutral float-left" title="Best Practices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

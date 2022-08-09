@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples &mdash; Explainer</title>
+  <title>Best Practices &mdash; Explainer</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
@@ -41,8 +41,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Testing explainer" href="test_import_from.html" />
-    <link rel="prev" title="Explainer Design" href="../design/index.html" /> 
+    <link rel="next" title="Explainer Design" href="../design/index.html" />
+    <link rel="prev" title="Requirements" href="../requirements/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -64,14 +64,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Explainable AI Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bestpractices/index.html">Best Practices</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Best Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../design/index.html">Explainer Design</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="test_import_from.html">Testing explainer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multiclass_classification.html">Explaining text classifications</a></li>
-<li class="toctree-l2"><a class="reference internal" href="zero_shot_learning.html">Explaining zero shot learning</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
 </ul>
 
@@ -89,9 +84,9 @@ const thebe_selector_output = ".output, .cell_output"
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Examples</li>
+      <li>Best Practices</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/examples/index.md" rel="nofollow"> View page source</a>
+            <a href="../_sources/bestpractices/index.md" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -99,10 +94,26 @@ const thebe_selector_output = ".output, .cell_output"
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h1>
-<div class="toctree-wrapper compound">
-</div>
+  <section id="best-practices">
+<span id="bestpractices"></span><h1>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline"></a></h1>
+<dl class="simple myst">
+<dt>Ensure Intel Optimizations are included</dt><dd><p>Any explainable method needs to leverage Intel libraries and configurations that provide optimizations.</p>
+</dd>
+<dt>Do not complicate or pollute python environments</dt><dd><p>Adding new explanations shouldn’t require new packages to be added to the existing python environment that may potentially corrupt or conflict with resident packages. Adding an explanation also shouldn’t require a new virtual environment, or change the existing environment in ways that are difficult to reverse.</p>
+</dd>
+<dt>Don’t forsake security</dt><dd><p>An Explainer YAML that includes python dependencies as a URI allows the explainer component to be located locally in the container, on a local volume mount or in a registry. The URI would allows for these different locations to be specified.</p>
+</dd>
+<dt>Be repeatable</dt><dd><p>An explanation that has dependencies on the model, data or features should ensure that these dependencies are version compatible.</p>
+</dd>
+<dt>Do not wrap native APIs</dt><dd><p>Providing a wrapper around an existing XAI toolkit does not scale</p>
+</dd>
+<dt>Do not mandate a particular platform (tensorflow, pytorch, etc)</dt><dd><p>Explainable techniques and methods that are specific to a platform should be filtered out when that platform is not in the workflow</p>
+</dd>
+<dt>Do not mandate a type of model</dt><dd><p>Explainable techniques and methods that expect a specific model class should be filtered out when that class is not available</p>
+</dd>
+<dt>Do not mandate a type of data</dt><dd><p>Explainable techniques and methods that expect a data format class should be filtered out when that format is not available</p>
+</dd>
+</dl>
 </section>
 
     <script type="text/x-thebe-config">
@@ -118,7 +129,7 @@ const thebe_selector_output = ".output, .cell_output"
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./examples"
+            path: "./bestpractices"
         },
         predefinedOutput: true
     }
@@ -128,8 +139,8 @@ const thebe_selector_output = ".output, .cell_output"
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../design/index.html" class="btn btn-neutral float-left" title="Explainer Design" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="test_import_from.html" class="btn btn-neutral float-right" title="Testing explainer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../requirements/index.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../design/index.html" class="btn btn-neutral float-right" title="Explainer Design" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -5,7 +5,7 @@
 <summary>What is Explainable AI?</summary>
 <br/>
 
-{{XAI}} (also known by the acronym XAI) is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model's training or inference workflow. As shown below, explainability and interpretability are tighly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.
+{{XAI}} (also known by the acronym XAI) is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model's training or inference workflow. As shown below, explainability and interpretability are tightly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.
 
 ```{figure} ../images/explain1.png
 ---
@@ -24,7 +24,7 @@ name: explainable-algos
 Explaination based on Algorithm
 ```
 
-Based on data alone, a similar state diagram is shown below, where a data-centric approach is used that leverages explainations that are tuned to image or text. Based on the model topology, these types of explanations would be added to object detection or nlp models. 
+Based on data alone, a similar state diagram is shown below, where a data-centric approach is used that leverages explanations that are tuned to image or text. Based on the model topology, these types of explanations would be added to object detection or nlp models. 
 
 ```{mermaid}
 :caption: "Explainable Data{cite}`bennetot2021practical`"
@@ -52,7 +52,7 @@ flowchart LR
 </details>
 
 <details>
-<summary>XAI Approaches</summary>
+<summary>Explainable AI Approaches</summary>
 <br/>
 
 The types of approaches that can be used to better explain a model as shown below are growing.
@@ -78,12 +78,12 @@ Various Toolkits available from 2021
 </details>
 
 <details>
-<summary>Toolkits that work well with transformers</summary>
+<summary>Explainable AI packages that work well with transformers</summary>
 <br/>
 
 **transformer-interpret**
 
-This library{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. An example of the API is shown below:
+This package{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. An example of the API is shown below:
 
 > model = AutoModel.from_pretrained("bert-base-cased")
 
@@ -93,7 +93,7 @@ In this case, the pretrained model "bert-base-cased" will be downloaded from the
 
 **path-explain**
 
-This library{{PathExplain}} explains machine learning and deep learning models models based on the author's paper{cite}`janizek2020explaining` and is well integrated with HuggingFace {{Transformers}} library. The library explains both feature attributions and feature interactions 
+This package{{PathExplain}} explains machine learning and deep learning models models based on the author's paper{cite}`janizek2020explaining` and is well integrated with HuggingFace {{Transformers}} library. This package explains both feature attributions and feature interactions 
 
 </details>
 <br/>
