@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Explainable AI Concepts &mdash; Explainer</title>
+  <title>Explainable AI Approaches &mdash; Explainer</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
@@ -41,8 +41,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Explainable AI Approaches" href="approaches.html" />
-    <link rel="prev" title="Content" href="../index.html" /> 
+    <link rel="next" title="Explainable AI packages that work well with transformers" href="packages.html" />
+    <link rel="prev" title="Explainable AI Concepts" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -61,8 +61,8 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Explainable AI Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="approaches.html">Explainable AI Approaches</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Explainable AI Concepts</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Explainable AI Approaches</a></li>
 <li class="toctree-l2"><a class="reference internal" href="packages.html">Explainable AI packages that work well with transformers</a></li>
 </ul>
 </li>
@@ -88,9 +88,10 @@ const thebe_selector_output = ".output, .cell_output"
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Explainable AI Concepts</li>
+          <li><a href="index.html">Explainable AI Concepts</a> &raquo;</li>
+      <li>Explainable AI Approaches</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/xai/index.md" rel="nofollow"> View page source</a>
+            <a href="../_sources/xai/approaches.md" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -98,49 +99,22 @@ const thebe_selector_output = ".output, .cell_output"
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="explainable-ai-concepts">
-<span id="xai"></span><h1>Explainable AI Concepts<a class="headerlink" href="#explainable-ai-concepts" title="Permalink to this headline"></a></h1>
-<p><a href="https://en.wikipedia.org/wiki/Explainable_artificial_intelligence" target="_blank">Explainable AI</a> (also known by the acronym XAI) is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model’s training or inference workflow. As shown below, explainability and interpretability are tightly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.</p>
-<figure class="align-default" id="interpretability-methods">
-<img alt="../_images/explain1.png" src="../_images/explain1.png" />
+  <section id="explainable-ai-approaches">
+<span id="xaiapproaches"></span><h1>Explainable AI Approaches<a class="headerlink" href="#explainable-ai-approaches" title="Permalink to this headline"></a></h1>
+<p>The types of approaches that can be used to better explain a model as shown below are growing.</p>
+<figure class="align-default" id="explainable-approaches">
+<img alt="../_images/explain2.png" src="../_images/explain2.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Various interpretability methods <span id="id1">[<a class="reference internal" href="../bibliography/index.html#id10" title="Pantelis Linardatos, Vasilis Papastefanopoulos, and Sotiris Kotsiantis. Explainable ai: a review of machine learning interpretability methods. Entropy, 2021. URL: https://www.mdpi.com/1099-4300/23/1/18, doi:10.3390/e23010018.">LPK21</a>]</span></span><a class="headerlink" href="#interpretability-methods" title="Permalink to this image"></a></p>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Various approaches to explainability</span><a class="headerlink" href="#explainable-approaches" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
-<p>Viewed as more of a state diagram, types of explanations are shown in the figure below, where the state is shown as a decision tree. For example, if the model is already interpretable then there are many metrics available that can show the accuracy of the prediction or classification. On the other hand, if the model is too complex to be interpretable such as deep learning models, then different options exist depending on what the user is exploring.</p>
-<figure class="align-default" id="explainable-algos">
-<img alt="../_images/explain5.png" src="../_images/explain5.png" />
+<p>As the table below shows, explainable toolkits abound and are growing rapidly.</p>
+<figure class="align-default" id="explainable-toolkits">
+<img alt="../_images/explain4.png" src="../_images/explain4.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Explaination based on Algorithm</span><a class="headerlink" href="#explainable-algos" title="Permalink to this image"></a></p>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Various Toolkits available from 2021</span><a class="headerlink" href="#explainable-toolkits" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
-<p>Based on data alone, a similar state diagram is shown below, where a data-centric approach is used that leverages explanations that are tuned to image or text. Based on the model topology, these types of explanations would be added to object detection or nlp models.</p>
-<figure class="align-default" id="id3">
-<div class="mermaid">
-            %%{
-  init: { &quot;flowchart&quot;: { &quot;htmlLabels&quot;: true, &quot;curve&quot;: &quot;linear&quot; } }
-}%%
-
-flowchart LR
-    A[Data] --&gt; B{Tabular Data?}
-    B --&gt;|Yes| C{Interactive\nExplanation?}
-    B --&gt;|No| E{Text Data?}
-    C --&gt;|Yes| D[&quot;Logic\nTensor\nNetworks\n(LTN)&quot;]
-    C --&gt;|No| G{CounterFactual\nExplanation?}
-    E --&gt;|Yes| F[&quot;Transformer\nInterpret&quot;]
-    E --&gt;|No| J{&quot;Image Data?&quot;}
-    J --&gt;|Yes| K[&quot;Gradient-weighted\nClass\nActivation\nMapping\n(Grad-CAM)&quot;]
-    J --&gt;|No| L[&quot;Layer-wise\nRelevance\nPropagation\n(LDP)&quot;]
-    G --&gt;|Yes| H[&quot;Diverse\nCounterfactual\nExplanations\n(DICE)&quot;]
-    G --&gt;|No| I[&quot;Shapley\nAdditive\nExplanations\n(SHAP)&quot;]
-    classDef leafName fill:#eee;
-    class D,F,H,I,K,L leafName;
-        </div><figcaption>
-<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Explainable Data<span id="id2">[<a class="reference internal" href="../bibliography/index.html#id3" title="Adrien Bennetot, Ivan Donadello, Ayoub El Qadi, Mauro Dragoni, Thomas Frossard, Benedikt Wagner, Anna Saranti, Silvia Tulli, Maria Trocan, Raja Chatila, and others. A practical tutorial on explainable ai techniques. arXiv preprint arXiv:2111.14260, 2021.">BDQ+21</a>]</span></span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
-</figcaption>
-</figure>
-<div class="toctree-wrapper compound">
-</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -166,8 +140,8 @@ flowchart LR
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../index.html" class="btn btn-neutral float-left" title="Content" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="approaches.html" class="btn btn-neutral float-right" title="Explainable AI Approaches" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Explainable AI Concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="packages.html" class="btn btn-neutral float-right" title="Explainable AI packages that work well with transformers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

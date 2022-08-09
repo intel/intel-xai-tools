@@ -1,12 +1,15 @@
 (design)=
 # Explainer Design
 
-Explainer adheres to a set of principles based on [best practices](bestpractices) and {{PythonInteroperabilitySpecifications}}. These guideposts allow explainer to keep pace with the rapid rate of innovation within XAI by allowing different types of explanations to be packaged independently of one another. It also allows explainer to be multi-toolkit agnostic by providing explanations that may call specific toolkit implementations without binding to these toolkits APIs. Explainer uses the python entry points specification in order to achieve these goals. As noted in the {{PythonEntryPointsSpecification}}:
+Explainer adheres to a set of principles based on [best practices](bestpractices) and {{PythonInteroperabilitySpecifications}}. These guideposts allow explainer to keep pace with the rapid rate of innovation within XAI by allowing different types of explanations to be packaged independently of one another. It also allows explainer to be multi-toolkit agnostic by providing explanations that call specific toolkit implementations without binding to these toolkits APIs. Explainer uses the python entry points specification in order to achieve these goals. As noted in the {{PythonEntryPointsSpecification}}:
 
-> _Entry points are a way for Python packages to advertise objects with some common interface. The most common examples are console_scripts entry points, which define shell commands by identifying a Python function to run. The entrypoints module contains functions to find and load entry points._
+> Entry points are a way for Python packages to advertise objects with some common interface. The most common examples are console_scripts entry points, which define shell commands by identifying a Python function to run. The entrypoints module contains functions to find and load entry points.
+
+Python {{PythonEntryPointsFunction}} have an associated {{PythonEntryPointsDataModel}}. The Data Model provides a way for an entry point instance to be associated with a group, name and object reference.
+
+Entry points are indexed by wheelodex to provide lookup of groups of related plugins, for example pytest defines an entrypoint called pytest11. Under this entrypoint pytest {{PyTestPlugins}} can be registered by different contributors.
 
 Explainer uses python's entry point specification's {{PythonEntryPointsDataModel}} to define what XAI explanation (as well as the specific implementation) will be loaded and called. Explainer's CLI/API provides import/export mechanisms to bundle XAI functionality as python archives. The python archives are loaded at runtime either implicitly using python's import statement or explicitly using explainer's CLI/API. Details are provided in subsequent sections.
-
 
 
 <details>

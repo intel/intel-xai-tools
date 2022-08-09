@@ -1,9 +1,6 @@
 (xai)=
 # Explainable AI Concepts
 
-<details>
-<summary>What is Explainable AI?</summary>
-<br/>
 
 {{XAI}} (also known by the acronym XAI) is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model's training or inference workflow. As shown below, explainability and interpretability are tightly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.
 
@@ -49,51 +46,3 @@ flowchart LR
     class D,F,H,I,K,L leafName;
 ```
 
-</details>
-
-<details>
-<summary>Explainable AI Approaches</summary>
-<br/>
-
-The types of approaches that can be used to better explain a model as shown below are growing.
-
-```{figure} ../images/explain2.png
----
-name: explainable-approaches
----
-Various approaches to explainability
-
-```
-
-As the table below shows, explainable toolkits abound and are growing rapidly.
-
-```{figure} ../images/explain4.png
----
-name: explainable-toolkits
----
-Various Toolkits available from 2021
-
-```
-
-</details>
-
-<details>
-<summary>Explainable AI packages that work well with transformers</summary>
-<br/>
-
-**transformer-interpret**
-
-This package{{TransformersInterpret}} adds an explainer to any HuggingFace transformer. The python package combines both HuggingFace {{Transformers}} and {{Captum}}. The choice of a model within the HuggingFace {{Transformers}} library is done by using {{AutoClasses}}. An example of the API is shown below:
-
-> model = AutoModel.from_pretrained("bert-base-cased")
-
-
-In this case, the pretrained model "bert-base-cased" will be downloaded from the HuggingFace model repo on huggingface.com, added to a local python class cache and imported into the current python environment. The type of framework used with the pretained model is determined by the path or an additional boolean parameter in the method of from_tf. The bert model returned from the method differs depending on whether PyTorch or TensorFlow.
-
-
-**path-explain**
-
-This package{{PathExplain}} explains machine learning and deep learning models models based on the author's paper{cite}`janizek2020explaining` and is well integrated with HuggingFace {{Transformers}} library. This package explains both feature attributions and feature interactions 
-
-</details>
-<br/>
