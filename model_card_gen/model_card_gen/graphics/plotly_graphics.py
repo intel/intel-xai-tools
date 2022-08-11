@@ -76,8 +76,10 @@ class OverallPerformanceAtThreshold(_PlotlyGraph):
 
     def create_df(self, plots):
         df = plots_to_df(plots, self.eval_result_keys)
-        df['accuracy'] = ((df.truePositives + df.trueNegatives) / 
-            (df.truePositives + df.falsePositives + df.falseNegatives + df.trueNegatives))
+        num = df.get('truePositives', 0) + df.get('trueNegatives', 0)
+        dom = (df.get('truePositives', 0) + df.get('falsePositives', 0) + 
+               df.get('falseNegatives', 0) + df.get('trueNegatives', 0))
+        df['accuracy'] = num / dom
         df['f1'] = 2 * (df.precision * df.recall) / (df.precision + df.recall)
         return df
     
@@ -119,7 +121,7 @@ class DataStatsGraphs(_PlotlyGraph):
                      # button filter
                     df['feature'] = feature.name or feature.path.step[0]
                     # groupby feature
-                    df['dataset'] = 'Dataset {name}'.format(name=name.title())
+                    df['dataset'] = 'Dataset {name}'.format(name=str(name).title())
                     data = pd.concat([data, df])
         return data
 
@@ -172,8 +174,10 @@ class ConfusionMatrixAtThresholdsGraphs(_PlotlyGraph):
         
     def create_df(self, plots):
         df = plots_to_df(plots, self.eval_result_keys)
-        df['accuracy'] = ((df.truePositives + df.trueNegatives) / 
-            (df.truePositives + df.falsePositives + df.falseNegatives + df.trueNegatives))
+        num = df.get('truePositives', 0) + df.get('trueNegatives', 0)
+        dom = (df.get('truePositives', 0) + df.get('falsePositives', 0) + 
+               df.get('falseNegatives', 0) + df.get('trueNegatives', 0))
+        df['accuracy'] = num / dom
         df['f1'] = 2 * (df.precision * df.recall) / (df.precision + df.recall)
         return df
     

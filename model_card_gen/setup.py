@@ -44,7 +44,8 @@ NOTEBOOK_PACKAGES = [
     'sklearn',
     'tfx',
     'tensorflow-hub',
-    'tensorflow-transform'
+    'tensorflow-transform',
+    'torch'
 ]
 
 EXTRAS = {

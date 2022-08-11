@@ -17,34 +17,31 @@
 # SPDX-License-Identifier: EPL-2.0
 #
 
-from typing import Text, Optional, Union, Sequence
-
+from typing import Text, Optional, Union, Sequence, get_args
 import pandas as pd
+DataFormat = Union[pd.DataFrame, Text]
+
 import tensorflow_model_analysis as tfma
 from google.protobuf import text_format
 
 class ModelAnalyzer:
     def __init__(self,
-            eval_config : Union[tfma.EvalConfig, Text] = None):
+            eval_config : Union[tfma.EvalConfig, Text] = None,
+            data : DataFormat = ''):
         """Start TFMA analysis
         Args:
             eval_config : tfma.EvalConfig or str representing proto file path
         Return:
             EvalResult
         """
-        if isinstance(eval_config, tfma.EvalConfig):
-            self.eval_config = eval_config
-        elif isinstance(eval_config, str):
-             self.eval_config = self.parse_eval_config(eval_config)
-        else:
-            raise ValueError("ModelAnalyzer needs either eval_config or eval_config_path argument.")
-        self.eval_result = None
+        self.eval_config: tfma.EvalConfig = self.check_eval_config(eval_config)
+        self.data: DataFormat = self.check_data(data)
 
     @classmethod
     def analyze(cls,
             model_path: Optional[Text] = '',
             eval_config : Union[tfma.EvalConfig, Text] = None,
-            data : Sequence[Union[Text, pd.DataFrame]] = ''):
+            data :  Union[Text, pd.DataFrame] = ''):
         """Class Factory to start TFMA analysis
         Args:
             eval_config : tfma.EvalConfig or str representing proto file path
@@ -52,20 +49,26 @@ class ModelAnalyzer:
         Returns:
             tfma.EvalConfig()
         """
-        if bool(data) and isinstance(data, dict) and 'eval' in data:
-            self = TFAnalyzer(model_path, data['eval'], eval_config)
-        elif bool(data) and all(isinstance(elem, str) for elem in data):
-            self = TFAnalyzer(model_path, data[0], eval_config)
-        elif isinstance(data, str):
+        self = cls(eval_config, data)
+        if isinstance(data, str):
             self = TFAnalyzer(model_path, data, eval_config)
         elif isinstance(data, pd.DataFrame):
             self = DFAnalyzer(data, eval_config)
-        elif bool(data) and all(isinstance(elem, pd.DataFrame) for elem in data):
-            self = DFAnalyzer(data[0], eval_config)
-        elif not bool(data):
-            raise ValueError("ModelAnalyzer needs data argument.")
         self.analyze()
         return self.get()
+
+    def check_eval_config(self, eval_config) -> tfma.EvalConfig:
+        if isinstance(eval_config, tfma.EvalConfig):
+            return eval_config
+        elif isinstance(eval_config, str):
+             return self.parse_eval_config(eval_config)
+        else:
+            raise ValueError("ModelAnalyzer needs either eval_config or eval_config_path argument.")
+
+    def check_data(self, data):
+        if not isinstance(data, get_args(DataFormat)):
+            raise TypeError("ModelAnalyzer.analyze requires data argument to be of type dict")
+        return data
 
     def parse_eval_config(self, eval_config_path):
         """Parse proto file from file path to generate Eval config
@@ -88,7 +91,7 @@ class ModelAnalyzer:
 
 class DFAnalyzer(ModelAnalyzer):
     def __init__(self,
-                 raw_data : pd.DataFrame,
+                 data : pd.DataFrame,
                  eval_config : Union[tfma.EvalConfig, Text] = None):
         """Start TFMA analysis on Pandas DataFrame
         
@@ -96,33 +99,32 @@ class DFAnalyzer(ModelAnalyzer):
             raw_data : pd.DataFrame
             eval_config : tfma.EvalConfig or str representing proto file path
         """
-        super().__init__(eval_config)
-        self.raw_data = raw_data
+        super().__init__(eval_config, data)
 
     def analyze(self):
-        self.eval_result = tfma.analyze_raw_data(data=self.raw_data,
+        self.eval_result = tfma.analyze_raw_data(data=self.data,
                               eval_config=self.eval_config)
         return self.eval_result
 
 class TFAnalyzer(ModelAnalyzer):
     def __init__(self,
                  model_path : Text,
-                 data_path : Text,
+                 data : Text,
                  eval_config : Union[tfma.EvalConfig, Text] = None):
-        super().__init__(eval_config)
+        super().__init__(eval_config, data)
         self.model_path = model_path
-        self.data_path = data_path
+        self.data = data
 
     def analyze(self):
         #TODO if not eval_shared
         eval_shared_model = tfma.default_eval_shared_model(
             eval_saved_model_path=self.model_path,
             eval_config=self.eval_config)
-        
+
         self.eval_result = tfma.run_model_analysis(
             eval_shared_model=eval_shared_model,
             eval_config=self.eval_config,
-            data_location=self.data_path)
+            data_location=self.data)
         return self.eval_result
 
 def analyze_model(model_path: Optional[Text] = '',

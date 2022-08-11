@@ -35,9 +35,10 @@ from model_card_gen.graphics.add_graphics import (
     add_overview_graphs,
     add_eval_result_plots,
     add_eval_result_slicing_metrics)
+from model_card_gen.datasets import DataFormat
 # Typing
 import tensorflow_model_analysis as tfma
-from typing import Optional, Text, Union, Dict, Any
+from typing import Optional, Sequence, Text, Union, Dict, Any
 
 _UI_TEMPLATES = (
     'template/html/default_template.html.jinja',
@@ -50,22 +51,23 @@ _DEFAULT_MODEL_CARD_FILE_NAME = 'model_card.html'
 
 class ModelCardGen():
     def __init__(self,
-                 data_paths: Dict[Text, Text] = {},
+                 data_sets: Dict[Text, Text] = {},
                  model_path: Text = '',
                  eval_config: Union[tfma.EvalResult, str] = None,
                  model_card: Union[ModelCard, Dict[Text, Any]] = None,
+                 eval_results: Sequence[tfma.EvalResult] = None,
                  output_dir: Text = ''):
         """
         Generate Model Card from tfma results eval results
 
         Args:
-            data_paths: dict with keys of name of dataset and value to path
+            data_sets: dict with keys of name of dataset and value to path
             model_path: str representing TF SavedModel path
             eval_config: tfma.EvalResult or str to config file path
             model_card: ModelCard or dict following model card schema
             output_dir: str of where to output model card
         """
-        self.data_paths = data_paths
+        self.data_sets = self.check_data_sets(data_sets)
         self.model_path = model_path
         self.eval_config = eval_config
         # Local asset paths
@@ -81,20 +83,20 @@ class ModelCardGen():
           self.model_card = ModelCard()
         # Generated Attributes
         self.data_stats = None
-        self.eval_results = None
+        self.eval_results = eval_results
         self.model_card_html = ''
 
     @classmethod
     def generate(cls,
-                 data_paths: Dict[Text, Text],
-                 model_path: Text,
-                 eval_config: Union[tfma.EvalResult, str],
+                 data_sets: Dict[Text, DataFormat],
+                 eval_config: Union[tfma.EvalConfig, str],
+                 model_path: Text = '',
                  model_card: Union[ModelCard, Dict[Text, Any], Text] = None,
                  output_dir: Text = ''):
         """Class Factory starting TFMA analysis and generating model card
 
         Args:
-            data_paths: dict with keys of name of dataset and value to path
+            data_sets: dict with keys of name of dataset and value to path
             model_path: str representing TF SavedModel path
             eval_config: tfma.EvalResult or str to config file path
             model_card: ModelCard or dict following model card schema
@@ -103,35 +105,35 @@ class ModelCardGen():
             ModelCardGen
         """
         self = cls(
-            data_paths,
+            data_sets,
             model_path,
             eval_config,
             model_card=model_card,
             output_dir=output_dir)
         self.data_stats = self.get_stats()
-        self.eval_results = ModelAnalyzer.analyze(model_path=model_path,
-            data=data_paths,
-            eval_config=eval_config)
+        self.eval_results = [
+            ModelAnalyzer.analyze(
+                model_path=model_path,
+                data=data,
+                eval_config=eval_config)
+            for data in data_sets.values()]
         self.model_card_html = self.build_model_card()
         return self
     
+    def check_data_sets(self, data_sets):
+        if not data_sets:
+            raise TypeError("ModelCardGen revieved invalid value for data_sets argument")
+        if not isinstance(data_sets, dict):
+            raise TypeError("ModelCardGen requires data_sets argument to be of type dict")
+        return data_sets
+
     def get_stats(self):
-        if bool(self.data_paths) and all(isinstance(elem, str)
-                                         for elem in self.data_paths):
-            if isinstance(self.data_paths, dict):
-              return {name: tfdv.generate_statistics_from_tfrecord(data_location=path)
-                      for name, path in self.data_paths.items()}
-            else:
-              return {path: tfdv.generate_statistics_from_tfrecord(data_location=path)
-                      for path in self.data_paths}
-        elif bool(self.data_paths) and all(isinstance(elem, pd.DataFrame)
-                                           for elem in self.data_paths):
-            if isinstance(self.data_paths, dict):
-              return {name: tfdv.generate_statistics_from_dataframe(data_location=path)
-                      for name, path in self.data_paths.items()}
-            else:
-              return {i: tfdv.generate_statistics_from_dataframe(dataframe=df)
-                      for i, df in enumerate(self.data_paths)}
+        if all(isinstance(elem, str) for elem in self.data_sets.values()):
+            return {name: tfdv.generate_statistics_from_tfrecord(data_location=path)
+                        for name, path in self.data_sets.items()}
+        elif all(isinstance(elem, pd.DataFrame) for elem in self.data_sets.values()):
+            return {name: tfdv.generate_statistics_from_dataframe(path)
+                    for name, path in self.data_sets.items()}
 
     def build_model_card(self):
         self.scaffold_assets()
@@ -143,9 +145,10 @@ class ModelCardGen():
                 dataset.graphics.collection = sorted(dataset.graphics.collection,
                     key=lambda x: x.name)
         # Add Evaluation Statistics
-        add_overview_graphs(self.model_card, self.eval_results)
-        add_eval_result_plots(self.model_card, self.eval_results)
-        add_eval_result_slicing_metrics(self.model_card, self.eval_results)
+        for eval_result, dataset_name in zip(self.eval_results, self.data_sets.keys()):
+            add_overview_graphs(self.model_card, eval_result, dataset_name)
+            add_eval_result_plots(self.model_card, eval_result)
+            add_eval_result_slicing_metrics(self.model_card, eval_result)
         self.update_model_card(self.model_card)
         return self.export_format(self.model_card)
 

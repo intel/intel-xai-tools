@@ -23,7 +23,7 @@ from .plotly_graphics import *
 # Typing
 from typing import Sequence, Text, Tuple, Union, Optional
 import tensorflow_model_analysis as tfma
-from tensorflow_metadata.proto.v0 import statistics_pb2
+from tensorflow_metadata.proto.v0.statistics_pb2 import DatasetFeatureStatisticsList
 
 OVERVIEW_GRAPHS = [OverallPerformanceAtThreshold]
 PLOTS_GRAPHS = [ConfusionMatrixAtThresholdsGraphs]
@@ -31,7 +31,8 @@ SLICING_METRIC_GRAPHS = [SlicingMetricGraphs]
 DATASTAT_GRAPHS = [DataStatsGraphs]
 
 def add_overview_graphs(model_card: ModelCard,
-                        eval_result: tfma.EvalResult) -> None:
+                        eval_result: tfma.EvalResult,
+                        dataset_name: Text) -> None:
     """Adds plots for every graph in OVERVIEW_GRAPHS.
 
     Args:
@@ -54,13 +55,12 @@ def add_overview_graphs(model_card: ModelCard,
             if graph.eval_result_keys[0] in plots]
         # Add graphs to modle card
         model_card.model_details.graphics.collection.extend([
-                Graphic(name=None, html=graph.html_content)
-                for graph in graphs
-        ])
+                Graphic(name=dataset_name, html=graph.html_content)
+                for graph in graphs])
 
 def add_dataset_feature_statistics_plots(
         model_card: ModelCard,
-        data_stats: Sequence[statistics_pb2.DatasetFeatureStatisticsList]) -> None:
+        data_stats: Dict[Text, DatasetFeatureStatisticsList]) -> None:
     """Adds Dataset objects to model card with all graphs in
          DATASTAT_GRAPHS
     """

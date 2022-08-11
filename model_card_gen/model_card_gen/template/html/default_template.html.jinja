@@ -42,6 +42,7 @@
 {% macro render_graphics(graphics) %}
   {% if graphics.description %}<p>{{ graphics.description }}</p>{% endif %}
   {% for graph in graphics %}
+      {% if graph.name %}<h3>{{ graph.name }}</h3>{% endif %}
       {% if graph.html %}
         <div class="interactive-graph">{{ graph.html|safe }}</div>
       {% elif graph.image %}
@@ -262,6 +263,7 @@
                 <li>{{ citation.citation }}</li>
               {% endfor %}
               </ul>{% endif %}
+          </div>
         </div>
       {% if model_parameters.model_architecture or model_parameters.input_format or model_parameters.input_format_map or model_parameters.output_format or model_parameters.output_format_map %}
         <div class="col card">
