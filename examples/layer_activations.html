@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>showing layer activations via the ecco toolkit &mdash; Explainer</title>
+  <title>Explaining a nlp model’s layer activations &mdash; Explainer</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
@@ -41,7 +41,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Explaining layer predictions via the ecco toolkit" href="layer_predictions.html" />
+    <link rel="next" title="Explaining a nlp model’s layer predictions" href="layer_predictions.html" />
     <link rel="prev" title="Explaining zero shot learning" href="zero_shot_learning.html" /> 
 </head>
 
@@ -70,8 +70,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="test_import_from.html">Testing explainer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multiclass_classification.html">Explaining text classifications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="zero_shot_learning.html">Explaining zero shot learning</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">showing layer activations via the ecco toolkit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layer_predictions.html">Explaining layer predictions via the ecco toolkit</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Explaining a nlp model’s layer activations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layer_predictions.html">Explaining a nlp model’s layer predictions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
@@ -92,7 +92,7 @@ const thebe_selector_output = ".output, .cell_output"
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Examples</a> &raquo;</li>
-      <li>showing layer activations via the ecco toolkit</li>
+      <li>Explaining a nlp model’s layer activations</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/examples/layer_activations.ipynb" rel="nofollow"> View page source</a>
       </li>
@@ -102,8 +102,10 @@ const thebe_selector_output = ".output, .cell_output"
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="showing-layer-activations-via-the-ecco-toolkit">
-<h1>showing layer activations via the <a class="reference external" href="https://ecco.readthedocs.io/en/main/">ecco toolkit</a><a class="headerlink" href="#showing-layer-activations-via-the-ecco-toolkit" title="Permalink to this headline"></a></h1>
+  <section id="explaining-a-nlp-model-s-layer-activations">
+<h1>Explaining a nlp model’s layer activations<a class="headerlink" href="#explaining-a-nlp-model-s-layer-activations" title="Permalink to this headline"></a></h1>
+<section id="see-the-ecco-toolkitalammar-2021-ecco">
+<h2>See the <a class="reference external" href="https://ecco.readthedocs.io/en/main/">ecco toolkit</a><span id="id1">[<a class="reference internal" href="../bibliography/index.html#id13" title="J Alammar. Ecco: an open source library for the explainability of transformer language models. In Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations. Association for Computational Linguistics, 2021.">Ala21</a>]</span><a class="headerlink" href="#see-the-ecco-toolkitalammar-2021-ecco" title="Permalink to this headline"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">explainer.explainers</span> <span class="kn">import</span> <span class="n">layer_activations</span>
@@ -141,6 +143,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
+</section>
 <section id="show-activations-in-each-layer-in-the-model">
 <h2>Show activations in each layer in the model<a class="headerlink" href="#show-activations-in-each-layer-in-the-model" title="Permalink to this headline"></a></h2>
 <div class="cell docutils container">
@@ -335,7 +338,7 @@ const thebe_selector_output = ".output, .cell_output"
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="zero_shot_learning.html" class="btn btn-neutral float-left" title="Explaining zero shot learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="layer_predictions.html" class="btn btn-neutral float-right" title="Explaining layer predictions via the ecco toolkit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="layer_predictions.html" class="btn btn-neutral float-right" title="Explaining a nlp model’s layer predictions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
