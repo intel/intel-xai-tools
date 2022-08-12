@@ -5,11 +5,15 @@ Explainer adheres to a set of principles based on [best practices](bestpractices
 
 > Entry points are a way for Python packages to advertise objects with some common interface. The most common examples are console_scripts entry points, which define shell commands by identifying a Python function to run. The entrypoints module contains functions to find and load entry points.
 
-Python {{PythonEntryPointsFunction}} have an associated {{PythonEntryPointsDataModel}}. The Data Model provides a way for an entry point instance to be associated with a group, name and object reference.
+Python {{PythonEntryPointsFunction}} have an associated {{PythonEntryPointsDataModel}}. The Data Model provides a way for an entry point instance to be associated with a group, name and object reference. 
 
-Entry points are indexed by wheelodex to provide lookup of groups of related plugins, for example pytest defines an entrypoint called pytest11. Under this entrypoint pytest {{PyTestPlugins}} can be registered by different contributors.
+Entry points are indexed by wheelodex to provide lookup of groups of related plugins, for example pytest defines an entrypoint called pytest11. Under this entrypoint pytest {{PyTestPlugins}} can be registered by different contributors. As shown in {{EntryPointsForPlugins}}, entry points can be used to load plugins which is the basis of explainer's functionality.
 
-Explainer uses python's entry point specification's {{PythonEntryPointsDataModel}} to define what XAI explanation (as well as the specific implementation) will be loaded and called. Explainer's CLI/API provides import/export mechanisms to bundle XAI functionality as python archives. The python archives are loaded at runtime either implicitly using python's import statement or explicitly using explainer's CLI/API. Details are provided in subsequent sections.
+Explainer uses plugins to define what XAI explanation (as well as the specific implementation) will be loaded and called. Explainer's CLI/API provides import/export mechanisms to bundle XAI functionality as python archives. The python archives are loaded at runtime either implicitly using python's import statement or explicitly using explainer's CLI/API. Details are provided in subsequent sections.
+
+
+> explainer prediction explain
+> explainer text-classification explain
 
 
 <details>
