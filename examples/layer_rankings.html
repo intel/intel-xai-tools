@@ -71,6 +71,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="multiclass_classification.html">Explaining text classifications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="zero_shot_learning.html">Explaining zero shot learning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="layer_activations.html">Explaining a nlp model’s layer activations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layer_attentions.html">Explaining a nlp model’s layer attentions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="layer_predictions.html">Explaining a nlp model’s layer predictions</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Explaining a nlp model’s layer rankings</a></li>
 </ul>
@@ -201,9 +202,9 @@ const thebe_selector_output = ".output, .cell_output"
 <div id="basic"></div>
 </div><script type="application/javascript">
          requirejs( ['basic', 'ecco'], function(basic, ecco){
-            basic.init('viz_240868') // Python needs to know the viz id. Used for each output token.
-            window.ecco['viz_240868'] = new ecco.renderOutputSequence({
-                    parentDiv: 'viz_240868',
+            basic.init('viz_264578') // Python needs to know the viz id. Used for each output token.
+            window.ecco['viz_264578'] = new ecco.renderOutputSequence({
+                    parentDiv: 'viz_264578',
                     data: {"tokens": [{"token": "The", "is_partial": true, "position": 0, "token_id": 464, "type": "input"}, {"token": "keys", "is_partial": false, "position": 1, "token_id": 8251, "type": "input"}, {"token": "to", "is_partial": false, "position": 2, "token_id": 284, "type": "input"}, {"token": "the", "is_partial": false, "position": 3, "token_id": 262, "type": "input"}, {"token": "cabinet", "is_partial": false, "position": 4, "token_id": 13447, "type": "input"}]},
                     tokenization_config: {"token_prefix": "\u0120", "partial_token_prefix": ""}
             
@@ -218,9 +219,9 @@ const thebe_selector_output = ".output, .cell_output"
         // We don't really need these require scripts. But this is to avert
         //this code from running before display_input_sequence which DOES require external files
         requirejs(['basic', 'ecco'], function(basic, ecco){
-                console.log('addToken viz_id', 'viz_240868');
-                window.ecco['viz_240868'].addToken({"token": "are", "is_partial": false, "token_id": 389, "position": 5, "type": "output"})
-                window.ecco['viz_240868'].redraw()
+                console.log('addToken viz_id', 'viz_264578');
+                window.ecco['viz_264578'].addToken({"token": "are", "is_partial": false, "token_id": 389, "position": 5, "type": "output"})
+                window.ecco['viz_264578'].redraw()
         })
         </script><img alt="../_images/3f08b3e6e77534297b948f2795cecd851c3d70770ca49488a76e888bc6b1c2a2.png" src="../_images/3f08b3e6e77534297b948f2795cecd851c3d70770ca49488a76e888bc6b1c2a2.png" />
 </div>

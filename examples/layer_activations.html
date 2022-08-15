@@ -142,7 +142,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at bert-base-uncased were not used when initializing BertModel: [&#39;cls.predictions.decoder.weight&#39;, &#39;cls.predictions.bias&#39;, &#39;cls.seq_relationship.bias&#39;, &#39;cls.predictions.transform.dense.bias&#39;, &#39;cls.predictions.transform.LayerNorm.bias&#39;, &#39;cls.predictions.transform.dense.weight&#39;, &#39;cls.seq_relationship.weight&#39;, &#39;cls.predictions.transform.LayerNorm.weight&#39;]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at bert-base-uncased were not used when initializing BertModel: [&#39;cls.predictions.transform.LayerNorm.bias&#39;, &#39;cls.predictions.transform.LayerNorm.weight&#39;, &#39;cls.predictions.decoder.weight&#39;, &#39;cls.seq_relationship.weight&#39;, &#39;cls.predictions.bias&#39;, &#39;cls.seq_relationship.bias&#39;, &#39;cls.predictions.transform.dense.bias&#39;, &#39;cls.predictions.transform.dense.weight&#39;]
 - This IS expected if you are initializing BertModel from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
 - This IS NOT expected if you are initializing BertModel from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
 </pre></div>
