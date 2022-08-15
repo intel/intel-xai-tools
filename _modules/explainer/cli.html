@@ -47,8 +47,7 @@ const thebe_selector_output = ".output, .cell_output"
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html">
-            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+            <a href="../../index.html" class="icon icon-home"> Intel® Explainable AI Tools
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -59,9 +58,11 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../xai/index.html">Explainable AI Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../requirements/index.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../design/index.html">Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bestpractices/index.html">Best Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design/index.html">Explainer Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../bibliography/index.html">Bibliography</a></li>
 </ul>
@@ -72,7 +73,7 @@ const thebe_selector_output = ".output, .cell_output"
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Python</a>
+          <a href="../../index.html">Intel® Explainable AI Tools</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -98,7 +99,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">import</span> <span class="nn">click</span>
 <span class="kn">import</span> <span class="nn">click_completion</span>
 <span class="kn">from</span> <span class="nn">explainer.api</span> <span class="kn">import</span> <span class="n">Explainer</span>
@@ -106,6 +107,13 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="n">CONTEXT_SETTINGS</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">auto_envvar_prefix</span><span class="o">=</span><span class="s2">&quot;EXPLAINER&quot;</span><span class="p">)</span>
 
 <span class="n">click_completion</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">complete_explainers</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">incomplete</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">exp</span> <span class="o">=</span> <span class="n">Explainer</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">incomplete</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exp</span><span class="o">.</span><span class="n">list</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">incomplete</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">exp</span><span class="o">.</span><span class="n">list</span>
 
 <div class="viewcode-block" id="Environment"><a class="viewcode-back" href="../../design/index.html#explainer.cli.Environment">[docs]</a><span class="k">class</span> <span class="nc">Environment</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Provides an Environment that can be passed to click subcommands&quot;&quot;&quot;</span>

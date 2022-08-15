@@ -41,7 +41,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Explaining a nlp model’s layer predictions" href="layer_predictions.html" />
+    <link rel="next" title="Explaining a nlp model’s layer attentions" href="layer_attentions.html" />
     <link rel="prev" title="Explaining zero shot learning" href="zero_shot_learning.html" /> 
 </head>
 
@@ -71,6 +71,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="multiclass_classification.html">Explaining text classifications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="zero_shot_learning.html">Explaining zero shot learning</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Explaining a nlp model’s layer activations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layer_attentions.html">Explaining a nlp model’s layer attentions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="layer_predictions.html">Explaining a nlp model’s layer predictions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="layer_rankings.html">Explaining a nlp model’s layer rankings</a></li>
 </ul>
@@ -141,7 +142,7 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at bert-base-uncased were not used when initializing BertModel: [&#39;cls.predictions.decoder.weight&#39;, &#39;cls.seq_relationship.weight&#39;, &#39;cls.predictions.transform.LayerNorm.weight&#39;, &#39;cls.predictions.transform.LayerNorm.bias&#39;, &#39;cls.predictions.bias&#39;, &#39;cls.seq_relationship.bias&#39;, &#39;cls.predictions.transform.dense.weight&#39;, &#39;cls.predictions.transform.dense.bias&#39;]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Some weights of the model checkpoint at bert-base-uncased were not used when initializing BertModel: [&#39;cls.predictions.decoder.weight&#39;, &#39;cls.predictions.bias&#39;, &#39;cls.seq_relationship.bias&#39;, &#39;cls.predictions.transform.dense.bias&#39;, &#39;cls.predictions.transform.LayerNorm.bias&#39;, &#39;cls.predictions.transform.dense.weight&#39;, &#39;cls.seq_relationship.weight&#39;, &#39;cls.predictions.transform.LayerNorm.weight&#39;]
 - This IS expected if you are initializing BertModel from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
 - This IS NOT expected if you are initializing BertModel from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
 </pre></div>
@@ -259,7 +260,7 @@ const thebe_selector_output = ".output, .cell_output"
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="zero_shot_learning.html" class="btn btn-neutral float-left" title="Explaining zero shot learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="layer_predictions.html" class="btn btn-neutral float-right" title="Explaining a nlp model’s layer predictions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="layer_attentions.html" class="btn btn-neutral float-right" title="Explaining a nlp model’s layer attentions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
