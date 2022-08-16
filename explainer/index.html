@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explainer &mdash; Explainer</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-thebe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+        <script src="../_static/design-tabs.js"></script>
+        <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+        <script async="async" src="../_static/sphinx-thebe.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CLI Reference" href="cli.html" />
+    <link rel="prev" title="Requirements" href="../requirements/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Explainer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html">CLI Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="criteria.html">Criteria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html">Explainer Design</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Explainer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/explainer/index.md" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="explainer">
+<span id="id1"></span><h1>Explainer<a class="headerlink" href="#explainer" title="Permalink to this headline"></a></h1>
+<section id="features">
+<h2>Features:<a class="headerlink" href="#features" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>allows injection of xai methods into python workflows|notebooks without requiring version compatibility of resident packages in the active python environment.</p></li>
+<li><p>enables a seamless way to include the best or most relevant xai methods from any external package|toolkit to explain models|data from within the pluggable environment without modifying the resident environment.</p></li>
+<li><p>is extensible, leveraging python’s entry_points specification.</p></li>
+<li><p>is compliant with python’s importlib and contextlib APIs, both part of standard python 3.</p></li>
+<li><p>provides an avenuse for community contributions. Plugin architectures have had tremendous success in python’s ecosystem. New plugins are created as wheels and published to python’s pypi or used locally on disk.</p></li>
+</ul>
+</section>
+<section id="syntax">
+<h2>Syntax:<a class="headerlink" href="#syntax" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">explainer.explainers</span> <span class="kn">import</span> <span class="n">model_layers</span>
+
+<span class="k">with</span> <span class="n">model_layers</span> <span class="k">as</span> <span class="n">m</span><span class="p">:</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">layer_attributions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+  <span class="n">m</span><span class="o">.</span><span class="n">layer_predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="innovations">
+<h2>Innovations:<a class="headerlink" href="#innovations" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>uses python’s import mechanism to read a yaml file that is then used to load a python environment. This environment is ephemeral or pluggable and inserted at the head of sys.path.</p></li>
+<li><p>the ModuleSpec returned from import has been extended as a subclass to hold:</p>
+<ul>
+<li><p>a dictionary of entry_points grouped by the import name that are listed in the pluggable environment’s dist-info (entry_points.txt)</p></li>
+<li><p>an optional context manager that will unload the environment when used with python’s with statement</p>
+<ul>
+<li><p>the context manager is similar to python’s contextmanager for files but used for pluggable environments.</p></li>
+</ul>
+</li>
+<li><p>model as a python Resource &lt;- an attribute in the yaml file.</p></li>
+<li><p>dataset as a python Resource &lt;- an attribute in the yaml file.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="plugin-naming-conventions-for-various-types-of-explainers">
+<h2>Plugin Naming Conventions (for various types of explainers):<a class="headerlink" href="#plugin-naming-conventions-for-various-types-of-explainers" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>model-<plugin>: eg model-layers, model-posthoc, model-attributions</p></li>
+<li><p>data-<plugin>: eg data-perf, data-feature-permutation</p></li>
+</ul>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./explainer"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../requirements/index.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cli.html" class="btn btn-neutral float-right" title="CLI Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

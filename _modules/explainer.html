@@ -58,11 +58,10 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Explainable AI Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bestpractices/index.html">Best Practices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Explainer Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
 </ul>
@@ -196,7 +195,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="k">return</span> <span class="n">info</span>
 
 
-<div class="viewcode-block" id="ExplainerModuleSpec"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerModuleSpec">[docs]</a><span class="k">class</span> <span class="nc">ExplainerModuleSpec</span><span class="p">(</span><span class="n">ModuleSpec</span><span class="p">):</span>
+<div class="viewcode-block" id="ExplainerModuleSpec"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerModuleSpec">[docs]</a><span class="k">class</span> <span class="nc">ExplainerModuleSpec</span><span class="p">(</span><span class="n">ModuleSpec</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extends the ModuleSpec to add</span>
 <span class="sd">       spec: ExplainerSpec</span>
 <span class="sd">       entry_points: EntryPoints TBD</span>
@@ -238,7 +237,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="k">return</span> <span class="n">info</span></div>
 
 
-<div class="viewcode-block" id="ExplainerLoader"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerLoader">[docs]</a><span class="k">class</span> <span class="nc">ExplainerLoader</span><span class="p">(</span><span class="n">Loader</span><span class="p">):</span>
+<div class="viewcode-block" id="ExplainerLoader"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerLoader">[docs]</a><span class="k">class</span> <span class="nc">ExplainerLoader</span><span class="p">(</span><span class="n">Loader</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Loads yaml files that hold ExplainerSpec definitions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -270,7 +269,7 @@ const thebe_selector_output = ".output, .cell_output"
                 <span class="k">raise</span> <span class="ne">ImportError</span> <span class="kn">from</span> <span class="nn">error</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module</span>
 
-<div class="viewcode-block" id="ExplainerLoader.create_module"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerLoader.create_module">[docs]</a>    <span class="k">def</span> <span class="nf">create_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">ModuleSpec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleSpec</span><span class="p">:</span>
+<div class="viewcode-block" id="ExplainerLoader.create_module"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerLoader.create_module">[docs]</a>    <span class="k">def</span> <span class="nf">create_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">ModuleSpec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleSpec</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Return a module to initialize and into which to load.</span>
 
 <span class="sd">        Args:</span>
@@ -292,7 +291,7 @@ const thebe_selector_output = ".output, .cell_output"
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span></div>
 
-<div class="viewcode-block" id="ExplainerLoader.exec_module"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerLoader.exec_module">[docs]</a>    <span class="k">def</span> <span class="nf">exec_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_module</span><span class="p">:</span> <span class="n">ModuleSpec</span><span class="p">):</span>
+<div class="viewcode-block" id="ExplainerLoader.exec_module"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerLoader.exec_module">[docs]</a>    <span class="k">def</span> <span class="nf">exec_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_module</span><span class="p">:</span> <span class="n">ModuleSpec</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;needs to reify parts of _module.spec and add them to _module</span>
 
 <span class="sd">        Args:</span>
@@ -303,7 +302,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="ExplainerLoader.get_resource_reader"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerLoader.get_resource_reader">[docs]</a>    <span class="k">def</span> <span class="nf">get_resource_reader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResourceReader</span><span class="p">:</span>
+<div class="viewcode-block" id="ExplainerLoader.get_resource_reader"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerLoader.get_resource_reader">[docs]</a>    <span class="k">def</span> <span class="nf">get_resource_reader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResourceReader</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Required for Loaders that implement resource loading</span>
 
 <span class="sd">        Args:</span>
@@ -315,11 +314,11 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;get_resource_reader fullname=</span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="ExplainerLoader.load_dataset"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerLoader.load_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">load_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ExplainerLoader.load_dataset"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerLoader.load_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">load_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;loads a dataset</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="ExplainerLoader.load_plugin"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerLoader.load_plugin">[docs]</a>    <span class="k">def</span> <span class="nf">load_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ExplainerLoader.load_plugin"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerLoader.load_plugin">[docs]</a>    <span class="k">def</span> <span class="nf">load_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;loads the plugin specified in the module.spec</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -334,12 +333,12 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;entry_point&quot;</span><span class="p">):</span>
                 <span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;entry_point&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ExplainerLoader.spec"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerLoader.spec">[docs]</a>    <span class="k">def</span> <span class="nf">spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loader</span><span class="p">:</span> <span class="n">yaml</span><span class="o">.</span><span class="n">SafeLoader</span><span class="p">,</span>
+<div class="viewcode-block" id="ExplainerLoader.spec"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerLoader.spec">[docs]</a>    <span class="k">def</span> <span class="nf">spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loader</span><span class="p">:</span> <span class="n">yaml</span><span class="o">.</span><span class="n">SafeLoader</span><span class="p">,</span>
              <span class="n">node</span><span class="p">:</span> <span class="n">yaml</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">MappingNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExplainerSpec</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Construct a ExplainerSpec&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ExplainerSpec</span><span class="p">(</span><span class="o">**</span><span class="n">loader</span><span class="o">.</span><span class="n">construct_mapping</span><span class="p">(</span><span class="n">node</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ExplainerLoader.get_yaml_loader"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerLoader.get_yaml_loader">[docs]</a>    <span class="k">def</span> <span class="nf">get_yaml_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">yaml</span><span class="o">.</span><span class="n">SafeLoader</span><span class="p">]:</span>
+<div class="viewcode-block" id="ExplainerLoader.get_yaml_loader"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerLoader.get_yaml_loader">[docs]</a>    <span class="k">def</span> <span class="nf">get_yaml_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">yaml</span><span class="o">.</span><span class="n">SafeLoader</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the yaml loader for the tag !ExplainerSpec</span>
 
 <span class="sd">        Returns:</span>
@@ -351,12 +350,12 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="k">return</span> <span class="n">loader</span></div></div>
 
 
-<div class="viewcode-block" id="ExplainerMetaPathFinder"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerMetaPathFinder">[docs]</a><span class="k">class</span> <span class="nc">ExplainerMetaPathFinder</span><span class="p">(</span><span class="n">MetaPathFinder</span><span class="p">):</span>
+<div class="viewcode-block" id="ExplainerMetaPathFinder"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerMetaPathFinder">[docs]</a><span class="k">class</span> <span class="nc">ExplainerMetaPathFinder</span><span class="p">(</span><span class="n">MetaPathFinder</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;ExplainerMetaPathFinder imports yaml files that define a</span>
 <span class="sd">       explanation&#39;s model, data, entry_point and plugin path</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ExplainerMetaPathFinder.find_spec"><a class="viewcode-back" href="../design/index.html#explainer.ExplainerMetaPathFinder.find_spec">[docs]</a>    <span class="k">def</span> <span class="nf">find_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_target</span><span class="p">:</span> <span class="n">ModuleType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleSpec</span><span class="p">:</span>
+<div class="viewcode-block" id="ExplainerMetaPathFinder.find_spec"><a class="viewcode-back" href="../explainer/design.html#explainer.ExplainerMetaPathFinder.find_spec">[docs]</a>    <span class="k">def</span> <span class="nf">find_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_target</span><span class="p">:</span> <span class="n">ModuleType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleSpec</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns ExplainerLoader if the path is a yaml file that includes a !ExplainerSpec tag</span>
 
 <span class="sd">        Args:</span>

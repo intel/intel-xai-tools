@@ -1,5 +1,5 @@
 (xai)=
-# Explainable AI Concepts
+# Concepts
 
 
 {{XAI}} (also known by the acronym XAI) is a methodology to provide information about a model, data or its features that can be understood by humans. Explainability techniques can be applied at almost any point within a model's training or inference workflow. As shown below, explainability and interpretability are tightly coupled. Depending on the algorithm being used, different approaches to add explainability are contingent on what is interpretable.

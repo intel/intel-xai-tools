@@ -58,11 +58,10 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../xai/index.html">Explainable AI Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../xai/index.html">Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../requirements/index.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../bestpractices/index.html">Best Practices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../design/index.html">Explainer Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../explainer/index.html">Explainer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../bibliography/index.html">Bibliography</a></li>
 </ul>
@@ -109,7 +108,7 @@ const thebe_selector_output = ".output, .cell_output"
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;explainers&quot;</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="Explainer"><a class="viewcode-back" href="../../design/index.html#explainer.api.Explainer">[docs]</a><span class="k">class</span> <span class="nc">Explainer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="Explainer"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer">[docs]</a><span class="k">class</span> <span class="nc">Explainer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Explainer API base class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -157,7 +156,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_explainer</span>
 
-<div class="viewcode-block" id="Explainer.export_to"><a class="viewcode-back" href="../../design/index.html#explainer.api.Explainer.export_to">[docs]</a>    <span class="k">def</span> <span class="nf">export_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExplainerModuleSpec</span><span class="p">:</span>
+<div class="viewcode-block" id="Explainer.export_to"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.export_to">[docs]</a>    <span class="k">def</span> <span class="nf">export_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExplainerModuleSpec</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;creates a pkz file under explainer/explainers with an optional entry_point</span>
 
 <span class="sd">        Args:</span>
@@ -218,7 +217,7 @@ const thebe_selector_output = ".output, .cell_output"
 
         <span class="k">return</span> <span class="n">module</span></div>
 
-<div class="viewcode-block" id="Explainer.import_from"><a class="viewcode-back" href="../../design/index.html#explainer.api.Explainer.import_from">[docs]</a>    <span class="k">def</span> <span class="nf">import_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExplainerModuleSpec</span><span class="p">:</span>
+<div class="viewcode-block" id="Explainer.import_from"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.import_from">[docs]</a>    <span class="k">def</span> <span class="nf">import_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExplainerModuleSpec</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Import a yaml file using the ExplainerLoader</span>
 
 <span class="sd">        Args:</span>
@@ -236,7 +235,7 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fullpath</span><span class="si">}</span><span class="s2">: does not exit&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">module</span></div>
 
-<div class="viewcode-block" id="Explainer.info"><a class="viewcode-back" href="../../design/index.html#explainer.api.Explainer.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExplainerModuleSpec</span><span class="p">:</span>
+<div class="viewcode-block" id="Explainer.info"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExplainerModuleSpec</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;shows information about the yaml file</span>
 
 <span class="sd">        Args:</span>
@@ -252,7 +251,7 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="n">module</span> <span class="o">=</span> <span class="n">exl</span><span class="o">.</span><span class="n">create_module</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">module</span></div>
 
-<div class="viewcode-block" id="Explainer.explain"><a class="viewcode-back" href="../../design/index.html#explainer.api.Explainer.explain">[docs]</a>    <span class="k">def</span> <span class="nf">explain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Explainer.explain"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.explain">[docs]</a>    <span class="k">def</span> <span class="nf">explain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;takes _data and forwards to internal explainer</span>
 
 <span class="sd">        Args:</span>

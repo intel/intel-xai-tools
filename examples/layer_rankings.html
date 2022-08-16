@@ -61,11 +61,10 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Explainable AI Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bestpractices/index.html">Best Practices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Explainer Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="test_import_from.html">Testing explainer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multiclass_classification.html">Explaining text classifications</a></li>
@@ -124,6 +123,127 @@ const thebe_selector_output = ".output, .cell_output"
 
 <span class="kn">import</span> <span class="nn">entry_point</span>
 <span class="n">explainer</span> <span class="o">=</span> <span class="n">entry_point</span><span class="o">.</span><span class="n">entry_point</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="show-model-layers">
+<h2>Show model layers<a class="headerlink" href="#show-model-layers" title="Permalink to this headline"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">explainer</span><span class="o">.</span><span class="n">lm</span><span class="o">.</span><span class="n">model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GPT2LMHeadModel(
+  (transformer): GPT2Model(
+    (wte): Embedding(50257, 768)
+    (wpe): Embedding(1024, 768)
+    (drop): Dropout(p=0.1, inplace=False)
+    (h): ModuleList(
+      (0): GPT2Block(
+        (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (attn): GPT2Attention(
+          (c_attn): Conv1D()
+          (c_proj): Conv1D()
+          (attn_dropout): Dropout(p=0.1, inplace=False)
+          (resid_dropout): Dropout(p=0.1, inplace=False)
+        )
+        (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (mlp): GPT2MLP(
+          (c_fc): Conv1D()
+          (c_proj): Conv1D()
+          (act): NewGELUActivation()
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+      (1): GPT2Block(
+        (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (attn): GPT2Attention(
+          (c_attn): Conv1D()
+          (c_proj): Conv1D()
+          (attn_dropout): Dropout(p=0.1, inplace=False)
+          (resid_dropout): Dropout(p=0.1, inplace=False)
+        )
+        (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (mlp): GPT2MLP(
+          (c_fc): Conv1D()
+          (c_proj): Conv1D()
+          (act): NewGELUActivation()
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+      (2): GPT2Block(
+        (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (attn): GPT2Attention(
+          (c_attn): Conv1D()
+          (c_proj): Conv1D()
+          (attn_dropout): Dropout(p=0.1, inplace=False)
+          (resid_dropout): Dropout(p=0.1, inplace=False)
+        )
+        (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (mlp): GPT2MLP(
+          (c_fc): Conv1D()
+          (c_proj): Conv1D()
+          (act): NewGELUActivation()
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+      (3): GPT2Block(
+        (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (attn): GPT2Attention(
+          (c_attn): Conv1D()
+          (c_proj): Conv1D()
+          (attn_dropout): Dropout(p=0.1, inplace=False)
+          (resid_dropout): Dropout(p=0.1, inplace=False)
+        )
+        (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (mlp): GPT2MLP(
+          (c_fc): Conv1D()
+          (c_proj): Conv1D()
+          (act): NewGELUActivation()
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+      (4): GPT2Block(
+        (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (attn): GPT2Attention(
+          (c_attn): Conv1D()
+          (c_proj): Conv1D()
+          (attn_dropout): Dropout(p=0.1, inplace=False)
+          (resid_dropout): Dropout(p=0.1, inplace=False)
+        )
+        (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (mlp): GPT2MLP(
+          (c_fc): Conv1D()
+          (c_proj): Conv1D()
+          (act): NewGELUActivation()
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+      (5): GPT2Block(
+        (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (attn): GPT2Attention(
+          (c_attn): Conv1D()
+          (c_proj): Conv1D()
+          (attn_dropout): Dropout(p=0.1, inplace=False)
+          (resid_dropout): Dropout(p=0.1, inplace=False)
+        )
+        (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        (mlp): GPT2MLP(
+          (c_fc): Conv1D()
+          (c_proj): Conv1D()
+          (act): NewGELUActivation()
+          (dropout): Dropout(p=0.1, inplace=False)
+        )
+      )
+    )
+    (ln_f): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+  )
+  (lm_head): Linear(in_features=768, out_features=50257, bias=False)
+)
 </pre></div>
 </div>
 </div>
@@ -202,9 +322,9 @@ const thebe_selector_output = ".output, .cell_output"
 <div id="basic"></div>
 </div><script type="application/javascript">
          requirejs( ['basic', 'ecco'], function(basic, ecco){
-            basic.init('viz_264578') // Python needs to know the viz id. Used for each output token.
-            window.ecco['viz_264578'] = new ecco.renderOutputSequence({
-                    parentDiv: 'viz_264578',
+            basic.init('viz_80850') // Python needs to know the viz id. Used for each output token.
+            window.ecco['viz_80850'] = new ecco.renderOutputSequence({
+                    parentDiv: 'viz_80850',
                     data: {"tokens": [{"token": "The", "is_partial": true, "position": 0, "token_id": 464, "type": "input"}, {"token": "keys", "is_partial": false, "position": 1, "token_id": 8251, "type": "input"}, {"token": "to", "is_partial": false, "position": 2, "token_id": 284, "type": "input"}, {"token": "the", "is_partial": false, "position": 3, "token_id": 262, "type": "input"}, {"token": "cabinet", "is_partial": false, "position": 4, "token_id": 13447, "type": "input"}]},
                     tokenization_config: {"token_prefix": "\u0120", "partial_token_prefix": ""}
             
@@ -219,12 +339,515 @@ const thebe_selector_output = ".output, .cell_output"
         // We don't really need these require scripts. But this is to avert
         //this code from running before display_input_sequence which DOES require external files
         requirejs(['basic', 'ecco'], function(basic, ecco){
-                console.log('addToken viz_id', 'viz_264578');
-                window.ecco['viz_264578'].addToken({"token": "are", "is_partial": false, "token_id": 389, "position": 5, "type": "output"})
-                window.ecco['viz_264578'].redraw()
+                console.log('addToken viz_id', 'viz_80850');
+                window.ecco['viz_80850'].addToken({"token": "are", "is_partial": false, "token_id": 389, "position": 5, "type": "output"})
+                window.ecco['viz_80850'].redraw()
         })
         </script><img alt="../_images/3f08b3e6e77534297b948f2795cecd851c3d70770ca49488a76e888bc6b1c2a2.png" src="../_images/3f08b3e6e77534297b948f2795cecd851c3d70770ca49488a76e888bc6b1c2a2.png" />
 </div>
+</div>
+</section>
+<section id="calculate-integrated-gradients-and-input-x-gradient-saliency-attributions">
+<h2>Calculate Integrated Gradients and Input X Gradient saliency attributions<a class="headerlink" href="#calculate-integrated-gradients-and-input-x-gradient-saliency-attributions" title="Permalink to this headline"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">text</span><span class="o">=</span> <span class="s2">&quot;The countries of the European Union are:</span><span class="se">\n</span><span class="s2">1. Austria</span><span class="se">\n</span><span class="s2">2. Belgium</span><span class="se">\n</span><span class="s2">3. Bulgaria</span><span class="se">\n</span><span class="s2">4.&quot;</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">lm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">generate</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">attribution</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ig&#39;</span><span class="p">,</span> <span class="s1">&#39;grad_x_input&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html lang="en">
+<script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+<script>
+    var ecco_url = 'https://storage.googleapis.com/ml-intro/ecco/'
+    //var ecco_url = 'http://localhost:8000/'
+
+    if (window.ecco === undefined) window.ecco = {}
+
+    // Setup the paths of the script we'll be using
+    requirejs.config({
+        urlArgs: "bust=" + (new Date()).getTime(),
+        nodeRequire: require,
+        paths: {
+            d3: "https://d3js.org/d3.v6.min", // This is only for use in setup.html and basic.html
+            "d3-array": "https://d3js.org/d3-array.v2.min",
+            jquery: "https://code.jquery.com/jquery-3.5.1.min",
+            ecco: ecco_url + 'js/0.0.6/ecco-bundle.min',
+            xregexp: 'https://cdnjs.cloudflare.com/ajax/libs/xregexp/3.2.0/xregexp-all.min'
+        }
+    });
+
+    // Add the css file
+    //requirejs(['d3'],
+    //    function (d3) {
+    //        d3.select('#css').attr('href', ecco_url + 'html/styles.css')
+    //    })
+
+    console.log('Ecco initialize!!')
+
+    // returns a 'basic' object. basic.init() selects the html div we'll be
+    // rendering the html into, adds styles.css to the document.
+    define('basic', ['d3'],
+        function (d3) {
+            return {
+                init: function (viz_id = null) {
+                    if (viz_id == null) {
+                        viz_id = "viz_" + Math.round(Math.random() * 10000000)
+                    }
+                    // Select the div rendered below, change its id
+                    const div = d3.select('#basic').attr('id', viz_id),
+                        div_parent = d3.select('#' + viz_id).node().parentNode
+
+                    // Link to CSS file
+                    d3.select(div_parent).insert('link')
+                        .attr('rel', 'stylesheet')
+                        .attr('type', 'text/css')
+                        .attr('href', ecco_url + 'html/0.0.2/styles.css')
+
+                    return viz_id
+                }
+            }
+        }, function (err) {
+            console.log(err);
+        }
+    )
+</script>
+
+<head>
+    <link id='css' rel="stylesheet" type="text/css">
+</head>
+<div id="basic"></div>
+</div><script type="application/javascript">
+         requirejs( ['basic', 'ecco'], function(basic, ecco){
+            basic.init('viz_714447') // Python needs to know the viz id. Used for each output token.
+            window.ecco['viz_714447'] = new ecco.renderOutputSequence({
+                    parentDiv: 'viz_714447',
+                    data: {"tokens": [{"token": "The", "is_partial": true, "position": 0, "token_id": 464, "type": "input"}, {"token": "countries", "is_partial": false, "position": 1, "token_id": 2678, "type": "input"}, {"token": "of", "is_partial": false, "position": 2, "token_id": 286, "type": "input"}, {"token": "the", "is_partial": false, "position": 3, "token_id": 262, "type": "input"}, {"token": "European", "is_partial": false, "position": 4, "token_id": 3427, "type": "input"}, {"token": "Union", "is_partial": false, "position": 5, "token_id": 4479, "type": "input"}, {"token": "are", "is_partial": false, "position": 6, "token_id": 389, "type": "input"}, {"token": ":", "is_partial": true, "position": 7, "token_id": 25, "type": "input"}, {"token": "\n", "is_partial": true, "position": 8, "token_id": 198, "type": "input"}, {"token": "1", "is_partial": true, "position": 9, "token_id": 16, "type": "input"}, {"token": ".", "is_partial": true, "position": 10, "token_id": 13, "type": "input"}, {"token": "Austria", "is_partial": false, "position": 11, "token_id": 17322, "type": "input"}, {"token": "\n", "is_partial": true, "position": 12, "token_id": 198, "type": "input"}, {"token": "2", "is_partial": true, "position": 13, "token_id": 17, "type": "input"}, {"token": ".", "is_partial": true, "position": 14, "token_id": 13, "type": "input"}, {"token": "Belgium", "is_partial": false, "position": 15, "token_id": 15664, "type": "input"}, {"token": "\n", "is_partial": true, "position": 16, "token_id": 198, "type": "input"}, {"token": "3", "is_partial": true, "position": 17, "token_id": 18, "type": "input"}, {"token": ".", "is_partial": true, "position": 18, "token_id": 13, "type": "input"}, {"token": "Bulgaria", "is_partial": false, "position": 19, "token_id": 27902, "type": "input"}, {"token": "\n", "is_partial": true, "position": 20, "token_id": 198, "type": "input"}, {"token": "4", "is_partial": true, "position": 21, "token_id": 19, "type": "input"}, {"token": ".", "is_partial": true, "position": 22, "token_id": 13, "type": "input"}]},
+                    tokenization_config: {"token_prefix": "\u0120", "partial_token_prefix": ""}
+            
+            })
+         }, function (err) {
+            console.log(err);
+        })
+        </script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.
+</pre></div>
+</div>
+<script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "Belgium", "is_partial": false, "token_id": 15664, "position": 23, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "\n", "is_partial": true, "token_id": 198, "position": 24, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "5", "is_partial": true, "token_id": 20, "position": 25, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": ".", "is_partial": true, "token_id": 13, "position": 26, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "Great", "is_partial": false, "token_id": 3878, "position": 27, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "Britain", "is_partial": false, "token_id": 5491, "position": 28, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "\n", "is_partial": true, "token_id": 198, "position": 29, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "6", "is_partial": true, "token_id": 21, "position": 30, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": ".", "is_partial": true, "token_id": 13, "position": 31, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "France", "is_partial": false, "token_id": 4881, "position": 32, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "\n", "is_partial": true, "token_id": 198, "position": 33, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "7", "is_partial": true, "token_id": 22, "position": 34, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": ".", "is_partial": true, "token_id": 13, "position": 35, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "Germany", "is_partial": false, "token_id": 4486, "position": 36, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "\n", "is_partial": true, "token_id": 198, "position": 37, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "8", "is_partial": true, "token_id": 23, "position": 38, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": ".", "is_partial": true, "token_id": 13, "position": 39, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "Hong", "is_partial": false, "token_id": 9764, "position": 40, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "Kong", "is_partial": false, "token_id": 9071, "position": 41, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script><script type="application/javascript">
+        // We don't really need these require scripts. But this is to avert
+        //this code from running before display_input_sequence which DOES require external files
+        requirejs(['basic', 'ecco'], function(basic, ecco){
+                console.log('addToken viz_id', 'viz_714447');
+                window.ecco['viz_714447'].addToken({"token": "\n", "is_partial": true, "token_id": 198, "position": 42, "type": "output"})
+                window.ecco['viz_714447'].redraw()
+        })
+        </script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="o">.</span><span class="n">rankings</span><span class="p">()</span>
+<span class="n">output</span><span class="o">.</span><span class="n">primary_attributions</span><span class="p">(</span><span class="n">attr_method</span><span class="o">=</span><span class="s1">&#39;ig&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;detailed&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html lang="en">
+<script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+<script>
+    var ecco_url = 'https://storage.googleapis.com/ml-intro/ecco/'
+    //var ecco_url = 'http://localhost:8000/'
+
+    if (window.ecco === undefined) window.ecco = {}
+
+    // Setup the paths of the script we'll be using
+    requirejs.config({
+        urlArgs: "bust=" + (new Date()).getTime(),
+        nodeRequire: require,
+        paths: {
+            d3: "https://d3js.org/d3.v6.min", // This is only for use in setup.html and basic.html
+            "d3-array": "https://d3js.org/d3-array.v2.min",
+            jquery: "https://code.jquery.com/jquery-3.5.1.min",
+            ecco: ecco_url + 'js/0.0.6/ecco-bundle.min',
+            xregexp: 'https://cdnjs.cloudflare.com/ajax/libs/xregexp/3.2.0/xregexp-all.min'
+        }
+    });
+
+    // Add the css file
+    //requirejs(['d3'],
+    //    function (d3) {
+    //        d3.select('#css').attr('href', ecco_url + 'html/styles.css')
+    //    })
+
+    console.log('Ecco initialize!!')
+
+    // returns a 'basic' object. basic.init() selects the html div we'll be
+    // rendering the html into, adds styles.css to the document.
+    define('basic', ['d3'],
+        function (d3) {
+            return {
+                init: function (viz_id = null) {
+                    if (viz_id == null) {
+                        viz_id = "viz_" + Math.round(Math.random() * 10000000)
+                    }
+                    // Select the div rendered below, change its id
+                    const div = d3.select('#basic').attr('id', viz_id),
+                        div_parent = d3.select('#' + viz_id).node().parentNode
+
+                    // Link to CSS file
+                    d3.select(div_parent).insert('link')
+                        .attr('rel', 'stylesheet')
+                        .attr('type', 'text/css')
+                        .attr('href', ecco_url + 'html/0.0.2/styles.css')
+
+                    return viz_id
+                }
+            }
+        }, function (err) {
+            console.log(err);
+        }
+    )
+</script>
+
+<head>
+    <link id='css' rel="stylesheet" type="text/css">
+</head>
+<div id="basic"></div>
+</div><script type="application/javascript">
+             requirejs(['basic', 'ecco'], function(basic, ecco){
+                const viz_id = basic.init()
+                console.log(viz_id)
+                window.ecco[viz_id] = ecco.interactiveTokens({
+                    parentDiv: viz_id,
+                    data: {"tokens": [{"token": "The", "token_id": 464, "is_partial": true, "type": "input", "value": "0.040535374164857606", "position": 0}, {"token": "countries", "token_id": 2678, "is_partial": false, "type": "input", "value": "0.04169492763228994", "position": 1}, {"token": "of", "token_id": 286, "is_partial": false, "type": "input", "value": "0.019621304508223664", "position": 2}, {"token": "the", "token_id": 262, "is_partial": false, "type": "input", "value": "0.01651024879556671", "position": 3}, {"token": "European", "token_id": 3427, "is_partial": false, "type": "input", "value": "0.02951364020080789", "position": 4}, {"token": "Union", "token_id": 4479, "is_partial": false, "type": "input", "value": "0.024033369585490315", "position": 5}, {"token": "are", "token_id": 389, "is_partial": false, "type": "input", "value": "0.015226641912140964", "position": 6}, {"token": ":", "token_id": 25, "is_partial": true, "type": "input", "value": "0.02058155989788039", "position": 7}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.024150375219153867", "position": 8}, {"token": "1", "token_id": 16, "is_partial": true, "type": "input", "value": "0.026397221662135123", "position": 9}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.030195037509542205", "position": 10}, {"token": "Austria", "token_id": 17322, "is_partial": false, "type": "input", "value": "0.050020308271923476", "position": 11}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.033699215393720956", "position": 12}, {"token": "2", "token_id": 17, "is_partial": true, "type": "input", "value": "0.036116759164789757", "position": 13}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.03181024189804675", "position": 14}, {"token": "Belgium", "token_id": 15664, "is_partial": false, "type": "input", "value": "0.11914982230494678", "position": 15}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.024124244395522947", "position": 16}, {"token": "3", "token_id": 18, "is_partial": true, "type": "input", "value": "0.028170368730739657", "position": 17}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.022006566080107672", "position": 18}, {"token": "Bulgaria", "token_id": 27902, "is_partial": false, "type": "input", "value": "0.2251191429081425", "position": 19}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.02044069923284291", "position": 20}, {"token": "4", "token_id": 19, "is_partial": true, "type": "input", "value": "0.058729057282742005", "position": 21}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.062153873248385866", "position": 22}, {"token": "Belgium", "token_id": 15664, "is_partial": false, "type": "output", "value": "0", "position": 23}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 24}, {"token": "5", "token_id": 20, "is_partial": true, "type": "output", "value": "0", "position": 25}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 26}, {"token": "Great", "token_id": 3878, "is_partial": false, "type": "output", "value": "0", "position": 27}, {"token": "Britain", "token_id": 5491, "is_partial": false, "type": "output", "value": "0", "position": 28}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 29}, {"token": "6", "token_id": 21, "is_partial": true, "type": "output", "value": "0", "position": 30}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 31}, {"token": "France", "token_id": 4881, "is_partial": false, "type": "output", "value": "0", "position": 32}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 33}, {"token": "7", "token_id": 22, "is_partial": true, "type": "output", "value": "0", "position": 34}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 35}, {"token": "Germany", "token_id": 4486, "is_partial": false, "type": "output", "value": "0", "position": 36}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 37}, {"token": "8", "token_id": 23, "is_partial": true, "type": "output", "value": "0", "position": 38}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 39}, {"token": "Hong", "token_id": 9764, "is_partial": false, "type": "output", "value": "0", "position": 40}, {"token": "Kong", "token_id": 9071, "is_partial": false, "type": "output", "value": "0", "position": 41}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 42}], "attributions": [[0.040535374164857606, 0.04169492763228994, 0.019621304508223664, 0.01651024879556671, 0.02951364020080789, 0.024033369585490315, 0.015226641912140964, 0.02058155989788039, 0.024150375219153867, 0.026397221662135123, 0.030195037509542205, 0.050020308271923476, 0.033699215393720956, 0.036116759164789757, 0.03181024189804675, 0.11914982230494678, 0.024124244395522947, 0.028170368730739657, 0.022006566080107672, 0.2251191429081425, 0.02044069923284291, 0.058729057282742005, 0.062153873248385866], [0.07991771528541909, 0.04378250111282801, 0.038182779228401915, 0.027902952118332602, 0.04143723083384548, 0.03694225312667729, 0.022876426342082867, 0.027858659391755445, 0.034054680051393185, 0.030621635171810484, 0.023872194480170007, 0.06119698324051554, 0.05198589555362461, 0.032103840589039624, 0.02257228512247238, 0.06995569727219925, 0.06147419273493883, 0.02559520531717458, 0.01873099924282603, 0.07685648250749967, 0.06087455305460182, 0.02064319872890001, 0.018606063529536546, 0.0719555759639548], [0.03379535468677371, 0.030779694324747836, 0.0617563389209374, 0.019204611860218913, 0.025762168147753655, 0.02590156820781269, 0.023985088218443976, 0.02155546926625325, 0.025967868361217894, 0.07445971545746735, 0.03018446152297511, 0.026624364449019815, 0.02354462078217178, 0.1398395315254844, 0.013458337073778638, 0.02017672944272121, 0.02204882546645981, 0.0911984396275407, 0.01081353071828752, 0.023780422000044217, 0.023217083894863686, 0.17168488020098585, 0.013602155023646737, 0.029514719867065744, 0.017144020953328086], [0.082875483813702, 0.04708375221800717, 0.034727972481140575, 0.024477222754349274, 0.03560509044087996, 0.03168967801280575, 0.024794199313519217, 0.027449218648397215, 0.026931559399877607, 0.02761749679063111, 0.02720556251182666, 0.02840983985492884, 0.02890724202898614, 0.03358778447432348, 0.03278498163849667, 0.02997005947975002, 0.028813278848096112, 0.04234828228758199, 0.036439647969605, 0.02917072429976055, 0.03294693794166308, 0.07317817697391428, 0.06760684847831762, 0.02546679893562298, 0.03791745740008111, 0.08199470300373564], [0.03733809786879748, 0.03752818920206076, 0.016571266034639796, 0.012217548335349894, 0.048150153106070834, 0.024868130749191777, 0.012270636544743004, 0.013543992000932708, 0.017678876929965004, 0.017074134441998692, 0.015131454603456291, 0.061544390951447744, 0.011657244281021821, 0.017940553786132095, 0.010925267152532933, 0.07345961670205543, 0.016407872533648712, 0.017355385001633816, 0.014339776170808364, 0.1423191072646788, 0.021198106475414036, 0.038118494554919974, 0.019973913762429407, 0.20230456241608247, 0.016678526202906836, 0.042686363305184084, 0.04071833962189723], [0.05051775433411285, 0.04163565488575435, 0.025191222543831018, 0.019476174253865004, 0.027223078419137625, 0.025370861046032887, 0.024424233054134485, 0.022709381608363756, 0.030101469501200642, 0.02289189241746578, 0.02150269671554422, 0.03787766420318099, 0.03295712207882339, 0.02673742751318663, 0.013958910028965675, 0.031818612856393, 0.0210399669778486, 0.0195380575083224, 0.011638176740810613, 0.0337405781770349, 0.01857368180892362, 0.0188441835678521, 0.0160135450020261, 0.046843437173722635, 0.03268285138344597, 0.05195227148785382, 0.07827390716566007, 0.19646518754650683], [0.056483012277184046, 0.03484397751516729, 0.028300240455232977, 0.023764711375473042, 0.033157134956944674, 0.027348192851684813, 0.01858666252944172, 0.021044930633922158, 0.025195633115582504, 0.01945093971738136, 0.015509683531494275, 0.0325362944254711, 0.028225670858258608, 0.0213895301882576, 0.015253686109348463, 0.04454762213957192, 0.03404053509410696, 0.01780397770409069, 0.014569213552283427, 0.05796903630538888, 0.038380382032045204, 0.017036255007030623, 0.013480258784381863, 0.03766436807824006, 0.04325288438109356, 0.02241155171386884, 0.036568392935776364, 0.10132395582499006, 0.11986126590628689], [0.03319815044002636, 0.037012164408825585, 0.045345373876494496, 0.016691815530924907, 0.02492598970558275, 0.022967257041753966, 0.0217424454400324, 0.021088322445984152, 0.02335274598484787, 0.05050598278358743, 0.02594775366706059, 0.029198258845310604, 0.02104664096445725, 0.08663880962867869, 0.01520391443130864, 0.02057046193374728, 0.02040196827361911, 0.05953830010292695, 0.012462993360762285, 0.023411189260939012, 0.021407829688645526, 0.08298414834120087, 0.01340633722046976, 0.020090530463114827, 0.028624517230288114, 0.14383569561738976, 0.014203229801997487, 0.02327044502867766, 0.02426046432893332, 0.01666626415241222], [0.06964427885707529, 0.04326361030289997, 0.03207793191336741, 0.023425502818594755, 0.03414317490378891, 0.029356835515616894, 0.01971064400767479, 0.022470715541299504, 0.020134678226301966, 0.020635585788783654, 0.02045444042908902, 0.022424361463577836, 0.019287726854539743, 0.02355191130179864, 0.023201612205889722, 0.02436656381123886, 0.019184866140368146, 0.026705138847889644, 0.02435471342390864, 0.02497336331782197, 0.020277543380305813, 0.039688548424283175, 0.04135169927335939, 0.022461381355431565, 0.023431134310147175, 0.03456099267477773, 0.03775316270544484, 0.029596497449882932, 0.03430715169651017, 0.05587928111229846, 0.11732495194603344], [0.028031648629275152, 0.027494305124457198, 0.010692570449190787, 0.010343619284318498, 0.03668063750223223, 0.019100763022602947, 0.01091135139277506, 0.011811206492068538, 0.012767883014317713, 0.015117825365215092, 0.009989970801972902, 0.0526233791099584, 0.010550258262332395, 0.01246437629058675, 0.008760265493113225, 0.07361905257025583, 0.010556587054799645, 0.014102245118881095, 0.009910671573122724, 0.09562325319273718, 0.009738405725563106, 0.01448428069100713, 0.011900507203897518, 0.18579666976178416, 0.017424550525836444, 0.026157358157742523, 0.025286543115819952, 0.08240736289480159, 0.04052752350200551, 0.015501580999119706, 0.058391646284768464, 0.031231701393440617], [0.052143873856428796, 0.040788534174207317, 0.035726208389920376, 0.03139241400285941, 0.03819473780031837, 0.03133439817973472, 0.01992676325622307, 0.024357700971667364, 0.03215193644140797, 0.020488052540917352, 0.015780718391334384, 0.037058720460112916, 0.035079567098629305, 0.020935489774158326, 0.015207350625173626, 0.041977863248340026, 0.040366166689389416, 0.021181041534670073, 0.016258500062821313, 0.05057937173905419, 0.047105242679570974, 0.021194586958122832, 0.013406573256239953, 0.028349420964923294, 0.048964547017284275, 0.01583022292874089, 0.00988346506979802, 0.02332422803212362, 0.02400731420534611, 0.03999539153496661, 0.02063641229621813, 0.01733316480296754, 0.0690400210163294], [0.027431932267747674, 0.02681270188328953, 0.04737470413766173, 0.016026621219783817, 0.02438621175813547, 0.021173909201302066, 0.01908512911377643, 0.01745272300644303, 0.018529207432161732, 0.05209496413741664, 0.027722075182159803, 0.022319854017391984, 0.016158977316044713, 0.08359984859912814, 0.01425541814870383, 0.015535288747656795, 0.01268884646980877, 0.055784841879509654, 0.009588681991299386, 0.022908379344229665, 0.012292272935466173, 0.0735802814880093, 0.008697270485305065, 0.015648142922105677, 0.013689086795457142, 0.10851252520240423, 0.00698719261442222, 0.011856885765330555, 0.011119324998731332, 0.012928726757873248, 0.1179912166015904, 0.00791593010796094, 0.03242345620673913, 0.01542737126495364], [0.05508210772460571, 0.03220324552408061, 0.02546932424995027, 0.018895102665668687, 0.026986395713541726, 0.023196120117265236, 0.018669498709777167, 0.019548195377533613, 0.025100464421838463, 0.01893502014226031, 0.022700235242487654, 0.02419128665399565, 0.02491740169885067, 0.026784779454187658, 0.02337049518878544, 0.024393995915715165, 0.022394652002474202, 0.026345244132700008, 0.022244599137285194, 0.025625442804751496, 0.022415564278931106, 0.03819019418568923, 0.032222418709712194, 0.0256787742751355, 0.02721813331092456, 0.04589431268240918, 0.050289960877463416, 0.022549303535868013, 0.022971265600953163, 0.026532311468263455, 0.03007567483707422, 0.03323131165573635, 0.02247774781924253, 0.03531804352241931, 0.05788137636242275], [0.021037559051653117, 0.027708123768645433, 0.00895588939719854, 0.009908108540533811, 0.03928048486377496, 0.017474776967483726, 0.007990383725818057, 0.009119679092441189, 0.012572113991889174, 0.01544084957513622, 0.010006593786929113, 0.03967782715880788, 0.008997050981970046, 0.016258424519806126, 0.009400324023689276, 0.05480897616459107, 0.008595054491407695, 0.01139635272627629, 0.012532189886972193, 0.06609229933373115, 0.029928664075322867, 0.023065957829036556, 0.01192676684520388, 0.0762817428971036, 0.02153649093498344, 0.015250491962729972, 0.009899025235090982, 0.05440723802711788, 0.020279307727314382, 0.019542132002508893, 0.03911386426570651, 0.022135814174635754, 0.15983093495974368, 0.012298885492814458, 0.058564103036613586, 0.018685518485318534], [0.053203045087075906, 0.038225178077261224, 0.032091233574274465, 0.02957847005453718, 0.03647661921260789, 0.029336360484012655, 0.01936139355788047, 0.02343021205018642, 0.02805767294135349, 0.019609790385854756, 0.014756159866992883, 0.03426731410624403, 0.030017972209751363, 0.019672554306734966, 0.014165025408058687, 0.03768654961525316, 0.033865062915216494, 0.02053999451685089, 0.01579876369088724, 0.046225986903053004, 0.039179908228862914, 0.022200645406444484, 0.013805755514327132, 0.03010615200391354, 0.040661767614309084, 0.018140406673191552, 0.011161804973779912, 0.02158394596702173, 0.021764943265223085, 0.028223456080661125, 0.01672225362227479, 0.009065580868701332, 0.02324821249513479, 0.02910661797375847, 0.014616962655031691, 0.015947103141464653, 0.06809912455181256], [0.024406944240941687, 0.025682151445248852, 0.030347883323672033, 0.013113493436731625, 0.019204453017164225, 0.017931848276884054, 0.014346227529950711, 0.014264560036314761, 0.016553018218231515, 0.034887037937946126, 0.022547803879124945, 0.016469322609155488, 0.015005882581176636, 0.05909670223159767, 0.014709889285110819, 0.019918629940064433, 0.011443474746141746, 0.03436073038826549, 0.010075067640470938, 0.03246776996147112, 0.010660738732686472, 0.04992736470675271, 0.009969002764156618, 0.013100641633161537, 0.015991006800558896, 0.06687332788844177, 0.006611959252643975, 0.009721325739200017, 0.009950457678139023, 0.014320041731313826, 0.05091860591021689, 0.012282257177169015, 0.02649924325206866, 0.02573648070169339, 0.18523866385816526, 0.006185948490585608, 0.02604054361089702, 0.013139499346484475], [0.04998549431845741, 0.031631761126169985, 0.023915504234577983, 0.01762478772459008, 0.02699344312146327, 0.02219147378433584, 0.01598594310189565, 0.01666239710817183, 0.021212232864103633, 0.01514858977172452, 0.019405395184724856, 0.02105420364959146, 0.01903950063126708, 0.019335155733491264, 0.019649249366898613, 0.022022869076704726, 0.017364317952182712, 0.02035014331000071, 0.016609438354280828, 0.023235318586988036, 0.0179090947439713, 0.029665684261513173, 0.026188199778422728, 0.02340315586159195, 0.019292627115094548, 0.030705872305300703, 0.03124427757778717, 0.02433760077964575, 0.022394842673837644, 0.025719994431426006, 0.03212806140594089, 0.03063303338933898, 0.02839170304713962, 0.03102284934513527, 0.028884561426021884, 0.036858136345873364, 0.025465278621752994, 0.031207870216332464, 0.06512993767225292], [0.03637303878699459, 0.04764296130251809, 0.013014835140294683, 0.009977324937191041, 0.06339371888319939, 0.02717090563488033, 0.00870354508009304, 0.010925927479435353, 0.011380335515052943, 0.011917014393023347, 0.01016898716710874, 0.038188539969076826, 0.00879276150368651, 0.010480436808479283, 0.008226918349243969, 0.03436871993564848, 0.008085305228698615, 0.009524695682311886, 0.00788313841314895, 0.05301135918344963, 0.007740632177188905, 0.010082594116534992, 0.007132821516295155, 0.03552130738637574, 0.009543790388805134, 0.011844743892020233, 0.00906884351928747, 0.038416120887087575, 0.020296624507285126, 0.02243205240904268, 0.025938577864447625, 0.01453566716563805, 0.06956141950401215, 0.015472772135537388, 0.030307496461905746, 0.02285655293215561, 0.11732986187567535, 0.02999448808391491, 0.0447744716883283, 0.027918692094925982], [0.02658029897477684, 0.023739649413626086, 0.010412349244959856, 0.009143547774420604, 0.017712275773669742, 0.013979169543279891, 0.007695685361585726, 0.007605045554188801, 0.00969878006757794, 0.00896190913726892, 0.009062168348240687, 0.01905882240908701, 0.009922813414507644, 0.009162843859882095, 0.007796036887210693, 0.023058727082013022, 0.008698236353698544, 0.008187614487051692, 0.006850238129636224, 0.04286000228171268, 0.008367322660697315, 0.009221524116299033, 0.007463179863718933, 0.01958488469953998, 0.009054056342538346, 0.010933470368862079, 0.008017630624821089, 0.02753640807752886, 0.01825640739818769, 0.011553687907643877, 0.015039309648653335, 0.01237587183803059, 0.022595434277084086, 0.016456243160153053, 0.027431117460920154, 0.015238221463548444, 0.038094246987168144, 0.02747338637005771, 0.04807624879961944, 0.044594708993973366, 0.3224504248425598], [0.027525596584237432, 0.02004973469424052, 0.014359106868097984, 0.011397864892310256, 0.020806194345499265, 0.017746154126793735, 0.009746953105743493, 0.011428397294079714, 0.015052999580841305, 0.014230928970116644, 0.009743907143108665, 0.02133896559692124, 0.011177987209915382, 0.01113079573899907, 0.0075096565384774605, 0.02290382655899472, 0.012110531520581742, 0.011156358978836682, 0.008363848608474637, 0.025639004058529594, 0.014283301001038693, 0.010894970804223893, 0.008689707384746613, 0.019104058172066674, 0.01596389597493215, 0.010884563642402022, 0.0098651772634693, 0.015705223388582858, 0.015827125848123638, 0.014507243374824081, 0.011067330160983982, 0.01049413505510104, 0.01837020103463327, 0.015270545401089398, 0.01196769650320355, 0.012076391595954816, 0.02021195326305397, 0.02373294222481502, 0.03588127725639331, 0.02663254004937398, 0.17662650239506084, 0.19852440579112735]]},
+                    tokenization_config: {"token_prefix": "\u0120", "partial_token_prefix": ""}
+             })
+
+             }, function (err) {
+                console.log(err);
+            })</script><img alt="../_images/1579ed6f96b95be14a5524e36496d9b654389684989db45a41514a8cc0818e78.png" src="../_images/1579ed6f96b95be14a5524e36496d9b654389684989db45a41514a8cc0818e78.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="o">.</span><span class="n">primary_attributions</span><span class="p">(</span><span class="n">attr_method</span><span class="o">=</span><span class="s1">&#39;grad_x_input&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html lang="en">
+<script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+<script>
+    var ecco_url = 'https://storage.googleapis.com/ml-intro/ecco/'
+    //var ecco_url = 'http://localhost:8000/'
+
+    if (window.ecco === undefined) window.ecco = {}
+
+    // Setup the paths of the script we'll be using
+    requirejs.config({
+        urlArgs: "bust=" + (new Date()).getTime(),
+        nodeRequire: require,
+        paths: {
+            d3: "https://d3js.org/d3.v6.min", // This is only for use in setup.html and basic.html
+            "d3-array": "https://d3js.org/d3-array.v2.min",
+            jquery: "https://code.jquery.com/jquery-3.5.1.min",
+            ecco: ecco_url + 'js/0.0.6/ecco-bundle.min',
+            xregexp: 'https://cdnjs.cloudflare.com/ajax/libs/xregexp/3.2.0/xregexp-all.min'
+        }
+    });
+
+    // Add the css file
+    //requirejs(['d3'],
+    //    function (d3) {
+    //        d3.select('#css').attr('href', ecco_url + 'html/styles.css')
+    //    })
+
+    console.log('Ecco initialize!!')
+
+    // returns a 'basic' object. basic.init() selects the html div we'll be
+    // rendering the html into, adds styles.css to the document.
+    define('basic', ['d3'],
+        function (d3) {
+            return {
+                init: function (viz_id = null) {
+                    if (viz_id == null) {
+                        viz_id = "viz_" + Math.round(Math.random() * 10000000)
+                    }
+                    // Select the div rendered below, change its id
+                    const div = d3.select('#basic').attr('id', viz_id),
+                        div_parent = d3.select('#' + viz_id).node().parentNode
+
+                    // Link to CSS file
+                    d3.select(div_parent).insert('link')
+                        .attr('rel', 'stylesheet')
+                        .attr('type', 'text/css')
+                        .attr('href', ecco_url + 'html/0.0.2/styles.css')
+
+                    return viz_id
+                }
+            }
+        }, function (err) {
+            console.log(err);
+        }
+    )
+</script>
+
+<head>
+    <link id='css' rel="stylesheet" type="text/css">
+</head>
+<div id="basic"></div>
+</div><script type="application/javascript">
+             requirejs(['basic', 'ecco'], function(basic, ecco){
+                const viz_id = basic.init()
+                console.log(viz_id)
+                // ecco.interactiveTokens(viz_id, {})
+                window.ecco[viz_id] = new ecco.MinimalHighlighter({
+                    parentDiv: viz_id,
+                    data: {"tokens": [{"token": "The", "token_id": 464, "is_partial": true, "type": "input", "value": "0.035324607", "position": 0}, {"token": "countries", "token_id": 2678, "is_partial": false, "type": "input", "value": "0.04520939", "position": 1}, {"token": "of", "token_id": 286, "is_partial": false, "type": "input", "value": "0.012277197", "position": 2}, {"token": "the", "token_id": 262, "is_partial": false, "type": "input", "value": "0.010076298", "position": 3}, {"token": "European", "token_id": 3427, "is_partial": false, "type": "input", "value": "0.067219414", "position": 4}, {"token": "Union", "token_id": 4479, "is_partial": false, "type": "input", "value": "0.030923465", "position": 5}, {"token": "are", "token_id": 389, "is_partial": false, "type": "input", "value": "0.013205702", "position": 6}, {"token": ":", "token_id": 25, "is_partial": true, "type": "input", "value": "0.021569924", "position": 7}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.020624358", "position": 8}, {"token": "1", "token_id": 16, "is_partial": true, "type": "input", "value": "0.026061758", "position": 9}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.019761438", "position": 10}, {"token": "Austria", "token_id": 17322, "is_partial": false, "type": "input", "value": "0.09002551", "position": 11}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.018375082", "position": 12}, {"token": "2", "token_id": 17, "is_partial": true, "type": "input", "value": "0.027379312", "position": 13}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.018035803", "position": 14}, {"token": "Belgium", "token_id": 15664, "is_partial": false, "type": "input", "value": "0.15297604", "position": 15}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.014399052", "position": 16}, {"token": "3", "token_id": 18, "is_partial": true, "type": "input", "value": "0.018890483", "position": 17}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.014782169", "position": 18}, {"token": "Bulgaria", "token_id": 27902, "is_partial": false, "type": "input", "value": "0.2576212", "position": 19}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.015381541", "position": 20}, {"token": "4", "token_id": 19, "is_partial": true, "type": "input", "value": "0.03656192", "position": 21}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.033318408", "position": 22}, {"token": "Belgium", "token_id": 15664, "is_partial": false, "type": "output", "value": "0", "position": 23}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 24}, {"token": "5", "token_id": 20, "is_partial": true, "type": "output", "value": "0", "position": 25}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 26}, {"token": "Great", "token_id": 3878, "is_partial": false, "type": "output", "value": "0", "position": 27}, {"token": "Britain", "token_id": 5491, "is_partial": false, "type": "output", "value": "0", "position": 28}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 29}, {"token": "6", "token_id": 21, "is_partial": true, "type": "output", "value": "0", "position": 30}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 31}, {"token": "France", "token_id": 4881, "is_partial": false, "type": "output", "value": "0", "position": 32}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 33}, {"token": "7", "token_id": 22, "is_partial": true, "type": "output", "value": "0", "position": 34}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 35}, {"token": "Germany", "token_id": 4486, "is_partial": false, "type": "output", "value": "0", "position": 36}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 37}, {"token": "8", "token_id": 23, "is_partial": true, "type": "output", "value": "0", "position": 38}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 39}, {"token": "Hong", "token_id": 9764, "is_partial": false, "type": "output", "value": "0", "position": 40}, {"token": "Kong", "token_id": 9071, "is_partial": false, "type": "output", "value": "0", "position": 41}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 42}], "attributions": [[0.03532460704445839, 0.04520938917994499, 0.01227719709277153, 0.010076298378407955, 0.06721941381692886, 0.03092346526682377, 0.013205702416598797, 0.02156992442905903, 0.02062435820698738, 0.026061758399009705, 0.01976143755018711, 0.09002550691366196, 0.018375081941485405, 0.027379311621189117, 0.018035802990198135, 0.15297603607177734, 0.014399051666259766, 0.018890483304858208, 0.01478216890245676, 0.2576211988925934, 0.015381541103124619, 0.03656192123889923, 0.0333184078335762], [0.0442504808306694, 0.04950770363211632, 0.015805311501026154, 0.013034473173320293, 0.04186310991644859, 0.027299191802740097, 0.02566932886838913, 0.03175049647688866, 0.027350328862667084, 0.03427986428141594, 0.020242473110556602, 0.08964195102453232, 0.023273374885320663, 0.025468915700912476, 0.01530003733932972, 0.12900763750076294, 0.01904929056763649, 0.023893699049949646, 0.016189174726605415, 0.0683756172657013, 0.02127605490386486, 0.03104635328054428, 0.028716541826725006, 0.1777084767818451], [0.036775123327970505, 0.05049862340092659, 0.012534596025943756, 0.009008659981191158, 0.02759980969130993, 0.02156795933842659, 0.025054236873984337, 0.029482610523700714, 0.03185214102268219, 0.040103159844875336, 0.018755285069346428, 0.04166799411177635, 0.028606388717889786, 0.038963399827480316, 0.015483939088881016, 0.036342162638902664, 0.04150659218430519, 0.053353991359472275, 0.02159999869763851, 0.04218116030097008, 0.04356900975108147, 0.19437426328659058, 0.03310908377170563, 0.048576194792985916, 0.0574335902929306], [0.05409235134720802, 0.04551028460264206, 0.01481173187494278, 0.012664580717682838, 0.033362552523612976, 0.022898709401488304, 0.023939091712236404, 0.03720778971910477, 0.038038186728954315, 0.0680900365114212, 0.040480781346559525, 0.05098704993724823, 0.02937901020050049, 0.036908432841300964, 0.037887509912252426, 0.031935226172208786, 0.027525922283530235, 0.03414838761091232, 0.03604576364159584, 0.03337293863296509, 0.023422304540872574, 0.044039346277713776, 0.039509572088718414, 0.027946392074227333, 0.07072754204273224, 0.08506844937801361], [0.036424923688173294, 0.04619419947266579, 0.011052420362830162, 0.008456812240183353, 0.06616194546222687, 0.026305846869945526, 0.012156475335359573, 0.01514237467199564, 0.01444055326282978, 0.018711082637310028, 0.011052954941987991, 0.054897241294384, 0.010985694825649261, 0.017911776900291443, 0.012329388409852982, 0.08122546970844269, 0.015489606186747551, 0.01549921277910471, 0.016444645822048187, 0.1314518004655838, 0.023012947291135788, 0.04241817072033882, 0.02048025280237198, 0.20360717177391052, 0.017454300075769424, 0.03532363474369049, 0.03536906838417053], [0.04282529279589653, 0.06222892925143242, 0.012653889134526253, 0.009491984732449055, 0.04324828088283539, 0.030314579606056213, 0.012516817077994347, 0.017037751153111458, 0.016312241554260254, 0.014278584159910679, 0.010821206495165825, 0.063783660531044, 0.014307534322142601, 0.012260613963007927, 0.010265314020216465, 0.05361834913492203, 0.013758882880210876, 0.018161293119192123, 0.013047151267528534, 0.07440225780010223, 0.01414613425731659, 0.01573360152542591, 0.013435617089271545, 0.055541038513183594, 0.02145514078438282, 0.037422508001327515, 0.04122483730316162, 0.2557066082954407], [0.0463838092982769, 0.055499713867902756, 0.01519658975303173, 0.011615591123700142, 0.03677290305495262, 0.0275201927870512, 0.027902068570256233, 0.03337829187512398, 0.025944199413061142, 0.031879767775535583, 0.01640027016401291, 0.06231394782662392, 0.02156590297818184, 0.023603832349181175, 0.012739214114844799, 0.046078022569417953, 0.017027229070663452, 0.019972076639533043, 0.013063037768006325, 0.04800332337617874, 0.0177287794649601, 0.0179669838398695, 0.0148432906717062, 0.03864255174994469, 0.019989021122455597, 0.019690193235874176, 0.023651529103517532, 0.1056479662656784, 0.14897970855236053], [0.040042586624622345, 0.057152159512043, 0.014055103994905949, 0.009812929667532444, 0.029490869492292404, 0.022335689514875412, 0.024897847324609756, 0.03464078530669212, 0.036934468895196915, 0.04557565599679947, 0.01774708181619644, 0.03981028497219086, 0.025627650320529938, 0.03217080608010292, 0.010843618772923946, 0.026725659146904945, 0.024352706968784332, 0.02879600040614605, 0.014344037510454655, 0.03392203152179718, 0.032380372285842896, 0.0437321662902832, 0.01877635531127453, 0.033327262848615646, 0.040368638932704926, 0.11745849996805191, 0.02621760033071041, 0.037143904715776443, 0.04515962302684784, 0.03615761920809746], [0.052670057862997055, 0.04192320257425308, 0.013872692361474037, 0.013816975988447666, 0.03017033077776432, 0.020732741802930832, 0.02419324219226837, 0.03307357802987099, 0.034063056111335754, 0.06404665857553482, 0.03775392472743988, 0.04712703078985214, 0.026853710412979126, 0.031392522156238556, 0.03583924099802971, 0.031457848846912384, 0.023989366367459297, 0.030989747494459152, 0.0273464173078537, 0.030876431614160538, 0.0216892771422863, 0.02748679183423519, 0.027696318924427032, 0.01963159441947937, 0.020802348852157593, 0.02936418354511261, 0.029488908126950264, 0.025244824588298798, 0.01687641069293022, 0.05026305839419365, 0.07926755398511887], [0.028764545917510986, 0.03103812225162983, 0.008959394879639149, 0.007850651629269123, 0.05369807407259941, 0.021820882335305214, 0.011468487791717052, 0.013072790578007698, 0.011633114889264107, 0.014358708634972572, 0.008467589505016804, 0.0455758310854435, 0.01008656807243824, 0.013490796089172363, 0.00835355930030346, 0.08066309988498688, 0.010366639122366905, 0.013603873550891876, 0.010582702234387398, 0.09688448160886765, 0.01064109057188034, 0.0167477298527956, 0.010709241032600403, 0.19771739840507507, 0.012320281937718391, 0.021046610549092293, 0.027860432863235474, 0.07162059098482132, 0.04777681827545166, 0.018413247540593147, 0.0406695194542408, 0.023737093433737755], [0.03980221971869469, 0.04064544662833214, 0.011731860227882862, 0.009051578119397163, 0.04007493332028389, 0.02127378061413765, 0.017647136002779007, 0.023459680378437042, 0.02186298929154873, 0.02392452396452427, 0.013399706222116947, 0.059140559285879135, 0.019113417714834213, 0.017930924892425537, 0.010793915018439293, 0.04373086616396904, 0.018057338893413544, 0.016432229429483414, 0.012994779273867607, 0.04855332523584366, 0.016463784500956535, 0.014494217000901699, 0.012205963023006916, 0.037087202072143555, 0.015058416873216629, 0.021555764600634575, 0.010966175235807896, 0.031307436525821686, 0.03269338607788086, 0.028643030673265457, 0.05331183597445488, 0.03177336975932121, 0.18481816351413727], [0.036247532814741135, 0.04887092113494873, 0.010425188578665257, 0.00787185039371252, 0.026944253593683243, 0.0200089942663908, 0.019580619409680367, 0.025152739137411118, 0.032202329486608505, 0.031243231147527695, 0.013259649276733398, 0.036590222269296646, 0.02345350570976734, 0.024338550865650177, 0.00874225702136755, 0.025837551802396774, 0.02028823271393776, 0.024789882823824883, 0.01195890735834837, 0.02832641266286373, 0.020438287407159805, 0.03280215710401535, 0.020906636491417885, 0.026980817317962646, 0.020212527364492416, 0.052738167345523834, 0.015756478533148766, 0.02894938550889492, 0.03223602473735809, 0.03461027890443802, 0.13096264004707336, 0.026888392865657806, 0.03720319643616676, 0.04318214952945709], [0.04773762822151184, 0.036808080971241, 0.01208525337278843, 0.011986952275037766, 0.02658762037754059, 0.018538067117333412, 0.020465698093175888, 0.027975033968687057, 0.030606698244810104, 0.053117960691452026, 0.02907460927963257, 0.04240560531616211, 0.02430800534784794, 0.027257220819592476, 0.03060302883386612, 0.030437786132097244, 0.019618185237050056, 0.024036848917603493, 0.025249363854527473, 0.03077576495707035, 0.01892714388668537, 0.020765135064721107, 0.022384993731975555, 0.020392145961523056, 0.018704038113355637, 0.01662098802626133, 0.023530807346105576, 0.01926455833017826, 0.012494240887463093, 0.02927865833044052, 0.03593006357550621, 0.032428327947854996, 0.025338681414723396, 0.0563177727162838, 0.07794695347547531], [0.026963215321302414, 0.03247317299246788, 0.009958744049072266, 0.007122192066162825, 0.04163593426346779, 0.02246193028986454, 0.011073472909629345, 0.011781122535467148, 0.016791285946965218, 0.020029226318001747, 0.013134271837770939, 0.06920798122882843, 0.01308036781847477, 0.014263046905398369, 0.009123186580836773, 0.06726618856191635, 0.00994014274328947, 0.013437795452773571, 0.01253887452185154, 0.06035420671105385, 0.02059950679540634, 0.018267791718244553, 0.009998020716011524, 0.07924237847328186, 0.017659785225987434, 0.018935898318886757, 0.010952649638056755, 0.04182982072234154, 0.023683298379182816, 0.015340047888457775, 0.02395767904818058, 0.014183170162141323, 0.14735251665115356, 0.019856169819831848, 0.023461991921067238, 0.03204305097460747], [0.04053525626659393, 0.04225332662463188, 0.011900106444954872, 0.009904997423291206, 0.039442770183086395, 0.023634176701307297, 0.022586187347769737, 0.027548983693122864, 0.02722400240600109, 0.025409817695617676, 0.013892901130020618, 0.06962861120700836, 0.01765836589038372, 0.018872644752264023, 0.009973210282623768, 0.05067627131938934, 0.013293655589222908, 0.01308421790599823, 0.009255047887563705, 0.05902289226651192, 0.012253931723535061, 0.010959758423268795, 0.008223418146371841, 0.03580879420042038, 0.012484395876526833, 0.012373910285532475, 0.007936625741422176, 0.01881127804517746, 0.025540294125676155, 0.012064711190760136, 0.016794659197330475, 0.011034530587494373, 0.03652726113796234, 0.02280210144817829, 0.03754667565226555, 0.017461519688367844, 0.15557871758937836], [0.03171457350254059, 0.04601619020104408, 0.010108054615557194, 0.008030220866203308, 0.02432921528816223, 0.017928525805473328, 0.018444698303937912, 0.02391960844397545, 0.030508169904351234, 0.027995597571134567, 0.014091391116380692, 0.028841007500886917, 0.01904575526714325, 0.020967679098248482, 0.009048735722899437, 0.02027822472155094, 0.0148142259567976, 0.023802094161510468, 0.008972462266683578, 0.02851325273513794, 0.01520150899887085, 0.029173217713832855, 0.009336324408650398, 0.02019539847970009, 0.015481790527701378, 0.03127925097942352, 0.013339146971702576, 0.019619185477495193, 0.014867071062326431, 0.021713601425290108, 0.040731750428676605, 0.01985624060034752, 0.031506434082984924, 0.03786648437380791, 0.16477246582508087, 0.015076696872711182, 0.038149867206811905, 0.034463874995708466], [0.04547720029950142, 0.0363968200981617, 0.012124724686145782, 0.011726731434464455, 0.025824828073382378, 0.018508456647396088, 0.01938583329319954, 0.026296520605683327, 0.03058006800711155, 0.05232289433479309, 0.027204373851418495, 0.0375639833509922, 0.022437965497374535, 0.02463383600115776, 0.027969714254140854, 0.027595525607466698, 0.018957428634166718, 0.02283846214413643, 0.020754680037498474, 0.029026422649621964, 0.01707967184484005, 0.018655508756637573, 0.01847902312874794, 0.01888316310942173, 0.015866773203015327, 0.01564144901931286, 0.01775660179555416, 0.01589897647500038, 0.012637636624276638, 0.017889687791466713, 0.02307143434882164, 0.022023361176252365, 0.019166307523846626, 0.018353058025240898, 0.029692569747567177, 0.02522369474172592, 0.02281152829527855, 0.05211063474416733, 0.0811324343085289], [0.04471781849861145, 0.05748949944972992, 0.015886491164565086, 0.012257179245352745, 0.08236055076122284, 0.027155717834830284, 0.01034220214933157, 0.012149042449891567, 0.011712939478456974, 0.014528172090649605, 0.008941728621721268, 0.05568638816475868, 0.009320100769400597, 0.011728692799806595, 0.008486587554216385, 0.04026905819773674, 0.007851545698940754, 0.011051733046770096, 0.006901215761899948, 0.04781033471226692, 0.00786343589425087, 0.013262355700135231, 0.007230966817587614, 0.03538001701235771, 0.008336230181157589, 0.009267874993383884, 0.006815181579440832, 0.03270912915468216, 0.025065552443265915, 0.013846459798514843, 0.019778497517108917, 0.013294633477926254, 0.0679674744606018, 0.013961597345769405, 0.021413616836071014, 0.013567046262323856, 0.1079392284154892, 0.019217070192098618, 0.033762913197278976, 0.032673753798007965], [0.032715700566768646, 0.039825618267059326, 0.007699612062424421, 0.007185840513557196, 0.01928856037557125, 0.018580207601189613, 0.007835252210497856, 0.009578319266438484, 0.011202314868569374, 0.00950553733855486, 0.006570237223058939, 0.03152928873896599, 0.010023941285908222, 0.008254765532910824, 0.0057068271562457085, 0.026973150670528412, 0.008181710727512836, 0.009679805487394333, 0.005974374245852232, 0.028662778437137604, 0.007091809529811144, 0.007785134948790073, 0.0054550860077142715, 0.024500004947185516, 0.0074188425205647945, 0.008658760227262974, 0.007168551441282034, 0.026004770770668983, 0.02324303425848484, 0.009140366688370705, 0.01072629727423191, 0.010127571411430836, 0.023301774635910988, 0.011800636537373066, 0.011424645781517029, 0.015229368582367897, 0.036706242710351944, 0.020709684118628502, 0.031282927840948105, 0.0246262289583683, 0.3726244270801544], [0.039962027221918106, 0.036168113350868225, 0.01088254526257515, 0.008710958994925022, 0.03015219420194626, 0.020147716626524925, 0.017830317839980125, 0.020982665941119194, 0.020009728148579597, 0.01965533010661602, 0.010210257023572922, 0.04793239012360573, 0.015014835633337498, 0.01664007641375065, 0.007609134074300528, 0.040032412856817245, 0.011316420510411263, 0.012816091999411583, 0.00709755951538682, 0.043428465723991394, 0.01112587284296751, 0.009882849641144276, 0.005741238594055176, 0.03045082651078701, 0.009989599697291851, 0.011232929304242134, 0.006619689520448446, 0.017880165949463844, 0.019301852211356163, 0.012360742315649986, 0.011901818215847015, 0.008366833440959454, 0.030354704707860947, 0.014604943804442883, 0.013277314603328705, 0.010264517739415169, 0.03140852972865105, 0.02245192788541317, 0.02127734385430813, 0.012075142934918404, 0.12533514201641083, 0.12749679386615753]]},
+                    preset: 'viridis',
+                    tokenization_config: {"token_prefix": "\u0120", "partial_token_prefix": ""}
+
+             })
+
+             window.ecco[viz_id].init();
+             window.ecco[viz_id].selectFirstToken();
+
+             }, function (err) {
+                console.log(err);
+            })</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span><span class="o">.</span><span class="n">primary_attributions</span><span class="p">(</span><span class="n">attr_method</span><span class="o">=</span><span class="s1">&#39;grad_x_input&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;detailed&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html lang="en">
+<script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+<script>
+    var ecco_url = 'https://storage.googleapis.com/ml-intro/ecco/'
+    //var ecco_url = 'http://localhost:8000/'
+
+    if (window.ecco === undefined) window.ecco = {}
+
+    // Setup the paths of the script we'll be using
+    requirejs.config({
+        urlArgs: "bust=" + (new Date()).getTime(),
+        nodeRequire: require,
+        paths: {
+            d3: "https://d3js.org/d3.v6.min", // This is only for use in setup.html and basic.html
+            "d3-array": "https://d3js.org/d3-array.v2.min",
+            jquery: "https://code.jquery.com/jquery-3.5.1.min",
+            ecco: ecco_url + 'js/0.0.6/ecco-bundle.min',
+            xregexp: 'https://cdnjs.cloudflare.com/ajax/libs/xregexp/3.2.0/xregexp-all.min'
+        }
+    });
+
+    // Add the css file
+    //requirejs(['d3'],
+    //    function (d3) {
+    //        d3.select('#css').attr('href', ecco_url + 'html/styles.css')
+    //    })
+
+    console.log('Ecco initialize!!')
+
+    // returns a 'basic' object. basic.init() selects the html div we'll be
+    // rendering the html into, adds styles.css to the document.
+    define('basic', ['d3'],
+        function (d3) {
+            return {
+                init: function (viz_id = null) {
+                    if (viz_id == null) {
+                        viz_id = "viz_" + Math.round(Math.random() * 10000000)
+                    }
+                    // Select the div rendered below, change its id
+                    const div = d3.select('#basic').attr('id', viz_id),
+                        div_parent = d3.select('#' + viz_id).node().parentNode
+
+                    // Link to CSS file
+                    d3.select(div_parent).insert('link')
+                        .attr('rel', 'stylesheet')
+                        .attr('type', 'text/css')
+                        .attr('href', ecco_url + 'html/0.0.2/styles.css')
+
+                    return viz_id
+                }
+            }
+        }, function (err) {
+            console.log(err);
+        }
+    )
+</script>
+
+<head>
+    <link id='css' rel="stylesheet" type="text/css">
+</head>
+<div id="basic"></div>
+</div><script type="application/javascript">
+             requirejs(['basic', 'ecco'], function(basic, ecco){
+                const viz_id = basic.init()
+                console.log(viz_id)
+                window.ecco[viz_id] = ecco.interactiveTokens({
+                    parentDiv: viz_id,
+                    data: {"tokens": [{"token": "The", "token_id": 464, "is_partial": true, "type": "input", "value": "0.035324607", "position": 0}, {"token": "countries", "token_id": 2678, "is_partial": false, "type": "input", "value": "0.04520939", "position": 1}, {"token": "of", "token_id": 286, "is_partial": false, "type": "input", "value": "0.012277197", "position": 2}, {"token": "the", "token_id": 262, "is_partial": false, "type": "input", "value": "0.010076298", "position": 3}, {"token": "European", "token_id": 3427, "is_partial": false, "type": "input", "value": "0.067219414", "position": 4}, {"token": "Union", "token_id": 4479, "is_partial": false, "type": "input", "value": "0.030923465", "position": 5}, {"token": "are", "token_id": 389, "is_partial": false, "type": "input", "value": "0.013205702", "position": 6}, {"token": ":", "token_id": 25, "is_partial": true, "type": "input", "value": "0.021569924", "position": 7}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.020624358", "position": 8}, {"token": "1", "token_id": 16, "is_partial": true, "type": "input", "value": "0.026061758", "position": 9}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.019761438", "position": 10}, {"token": "Austria", "token_id": 17322, "is_partial": false, "type": "input", "value": "0.09002551", "position": 11}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.018375082", "position": 12}, {"token": "2", "token_id": 17, "is_partial": true, "type": "input", "value": "0.027379312", "position": 13}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.018035803", "position": 14}, {"token": "Belgium", "token_id": 15664, "is_partial": false, "type": "input", "value": "0.15297604", "position": 15}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.014399052", "position": 16}, {"token": "3", "token_id": 18, "is_partial": true, "type": "input", "value": "0.018890483", "position": 17}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.014782169", "position": 18}, {"token": "Bulgaria", "token_id": 27902, "is_partial": false, "type": "input", "value": "0.2576212", "position": 19}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "input", "value": "0.015381541", "position": 20}, {"token": "4", "token_id": 19, "is_partial": true, "type": "input", "value": "0.03656192", "position": 21}, {"token": ".", "token_id": 13, "is_partial": true, "type": "input", "value": "0.033318408", "position": 22}, {"token": "Belgium", "token_id": 15664, "is_partial": false, "type": "output", "value": "0", "position": 23}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 24}, {"token": "5", "token_id": 20, "is_partial": true, "type": "output", "value": "0", "position": 25}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 26}, {"token": "Great", "token_id": 3878, "is_partial": false, "type": "output", "value": "0", "position": 27}, {"token": "Britain", "token_id": 5491, "is_partial": false, "type": "output", "value": "0", "position": 28}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 29}, {"token": "6", "token_id": 21, "is_partial": true, "type": "output", "value": "0", "position": 30}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 31}, {"token": "France", "token_id": 4881, "is_partial": false, "type": "output", "value": "0", "position": 32}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 33}, {"token": "7", "token_id": 22, "is_partial": true, "type": "output", "value": "0", "position": 34}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 35}, {"token": "Germany", "token_id": 4486, "is_partial": false, "type": "output", "value": "0", "position": 36}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 37}, {"token": "8", "token_id": 23, "is_partial": true, "type": "output", "value": "0", "position": 38}, {"token": ".", "token_id": 13, "is_partial": true, "type": "output", "value": "0", "position": 39}, {"token": "Hong", "token_id": 9764, "is_partial": false, "type": "output", "value": "0", "position": 40}, {"token": "Kong", "token_id": 9071, "is_partial": false, "type": "output", "value": "0", "position": 41}, {"token": "\n", "token_id": 198, "is_partial": true, "type": "output", "value": "0", "position": 42}], "attributions": [[0.03532460704445839, 0.04520938917994499, 0.01227719709277153, 0.010076298378407955, 0.06721941381692886, 0.03092346526682377, 0.013205702416598797, 0.02156992442905903, 0.02062435820698738, 0.026061758399009705, 0.01976143755018711, 0.09002550691366196, 0.018375081941485405, 0.027379311621189117, 0.018035802990198135, 0.15297603607177734, 0.014399051666259766, 0.018890483304858208, 0.01478216890245676, 0.2576211988925934, 0.015381541103124619, 0.03656192123889923, 0.0333184078335762], [0.0442504808306694, 0.04950770363211632, 0.015805311501026154, 0.013034473173320293, 0.04186310991644859, 0.027299191802740097, 0.02566932886838913, 0.03175049647688866, 0.027350328862667084, 0.03427986428141594, 0.020242473110556602, 0.08964195102453232, 0.023273374885320663, 0.025468915700912476, 0.01530003733932972, 0.12900763750076294, 0.01904929056763649, 0.023893699049949646, 0.016189174726605415, 0.0683756172657013, 0.02127605490386486, 0.03104635328054428, 0.028716541826725006, 0.1777084767818451], [0.036775123327970505, 0.05049862340092659, 0.012534596025943756, 0.009008659981191158, 0.02759980969130993, 0.02156795933842659, 0.025054236873984337, 0.029482610523700714, 0.03185214102268219, 0.040103159844875336, 0.018755285069346428, 0.04166799411177635, 0.028606388717889786, 0.038963399827480316, 0.015483939088881016, 0.036342162638902664, 0.04150659218430519, 0.053353991359472275, 0.02159999869763851, 0.04218116030097008, 0.04356900975108147, 0.19437426328659058, 0.03310908377170563, 0.048576194792985916, 0.0574335902929306], [0.05409235134720802, 0.04551028460264206, 0.01481173187494278, 0.012664580717682838, 0.033362552523612976, 0.022898709401488304, 0.023939091712236404, 0.03720778971910477, 0.038038186728954315, 0.0680900365114212, 0.040480781346559525, 0.05098704993724823, 0.02937901020050049, 0.036908432841300964, 0.037887509912252426, 0.031935226172208786, 0.027525922283530235, 0.03414838761091232, 0.03604576364159584, 0.03337293863296509, 0.023422304540872574, 0.044039346277713776, 0.039509572088718414, 0.027946392074227333, 0.07072754204273224, 0.08506844937801361], [0.036424923688173294, 0.04619419947266579, 0.011052420362830162, 0.008456812240183353, 0.06616194546222687, 0.026305846869945526, 0.012156475335359573, 0.01514237467199564, 0.01444055326282978, 0.018711082637310028, 0.011052954941987991, 0.054897241294384, 0.010985694825649261, 0.017911776900291443, 0.012329388409852982, 0.08122546970844269, 0.015489606186747551, 0.01549921277910471, 0.016444645822048187, 0.1314518004655838, 0.023012947291135788, 0.04241817072033882, 0.02048025280237198, 0.20360717177391052, 0.017454300075769424, 0.03532363474369049, 0.03536906838417053], [0.04282529279589653, 0.06222892925143242, 0.012653889134526253, 0.009491984732449055, 0.04324828088283539, 0.030314579606056213, 0.012516817077994347, 0.017037751153111458, 0.016312241554260254, 0.014278584159910679, 0.010821206495165825, 0.063783660531044, 0.014307534322142601, 0.012260613963007927, 0.010265314020216465, 0.05361834913492203, 0.013758882880210876, 0.018161293119192123, 0.013047151267528534, 0.07440225780010223, 0.01414613425731659, 0.01573360152542591, 0.013435617089271545, 0.055541038513183594, 0.02145514078438282, 0.037422508001327515, 0.04122483730316162, 0.2557066082954407], [0.0463838092982769, 0.055499713867902756, 0.01519658975303173, 0.011615591123700142, 0.03677290305495262, 0.0275201927870512, 0.027902068570256233, 0.03337829187512398, 0.025944199413061142, 0.031879767775535583, 0.01640027016401291, 0.06231394782662392, 0.02156590297818184, 0.023603832349181175, 0.012739214114844799, 0.046078022569417953, 0.017027229070663452, 0.019972076639533043, 0.013063037768006325, 0.04800332337617874, 0.0177287794649601, 0.0179669838398695, 0.0148432906717062, 0.03864255174994469, 0.019989021122455597, 0.019690193235874176, 0.023651529103517532, 0.1056479662656784, 0.14897970855236053], [0.040042586624622345, 0.057152159512043, 0.014055103994905949, 0.009812929667532444, 0.029490869492292404, 0.022335689514875412, 0.024897847324609756, 0.03464078530669212, 0.036934468895196915, 0.04557565599679947, 0.01774708181619644, 0.03981028497219086, 0.025627650320529938, 0.03217080608010292, 0.010843618772923946, 0.026725659146904945, 0.024352706968784332, 0.02879600040614605, 0.014344037510454655, 0.03392203152179718, 0.032380372285842896, 0.0437321662902832, 0.01877635531127453, 0.033327262848615646, 0.040368638932704926, 0.11745849996805191, 0.02621760033071041, 0.037143904715776443, 0.04515962302684784, 0.03615761920809746], [0.052670057862997055, 0.04192320257425308, 0.013872692361474037, 0.013816975988447666, 0.03017033077776432, 0.020732741802930832, 0.02419324219226837, 0.03307357802987099, 0.034063056111335754, 0.06404665857553482, 0.03775392472743988, 0.04712703078985214, 0.026853710412979126, 0.031392522156238556, 0.03583924099802971, 0.031457848846912384, 0.023989366367459297, 0.030989747494459152, 0.0273464173078537, 0.030876431614160538, 0.0216892771422863, 0.02748679183423519, 0.027696318924427032, 0.01963159441947937, 0.020802348852157593, 0.02936418354511261, 0.029488908126950264, 0.025244824588298798, 0.01687641069293022, 0.05026305839419365, 0.07926755398511887], [0.028764545917510986, 0.03103812225162983, 0.008959394879639149, 0.007850651629269123, 0.05369807407259941, 0.021820882335305214, 0.011468487791717052, 0.013072790578007698, 0.011633114889264107, 0.014358708634972572, 0.008467589505016804, 0.0455758310854435, 0.01008656807243824, 0.013490796089172363, 0.00835355930030346, 0.08066309988498688, 0.010366639122366905, 0.013603873550891876, 0.010582702234387398, 0.09688448160886765, 0.01064109057188034, 0.0167477298527956, 0.010709241032600403, 0.19771739840507507, 0.012320281937718391, 0.021046610549092293, 0.027860432863235474, 0.07162059098482132, 0.04777681827545166, 0.018413247540593147, 0.0406695194542408, 0.023737093433737755], [0.03980221971869469, 0.04064544662833214, 0.011731860227882862, 0.009051578119397163, 0.04007493332028389, 0.02127378061413765, 0.017647136002779007, 0.023459680378437042, 0.02186298929154873, 0.02392452396452427, 0.013399706222116947, 0.059140559285879135, 0.019113417714834213, 0.017930924892425537, 0.010793915018439293, 0.04373086616396904, 0.018057338893413544, 0.016432229429483414, 0.012994779273867607, 0.04855332523584366, 0.016463784500956535, 0.014494217000901699, 0.012205963023006916, 0.037087202072143555, 0.015058416873216629, 0.021555764600634575, 0.010966175235807896, 0.031307436525821686, 0.03269338607788086, 0.028643030673265457, 0.05331183597445488, 0.03177336975932121, 0.18481816351413727], [0.036247532814741135, 0.04887092113494873, 0.010425188578665257, 0.00787185039371252, 0.026944253593683243, 0.0200089942663908, 0.019580619409680367, 0.025152739137411118, 0.032202329486608505, 0.031243231147527695, 0.013259649276733398, 0.036590222269296646, 0.02345350570976734, 0.024338550865650177, 0.00874225702136755, 0.025837551802396774, 0.02028823271393776, 0.024789882823824883, 0.01195890735834837, 0.02832641266286373, 0.020438287407159805, 0.03280215710401535, 0.020906636491417885, 0.026980817317962646, 0.020212527364492416, 0.052738167345523834, 0.015756478533148766, 0.02894938550889492, 0.03223602473735809, 0.03461027890443802, 0.13096264004707336, 0.026888392865657806, 0.03720319643616676, 0.04318214952945709], [0.04773762822151184, 0.036808080971241, 0.01208525337278843, 0.011986952275037766, 0.02658762037754059, 0.018538067117333412, 0.020465698093175888, 0.027975033968687057, 0.030606698244810104, 0.053117960691452026, 0.02907460927963257, 0.04240560531616211, 0.02430800534784794, 0.027257220819592476, 0.03060302883386612, 0.030437786132097244, 0.019618185237050056, 0.024036848917603493, 0.025249363854527473, 0.03077576495707035, 0.01892714388668537, 0.020765135064721107, 0.022384993731975555, 0.020392145961523056, 0.018704038113355637, 0.01662098802626133, 0.023530807346105576, 0.01926455833017826, 0.012494240887463093, 0.02927865833044052, 0.03593006357550621, 0.032428327947854996, 0.025338681414723396, 0.0563177727162838, 0.07794695347547531], [0.026963215321302414, 0.03247317299246788, 0.009958744049072266, 0.007122192066162825, 0.04163593426346779, 0.02246193028986454, 0.011073472909629345, 0.011781122535467148, 0.016791285946965218, 0.020029226318001747, 0.013134271837770939, 0.06920798122882843, 0.01308036781847477, 0.014263046905398369, 0.009123186580836773, 0.06726618856191635, 0.00994014274328947, 0.013437795452773571, 0.01253887452185154, 0.06035420671105385, 0.02059950679540634, 0.018267791718244553, 0.009998020716011524, 0.07924237847328186, 0.017659785225987434, 0.018935898318886757, 0.010952649638056755, 0.04182982072234154, 0.023683298379182816, 0.015340047888457775, 0.02395767904818058, 0.014183170162141323, 0.14735251665115356, 0.019856169819831848, 0.023461991921067238, 0.03204305097460747], [0.04053525626659393, 0.04225332662463188, 0.011900106444954872, 0.009904997423291206, 0.039442770183086395, 0.023634176701307297, 0.022586187347769737, 0.027548983693122864, 0.02722400240600109, 0.025409817695617676, 0.013892901130020618, 0.06962861120700836, 0.01765836589038372, 0.018872644752264023, 0.009973210282623768, 0.05067627131938934, 0.013293655589222908, 0.01308421790599823, 0.009255047887563705, 0.05902289226651192, 0.012253931723535061, 0.010959758423268795, 0.008223418146371841, 0.03580879420042038, 0.012484395876526833, 0.012373910285532475, 0.007936625741422176, 0.01881127804517746, 0.025540294125676155, 0.012064711190760136, 0.016794659197330475, 0.011034530587494373, 0.03652726113796234, 0.02280210144817829, 0.03754667565226555, 0.017461519688367844, 0.15557871758937836], [0.03171457350254059, 0.04601619020104408, 0.010108054615557194, 0.008030220866203308, 0.02432921528816223, 0.017928525805473328, 0.018444698303937912, 0.02391960844397545, 0.030508169904351234, 0.027995597571134567, 0.014091391116380692, 0.028841007500886917, 0.01904575526714325, 0.020967679098248482, 0.009048735722899437, 0.02027822472155094, 0.0148142259567976, 0.023802094161510468, 0.008972462266683578, 0.02851325273513794, 0.01520150899887085, 0.029173217713832855, 0.009336324408650398, 0.02019539847970009, 0.015481790527701378, 0.03127925097942352, 0.013339146971702576, 0.019619185477495193, 0.014867071062326431, 0.021713601425290108, 0.040731750428676605, 0.01985624060034752, 0.031506434082984924, 0.03786648437380791, 0.16477246582508087, 0.015076696872711182, 0.038149867206811905, 0.034463874995708466], [0.04547720029950142, 0.0363968200981617, 0.012124724686145782, 0.011726731434464455, 0.025824828073382378, 0.018508456647396088, 0.01938583329319954, 0.026296520605683327, 0.03058006800711155, 0.05232289433479309, 0.027204373851418495, 0.0375639833509922, 0.022437965497374535, 0.02463383600115776, 0.027969714254140854, 0.027595525607466698, 0.018957428634166718, 0.02283846214413643, 0.020754680037498474, 0.029026422649621964, 0.01707967184484005, 0.018655508756637573, 0.01847902312874794, 0.01888316310942173, 0.015866773203015327, 0.01564144901931286, 0.01775660179555416, 0.01589897647500038, 0.012637636624276638, 0.017889687791466713, 0.02307143434882164, 0.022023361176252365, 0.019166307523846626, 0.018353058025240898, 0.029692569747567177, 0.02522369474172592, 0.02281152829527855, 0.05211063474416733, 0.0811324343085289], [0.04471781849861145, 0.05748949944972992, 0.015886491164565086, 0.012257179245352745, 0.08236055076122284, 0.027155717834830284, 0.01034220214933157, 0.012149042449891567, 0.011712939478456974, 0.014528172090649605, 0.008941728621721268, 0.05568638816475868, 0.009320100769400597, 0.011728692799806595, 0.008486587554216385, 0.04026905819773674, 0.007851545698940754, 0.011051733046770096, 0.006901215761899948, 0.04781033471226692, 0.00786343589425087, 0.013262355700135231, 0.007230966817587614, 0.03538001701235771, 0.008336230181157589, 0.009267874993383884, 0.006815181579440832, 0.03270912915468216, 0.025065552443265915, 0.013846459798514843, 0.019778497517108917, 0.013294633477926254, 0.0679674744606018, 0.013961597345769405, 0.021413616836071014, 0.013567046262323856, 0.1079392284154892, 0.019217070192098618, 0.033762913197278976, 0.032673753798007965], [0.032715700566768646, 0.039825618267059326, 0.007699612062424421, 0.007185840513557196, 0.01928856037557125, 0.018580207601189613, 0.007835252210497856, 0.009578319266438484, 0.011202314868569374, 0.00950553733855486, 0.006570237223058939, 0.03152928873896599, 0.010023941285908222, 0.008254765532910824, 0.0057068271562457085, 0.026973150670528412, 0.008181710727512836, 0.009679805487394333, 0.005974374245852232, 0.028662778437137604, 0.007091809529811144, 0.007785134948790073, 0.0054550860077142715, 0.024500004947185516, 0.0074188425205647945, 0.008658760227262974, 0.007168551441282034, 0.026004770770668983, 0.02324303425848484, 0.009140366688370705, 0.01072629727423191, 0.010127571411430836, 0.023301774635910988, 0.011800636537373066, 0.011424645781517029, 0.015229368582367897, 0.036706242710351944, 0.020709684118628502, 0.031282927840948105, 0.0246262289583683, 0.3726244270801544], [0.039962027221918106, 0.036168113350868225, 0.01088254526257515, 0.008710958994925022, 0.03015219420194626, 0.020147716626524925, 0.017830317839980125, 0.020982665941119194, 0.020009728148579597, 0.01965533010661602, 0.010210257023572922, 0.04793239012360573, 0.015014835633337498, 0.01664007641375065, 0.007609134074300528, 0.040032412856817245, 0.011316420510411263, 0.012816091999411583, 0.00709755951538682, 0.043428465723991394, 0.01112587284296751, 0.009882849641144276, 0.005741238594055176, 0.03045082651078701, 0.009989599697291851, 0.011232929304242134, 0.006619689520448446, 0.017880165949463844, 0.019301852211356163, 0.012360742315649986, 0.011901818215847015, 0.008366833440959454, 0.030354704707860947, 0.014604943804442883, 0.013277314603328705, 0.010264517739415169, 0.03140852972865105, 0.02245192788541317, 0.02127734385430813, 0.012075142934918404, 0.12533514201641083, 0.12749679386615753]]},
+                    tokenization_config: {"token_prefix": "\u0120", "partial_token_prefix": ""}
+             })
+
+             }, function (err) {
+                console.log(err);
+            })</script></div>
 </div>
 </section>
 </section>

@@ -61,11 +61,10 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Explainable AI Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bestpractices/index.html">Best Practices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Explainer Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="test_import_from.html">Testing explainer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multiclass_classification.html">Explaining text classifications</a></li>
@@ -195,9 +194,9 @@ const thebe_selector_output = ".output, .cell_output"
 <div id="basic"></div>
 </div><script type="application/javascript">
          requirejs( ['basic', 'ecco'], function(basic, ecco){
-            basic.init('viz_60035') // Python needs to know the viz id. Used for each output token.
-            window.ecco['viz_60035'] = new ecco.renderOutputSequence({
-                    parentDiv: 'viz_60035',
+            basic.init('viz_287841') // Python needs to know the viz id. Used for each output token.
+            window.ecco['viz_287841'] = new ecco.renderOutputSequence({
+                    parentDiv: 'viz_287841',
                     data: {"tokens": [{"token": "Heath", "is_partial": false, "position": 0, "token_id": 25846, "type": "input"}, {"token": "row", "is_partial": true, "position": 1, "token_id": 808, "type": "input"}, {"token": "airport", "is_partial": false, "position": 2, "token_id": 9003, "type": "input"}, {"token": "is", "is_partial": false, "position": 3, "token_id": 318, "type": "input"}, {"token": "in", "is_partial": false, "position": 4, "token_id": 287, "type": "input"}, {"token": "the", "is_partial": false, "position": 5, "token_id": 262, "type": "input"}, {"token": "city", "is_partial": false, "position": 6, "token_id": 1748, "type": "input"}, {"token": "of", "is_partial": false, "position": 7, "token_id": 286, "type": "input"}]},
                     tokenization_config: {"token_prefix": "\u0120", "partial_token_prefix": ""}
             
@@ -212,9 +211,9 @@ const thebe_selector_output = ".output, .cell_output"
         // We don't really need these require scripts. But this is to avert
         //this code from running before display_input_sequence which DOES require external files
         requirejs(['basic', 'ecco'], function(basic, ecco){
-                console.log('addToken viz_id', 'viz_60035');
-                window.ecco['viz_60035'].addToken({"token": "London", "is_partial": false, "token_id": 3576, "position": 8, "type": "output"})
-                window.ecco['viz_60035'].redraw()
+                console.log('addToken viz_id', 'viz_287841');
+                window.ecco['viz_287841'].addToken({"token": "London", "is_partial": false, "token_id": 3576, "position": 8, "type": "output"})
+                window.ecco['viz_287841'].redraw()
         })
         </script></div>
 </div>
