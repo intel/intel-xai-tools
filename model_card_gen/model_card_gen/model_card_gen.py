@@ -53,19 +53,20 @@ class ModelCardGen():
     def __init__(self,
                  data_sets: Dict[Text, Text] = {},
                  model_path: Text = '',
-                 eval_config: Union[tfma.EvalResult, str] = None,
+                 eval_config: Union[tfma.EvalConfig, str] = None,
                  model_card: Union[ModelCard, Dict[Text, Any]] = None,
                  eval_results: Sequence[tfma.EvalResult] = None,
                  output_dir: Text = ''):
         """
-        Generate Model Card from tfma results eval results
+        Generate ModelCard from with TFMA
 
         Args:
-            data_sets: dict with keys of name of dataset and value to path
-            model_path: str representing TF SavedModel path
-            eval_config: tfma.EvalResult or str to config file path
-            model_card: ModelCard or dict following model card schema
-            output_dir: str of where to output model card
+            data_sets (dict): dictionary with keys of name of dataset and value to path
+            model_path (str): representing TF SavedModel path
+            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
+            eval_results (tfma.EvalResults): pre-generated tfma results for when you do not wish to run evaluator
+            output_dir (str): representing of where to output model card
         """
         self.data_sets = self.check_data_sets(data_sets)
         self.model_path = model_path
@@ -93,16 +94,30 @@ class ModelCardGen():
                  model_path: Text = '',
                  model_card: Union[ModelCard, Dict[Text, Any], Text] = None,
                  output_dir: Text = ''):
-        """Class Factory starting TFMA analysis and generating model card
+        """Class Factory starting TFMA analysis and generating ModelCard
 
         Args:
-            data_sets: dict with keys of name of dataset and value to path
-            model_path: str representing TF SavedModel path
-            eval_config: tfma.EvalResult or str to config file path
-            model_card: ModelCard or dict following model card schema
-            output_dir: str of where to output model card
+            data_sets (dict): dictionary with keys of name of dataset and value to path
+            model_path (str): representing TF SavedModel path
+            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema 
+            output_dir (str): representing of where to output model card
+
         Returns:
             ModelCardGen
+
+        Raises:
+            ValueError: when invalid value for data_sets argument is empty
+            TypeError: when data_sets argument is  not type dict
+
+        Example:
+            >>> from model_card_gen.model_card_gen import ModelCardGen
+            >>> model_path = 'compas/model'
+            >>> data_paths = {
+                  'eval': 'compas/eval.tfrecord',
+                  'train': 'compas/train.tfrecord'}
+            >>> eval_config = 'compas/eval_config.proto'
+            >>> mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config)
         """
         self = cls(
             data_sets,
@@ -121,13 +136,18 @@ class ModelCardGen():
         return self
     
     def check_data_sets(self, data_sets):
+        """Checks whether data_set object is not empty or not of type dict"""
+
         if not data_sets:
-            raise TypeError("ModelCardGen revieved invalid value for data_sets argument")
+            raise ValueError("ModelCardGen revieved invalid value for data_sets argument")
         if not isinstance(data_sets, dict):
             raise TypeError("ModelCardGen requires data_sets argument to be of type dict")
         return data_sets
 
     def get_stats(self):
+        """Get statistics_pb2.DatasetFeatureStatisticsList object for each dataset.
+        Store each result in dictionary with corresponding name of dataset as key.
+        """
         if all(isinstance(elem, str) for elem in self.data_sets.values()):
             return {name: tfdv.generate_statistics_from_tfrecord(data_location=path)
                         for name, path in self.data_sets.items()}
@@ -136,6 +156,8 @@ class ModelCardGen():
                     for name, path in self.data_sets.items()}
 
     def build_model_card(self):
+        """Build graphics and add them to model card"""
+
         self.scaffold_assets()
         # Add Dataset Statistics
         if self.data_stats:
@@ -157,10 +179,10 @@ class ModelCardGen():
       """Updates the JSON file in the MCT assets directory.
   
       Args:
-        model_card: The updated model card to write back.
+        model_card (ModelCard): The updated model card to write back.
   
       Raises:
-         Error: when the given model_card is invalid w.r.t. the schema.
+         Error: when the given model_card is invalid with reference to the schema.
       """
       self._write_json_file(self._mc_json_file, model_card)
 
@@ -178,10 +200,10 @@ class ModelCardGen():
         performance and data distributions.
 
         Returns:
-        A ModelCard representing the given model.
+            A ModelCard representing the given model.
 
         Raises:
-        FileNotFoundError: on failure to copy the template files.
+            FileNotFoundError: on failure to copy the template files.
         """
 
         # Write JSON file for model card
@@ -236,12 +258,12 @@ class ModelCardGen():
         to output_file.
 
         Args:
-        model_card: The ModelCard object, generated from `scaffold_assets()`. If
+        model_card (ModelCard): The ModelCard object, generated from `scaffold_assets()`. If
             not provided, it will be read from the ModelCard proto file in the
             assets directory.
-        template_path: The file path of the Jinja template. If not provided, the
+        template_path (str): The file path of the Jinja template. If not provided, the
             default template will be used.
-        output_file: The file name of the generated model card. If not provided,
+        output_file (str): The file name of the generated model card. If not provided,
             the default 'model_card.html' will be used. If the file already exists,
             then it will be overwritten.
 

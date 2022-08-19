@@ -129,17 +129,15 @@ Step 3: Install with pip
 ```shell
 pip install .
 ```
-
-For notebook dependencies install with
-
-```shell
-pip install ".[notebook]"
 ```
 
 
 ### Run
 
 **Populate Model Card user-defined fields**
+
+The Model Card object that is generated can be serialized/deserialized via the JSON schema defined in `schema/v*/model_card.schema.json`. You can use a Python dictionary to provide content to static fields like those contained in the "model_details" section of the `mc` variable below. Any field can be added to this dictionary of pre-defined fields as long as it is it coheres to the schema being used.
+
 ```python
 mc = {
   "model_details": {
@@ -175,18 +173,70 @@ mc = {
 }
 ```
 
-**Define Inputs**
-```python
-_project_path = os.path.join('examples', 'compas')
-_model_path = os.path.join(_project_path, 'model')
-_data_paths = {'eval': os.path.join(_project_path, 'eval.tfrecord'),
-               'train': os.path.join(_project_path, 'train.tfrecord')}
-_eval_config = os.path.join(_project_path, 'eval_config.proto')
+**Model Card Generator Inputs**
+
+The `ModelCardGen.generate` classmethod requires three inputs and returns a `ModelCardGen` class instance: 
+
+* `data_sets` (dict) : dictionary containing the user-defined name of the dataset as key and the path to the tfrecrod or raw dataframe containing prediction values as value. For example, for `{"eval": 'eval.tfrecord'}` or for evaluating raw dataframes 
+
+```
+{"eval": pd.Darafram(
+    {"y_true": y_true, "y_pred": ypred}
+)}
+```
+
+* `model_path` (str) : this field represents the path to the TensorFlow SavedModel and it is only required for TensorFlow models.
+
+* `eval_config` (tfma.EvalConfig or str) : this is either the path to the proto config file used by the tfma evaluator or the proto string to be parsed. For example, let us review the following file entitled "eval_config.proto" defined for the COMPAS proxy model found in `notebooks/compas-model-card-tfx.ipynb`. 
+
+In the   `model_specs` section it tells the evaluator "label_key" is the ground truth label. In the `metric_specs` section it defines the following metrics to be computed: "BinaryAccuracy", "AUC", "ConfusionMatrixPlot", and "FairnessIndicators". In the `slicing_specs` section it tells the evaluator to compute these metrics accross all datapoints and aggregate these metrics grouped by the "race" feature.
+
+
+```
+model_specs {
+    label_key: 'is_recid'
+  }
+metrics_specs {
+  metrics {class_name: "BinaryAccuracy"}
+  metrics {class_name: "AUC"}
+  metrics {class_name: "ConfusionMatrixPlot"}
+  metrics {
+    class_name: "FairnessIndicators"
+      config: '{"thresholds": [0.25, 0.5, 0.75]}'
+  }
+  }
+# The overall slice
+slicing_specs {}
+slicing_specs {
+    feature_keys: 'race'
+    }
+options {
+    include_default_metrics { value: false }
+  }
+```
+
+If we are computing metrics on a raw dataframe we must add the "prediction_key" to  `model_specs` as follows
+
+```
+model_specs {
+    label_key: 'y_true'
+    prediction_key: 'y_pred'
+  }
+...
 ```
 
 **Create Model Card**
 ```python
+
 from model_card_gen.model_card_gen import ModelCardGen
+
+model_path = 'compas/model'
+data_paths = {
+  'eval': 'compas/eval.tfrecord',
+  'train': 'compas/train.tfrecord'
+}
+eval_config = 'compas/eval_config.proto'
+
 mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config, model_card=mc)
 ```
 

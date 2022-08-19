@@ -30,7 +30,7 @@ class ModelAnalyzer:
             data : DataFormat = ''):
         """Start TFMA analysis
         Args:
-            eval_config : tfma.EvalConfig or str representing proto file path
+            eval_config (tfma.EvalConfig or str): representing proto file path
         Return:
             EvalResult
         """
@@ -44,10 +44,24 @@ class ModelAnalyzer:
             data :  Union[Text, pd.DataFrame] = ''):
         """Class Factory to start TFMA analysis
         Args:
-            eval_config : tfma.EvalConfig or str representing proto file path
+            model_path (str) : path to model
+            eval_config (tfma.EvalConfig or str): representing proto file path
+            data (str or pd.DataFrame): string ot tfrecord or raw dataframe containing
+                prediction values and  ground truth
+
+        Raises:
+            TypeError: when eval_config is not of type tfma.EvalConfig or str
+            TypeError: when data argument is not of type pd.DataFrame or str
         
         Returns:
             tfma.EvalConfig()
+        
+        Example:
+            >>> from model_card_gen.analyzer import ModelAnalyzer
+            >>> ModelAnalyzer.analyze(
+                model_path='compas/model',
+                data='compas/eval.tfrecord',
+                eval_config='compas/eval_config.proto')
         """
         self = cls(eval_config, data)
         if isinstance(data, str):
@@ -58,23 +72,25 @@ class ModelAnalyzer:
         return self.get()
 
     def check_eval_config(self, eval_config) -> tfma.EvalConfig:
+        """Check that eval_config argument is of type tfma.EvalConfig or str"""
         if isinstance(eval_config, tfma.EvalConfig):
             return eval_config
         elif isinstance(eval_config, str):
              return self.parse_eval_config(eval_config)
         else:
-            raise ValueError("ModelAnalyzer needs either eval_config or eval_config_path argument.")
+            raise TypeError("ModelAnalyzer requres eval_config argument of type tfma.EvalConfig or str.")
 
     def check_data(self, data):
+        """Check that data argument is of type pd.DataFrame or str"""
         if not isinstance(data, get_args(DataFormat)):
-            raise TypeError("ModelAnalyzer.analyze requires data argument to be of type dict")
+            raise TypeError("ModelAnalyzer.analyze requires data argument to be of type pd.DataFrame or str")
         return data
 
     def parse_eval_config(self, eval_config_path):
         """Parse proto file from file path to generate Eval config
 
         Args:
-            eval_config_path : str representing proto file path
+            eval_config_path (str): representing proto file path
         
         Returns:
             tfma.EvalConfig()
@@ -96,8 +112,8 @@ class DFAnalyzer(ModelAnalyzer):
         """Start TFMA analysis on Pandas DataFrame
         
         Args:
-            raw_data : pd.DataFrame
-            eval_config : tfma.EvalConfig or str representing proto file path
+            raw_data (pd.DataFrame): dataframe containing prediciton values and ground truth
+            eval_config (tfma.EvalConfig or str): representing proto file path
         """
         super().__init__(eval_config, data)
 
@@ -111,6 +127,12 @@ class TFAnalyzer(ModelAnalyzer):
                  model_path : Text,
                  data : Text,
                  eval_config : Union[tfma.EvalConfig, Text] = None):
+        """Start TFMA analysis on TensorFlow model
+        Args:
+            model_path (str) : path to model
+            data (str): string ot tfrecord
+            eval_config (tfma.EvalConfig pr str): representing proto file path
+        """
         super().__init__(eval_config, data)
         self.model_path = model_path
         self.data = data
