@@ -35,10 +35,10 @@ from model_card_gen.graphics.add_graphics import (
     add_overview_graphs,
     add_eval_result_plots,
     add_eval_result_slicing_metrics)
-from model_card_gen.datasets import DataFormat
 # Typing
 import tensorflow_model_analysis as tfma
 from typing import Optional, Sequence, Text, Union, Dict, Any
+DataFormat = Union[pd.DataFrame, Text]
 
 _UI_TEMPLATES = (
     'template/html/default_template.html.jinja',
