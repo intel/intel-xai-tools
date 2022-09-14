@@ -188,15 +188,20 @@ class ConfusionMatrixAtThresholdsGraphs(_PlotlyGraph):
         for metric in metrics:
             for group, df in dfs:
                 vis = True if metric == metrics[0] else False
+                feature = df.feature.iloc[0]
+                if feature == "Overall":
+                    title = feature
+                else:
+                    title = f'{feature}={group}'.replace('_', " ").title()
                 trace = go.Scatter(x=df[self.x_name],
                                 y=df[metric],
                                 mode='lines',
-                                name=group.title(),
+                                name=title,
                                 visible=vis)
                 fig.add_trace(trace)
                 
         def create_layout_button(metric, viz_arg):
-            return dict(label = metric.title(),
+            return dict(label = str(metric).title(),
                         method = 'update',
                         args = [{'visible': viz_arg},
                                 {'title': f'{metric} at {self.x_name}'.title()}])
@@ -238,11 +243,16 @@ class SlicingMetricGraphs(_PlotlyGraph):
         for metric in self.metrics:
             for group, df in dfs:
                 vis = True if metric == self.metrics[0] else False
+                feature = df.feature.iloc[0]
+                if feature == "Overall":
+                    title = feature
+                else:
+                    title = f'{df.feature.iloc[0]}={group}'.replace('_', " ").title()
                 trace = go.Bar(x=df[metric],
-                       y=df['group'],
+                       y=df['group'].astype(str),
                        orientation='h',
-                       name=f'{group}'.title(),
-                               hovertemplate = '%{y}: %{x}<extra></extra>',
+                       name=title,
+                       hovertemplate = '%{y}: %{x}<extra></extra>',
                        visible=vis)
                 fig.add_trace(trace)
 

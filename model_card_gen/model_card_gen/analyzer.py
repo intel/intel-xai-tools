@@ -17,17 +17,18 @@
 # SPDX-License-Identifier: EPL-2.0
 #
 
-from typing import Text, Optional, Union, Sequence, get_args
 import pandas as pd
-DataFormat = Union[pd.DataFrame, Text]
-
 import tensorflow_model_analysis as tfma
 from google.protobuf import text_format
+from typing import Text, Optional, Union, get_args
+from model_card_gen.utils.types import DatasetType
+from model_card_gen.datasets import TensorflowDataset, PytorchDataset
+import torch 
 
 class ModelAnalyzer:
     def __init__(self,
             eval_config : Union[tfma.EvalConfig, Text] = None,
-            data : DataFormat = ''):
+            dataset : DatasetType = None):
         """Start TFMA analysis
         Args:
             eval_config (tfma.EvalConfig or str): representing proto file path
@@ -35,13 +36,13 @@ class ModelAnalyzer:
             EvalResult
         """
         self.eval_config: tfma.EvalConfig = self.check_eval_config(eval_config)
-        self.data: DataFormat = self.check_data(data)
+        self.dataset: DatasetType = self.check_data(dataset)
 
     @classmethod
     def analyze(cls,
             model_path: Optional[Text] = '',
             eval_config : Union[tfma.EvalConfig, Text] = None,
-            data :  Union[Text, pd.DataFrame] = ''):
+            dataset :  DatasetType = None):
         """Class Factory to start TFMA analysis
         Args:
             model_path (str) : path to model
@@ -63,11 +64,13 @@ class ModelAnalyzer:
                 data='compas/eval.tfrecord',
                 eval_config='compas/eval_config.proto')
         """
-        self = cls(eval_config, data)
-        if isinstance(data, str):
-            self = TFAnalyzer(model_path, data, eval_config)
-        elif isinstance(data, pd.DataFrame):
-            self = DFAnalyzer(data, eval_config)
+        self = cls(eval_config, dataset)
+        if isinstance(dataset, TensorflowDataset):
+            self = TFAnalyzer(model_path, dataset, eval_config)
+        elif isinstance(dataset, pd.DataFrame):
+            self = DFAnalyzer(dataset, eval_config)
+        elif isinstance(dataset, PytorchDataset):
+            self = PTAnalyzer(model_path, dataset, eval_config)
         self.analyze()
         return self.get()
 
@@ -80,11 +83,11 @@ class ModelAnalyzer:
         else:
             raise TypeError("ModelAnalyzer requres eval_config argument of type tfma.EvalConfig or str.")
 
-    def check_data(self, data):
-        """Check that data argument is of type pd.DataFrame or str"""
-        if not isinstance(data, get_args(DataFormat)):
-            raise TypeError("ModelAnalyzer.analyze requires data argument to be of type pd.DataFrame or str")
-        return data
+    def check_data(self, dataset):
+        """Check that data argument is of type pd.DataFrame or DatasetType"""
+        if not (isinstance(dataset, get_args(DatasetType)) or isinstance(dataset, pd.DataFrame)):
+            raise TypeError("ModelAnalyzer.analyze requires data argument to be of type pd.DataFrame, TensorflowDataset or PytorchDataset")
+        return dataset
 
     def parse_eval_config(self, eval_config_path):
         """Parse proto file from file path to generate Eval config
@@ -107,7 +110,7 @@ class ModelAnalyzer:
 
 class DFAnalyzer(ModelAnalyzer):
     def __init__(self,
-                 data : pd.DataFrame,
+                 dataset : pd.DataFrame,
                  eval_config : Union[tfma.EvalConfig, Text] = None):
         """Start TFMA analysis on Pandas DataFrame
         
@@ -115,17 +118,17 @@ class DFAnalyzer(ModelAnalyzer):
             raw_data (pd.DataFrame): dataframe containing prediciton values and ground truth
             eval_config (tfma.EvalConfig or str): representing proto file path
         """
-        super().__init__(eval_config, data)
+        super().__init__(eval_config, dataset)
 
     def analyze(self):
-        self.eval_result = tfma.analyze_raw_data(data=self.data,
+        self.eval_result = tfma.analyze_raw_data(data=self.dataset.dataset_path,
                               eval_config=self.eval_config)
         return self.eval_result
 
 class TFAnalyzer(ModelAnalyzer):
     def __init__(self,
                  model_path : Text,
-                 data : Text,
+                 dataset : DatasetType,
                  eval_config : Union[tfma.EvalConfig, Text] = None):
         """Start TFMA analysis on TensorFlow model
         Args:
@@ -133,9 +136,9 @@ class TFAnalyzer(ModelAnalyzer):
             data (str): string ot tfrecord
             eval_config (tfma.EvalConfig pr str): representing proto file path
         """
-        super().__init__(eval_config, data)
+        super().__init__(eval_config, dataset)
         self.model_path = model_path
-        self.data = data
+        self.dataset = dataset
 
     def analyze(self):
         #TODO if not eval_shared
@@ -146,7 +149,7 @@ class TFAnalyzer(ModelAnalyzer):
         self.eval_result = tfma.run_model_analysis(
             eval_shared_model=eval_shared_model,
             eval_config=self.eval_config,
-            data_location=self.data)
+            data_location=self.dataset.dataset_path)
         return self.eval_result
 
 def analyze_model(model_path: Optional[Text] = '',
@@ -158,3 +161,56 @@ def analyze_model(model_path: Optional[Text] = '',
             cls = DFAnalyzer(data, eval_config)
         cls.analyze()
         return cls
+
+class PTAnalyzer(ModelAnalyzer):
+    def __init__(self,
+                 model_path : Text,
+                 dataset : DatasetType,
+                 eval_config : Union[tfma.EvalConfig, Text] = None):
+        """Start TFMA analysis on TensorFlow model
+        Args:
+            model_path (str) : path to model
+            data (str): string ot tfrecord
+            eval_config (tfma.EvalConfig pr str): representing proto file path
+        """
+        super().__init__(eval_config, dataset)
+        self.dataset = dataset
+        self.model_path = model_path
+        self._model = self.load_model()
+        self.eval_data = self.make_eval_dataframe()
+
+    def load_model(self):
+        model = torch.jit.load(self.model_path)
+        model.eval()
+        return model
+    
+    def predict_instances(self, instances):
+        """
+        Perform feed-forward inference and predict the classes of the input_samples
+        """
+        predictions = self._model(instances)
+        _, predicted_ids = torch.max(predictions, dim=1)
+        return predicted_ids
+    
+    def get_inference_data(self):
+        """
+        Perform feed-forward inference and predict the classes of the input_samples
+        """
+        instances, true_values = self.dataset.dataset[:]
+        predicted_values = self.predict_instances(instances)
+        return instances, true_values, predicted_values
+    
+    def make_eval_dataframe(self):
+        """
+        Make pandas DataFrame for TFMA evaluation 
+        """
+        instances, true_values, predicted_values = self.get_inference_data()        
+        df = pd.DataFrame(instances, columns=self.dataset.feature_names)
+        df['true_values'] = true_values
+        df['predicted_values'] = predicted_values
+        return df
+
+    def analyze(self):
+        self.eval_result = tfma.analyze_raw_data(data=self.eval_data,
+                              eval_config=self.eval_config)
+        return self.eval_result

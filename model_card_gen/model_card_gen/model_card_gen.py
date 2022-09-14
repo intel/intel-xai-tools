@@ -129,15 +129,14 @@ class ModelCardGen():
         self.eval_results = [
             ModelAnalyzer.analyze(
                 model_path=model_path,
-                data=data,
+                dataset=dataset,
                 eval_config=eval_config)
-            for data in data_sets.values()]
+            for dataset in data_sets.values()]
         self.model_card_html = self.build_model_card()
         return self
     
     def check_data_sets(self, data_sets):
         """Checks whether data_set object is not empty or not of type dict"""
-
         if not data_sets:
             raise ValueError("ModelCardGen revieved invalid value for data_sets argument")
         if not isinstance(data_sets, dict):
@@ -157,7 +156,6 @@ class ModelCardGen():
 
     def build_model_card(self):
         """Build graphics and add them to model card"""
-
         self.scaffold_assets()
         # Add Dataset Statistics
         if self.data_stats:

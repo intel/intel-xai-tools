@@ -17,22 +17,20 @@
 # SPDX-License-Identifier: EPL-2.0
 #
 
-import pytest
-import tempfile
 import tensorflow as tf
 from model_card_gen.tests.model import build_and_train_model, train_tf_file, validate_tf_file
 from model_card_gen.model_card_gen import ModelCardGen
 import tensorflow_model_analysis as tfma
 from google.protobuf import text_format
-
+from model_card_gen. datasets import TensorflowDataset
 
 def test_end_to_end():
     """ Build a model card from a trained model
     """
     tfma_export_dir = build_and_train_model()
     _model_path = tfma_export_dir
-    _data_paths = {'eval': validate_tf_file,
-                'train': train_tf_file}
+    _data_sets ={'eval': TensorflowDataset(dataset_path=validate_tf_file),
+                 'train': TensorflowDataset(dataset_path=train_tf_file)}
 
     eval_config = text_format.Parse("""
     model_specs {
@@ -53,5 +51,5 @@ def test_end_to_end():
     }
     """, tfma.EvalConfig())
 
-    mcg = ModelCardGen.generate(_data_paths, _model_path, eval_config)
+    mcg = ModelCardGen.generate(data_sets=_data_sets, model_path=_model_path, eval_config=eval_config)
     assert mcg
