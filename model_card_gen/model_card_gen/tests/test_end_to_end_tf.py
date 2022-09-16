@@ -18,17 +18,17 @@
 #
 
 import tensorflow as tf
-from model_card_gen.tests.model import build_and_train_model, train_tf_file, validate_tf_file
+from model_card_gen.tests.tf_model import build_and_train_model, train_tf_file, validate_tf_file
 from model_card_gen.model_card_gen import ModelCardGen
 import tensorflow_model_analysis as tfma
 from google.protobuf import text_format
 from model_card_gen. datasets import TensorflowDataset
+import shutil
 
 def test_end_to_end():
     """ Build a model card from a trained model
     """
-    tfma_export_dir = build_and_train_model()
-    _model_path = tfma_export_dir
+    _model_path = build_and_train_model()
     _data_sets ={'eval': TensorflowDataset(dataset_path=validate_tf_file),
                  'train': TensorflowDataset(dataset_path=train_tf_file)}
 
@@ -52,4 +52,6 @@ def test_end_to_end():
     """, tfma.EvalConfig())
 
     mcg = ModelCardGen.generate(data_sets=_data_sets, model_path=_model_path, eval_config=eval_config)
+    # clean up model directory
+    shutil.rmtree(_model_path)
     assert mcg
