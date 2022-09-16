@@ -32,12 +32,14 @@ REQUIRED_PACKAGES = [
     'tensorflow-data-validation>=1.6.0,<1.8.0',
     'plotly>=3.8.1,<6',
     'dataclasses;python_version<"3.7"',
+    'torch',
+    'apache-beam==2.41.0'
 ]
 
 TEST_PACKAGES = [
     'pytest',
-    'httplib2<0.19.1'
-    'tensorflow-hub',
+    'httplib2<0.19.1',
+    'tensorflow-hub'
 ]
 
 NOTEBOOK_PACKAGES = [
