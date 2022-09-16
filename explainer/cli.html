@@ -42,7 +42,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="API Reference" href="api.html" />
-    <link rel="prev" title="Explainer" href="index.html" /> 
+    <link rel="prev" title="Quick Start" href="quickstart.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -65,8 +65,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Explainer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">CLI Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="criteria.html">Criteria</a></li>
 <li class="toctree-l2"><a class="reference internal" href="design.html">Explainer Design</a></li>
 </ul>
@@ -102,71 +104,85 @@ const thebe_selector_output = ".output, .cell_output"
              
   <section id="cli-reference">
 <span id="cli"></span><h1>CLI Reference<a class="headerlink" href="#cli-reference" title="Permalink to this headline"></a></h1>
-<p>Explainer CLI</p>
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Environment</span></span><a class="reference internal" href="../_modules/explainer/cli.html#Environment"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Provides an Environment that can be passed to click subcommands</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/cli.html#Environment.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Logs a message to stderr.</p>
-</dd></dl>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Usage: explainer [OPTIONS] COMMAND [ARGS]...
 
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">vlog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/cli.html#Environment.vlog"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Logs a message to stderr only if verbose is enabled.</p>
-</dd></dl>
+  The explainer CLI enables a plugin model for XAI. Plugins are a recognized
+  way to enable functional categories. See
+  https://packaging.python.org/en/latest/specifications/entry-points/.
 
-</dd></dl>
+Options:
+  --help  Show this message and exit.
 
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExplainerCLI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invoke_without_command</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_args_is_help</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subcommand_metavar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attrs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/cli.html#ExplainerCLI"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>ExplainerCLI inherits from click.MultiCommand</p>
-<p>ExplainerCLI will import explainable resources as defined by a yaml file.
-The yaml file has fields for model, data, python resources,
-and a Callable entry point</p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">explainer.cli.Environment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../_modules/explainer/cli.html#ExplainerCLI.get_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>dynamically loads command if found under commands subdir</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>_env</strong> (<em>Environment</em>) – environment that holds context</p></li>
-<li><p><strong>cmd_name</strong> (<em>str</em>) – the name of the command to load</p></li>
+Commands:
+  explain    Calls the ModuleSpec entry point
+  generate   generates a template plugin directory under explainer/plugins
+  import     imports an explainable&#39;s functionality as defined by
+             ExplainerSpec
+  info       shows info about an explainer under explainer.explainers
+  install    installs the plugin (wheel) under the directory
+             explainer/explainers
+  list       lists available explainers
+  uninstall  uninstalls the plugin directory under the directory
+             explainer/explainers.
+  visualize  Plots an explanation JSON definition.
+</pre></div>
+</div>
+<section id="explainer-generate">
+<h2>explainer generate<a class="headerlink" href="#explainer-generate" title="Permalink to this headline"></a></h2>
+<p>CLI generate subcommand</p>
+<p>The generate subcommand creates a directory under explainer/plugins using the
+information in the explainer/explainers yaml file, which is the first argument
+to the command. The base name of the yaml file will be used to create the directory.
+The generate command generates a set of files which can be used to develop the plugin.
+The set of files created by generate are:</p>
+<ul class="simple">
+<li><p>✅ ‘&lt;plugin&gt;’/README.md</p></li>
+<li><p>✅ ‘&lt;plugin&gt;’/entry_point.py</p></li>
+<li><p>✅ ‘&lt;plugin&gt;’/Makefile</p></li>
+<li><p>✅ ‘&lt;plugin&gt;’/setup.cfg</p></li>
+<li><p>✅ ‘&lt;plugin&gt;’/setup.py</p></li>
+<li><p>‘&lt;plugin&gt;’/test/test.py</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>cli</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">list_commands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">explainer.cli.Environment</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../_modules/explainer/cli.html#ExplainerCLI.list_commands"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Return the subcommands under the subdir commands/</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>_env</strong> (<em>Environment</em>) – environment that holds context</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of commands</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<p>The entry_point.py is where the developer would define the entry_point functions specified in the yaml file.</p>
+</section>
+<section id="explainer-import">
+<h2>explainer import<a class="headerlink" href="#explainer-import" title="Permalink to this headline"></a></h2>
+<p>CLI import subcommand</p>
+<p>The import subcommand loads an exlainer plugin into the current python environment.
+It does this by adding the plugin installation directory to the head of the sys.path
+and instantiating an ExplainerModuleSpec that holds the plugins entry_points.
+These entry_points can be called with the appropriate arguments.</p>
+<p>Explainer plugins provide different entry_points that serve
+as ways to access XAI methods bundled within the plugin.</p>
+</section>
+<section id="explainer-info">
+<h2>explainer info<a class="headerlink" href="#explainer-info" title="Permalink to this headline"></a></h2>
+<p>CLI info subcommand</p>
+<p>The info subcommand prints out details of the yaml file.</p>
+</section>
+<section id="explainer-install">
+<h2>explainer install<a class="headerlink" href="#explainer-install" title="Permalink to this headline"></a></h2>
+<p>CLI install subcommand</p>
+<p>The install subcommand will install a wheel in a directory under explainer/plugins using the
+information in the explainer/explainers yaml file, which is the first argument
+to the command. The yaml file has an attribute <cite>plugin</cite> which names the plugin wheel.
+The install command calls <cite>pip install</cite> providing the wheel and a target directory
+which is derived from the path of the yaml file. The target directory path is located
+under explainer/explainers.</p>
+</section>
+<section id="explainer-list">
+<h2>explainer list<a class="headerlink" href="#explainer-list" title="Permalink to this headline"></a></h2>
+<p>CLI list subcommand</p>
+<p>The list subcommand lists the yaml file basenames under explainer/explainers.
+The yaml basename is used by the generate, install and import subcommands.
+The yaml file is where one defines the entry_point functions that are available under the plugin.</p>
+</section>
+<section id="explainer-uninstall">
+<h2>explainer uninstall<a class="headerlink" href="#explainer-uninstall" title="Permalink to this headline"></a></h2>
+<p>CLI uninstall subcommand</p>
+<p>The uninstall subcommand will remove the plugin directory under explainer/explainers.
+The related yaml file is not touched.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -192,7 +208,7 @@ and a Callable entry point</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Explainer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

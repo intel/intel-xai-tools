@@ -65,8 +65,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Explainer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli.html">CLI Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="criteria.html">Criteria</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Explainer Design</a></li>
 </ul>
@@ -149,6 +151,7 @@ Within this package are yaml files that explainer uses to load and invoke specif
 <figure class="align-default" id="id3">
 <div class="mermaid">
             classDiagram
+  Finder &lt;|-- MetaPathFinder
   MetaPathFinder &lt;|-- ExplainerMetaPathFinder
         </div><figcaption>
 <p><span class="caption-number">Fig. 8 </span><span class="caption-text">Class Hierarchy of explainer.ExplainerMetaPathFinder</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
@@ -212,10 +215,10 @@ Within this package are yaml files that explainer uses to load and invoke specif
 <br/>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExplainerModuleSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">explainer.ExplainerSpec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">importlib._abc.Loader</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer.html#ExplainerModuleSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExplainerModuleSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">explainer.ExplainerSpec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">importlib.abc.Loader</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loader_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_package</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer.html#ExplainerModuleSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Extends the ModuleSpec to add
 spec: ExplainerSpec
-entry_points: EntryPoints TBD</p>
+entry_points: EntryPoints</p>
 <dl class="py property">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span></dt>
@@ -230,11 +233,11 @@ entry_points: EntryPoints TBD</p>
 <br/>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExplainerLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer.html#ExplainerLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExplainerLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer.html#ExplainerLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Loads yaml files that hold ExplainerSpec definitions</p>
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">create_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">_frozen_importlib.ModuleSpec</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_frozen_importlib.ModuleSpec</span></span></span><a class="reference internal" href="../_modules/explainer.html#ExplainerLoader.create_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">create_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">_frozen_importlib.ModuleSpec</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">_frozen_importlib.ModuleSpec</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/explainer.html#ExplainerLoader.create_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Return a module to initialize and into which to load.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -268,7 +271,7 @@ entry_points: EntryPoints TBD</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_resource_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fullname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">importlib.abc.ResourceReader</span></span></span><a class="reference internal" href="../_modules/explainer.html#ExplainerLoader.get_resource_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">get_resource_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fullname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">importlib.abc.ResourceReader</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/explainer.html#ExplainerLoader.get_resource_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Required for Loaders that implement resource loading</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -285,7 +288,7 @@ entry_points: EntryPoints TBD</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">get_yaml_loader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">yaml.loader.SafeLoader</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/explainer.html#ExplainerLoader.get_yaml_loader"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">get_yaml_loader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">yaml.loader.FullLoader</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/explainer.html#ExplainerLoader.get_yaml_loader"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Returns the yaml loader for the tag !ExplainerSpec</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -318,12 +321,14 @@ functionality for this method.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">load_plugin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/explainer.html#ExplainerLoader.load_plugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>loads the plugin specified in the module.spec</p>
+<dd><p>loads the plugin specified in self.module.spec</p>
+<p>looks for explainers under explainer/explainers. These are yaml files.
+looks for plugins under explainer/plugins. These are directories where explainer wheels have been installed</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">module</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">explainer.ExplainerModuleSpec</span></em></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">module</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">explainer.ExplainerModuleSpec</span><span class="p"><span class="pre">]</span></span></em></dt>
 <dd><p>Creates an ExplainerModuleSpec</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
@@ -377,14 +382,14 @@ functionality is provided for this method.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">find_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fullname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">module</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_frozen_importlib.ModuleSpec</span></span></span><a class="reference internal" href="../_modules/explainer.html#ExplainerMetaPathFinder.find_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">find_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fullname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">module</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">explainer.ExplainerModuleSpec</span></span></span><a class="reference internal" href="../_modules/explainer.html#ExplainerMetaPathFinder.find_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Returns ExplainerLoader if the path is a yaml file that includes a !ExplainerSpec tag</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fullname</strong> (<em>str</em>) – _description_</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – _description_</p></li>
-<li><p><strong>_target</strong> (<em>ModuleType</em><em>, </em><em>optional</em>) – _description_. Defaults to None.</p></li>
+<li><p><strong>fullname</strong> (<em>str</em>) – package name</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – path to package</p></li>
+<li><p><strong>_target</strong> (<em>ModuleType</em><em>, </em><em>optional</em>) – Defaults to None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

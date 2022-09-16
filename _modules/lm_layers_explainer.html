@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lm_layers_explainer &mdash; Explainer</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-thebe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+        <script src="../_static/design-tabs.js"></script>
+        <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+        <script async="async" src="../_static/sphinx-thebe.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>lm_layers_explainer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lm_layers_explainer</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">============================</span>
+<span class="sd">lm_layers_explainer Plugin</span>
+<span class="sd">============================</span>
+
+<span class="sd">This plugin provides a set of functions to explore, visualize and interact with </span>
+<span class="sd">transformer based language models. These transformer models can be causal language models (clm), </span>
+<span class="sd">masked language models (mlm) or encoder-decoder language models (enc-dec).</span>
+<span class="sd">The functions within this plugin do not do any fine-tuning of the underlying transformer model, </span>
+<span class="sd">rather provide methods to:</span>
+
+<span class="sd">- explain individual predictions by visualizing input token importance</span>
+<span class="sd">- explain hidden state contributions and evolution across model layers</span>
+<span class="sd">- visualize sequence embeddings </span>
+<span class="sd">- visualize attention heads within the self-attention layer</span>
+
+<span class="sd">----------</span>
+<span class="sd">Algorithms</span>
+<span class="sd">----------</span>
+
+<span class="sd">Transformer based language models take words as input, turn them into tokens </span>
+<span class="sd">and provide numeric scores for each token in the model&#39;s vocabulary. </span>
+<span class="sd">A model&#39;s final layer, called the softmax layer, provides a probability score </span>
+<span class="sd">for each token. Transformer based architectures are comprised of 2 major layers:</span>
+<span class="sd">- the self-attention layer</span>
+<span class="sd">- the feed forward neural network layer</span>
+
+<span class="sd">-----------</span>
+<span class="sd">Environment</span>
+<span class="sd">-----------</span>
+<span class="sd">- jupyter notebooks</span>
+
+<span class="sd">-----------</span>
+<span class="sd">XAI Methods</span>
+<span class="sd">-----------</span>
+<span class="sd">- Gradient saliency</span>
+<span class="sd">- Input X Gradient saliency</span>
+<span class="sd">- Integrated Gradients</span>
+<span class="sd">- DeepLift</span>
+<span class="sd">- DeepLife with SHAP</span>
+<span class="sd">- Guided Backpropagation</span>
+<span class="sd">- Guided GradCam</span>
+<span class="sd">- Deconvolution</span>
+<span class="sd">- Layer-wise Relevance Propagation</span>
+<span class="sd">- Gradient-Based Saliency</span>
+
+<span class="sd">--------</span>
+<span class="sd">Toolkits</span>
+<span class="sd">--------</span>
+<span class="sd">- ecco</span>
+<span class="sd">- bertviz</span>
+
+<span class="sd">----------</span>
+<span class="sd">References</span>
+<span class="sd">----------</span>
+<span class="sd">[Visualize BERT sequence embeddings: An unseen way](https://towardsdatascience.com/visualize-bert-sequence-embeddings-an-unseen-way-1d6a351e4568)</span>
+<span class="sd">[Visualize attention in NLP Models](https://github.com/jessevig/bertviz)</span>
+<span class="sd">[Interfaces for Explaining Transformer Language Models](https://jalammar.github.io/explaining-transformers/)</span>
+<span class="sd">[Attention is not not Explanation](https://arxiv.org/pdf/1908.04626.pdf?ref=morioh.com&amp;utm_source=morioh.com)</span>
+<span class="sd">[Attention is not Explanation](https://arxiv.org/abs/1902.10186?ref=morioh.com&amp;utm_source=morioh.com)</span>
+<span class="sd">[Attention Interpretability Across NLP Tasks](https://arxiv.org/pdf/1909.11218.pdf?ref=morioh.com&amp;utm_source=morioh.com)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">Layer</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">ecco</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lm</span> <span class="o">=</span> <span class="n">ecco</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">activations</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">Activations</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">([</span><span class="n">text</span><span class="p">],</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">run_nmf</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">explore</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">AttentionHeadView</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModel</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">output_attentions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">bertviz</span> <span class="kn">import</span> <span class="n">head_view</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">attention</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_ids_to_tokens</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">head_view</span><span class="p">(</span><span class="n">attention</span><span class="p">,</span> <span class="n">tokens</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">AttentionModelView</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModel</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">output_attentions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sentence_a</span><span class="p">,</span> <span class="n">sentence_b</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">bertviz</span> <span class="kn">import</span> <span class="n">model_view</span>
+    <span class="n">encoder_input_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">(</span><span class="n">sentence_a</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span> <span class="n">add_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">input_ids</span>
+    <span class="n">decoder_input_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">(</span><span class="n">sentence_b</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span> <span class="n">add_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">input_ids</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="o">=</span><span class="n">encoder_input_ids</span><span class="p">,</span> <span class="n">decoder_input_ids</span><span class="o">=</span><span class="n">decoder_input_ids</span><span class="p">)</span>
+    <span class="n">encoder_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_ids_to_tokens</span><span class="p">(</span><span class="n">encoder_input_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">decoder_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_ids_to_tokens</span><span class="p">(</span><span class="n">decoder_input_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">model_view</span><span class="p">(</span>
+      <span class="n">encoder_attention</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">encoder_attentions</span><span class="p">,</span>
+      <span class="n">decoder_attention</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">decoder_attentions</span><span class="p">,</span>
+      <span class="n">cross_attention</span><span class="o">=</span><span class="n">outputs</span><span class="o">.</span><span class="n">cross_attentions</span><span class="p">,</span>
+      <span class="n">encoder_tokens</span><span class="o">=</span> <span class="n">encoder_text</span><span class="p">,</span>
+      <span class="n">decoder_tokens</span><span class="o">=</span><span class="n">decoder_text</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="activations"><a class="viewcode-back" href="../explainer/plugins.html#lm_layers_explainer.activations">[docs]</a><span class="k">def</span> <span class="nf">activations</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Provides visuals into what layers are activating tokens within the text segment</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">       model (pytorch): large language model such as bert, gpt-2</span>
+<span class="sd">       text  (str): input text that is given to the model tokenizer</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">       LayerActivations: this class shows activations within the model layers</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">Activations</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="attention_head_view"><a class="viewcode-back" href="../explainer/plugins.html#lm_layers_explainer.attention_head_view">[docs]</a><span class="k">def</span> <span class="nf">attention_head_view</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     visualize attention importance within one or more attention head layers</span>
+<span class="sd"> </span>
+<span class="sd">     Usage:</span>
+<span class="sd">     - Hover over any token on the left/right side of the visualization to filter attention from/to that token. The colors correspond to different attention heads.</span>
+<span class="sd">     - Double-click on any of the colored tiles at the top to filter to the corresponding attention head.</span>
+<span class="sd">     - Single-click on any of the colored tiles to toggle selection of the corresponding attention head.</span>
+<span class="sd">     - Click on the Layer drop-down to change the model layer (zero-indexed).</span>
+<span class="sd">     - The lines show the attention from each token (left) to every other token (right). Darker lines indicate higher attention weights. </span>
+<span class="sd">     - When multiple heads are selected, the attention weights are overlaid on one another.</span>
+<span class="sd"> </span>
+<span class="sd">     Args:</span>
+<span class="sd">       model (pytorch): large language model such as bert, gpt-2</span>
+<span class="sd">       text  (str): input text that is given to the model tokenizer</span>
+<span class="sd"> </span>
+<span class="sd">     Returns:</span>
+<span class="sd">       Activations: this class shows activations within the model layers</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">AttentionHeadView</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="attention_model_view"><a class="viewcode-back" href="../explainer/plugins.html#lm_layers_explainer.attention_model_view">[docs]</a><span class="k">def</span> <span class="nf">attention_model_view</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     shows token importance within the self-attention model view</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">       model (pytorch): large language model such as bert, gpt-2</span>
+<span class="sd">       text  (str): input text that is given to the model tokenizer</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">       Activations: this class shows activations within the model layers</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">AttentionModelView</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="attention_neuron_view"><a class="viewcode-back" href="../explainer/plugins.html#lm_layers_explainer.attention_neuron_view">[docs]</a><span class="k">def</span> <span class="nf">attention_neuron_view</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     shows token importance within the self-attention neuron view</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">       model (pytorch): large language model such as bert, gpt-2</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">       Activations: this class shows attention heads within the model layers</span>
+
+<span class="sd">     Reference:</span>
+<span class="sd">       https://github.com/jessevig/bertviz/blob/master/notebooks/neuron_view_bert.ipynb</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">class</span> <span class="nc">AttentionNeuronView</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+      <span class="kn">from</span> <span class="nn">bertviz.transformers_neuron_view</span> <span class="kn">import</span> <span class="n">BertModel</span><span class="p">,</span> <span class="n">BertTokenizer</span>
+      <span class="n">do_lower_case</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">BertModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">do_lower_case</span><span class="o">=</span><span class="n">do_lower_case</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+      <span class="kn">from</span> <span class="nn">bertviz.neuron_view</span> <span class="kn">import</span> <span class="n">show</span>
+      <span class="n">model_type</span> <span class="o">=</span> <span class="s1">&#39;bert&#39;</span>
+      <span class="c1">#show(model, model_type, tokenizer, sentence_a, sentence_b, display_mode=&#39;dark&#39;, layer=2, head=0)</span>
+      <span class="n">show</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">model_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">display_mode</span><span class="o">=</span><span class="s1">&#39;dark&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">head</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">AttentionNeuronView</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">attributions</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+  <span class="k">class</span> <span class="nc">Attributions</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+      <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">Attributions</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">predictions</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+  <span class="k">class</span> <span class="nc">Predictions</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+      <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">generate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">do_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">layer_predictions</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">Predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">rankings</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+  <span class="k">class</span> <span class="nc">Rankings</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+      <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">Rankings</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

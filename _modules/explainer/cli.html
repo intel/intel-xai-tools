@@ -58,10 +58,11 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../xai/index.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../xai/index.html">Explainable AI Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../requirements/index.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bestpractices/index.html">Best Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design/index.html">Explainer Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../bibliography/index.html">Bibliography</a></li>
 </ul>
@@ -114,7 +115,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="k">return</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exp</span><span class="o">.</span><span class="n">list</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">incomplete</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">exp</span><span class="o">.</span><span class="n">list</span>
 
-<div class="viewcode-block" id="Environment"><a class="viewcode-back" href="../../explainer/cli.html#explainer.cli.Environment">[docs]</a><span class="k">class</span> <span class="nc">Environment</span><span class="p">:</span>
+<div class="viewcode-block" id="Environment"><a class="viewcode-back" href="../../design/index.html#explainer.cli.Environment">[docs]</a><span class="k">class</span> <span class="nc">Environment</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Provides an Environment that can be passed to click subcommands&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -122,13 +123,13 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="bp">self</span><span class="o">.</span><span class="n">home</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span><span class="p">:</span> <span class="n">Explainer</span> <span class="o">=</span> <span class="n">Explainer</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Environment.log"><a class="viewcode-back" href="../../explainer/cli.html#explainer.cli.Environment.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="Environment.log"><a class="viewcode-back" href="../../design/index.html#explainer.cli.Environment.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logs a message to stderr.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">%=</span> <span class="n">args</span>
         <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Environment.vlog"><a class="viewcode-back" href="../../explainer/cli.html#explainer.cli.Environment.vlog">[docs]</a>    <span class="k">def</span> <span class="nf">vlog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="Environment.vlog"><a class="viewcode-back" href="../../design/index.html#explainer.cli.Environment.vlog">[docs]</a>    <span class="k">def</span> <span class="nf">vlog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Logs a message to stderr only if verbose is enabled.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div></div>
@@ -139,7 +140,7 @@ const thebe_selector_output = ".output, .cell_output"
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;commands&quot;</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="ExplainerCLI"><a class="viewcode-back" href="../../explainer/cli.html#explainer.cli.ExplainerCLI">[docs]</a><span class="k">class</span> <span class="nc">ExplainerCLI</span><span class="p">(</span><span class="n">click</span><span class="o">.</span><span class="n">MultiCommand</span><span class="p">):</span>
+<div class="viewcode-block" id="ExplainerCLI"><a class="viewcode-back" href="../../design/index.html#explainer.cli.ExplainerCLI">[docs]</a><span class="k">class</span> <span class="nc">ExplainerCLI</span><span class="p">(</span><span class="n">click</span><span class="o">.</span><span class="n">MultiCommand</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;ExplainerCLI inherits from click.MultiCommand</span>
 
 
@@ -148,7 +149,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="sd">    and a Callable entry point</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ExplainerCLI.list_commands"><a class="viewcode-back" href="../../explainer/cli.html#explainer.cli.ExplainerCLI.list_commands">[docs]</a>    <span class="k">def</span> <span class="nf">list_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_env</span><span class="p">:</span> <span class="n">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="ExplainerCLI.list_commands"><a class="viewcode-back" href="../../design/index.html#explainer.cli.ExplainerCLI.list_commands">[docs]</a>    <span class="k">def</span> <span class="nf">list_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_env</span><span class="p">:</span> <span class="n">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Return the subcommands under the subdir commands/</span>
 
 <span class="sd">        Args:</span>
@@ -164,7 +165,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="n">r_var</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">r_var</span></div>
 
-<div class="viewcode-block" id="ExplainerCLI.get_command"><a class="viewcode-back" href="../../explainer/cli.html#explainer.cli.ExplainerCLI.get_command">[docs]</a>    <span class="k">def</span> <span class="nf">get_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_env</span><span class="p">:</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">cmd_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<div class="viewcode-block" id="ExplainerCLI.get_command"><a class="viewcode-back" href="../../design/index.html#explainer.cli.ExplainerCLI.get_command">[docs]</a>    <span class="k">def</span> <span class="nf">get_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_env</span><span class="p">:</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">cmd_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;dynamically loads command if found under commands subdir</span>
 
 <span class="sd">        Args:</span>

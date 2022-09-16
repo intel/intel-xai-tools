@@ -41,7 +41,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="CLI Reference" href="cli.html" />
+    <link rel="next" title="Quick Start" href="quickstart.html" />
     <link rel="prev" title="Requirements" href="../requirements/index.html" /> 
 </head>
 
@@ -65,8 +65,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Explainer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli.html">CLI Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="criteria.html">Criteria</a></li>
 <li class="toctree-l2"><a class="reference internal" href="design.html">Explainer Design</a></li>
 </ul>
@@ -101,23 +103,50 @@ const thebe_selector_output = ".output, .cell_output"
              
   <section id="explainer">
 <span id="id1"></span><h1>Explainer<a class="headerlink" href="#explainer" title="Permalink to this headline"></a></h1>
+<p>The explainer tool provides a means to quickly integrate XAI methods into existing python environments such as workflows or notebooks.
+XAI methods are grouped as explainer plugins where each plugin provides various XAI techniques from one or more Toolkits.</p>
 <section id="features">
 <h2>Features:<a class="headerlink" href="#features" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p>allows injection of xai methods into python workflows|notebooks without requiring version compatibility of resident packages in the active python environment.</p></li>
-<li><p>enables a seamless way to include the best or most relevant xai methods from any external package|toolkit to explain models|data from within the pluggable environment without modifying the resident environment.</p></li>
-<li><p>is extensible, leveraging python’s entry_points specification.</p></li>
-<li><p>is compliant with python’s importlib and contextlib APIs, both part of standard python 3.</p></li>
-<li><p>provides an avenuse for community contributions. Plugin architectures have had tremendous success in python’s ecosystem. New plugins are created as wheels and published to python’s pypi or used locally on disk.</p></li>
+<li><p>composable: allowing easy injection of XAI methods into existing python workflows|notebooks in 2-3 lines of code.</p></li>
+<li><p>extensible: plugin based architecture that includes many popular toolkits</p></li>
+<li><p>community focused: community contributions can be added to pypi as wheels</p></li>
 </ul>
 </section>
-<section id="syntax">
-<h2>Syntax:<a class="headerlink" href="#syntax" title="Permalink to this headline"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">explainer.explainers</span> <span class="kn">import</span> <span class="n">model_layers</span>
+<section id="current-plugins">
+<h2>Current Plugins:<a class="headerlink" href="#current-plugins" title="Permalink to this headline"></a></h2>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Plugin</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+<th class="head"><p><strong>Focus</strong></p></th>
+<th class="head"><p><strong>Types of Models</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>lm_layer_explainer</p></td>
+<td><p>nlp transformers</p></td>
+<td><p>Input Saliency</p></td>
+<td><p>BERT, GPT-2</p></td>
+</tr>
+<tr class="row-odd"><td><p>lm_classifier_explainer</p></td>
+<td><p>nlp classification</p></td>
+<td><p>Layerwise Relevance Propagation</p></td>
+<td><p>BERT, GPT-2</p></td>
+</tr>
+<tr class="row-even"><td><p>lm_features_explainer</p></td>
+<td><p>feature attributions</p></td>
+<td><p>Feature Permutations</p></td>
+<td><p>VGG</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="example-syntax">
+<h2>Example Syntax:<a class="headerlink" href="#example-syntax" title="Permalink to this headline"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">explainer.explainers</span> <span class="kn">import</span> <span class="n">lm_layers_explainer</span>
 
-<span class="k">with</span> <span class="n">model_layers</span> <span class="k">as</span> <span class="n">m</span><span class="p">:</span>
-  <span class="n">m</span><span class="o">.</span><span class="n">layer_attributions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
-  <span class="n">m</span><span class="o">.</span><span class="n">layer_predictions</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+<span class="n">lm_layers_explainer</span><span class="p">[</span><span class="s1">&#39;layer_activations&#39;</span><span class="p">](</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -137,13 +166,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li><p>dataset as a python Resource &lt;- an attribute in the yaml file.</p></li>
 </ul>
 </li>
-</ul>
-</section>
-<section id="plugin-naming-conventions-for-various-types-of-explainers">
-<h2>Plugin Naming Conventions (for various types of explainers):<a class="headerlink" href="#plugin-naming-conventions-for-various-types-of-explainers" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><p>model-<plugin>: eg model-layers, model-posthoc, model-attributions</p></li>
-<li><p>data-<plugin>: eg data-perf, data-feature-permutation</p></li>
 </ul>
 </section>
 <div class="toctree-wrapper compound">
@@ -174,7 +196,7 @@ const thebe_selector_output = ".output, .cell_output"
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../requirements/index.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="cli.html" class="btn btn-neutral float-right" title="CLI Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quick Start" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

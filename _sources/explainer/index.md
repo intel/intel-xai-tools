@@ -1,24 +1,32 @@
 (explainer)=
 # Explainer
 
+The explainer tool provides a means to quickly integrate XAI methods into existing python environments such as workflows or notebooks.
+XAI methods are grouped as explainer plugins where each plugin provides various XAI techniques from one or more Toolkits.
+
 ## Features:
 
-- allows injection of xai methods into python workflows|notebooks without requiring version compatibility of resident packages in the active python environment.
-- enables a seamless way to include the best or most relevant xai methods from any external package|toolkit to explain models|data from within the pluggable environment without modifying the resident environment.
-- is extensible, leveraging python's entry_points specification.
-- is compliant with python's importlib and contextlib APIs, both part of standard python 3.
-- provides an avenuse for community contributions. Plugin architectures have had tremendous success in python's ecosystem. New plugins are created as wheels and published to python's pypi or used locally on disk.
+- composable: allowing easy injection of XAI methods into existing python workflows|notebooks in 2-3 lines of code.
+- extensible: plugin based architecture that includes many popular toolkits
+- community focused: community contributions can be added to pypi as wheels
 
-## Syntax:
+## Current Plugins:
+
+| **Plugin**              | **Description**      | **Focus**                       | **Types of Models**  |
+|-------------------------|----------------------|---------------------------------|----------------------|
+| lm_layer_explainer      | nlp transformers     | Input Saliency                  | BERT, GPT-2          |
+| lm_classifier_explainer | nlp classification   | Layerwise Relevance Propagation | BERT, GPT-2          |
+| lm_features_explainer   | feature attributions | Feature Permutations            | VGG                  |
+
+
+
+## Example Syntax:
 
 ```
-from explainer.explainers import model_layers
+from explainer.explainers import lm_layers_explainer
 
-with model_layers as m:
-  m.layer_attributions(model, text)
-  m.layer_predictions(model, text)
+lm_layers_explainer['layer_activations'](model, text)
 ```
-
 
 ## Innovations:
 
@@ -29,9 +37,3 @@ with model_layers as m:
     - the context manager is similar to python's contextmanager for files but used for pluggable environments.
   - model as a python Resource <- an attribute in the yaml file.
   - dataset as a python Resource <- an attribute in the yaml file.
-
-
-## Plugin Naming Conventions (for various types of explainers):
-
-- model-<plugin>: eg model-layers, model-posthoc, model-attributions
-- data-<plugin>: eg data-perf, data-feature-permutation
