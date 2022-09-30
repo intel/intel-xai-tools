@@ -1,0 +1,18 @@
+{% block javascript %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"></script>
+  <script type="text/javascript">
+    window.PlotlyConfig = {MathJaxConfig: 'local'};
+    if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+    if (typeof require !== 'undefined') {
+      require.undef("plotly");
+      requirejs.config({
+      paths: {
+          'plotly': ['https://cdn.plot.ly/plotly-2.6.3.min']
+      }
+    });
+    require(['plotly'], function(Plotly) {
+        window._Plotly = Plotly;
+    });
+    }
+  </script>
+{% endblock %}

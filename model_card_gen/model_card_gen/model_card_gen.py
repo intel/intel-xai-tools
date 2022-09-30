@@ -42,6 +42,9 @@ DataFormat = Union[pd.DataFrame, Text]
 
 _UI_TEMPLATES = (
     'template/html/default_template.html.jinja',
+    'template/html/style/default_style.html.jinja',
+    'template/html/macros/default_macros.html.jinja',
+    'template/html/js/plotly_js_header.html.jinja',
 )
 _DEFAULT_UI_TEMPLATE_FILE = os.path.join('html', 'default_template.html.jinja')
 _MC_JSON_FILE = os.path.join('data', 'model_card.json')
