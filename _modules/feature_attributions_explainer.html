@@ -90,33 +90,53 @@
 <span class="sd">feature-attributions-explainer plugin</span>
 <span class="sd">=====================================</span>
 
-<span class="sd">Feature Attributions are an approach to explaining a model&#39;s predictions based on how </span>
-<span class="sd">the model has weighted features it&#39;s been trained on.</span>
+<span class="sd">This plugin provides a set of functions to explore visualize and understand their model&#39;s features. </span>
+<span class="sd">This plugin currently utilizes SHAP (SHapley Additive exPlanations) which is an approach to </span>
+<span class="sd">explain the output of any machine learning model. Feature Attributions are an approach to </span>
+<span class="sd">explaining a model&#39;s predictions based on how the model has weighted features it&#39;s been trained on.</span>
+
+
 
 
 <span class="sd">Algorithm</span>
 <span class="sd">---------</span>
 
 <span class="sd">Determining feature importance within a model is done by utilizing the SHAP package.</span>
+<span class="sd">Shap accepts black box models and provides explanations through a game theoretic approach.</span>
 
 
 <span class="sd">Environment</span>
 <span class="sd">-----------</span>
+<span class="sd">- Jupyter Notebooks</span>
 
 
 <span class="sd">XAI Methods</span>
 <span class="sd">-----------</span>
+<span class="sd">- Shap Explainers</span>
+<span class="sd">  - Deep Explainer - provides explanations on Deep Learning models</span>
+<span class="sd">  - Gradient Explainer</span>
+<span class="sd">  - Kernel Explainer</span>
+<span class="sd">  - Partition Explainer</span>
+<span class="sd">  - Zero Shot Explainer</span>
+
+<span class="sd">- To Be Added:</span>
+<span class="sd">- Captum </span>
+<span class="sd">  - Integrated Gradients</span>
+<span class="sd">  - Deep Lift  </span>
 
 
 <span class="sd">Toolkits</span>
 <span class="sd">--------</span>
+<span class="sd">- Shap</span>
+
+<span class="sd">- To Be Added:</span>
+<span class="sd">- Captum</span>
 
 
 <span class="sd">References</span>
 <span class="sd">----------</span>
-
-<span class="sd">https://github.com/slundberg/shap</span>
-
+<span class="sd">[SHAP](https://github.com/slundberg/shap)</span>
+<span class="sd">[Captum](https://github.com/pytorch/captum)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -250,7 +270,6 @@
   <span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">shap_values</span><span class="p">)</span>
   <span class="c1"># Let&#39;s visualize the feature importance towards the outcome - sports</span>
   <span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="s1">&#39;sports&#39;</span><span class="p">])</span>
-
 </pre></div>
 
            </div>

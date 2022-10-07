@@ -100,22 +100,46 @@
 <p>“</p>
 <section id="feature-attributions-explainer-plugin">
 <h2>feature-attributions-explainer plugin<a class="headerlink" href="#feature-attributions-explainer-plugin" title="Permalink to this heading"></a></h2>
-<p>Feature Attributions are an approach to explaining a model’s predictions based on how
-the model has weighted features it’s been trained on.</p>
+<p>This plugin provides a set of functions to explore visualize and understand their model’s features.
+This plugin currently utilizes SHAP (SHapley Additive exPlanations) which is an approach to
+explain the output of any machine learning model. Feature Attributions are an approach to
+explaining a model’s predictions based on how the model has weighted features it’s been trained on.</p>
 <section id="algorithm">
 <h3>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this heading"></a></h3>
-<p>Determining feature importance within a model is done by utilizing the SHAP package.</p>
+<p>Determining feature importance within a model is done by utilizing the SHAP package.
+Shap accepts black box models and provides explanations through a game theoretic approach.</p>
 </section>
 <section id="environment">
 <h3>Environment<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Jupyter Notebooks</p></li>
+</ul>
 </section>
 <section id="xai-methods">
 <h3>XAI Methods<a class="headerlink" href="#xai-methods" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Shap Explainers
+- Deep Explainer - provides explanations on Deep Learning models
+- Gradient Explainer
+- Kernel Explainer
+- Partition Explainer
+- Zero Shot Explainer</p></li>
+<li><p>To Be Added:</p></li>
+<li><p>Captum
+- Integrated Gradients
+- Deep Lift</p></li>
+</ul>
 </section>
 <section id="toolkits">
 <h3>Toolkits<a class="headerlink" href="#toolkits" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Shap</p></li>
+<li><p>To Be Added:</p></li>
+<li><p>Captum</p></li>
+</ul>
 <p class="rubric">References</p>
-<p><a class="reference external" href="https://github.com/slundberg/shap">https://github.com/slundberg/shap</a></p>
+<p>[SHAP](<a class="reference external" href="https://github.com/slundberg/shap">https://github.com/slundberg/shap</a>)
+[Captum](<a class="reference external" href="https://github.com/pytorch/captum">https://github.com/pytorch/captum</a>)</p>
 </section>
 </section>
 <dl class="py function">
