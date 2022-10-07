@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>feature_attributions_explainer &mdash; Explainer</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Intel® Explainable AI Tools
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>feature_attributions_explainer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for feature_attributions_explainer</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+
+<span class="sd">feature-attributions-explainer plugin</span>
+<span class="sd">=====================================</span>
+
+<span class="sd">Feature Attributions are an approach to explaining a model&#39;s predictions based on how </span>
+<span class="sd">the model has weighted features it&#39;s been trained on.</span>
+
+
+<span class="sd">Algorithm</span>
+<span class="sd">---------</span>
+
+<span class="sd">Determining feature importance within a model is done by utilizing the SHAP package.</span>
+
+
+<span class="sd">Environment</span>
+<span class="sd">-----------</span>
+
+
+<span class="sd">XAI Methods</span>
+<span class="sd">-----------</span>
+
+
+<span class="sd">Toolkits</span>
+<span class="sd">--------</span>
+
+
+<span class="sd">References</span>
+<span class="sd">----------</span>
+
+<span class="sd">https://github.com/slundberg/shap</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">FeatureAttributions</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">shap</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shap</span> <span class="o">=</span> <span class="n">shap</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">plots</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">force_plot</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span>
+
+  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">pass</span>
+    
+<span class="k">class</span> <span class="nc">DeepExplainer</span><span class="p">(</span><span class="n">FeatureAttributions</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">background_images</span><span class="p">,</span> <span class="n">target_images</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">DeepExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">background_images</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">target_images</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
+
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_images</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">classes_</span><span class="p">)),</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="n">shap</span><span class="o">.</span><span class="n">image_plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">target_images</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">classes_</span><span class="p">),</span><span class="n">arr</span><span class="p">,</span><span class="n">arr</span><span class="p">]))</span>
+
+<span class="k">class</span> <span class="nc">GradientExplainer</span><span class="p">(</span><span class="n">FeatureAttributions</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_images</span><span class="p">):</span>
+    <span class="n">shap</span><span class="o">.</span><span class="n">image_plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">target_images</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">classes_</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">indexes</span><span class="p">])</span>
+
+<span class="k">class</span> <span class="nc">KernelExplainer</span><span class="p">(</span><span class="n">FeatureAttributions</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">KernelExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">50</span><span class="p">,:])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">20</span><span class="p">,:],</span> <span class="n">nsamples</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">20</span><span class="p">,:])</span>
+
+<span class="k">class</span> <span class="nc">PartitionExplainer</span><span class="p">(</span><span class="n">FeatureAttributions</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="kernel_explainer"><a class="viewcode-back" href="../explainer/plugins.html#feature_attributions_explainer.kernel_explainer">[docs]</a><span class="k">def</span> <span class="nf">kernel_explainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Returns a SHAP KernelExplainer</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">       model: model</span>
+<span class="sd">       data: dataframe</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">       KernelExplainer</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">KernelExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="deep_explainer"><a class="viewcode-back" href="../explainer/plugins.html#feature_attributions_explainer.deep_explainer">[docs]</a><span class="k">def</span> <span class="nf">deep_explainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">backgroundImages</span><span class="p">,</span><span class="n">targetImages</span><span class="p">,</span><span class="n">labels</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Returns a SHAP DeepExplainer</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">       model: model </span>
+<span class="sd">       backgroundImages: list</span>
+<span class="sd">       targetImages: list</span>
+<span class="sd">       labels: list</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">       DeepExplainer</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">DeepExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">backgroundImages</span><span class="p">,</span><span class="n">targetImages</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="gradient_explainer"><a class="viewcode-back" href="../explainer/plugins.html#feature_attributions_explainer.gradient_explainer">[docs]</a><span class="k">def</span> <span class="nf">gradient_explainer</span><span class="p">():</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Sets up a SHAP GradientExplainer</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">       GradientExplainer</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">GradientExplainer</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="partition_explainer"><a class="viewcode-back" href="../explainer/plugins.html#feature_attributions_explainer.partition_explainer">[docs]</a><span class="k">def</span> <span class="nf">partition_explainer</span><span class="p">():</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Sets up a SHAP PartitionExplainer</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">       PartitionExplainer</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">PartitionExplainer</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="integratedgradients"><a class="viewcode-back" href="../explainer/plugins.html#feature_attributions_explainer.integratedgradients">[docs]</a><span class="k">def</span> <span class="nf">integratedgradients</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Returns a Captum IntegratedGradients</span>
+<span class="sd">    </span>
+<span class="sd">     Args:</span>
+<span class="sd">       model: model</span>
+<span class="sd">    </span>
+<span class="sd">     Returns:</span>
+<span class="sd">       captum.attr.IntegratedGradients</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">IntegratedGradients</span>
+  <span class="k">return</span> <span class="n">IntegratedGradients</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="deeplift"><a class="viewcode-back" href="../explainer/plugins.html#feature_attributions_explainer.deeplift">[docs]</a><span class="k">def</span> <span class="nf">deeplift</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Returns a Captum DeepLift</span>
+<span class="sd">    </span>
+<span class="sd">     Args:</span>
+<span class="sd">       model: model</span>
+<span class="sd">    </span>
+<span class="sd">     Returns:</span>
+<span class="sd">       captum.attr.DeepLift</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">DeepLift</span>
+  <span class="k">return</span> <span class="n">DeepLift</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">zero_shot</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shap version used: </span><span class="si">{</span><span class="n">shap</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">explainer</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">Explainer</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+  <span class="n">shap_values</span> <span class="o">=</span> <span class="n">explainer</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="n">prediction</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model predictions are: </span><span class="si">{</span><span class="n">prediction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">shap_values</span><span class="p">)</span>
+  <span class="c1"># Let&#39;s visualize the feature importance towards the outcome - sports</span>
+  <span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="s1">&#39;sports&#39;</span><span class="p">])</span>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

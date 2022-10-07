@@ -7,11 +7,10 @@
   <title>Explainer &mdash; Explainer</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/sphinx-thebe.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -19,30 +18,25 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
         <script>let toggleHintShow = 'Click to show';</script>
         <script>let toggleHintHide = 'Click to hide';</script>
         <script>let toggleOpenOnPrint = 'true';</script>
         <script src="../_static/togglebutton.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
-        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
         <script src="../_static/design-tabs.js"></script>
-        <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-        <script async="async" src="../_static/sphinx-thebe.js"></script>
         <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
         <script>mermaid.initialize({startOnLoad:true});</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Quick Start" href="quickstart.html" />
-    <link rel="prev" title="Requirements" href="../requirements/index.html" /> 
+    <link rel="next" title="Plugins" href="plugins.html" />
+    <link rel="prev" title="AI Tools" href="../index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,6 +46,9 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="wy-side-nav-search" >
             <a href="../index.html" class="icon icon-home"> Intel® Explainable AI Tools
           </a>
+              <div class="version">
+                0.1.0
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -60,20 +57,16 @@ const thebe_selector_output = ".output, .cell_output"
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../xai/index.html">Concepts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../usecases/index.html">Use Cases</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Explainer</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html">CLI Reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugins.html">Plugins</a></li>
-<li class="toctree-l2"><a class="reference internal" href="criteria.html">Criteria</a></li>
-<li class="toctree-l2"><a class="reference internal" href="design.html">Explainer Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html">CLI Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
 </ul>
 
@@ -101,102 +94,28 @@ const thebe_selector_output = ".output, .cell_output"
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="explainer">
-<span id="id1"></span><h1>Explainer<a class="headerlink" href="#explainer" title="Permalink to this headline"></a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="explainer">
+<span id="id1"></span><h1 class="sd-d-none">Explainer<a class="headerlink" href="#explainer" title="Permalink to this heading"></a></h1>
 <p>The explainer tool provides a means to quickly integrate XAI methods into existing python environments such as workflows or notebooks.
 XAI methods are grouped as explainer plugins where each plugin provides various XAI techniques from one or more Toolkits.</p>
 <section id="features">
-<h2>Features:<a class="headerlink" href="#features" title="Permalink to this headline"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>composable: allowing easy injection of XAI methods into existing python workflows|notebooks in 2-3 lines of code.</p></li>
+<li><p>composable: XAI methods added to workflows in just 2-3 lines of code.</p></li>
 <li><p>extensible: plugin based architecture that includes many popular toolkits</p></li>
-<li><p>community focused: community contributions can be added to pypi as wheels</p></li>
-</ul>
-</section>
-<section id="current-plugins">
-<h2>Current Plugins:<a class="headerlink" href="#current-plugins" title="Permalink to this headline"></a></h2>
-<table class="colwidths-auto docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p><strong>Plugin</strong></p></th>
-<th class="head"><p><strong>Description</strong></p></th>
-<th class="head"><p><strong>Focus</strong></p></th>
-<th class="head"><p><strong>Types of Models</strong></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>lm_layer_explainer</p></td>
-<td><p>nlp transformers</p></td>
-<td><p>Input Saliency</p></td>
-<td><p>BERT, GPT-2</p></td>
-</tr>
-<tr class="row-odd"><td><p>lm_classifier_explainer</p></td>
-<td><p>nlp classification</p></td>
-<td><p>Layerwise Relevance Propagation</p></td>
-<td><p>BERT, GPT-2</p></td>
-</tr>
-<tr class="row-even"><td><p>lm_features_explainer</p></td>
-<td><p>feature attributions</p></td>
-<td><p>Feature Permutations</p></td>
-<td><p>VGG</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="example-syntax">
-<h2>Example Syntax:<a class="headerlink" href="#example-syntax" title="Permalink to this headline"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">explainer.explainers</span> <span class="kn">import</span> <span class="n">lm_layers_explainer</span>
-
-<span class="n">lm_layers_explainer</span><span class="p">[</span><span class="s1">&#39;layer_activations&#39;</span><span class="p">](</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="innovations">
-<h2>Innovations:<a class="headerlink" href="#innovations" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><p>uses python’s import mechanism to read a yaml file that is then used to load a python environment. This environment is ephemeral or pluggable and inserted at the head of sys.path.</p></li>
-<li><p>the ModuleSpec returned from import has been extended as a subclass to hold:</p>
-<ul>
-<li><p>a dictionary of entry_points grouped by the import name that are listed in the pluggable environment’s dist-info (entry_points.txt)</p></li>
-<li><p>an optional context manager that will unload the environment when used with python’s with statement</p>
-<ul>
-<li><p>the context manager is similar to python’s contextmanager for files but used for pluggable environments.</p></li>
-</ul>
-</li>
-<li><p>model as a python Resource &lt;- an attribute in the yaml file.</p></li>
-<li><p>dataset as a python Resource &lt;- an attribute in the yaml file.</p></li>
-</ul>
-</li>
+<li><p>community focused: community contributions added as wheels</p></li>
 </ul>
 </section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
 
-    <script type="text/x-thebe-config">
-    {
-        requestKernel: true,
-        binderOptions: {
-            repo: "binder-examples/jupyter-stacks-datascience",
-            ref: "master",
-        },
-        codeMirrorConfig: {
-            theme: "abcdef",
-            mode: "python"
-        },
-        kernelOptions: {
-            kernelName: "python3",
-            path: "./explainer"
-        },
-        predefinedOutput: true
-    }
-    </script>
-    <script>kernelName = 'python3'</script>
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../requirements/index.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quick Start" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="AI Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plugins.html" class="btn btn-neutral float-right" title="Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

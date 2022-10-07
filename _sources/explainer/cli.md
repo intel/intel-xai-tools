@@ -11,6 +11,24 @@
 
 ```
 
+## explainer build
+
+```{eval-rst}
+.. automodule:: explainer.commands.cmd_build
+   :noindex:
+   :members:
+
+```
+
+## explainer extract
+
+```{eval-rst}
+.. automodule:: explainer.commands.cmd_extract
+   :noindex:
+   :members:
+
+```
+
 ## explainer generate
 
 ```{eval-rst}
