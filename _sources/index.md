@@ -1,4 +1,10 @@
 # AI Tools
 
 
-## [Explainer](explainer)
+:::{card} Explainer {octicon}`link;1em;sd-text-info`
+:link: explainer
+:link-type: ref
+
+
+:::
+

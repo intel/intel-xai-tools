@@ -9,7 +9,7 @@ XAI methods are grouped as explainer plugins where each plugin provides various 
 
 ## Features
 
-- composable: XAI methods added to workflows in just 2-3 lines of code.
-- extensible: plugin based architecture that includes many popular toolkits
-- community focused: community contributions added as wheels
+- [x] composable: XAI methods added to workflows in just 2-3 lines of code.
+- [x] extensible: plugin based architecture that includes many popular toolkits
+- [x] community focused: community contributions added as wheels
 
