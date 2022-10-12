@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explaining Deep Learning Models &mdash; Explainer</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script src="../../_static/design-tabs.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Explaining Text Classification" href="partitionexplainer.html" />
+    <link rel="prev" title="Examples" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Intel® Explainable AI Tools
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Explainer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../plugins.html">Plugins</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Explaining Deep Learning Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partitionexplainer.html">Explaining Text Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_layers.html">Explaining Language Model Activations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html">CLI Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Explainer</a> &raquo;</li>
+          <li><a href="index.html">Examples</a> &raquo;</li>
+      <li>Explaining Deep Learning Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/explainer/examples/ExplainingDeepLearningModels.ipynb" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="explaining-deep-learning-models">
+<h1>Explaining Deep Learning Models<a class="headerlink" href="#explaining-deep-learning-models" title="Permalink to this heading"></a></h1>
+<section id="chapter-07-practical-exposure-of-using-shap-in-ml">
+<h2>CHAPTER 07 - <em>Practical exposure of using SHAP in ML</em><a class="headerlink" href="#chapter-07-practical-exposure-of-using-shap-in-ml" title="Permalink to this heading"></a></h2>
+<p>From <strong>Applied Machine Learning Explainability Techniques</strong> by <a class="reference external" href="https://www.linkedin.com/in/aditya-bhattacharya-b59155b6/"><strong>Aditya Bhattacharya</strong></a>, published by <strong>Packt</strong></p>
+<section id="objective">
+<h3>Objective<a class="headerlink" href="#objective" title="Permalink to this heading"></a></h3>
+<p>The goal of this notebook is to explore model explainability of deep learning image classification models using SHAP. Please check out <em>Chapter 7 - Practical exposure of using SHAP in ML</em> for other interesting approaches of using SHAP in practice.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="n">InteractiveShell</span><span class="o">.</span><span class="n">ast_node_interactivity</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="installing-the-modules">
+<h3>Installing the modules<a class="headerlink" href="#installing-the-modules" title="Permalink to this heading"></a></h3>
+<section id="optimized">
+<h4>** optimized **<a class="headerlink" href="#optimized" title="Permalink to this heading"></a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># intel-tensorflow==2.9.1</span>
+<span class="c1"># intel-python==3.9.12,  intel-tensorflow==2.9.1, numba-dpex==0.18.1, dpctl==0.13.0</span>
+<span class="c1"># shap @ git+https://github.com/slundberg/shap@v0.41.0</span>
+<span class="kn">from</span> <span class="nn">explainer.explainers</span> <span class="kn">import</span> <span class="n">feature_attributions_explainer</span><span class="p">,</span> <span class="n">metrics_explainer</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="non-optimized">
+<h4>** non-optimized **<a class="headerlink" href="#non-optimized" title="Permalink to this heading"></a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+# intel-python==3.9.12, tensorflow==2.9.1
+from explainer.explainers import shap_explainer
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="loading-the-modules">
+<h3>Loading the modules<a class="headerlink" href="#loading-the-modules" title="Permalink to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TF_CPP_MIN_LOG_LEVEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;3&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">c_map</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.applications.vgg19</span> <span class="kn">import</span> <span class="n">VGG19</span><span class="p">,</span> <span class="n">preprocess_input</span><span class="p">,</span> <span class="n">decode_predictions</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing</span> <span class="kn">import</span> <span class="n">image</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">import</span> <span class="nn">shap</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tensorflow version </span><span class="si">{</span><span class="n">tf</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2"> Shap version </span><span class="si">{</span><span class="n">shap</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tensorflow version 2.9.1 Shap version 0.41.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow.compat.v1.keras.backend</span> <span class="k">as</span> <span class="nn">K</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">disable_eager_execution</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Disable Eager Execution for SHAP to work&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Disable Eager Execution for SHAP to work
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="using-gradient-explainers-in-shap">
+<h2>Using Gradient Explainers in SHAP<a class="headerlink" href="#using-gradient-explainers-in-shap" title="Permalink to this heading"></a></h2>
+<section id="loading-the-dataset">
+<h3>Loading the dataset<a class="headerlink" href="#loading-the-dataset" title="Permalink to this heading"></a></h3>
+<p>We will choose an image from SHAP datasets.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">imagenet50</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="mi">224</span><span class="p">)</span>
+<span class="n">inference_image</span> <span class="o">=</span> <span class="n">X</span><span class="p">[[</span><span class="mi">46</span><span class="p">]]</span> 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="loading-the-model">
+<h3>Loading the model<a class="headerlink" href="#loading-the-model" title="Permalink to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">VGG19</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">)</span> <span class="c1"># Let&#39;s use VGG19 as our model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-10-12 16:12:12.670993: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+
+User settings:
+
+   KMP_AFFINITY=granularity=fine,verbose,compact,1,0
+   KMP_BLOCKTIME=1
+   KMP_DUPLICATE_LIB_OK=True
+   KMP_INIT_AT_FORK=FALSE
+   KMP_SETTINGS=1
+   KMP_WARNINGS=0
+
+Effective settings:
+
+   KMP_ABORT_DELAY=0
+   KMP_ADAPTIVE_LOCK_PROPS=&#39;1,1024&#39;
+   KMP_ALIGN_ALLOC=64
+   KMP_ALL_THREADPRIVATE=768
+   KMP_ATOMIC_MODE=2
+   KMP_BLOCKTIME=1
+   KMP_CPUINFO_FILE: value is not defined
+   KMP_DETERMINISTIC_REDUCTION=false
+   KMP_DEVICE_THREAD_LIMIT=2147483647
+   KMP_DISP_NUM_BUFFERS=7
+   KMP_DUPLICATE_LIB_OK=true
+   KMP_ENABLE_TASK_THROTTLING=true
+   KMP_FORCE_REDUCTION: value is not defined
+   KMP_FOREIGN_THREADS_THREADPRIVATE=true
+   KMP_FORKJOIN_BARRIER=&#39;2,2&#39;
+   KMP_FORKJOIN_BARRIER_PATTERN=&#39;hyper,hyper&#39;
+   KMP_GTID_MODE=3
+   KMP_HANDLE_SIGNALS=false
+   KMP_HOT_TEAMS_MAX_LEVEL=1
+   KMP_HOT_TEAMS_MODE=0
+   KMP_INIT_AT_FORK=true
+   KMP_LIBRARY=throughput
+   KMP_LOCK_KIND=queuing
+   KMP_MALLOC_POOL_INCR=1M
+   KMP_NUM_LOCKS_IN_BLOCK=1
+   KMP_PLAIN_BARRIER=&#39;2,2&#39;
+   KMP_PLAIN_BARRIER_PATTERN=&#39;hyper,hyper&#39;
+   KMP_REDUCTION_BARRIER=&#39;1,1&#39;
+   KMP_REDUCTION_BARRIER_PATTERN=&#39;hyper,hyper&#39;
+   KMP_SCHEDULE=&#39;static,balanced;guided,iterative&#39;
+   KMP_SETTINGS=true
+   KMP_SPIN_BACKOFF_PARAMS=&#39;4096,100&#39;
+   KMP_STACKOFFSET=64
+   KMP_STACKPAD=0
+   KMP_STACKSIZE=8M
+   KMP_STORAGE_MAP=false
+   KMP_TASKING=2
+   KMP_TASKLOOP_MIN_TASKS=0
+   KMP_TASK_STEALING_CONSTRAINT=1
+   KMP_TEAMS_THREAD_LIMIT=192
+   KMP_TOPOLOGY_METHOD=all
+   KMP_USE_YIELD=1
+   KMP_VERSION=false
+   KMP_WARNINGS=false
+   OMP_AFFINITY_FORMAT=&#39;OMP: pid %P tid %i thread %n bound to OS proc set {%A}&#39;
+   OMP_ALLOCATOR=omp_default_mem_alloc
+   OMP_CANCELLATION=false
+   OMP_DEFAULT_DEVICE=0
+   OMP_DISPLAY_AFFINITY=false
+   OMP_DISPLAY_ENV=false
+   OMP_DYNAMIC=false
+   OMP_MAX_ACTIVE_LEVELS=1
+   OMP_MAX_TASK_PRIORITY=0
+   OMP_NESTED: deprecated; max-active-levels-var=1
+   OMP_NUM_THREADS: value is not defined
+   OMP_PLACES: value is not defined
+   OMP_PROC_BIND=&#39;intel&#39;
+   OMP_SCHEDULE=&#39;static&#39;
+   OMP_STACKSIZE=8M
+   OMP_TARGET_OFFLOAD=DEFAULT
+   OMP_THREAD_LIMIT=2147483647
+   OMP_WAIT_POLICY=PASSIVE
+   KMP_AFFINITY=&#39;verbose,warnings,respect,granularity=fine,compact,1,0&#39;
+
+2022-10-12 16:12:12.682161: I tensorflow/core/common_runtime/process_util.cc:146] Creating new thread pool with default inter op setting: 
+2022-10-12 16:12:12.694158: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:354] MLIR V1 optimization pass is not enabled
+</pre></div>
+</div>
+</div>
+</div>
+<p>Gradient explainer helps to map the gradient flow of intermediate layers of a Deep Learning model to explain the working of the model. Let’s choose layer 10 for this example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">layer_num</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># Let&#39;s analyze the 10th layer</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># explain how the input to the 10th layer of the model explains the top two classes</span>
+<span class="k">def</span> <span class="nf">map2layer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Source : https://github.com/slundberg/shap</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">feed_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">input</span><span class="p">],</span> <span class="p">[</span><span class="n">preprocess_input</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">())]))</span>
+    <span class="k">return</span> <span class="n">K</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="shap-explainability">
+<h3>SHAP Explainability<a class="headerlink" href="#shap-explainability" title="Permalink to this heading"></a></h3>
+<section id="id1">
+<h4>** optimized **<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># kernel: xai-oneapi-aikit</span>
+<span class="c1"># intel-python,  intel-tensorflow, numba-dpex, dpctl</span>
+<span class="n">model_input</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">layer_num</span><span class="p">]</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+<span class="n">pstats</span> <span class="o">=</span> <span class="n">metrics_explainer</span><span class="p">[</span><span class="s1">&#39;pstats&#39;</span><span class="p">](</span><span class="s1">&#39;explainer = shap.GradientExplainer(model_input, map2layer(X, layer_num), local_smoothing=0)&#39;</span><span class="p">)</span>
+<span class="n">pstats</span><span class="o">.</span><span class="n">summary</span>
+<span class="n">pstats</span><span class="o">.</span><span class="n">report</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:tensorflow:From /tmp/ipykernel_410087/1444819054.py:7: The name tf.keras.backend.get_session is deprecated. Please use tf.compat.v1.keras.backend.get_session instead.
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>function calls</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1670988</td>
+      <td>2.108</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ncalls</th>
+      <th>tottime</th>
+      <th>percall</th>
+      <th>cumtime</th>
+      <th>percall</th>
+      <th>filename:lineno(function)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>1.296</td>
+      <td>1.296</td>
+      <td>1.296</td>
+      <td>1.296</td>
+      <td>method tensorflow.python.client._pywrap_tf_ses...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>69761</td>
+      <td>0.113</td>
+      <td>0.000</td>
+      <td>0.113</td>
+      <td>0.000</td>
+      <td>method posix.lstat}</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>69767</td>
+      <td>0.088</td>
+      <td>0.000</td>
+      <td>0.141</td>
+      <td>0.000</td>
+      <td>posixpath.py:71(join)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>80</td>
+      <td>0.085</td>
+      <td>0.001</td>
+      <td>0.775</td>
+      <td>0.010</td>
+      <td>inspect.py:727(getmodule)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5508</td>
+      <td>0.076</td>
+      <td>0.000</td>
+      <td>0.397</td>
+      <td>0.000</td>
+      <td>posixpath.py:397(_joinrealpath)</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>337</th>
+      <td>1</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>object_identity.py:106(deref)</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td>1</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>'__enter__' of '_thread.lock' objects}</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td></td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td></td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td></td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
+<p>342 rows × 6 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%%script false --no-raise-error</span>
+<span class="c1"># kernel: xai-oneapi-aikit</span>
+<span class="c1"># intel-python,  intel-tensorflow, numba-dpex, dpctl</span>
+<span class="c1"># pstats = metrics_explainer[&#39;pstats&#39;](&#39;shap_values, ind = explainer.shap_values(map2layer(inference_image, layer_num), ranked_outputs=4)&#39;)</span>
+<span class="c1"># pstats.summary</span>
+<span class="c1"># pstats.report</span>
+<span class="n">shap_values</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">map2layer</span><span class="p">(</span><span class="n">inference_image</span><span class="p">,</span> <span class="n">layer_num</span><span class="p">),</span> <span class="n">ranked_outputs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the ImageNet class names</span>
+<span class="k">def</span> <span class="nf">load_imagenet_classes</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+    <span class="kn">import</span> <span class="nn">json</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">json_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span>    
+    <span class="n">class_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">classes</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)][</span><span class="mi">1</span><span class="p">])(</span><span class="n">ind</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">classes</span><span class="p">,</span> <span class="n">class_names</span>
+
+<span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://raw.githubusercontent.com/WZMIAOMIAO/deep-learning-for-image-processing/master/pytorch_classification/mini_imagenet/imagenet_class_index.json&#39;</span>
+<span class="n">imagenet_classes</span><span class="p">,</span> <span class="n">class_names</span> <span class="o">=</span> <span class="n">load_imagenet_classes</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot the explanations</span>
+<span class="n">shap</span><span class="o">.</span><span class="n">image_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">inference_image</span><span class="p">,</span> <span class="n">class_names</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+</pre></div>
+</div>
+<img alt="../../_images/21e5f755a5bcf0e8dcf4109d4b86030d20b401a0c9b7e71263a635eba217f51e.png" src="../../_images/21e5f755a5bcf0e8dcf4109d4b86030d20b401a0c9b7e71263a635eba217f51e.png" />
+</div>
+</div>
+<p>From the above image, we can clearly see that based on the regions highlighted by the SHAP values how the model prediction is changing. When the model predicted the outcome as desktop computer, the region around the computer monitor keyboard and the desk got highlighted. Please observe that the man in the picture did not get highlighted. That is why the model did not predict the outcome as a man or human-being. Similarly, if you see that other possible predictions of desk monitor and screen, accordingly the different regions of the images are highlighted. This does provide a good explanation for the model outcome.</p>
+</section>
+</section>
+</section>
+<section id="using-deep-explainers-in-shap">
+<h2>Using Deep Explainers in SHAP<a class="headerlink" href="#using-deep-explainers-in-shap" title="Permalink to this heading"></a></h2>
+<p>Now, let’s use Deep Explainers in SHAP for Deep Learning models. But let’s train a model from scratch in this example, instead of using pre-trained model architectures.</p>
+<section id="reloading-the-modules-for-this-new-section">
+<h3>Reloading the modules for this new section.<a class="headerlink" href="#reloading-the-modules-for-this-new-section" title="Permalink to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# load package
+import shap
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+import matplotlib.pyplot as plt
+from keras.models import Sequential
+from keras import Input
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+import cv2
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="preparing-the-data">
+<h3>Preparing the data<a class="headerlink" href="#preparing-the-data" title="Permalink to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+(x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+x_train = x_train.reshape(50000, 32, 32, 3).astype(&quot;float32&quot;) / 255
+x_test = x_test.reshape(10000, 32, 32, 3).astype(&quot;float32&quot;) / 255
+y_train = y_train.reshape(50000,)
+y_test = y_test.reshape(10000,)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-the-model">
+<h3>Define the model<a class="headerlink" href="#define-the-model" title="Permalink to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# define the model architecture
+inputs = Input(shape=(32, 32, 3))
+x = Conv2D(32, (3, 3), activation=&#39;relu&#39;)(inputs)
+x = MaxPooling2D((2, 2))(x)
+x = Conv2D(128, (3, 3), activation=&#39;relu&#39;)(inputs)
+x = MaxPooling2D((2, 2))(x)
+x = Conv2D(64, (3, 3), activation=&#39;relu&#39;)(inputs)
+x = MaxPooling2D((2, 2))(x)
+x = Conv2D(32, (3, 3), activation=&#39;relu&#39;)(inputs)
+x = MaxPooling2D((2, 2))(x)
+x = Flatten()(x)
+x = Dense(256, activation=&#39;relu&#39;)(x)
+x = Dense(64, activation=&#39;relu&#39;)(x)
+outputs = keras.layers.Dense(10, activation=&#39;softmax&#39;)(x)
+
+model = keras.Model(inputs=inputs, outputs=outputs)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# compile the model
+model.compile(
+      loss= &#39;sparse_categorical_crossentropy&#39;,
+      optimizer= &#39;Adam&#39;,
+      metrics=[&#39;sparse_categorical_accuracy&#39;]
+  )
+model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs = 15)
+</pre></div>
+</div>
+</div>
+</div>
+<p>From the model scores, we can see that our model has a good training accuracy, but not so good validation accuracy, indicating that the model is clearly over-fitting</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+model.save(&#39;models/convo_model&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+reconstructed_model = keras.models.load_model(&quot;models/convo_model&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# Classes in CIFAR-10 data
+class_names = [&#39;airplane&#39;, &#39;automobile&#39;, &#39;bird&#39;, &#39;cat&#39;, &#39;deer&#39;, &#39;dog&#39;, &#39;frog&#39;, &#39;horse&#39;, &#39;ship&#39;, &#39;truck&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# Source : https://towardsdatascience.com/deep-learning-model-interpretation-using-shap-a21786e91d16
+# Fetching an image for each of CIFAR-10 class
+images_dict = dict()
+for ind, label in enumerate(y_train):
+    if len(images_dict)==10:
+        break
+    if label not in images_dict.keys():
+        images_dict[label] = x_train[ind].reshape((32, 32,3))
+images_dict = dict(sorted(images_dict.items()))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# Fetching an image for each of CIFAR-10 class for test set
+x_test_dict = dict()
+for ind, label in enumerate(y_test):
+    if len(x_test_dict)==10:
+        break
+    if label not in x_test_dict.keys():
+        x_test_dict[label] = x_test[ind]
+
+# sorting
+sample_x_test = [x_test_dict[i] for i in sorted(x_test_dict)]
+sample_x_test = np.asarray(sample_x_test)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# Checking the predictions
+predictions = model.predict(sample_x_test)
+predicted_class = np.argmax(predictions, axis=1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+confusionmatrix = metrics_explainer[&#39;confusionmatrix&#39;]
+confusionmatrix.__doc__
+#confusionmatrix(sample_x_text, predictions, class_names)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# Source : https://towardsdatascience.com/deep-learning-model-interpretation-using-shap-a21786e91d16
+# plot actual and predicted class
+def plot_actual_predicted(images, pred_classes):
+    fig, axes = plt.subplots(2, 5, figsize=(16, 6))
+    fig.tight_layout()
+    axes = axes.flatten()
+    ax = axes[0]
+    # plot image
+    for k,v in images.items():
+        ax = axes[k]
+        ax.imshow(cv2.resize(v, (512,512)), cmap=plt.cm.binary)
+        ax.set_title(f&quot;Original: %s \nPredicted: %s&quot; % (class_names[k], class_names[pred_classes[k]]))
+        ax.set_axis_off()
+    plt.tight_layout()
+    plt.show()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+plot_actual_predicted(images_dict, predicted_class)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h3>SHAP Explainability<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<p>Now, we will use SHAP Deep Explainers to explain our model. First we will need to create a background set for SHAP and then compute Shapley values using Deep SHAP and visualize the same.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# Setting the backgroud for shap
+background = x_train[np.random.choice(len(x_train), 1000, replace=False)]
+
+# DeepExplainer to explain predictions of the model
+explainer = shap.DeepExplainer(model, background)
+
+# Computing the shap values
+shap_values = explainer.shap_values(sample_x_test)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+# Prepare the labels for display
+labels = []
+for i in range(10):
+    labels.append(class_names)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> false --no-raise-error
+
+plt.figure(figsize=(16, 12))
+shap.image_plot(shap_values, sample_x_test, labels, labelpad=2)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="final-thoughts">
+<h2>Final Thoughts<a class="headerlink" href="#final-thoughts" title="Permalink to this heading"></a></h2>
+<p>It was interesting to see how regions highlighted by SHAP values in red was actually related to the prediction class. I recommend looking at other tutorial examples provided by SHAP at <a class="reference external" href="https://github.com/slundberg/shap/tree/master/notebooks/image_examples">https://github.com/slundberg/shap/tree/master/notebooks/image_examples</a> and <a class="reference external" href="https://github.com/slundberg/shap/tree/master/notebooks/text_examples">https://github.com/slundberg/shap/tree/master/notebooks/text_examples</a> for applying SHAP with deep learning models trained on image and text data.</p>
+</section>
+<section id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>SHAP GitHub Project - <a class="reference external" href="https://github.com/slundberg/shap">https://github.com/slundberg/shap</a></p></li>
+<li><p>SHAP Documentations - <a class="reference external" href="https://shap.readthedocs.io/en/latest/index.html">https://shap.readthedocs.io/en/latest/index.html</a></p></li>
+<li><p>SHAP Image Explainers - <a class="reference external" href="https://github.com/slundberg/shap/tree/master/notebooks/image_examples/image_classification">https://github.com/slundberg/shap/tree/master/notebooks/image_examples/image_classification</a></p></li>
+<li><p>DeepExplainer Reference - “Deep Learning Model Interpretation Using SHAP” - <a class="reference external" href="https://towardsdatascience.com/deep-learning-model-interpretation-using-shap-a21786e91d16">https://towardsdatascience.com/deep-learning-model-interpretation-using-shap-a21786e91d16</a></p></li>
+<li><p>Some of the utility functions and code are taken from the GitHub Repository of the author - Aditya Bhattacharya <a class="reference external" href="https://github.com/adib0073">https://github.com/adib0073</a></p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="partitionexplainer.html" class="btn btn-neutral float-right" title="Explaining Text Classification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

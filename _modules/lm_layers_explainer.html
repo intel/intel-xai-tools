@@ -10,6 +10,7 @@
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -57,7 +58,6 @@
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
 </ul>
 
         </div>
@@ -85,71 +85,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for lm_layers_explainer</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">lm_layers_explainer plugin</span>
-<span class="sd">============================</span>
-
-<span class="sd">This plugin provides a set of functions to explore, visualize and interact with </span>
-<span class="sd">transformer based language models. These transformer models can be causal language models (clm), </span>
-<span class="sd">masked language models (mlm) or encoder-decoder language models (enc-dec).</span>
-<span class="sd">The functions within this plugin do not do any fine-tuning of the underlying transformer model, </span>
-<span class="sd">rather provide methods to:</span>
-
-<span class="sd">- explain individual predictions by visualizing input token importance</span>
-<span class="sd">- explain hidden state contributions and evolution across model layers</span>
-<span class="sd">- visualize sequence embeddings </span>
-<span class="sd">- visualize attention heads within the self-attention layer</span>
-
-
-<span class="sd">Algorithms</span>
-<span class="sd">----------</span>
-
-<span class="sd">Transformer based language models take words as input, turn them into tokens </span>
-<span class="sd">and provide numeric scores for each token in the model&#39;s vocabulary. </span>
-<span class="sd">A model&#39;s final layer, called the softmax layer, provides a probability score </span>
-<span class="sd">for each token. Transformer based architectures are comprised of 2 major layers:</span>
-<span class="sd">- the self-attention layer</span>
-<span class="sd">- the feed forward neural network layer</span>
-
-
-<span class="sd">Environment</span>
-<span class="sd">-----------</span>
-<span class="sd">- jupyter notebooks</span>
-
-
-<span class="sd">XAI Methods</span>
-<span class="sd">-----------</span>
-<span class="sd">- Gradient saliency</span>
-<span class="sd">- Input X Gradient saliency</span>
-<span class="sd">- Integrated Gradients</span>
-<span class="sd">- DeepLift</span>
-<span class="sd">- DeepLife with SHAP</span>
-<span class="sd">- Guided Backpropagation</span>
-<span class="sd">- Guided GradCam</span>
-<span class="sd">- Deconvolution</span>
-<span class="sd">- Layer-wise Relevance Propagation</span>
-<span class="sd">- Gradient-Based Saliency</span>
-
-
-<span class="sd">Toolkits</span>
-<span class="sd">--------</span>
-<span class="sd">- ecco</span>
-<span class="sd">- bertviz</span>
-
-
-<span class="sd">References</span>
-<span class="sd">----------</span>
-<span class="sd">[Visualize BERT sequence embeddings: An unseen way](https://towardsdatascience.com/visualize-bert-sequence-embeddings-an-unseen-way-1d6a351e4568)</span>
-<span class="sd">[Visualize attention in NLP Models](https://github.com/jessevig/bertviz)</span>
-<span class="sd">[Interfaces for Explaining Transformer Language Models](https://jalammar.github.io/explaining-transformers/)</span>
-<span class="sd">[Attention is not not Explanation](https://arxiv.org/pdf/1908.04626.pdf?ref=morioh.com&amp;utm_source=morioh.com)</span>
-<span class="sd">[Attention is not Explanation](https://arxiv.org/abs/1902.10186?ref=morioh.com&amp;utm_source=morioh.com)</span>
-<span class="sd">[Attention Interpretability Across NLP Tasks](https://arxiv.org/pdf/1909.11218.pdf?ref=morioh.com&amp;utm_source=morioh.com)</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="k">class</span> <span class="nc">Layer</span><span class="p">:</span>
+<span></span><span class="k">class</span> <span class="nc">Layer</span><span class="p">:</span>
   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">ecco</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lm</span> <span class="o">=</span> <span class="n">ecco</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">activations</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -202,7 +138,7 @@
       <span class="n">decoder_tokens</span><span class="o">=</span><span class="n">decoder_text</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="activations"><a class="viewcode-back" href="../explainer/plugins.html#lm_layers_explainer.activations">[docs]</a><span class="k">def</span> <span class="nf">activations</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="activations"><a class="viewcode-back" href="../explainer/lm_layers_explainer.html#lm_layers_explainer.activations">[docs]</a><span class="k">def</span> <span class="nf">activations</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">     Provides visuals into what layers are activating tokens within the text segment</span>
 
@@ -215,7 +151,7 @@
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="k">return</span> <span class="n">Activations</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="attention_head_view"><a class="viewcode-back" href="../explainer/plugins.html#lm_layers_explainer.attention_head_view">[docs]</a><span class="k">def</span> <span class="nf">attention_head_view</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="attention_head_view"><a class="viewcode-back" href="../explainer/lm_layers_explainer.html#lm_layers_explainer.attention_head_view">[docs]</a><span class="k">def</span> <span class="nf">attention_head_view</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">     visualize attention importance within one or more attention head layers</span>
 <span class="sd"> </span>
@@ -236,7 +172,7 @@
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="k">return</span> <span class="n">AttentionHeadView</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="attention_model_view"><a class="viewcode-back" href="../explainer/plugins.html#lm_layers_explainer.attention_model_view">[docs]</a><span class="k">def</span> <span class="nf">attention_model_view</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="attention_model_view"><a class="viewcode-back" href="../explainer/lm_layers_explainer.html#lm_layers_explainer.attention_model_view">[docs]</a><span class="k">def</span> <span class="nf">attention_model_view</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">     shows token importance within the self-attention model view</span>
 
@@ -249,7 +185,7 @@
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="k">return</span> <span class="n">AttentionModelView</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="attention_neuron_view"><a class="viewcode-back" href="../explainer/plugins.html#lm_layers_explainer.attention_neuron_view">[docs]</a><span class="k">def</span> <span class="nf">attention_neuron_view</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="attention_neuron_view"><a class="viewcode-back" href="../explainer/lm_layers_explainer.html#lm_layers_explainer.attention_neuron_view">[docs]</a><span class="k">def</span> <span class="nf">attention_neuron_view</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">     shows token importance within the self-attention neuron view</span>
 

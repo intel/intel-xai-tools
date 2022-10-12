@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plugins &mdash; Explainer</title>
+  <title>Explainers &mdash; Explainer</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -36,7 +36,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Examples" href="examples/index.html" />
+    <link rel="next" title="Feature Attributions" href="feature_attributions_explainer.html" />
     <link rel="prev" title="Explainer" href="index.html" /> 
 </head>
 
@@ -61,14 +61,19 @@
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Explainer</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Plugins</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html">CLI Reference</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Explainers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="feature_attributions_explainer.html">Feature Attributions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lm_layers_explainer.html">Language Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metrics_explainer.html">Metrics</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html">CLI Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bibliography/index.html">Bibliography</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -86,7 +91,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Explainer</a> &raquo;</li>
-      <li>Plugins</li>
+      <li>Explainers</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/explainer/plugins.md" rel="nofollow"> View page source</a>
       </li>
@@ -96,285 +101,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section class="tex2jax_ignore mathjax_ignore" id="plugins">
-<span id="id1"></span><h1 class="sd-d-none">Plugins<a class="headerlink" href="#plugins" title="Permalink to this heading"></a></h1>
-<p>“</p>
-<section id="feature-attributions-explainer-plugin">
-<h2>feature-attributions-explainer plugin<a class="headerlink" href="#feature-attributions-explainer-plugin" title="Permalink to this heading"></a></h2>
-<p>This plugin provides a set of functions to explore visualize and understand their model’s features.
-This plugin currently utilizes SHAP (SHapley Additive exPlanations) which is an approach to
-explain the output of any machine learning model. Feature Attributions are an approach to
-explaining a model’s predictions based on how the model has weighted features it’s been trained on.</p>
-<section id="algorithm">
-<h3>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this heading"></a></h3>
-<p>Determining feature importance within a model is done by utilizing the SHAP package.
-Shap accepts black box models and provides explanations through a game theoretic approach.</p>
-</section>
-<section id="environment">
-<h3>Environment<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>Jupyter Notebooks</p></li>
-</ul>
-</section>
-<section id="xai-methods">
-<h3>XAI Methods<a class="headerlink" href="#xai-methods" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>Shap Explainers
-- Deep Explainer - provides explanations on Deep Learning models
-- Gradient Explainer
-- Kernel Explainer
-- Partition Explainer
-- Zero Shot Explainer</p></li>
-<li><p>To Be Added:</p></li>
-<li><p>Captum
-- Integrated Gradients
-- Deep Lift</p></li>
-</ul>
-</section>
-<section id="toolkits">
-<h3>Toolkits<a class="headerlink" href="#toolkits" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>Shap</p></li>
-<li><p>To Be Added:</p></li>
-<li><p>Captum</p></li>
-</ul>
-<p class="rubric">References</p>
-<p>[SHAP](<a class="reference external" href="https://github.com/slundberg/shap">https://github.com/slundberg/shap</a>)
-[Captum](<a class="reference external" href="https://github.com/pytorch/captum">https://github.com/pytorch/captum</a>)</p>
-</section>
-</section>
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">deep_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backgroundImages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetImages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#deep_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Returns a SHAP DeepExplainer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> – model</p></li>
-<li><p><strong>backgroundImages</strong> – list</p></li>
-<li><p><strong>targetImages</strong> – list</p></li>
-<li><p><strong>labels</strong> – list</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>DeepExplainer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">deeplift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#deeplift"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Returns a Captum DeepLift</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> – model</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>captum.attr.DeepLift</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">gradient_explainer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#gradient_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Sets up a SHAP GradientExplainer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>GradientExplainer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">integratedgradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#integratedgradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Returns a Captum IntegratedGradients</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> – model</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>captum.attr.IntegratedGradients</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">kernel_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#kernel_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Returns a SHAP KernelExplainer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> – model</p></li>
-<li><p><strong>data</strong> – dataframe</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>KernelExplainer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">partition_explainer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#partition_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Sets up a SHAP PartitionExplainer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>PartitionExplainer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<section id="lm-layers-explainer-plugin">
-<h2>lm_layers_explainer plugin<a class="headerlink" href="#lm-layers-explainer-plugin" title="Permalink to this heading"></a></h2>
-<p>This plugin provides a set of functions to explore, visualize and interact with
-transformer based language models. These transformer models can be causal language models (clm),
-masked language models (mlm) or encoder-decoder language models (enc-dec).
-The functions within this plugin do not do any fine-tuning of the underlying transformer model,
-rather provide methods to:</p>
-<ul class="simple">
-<li><p>explain individual predictions by visualizing input token importance</p></li>
-<li><p>explain hidden state contributions and evolution across model layers</p></li>
-<li><p>visualize sequence embeddings</p></li>
-<li><p>visualize attention heads within the self-attention layer</p></li>
-</ul>
-<section id="algorithms">
-<h3>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this heading"></a></h3>
-<p>Transformer based language models take words as input, turn them into tokens
-and provide numeric scores for each token in the model’s vocabulary.
-A model’s final layer, called the softmax layer, provides a probability score
-for each token. Transformer based architectures are comprised of 2 major layers:
-- the self-attention layer
-- the feed forward neural network layer</p>
-</section>
-<section id="id1">
-<h3>Environment<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>jupyter notebooks</p></li>
-</ul>
-</section>
-<section id="id2">
-<h3>XAI Methods<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>Gradient saliency</p></li>
-<li><p>Input X Gradient saliency</p></li>
-<li><p>Integrated Gradients</p></li>
-<li><p>DeepLift</p></li>
-<li><p>DeepLife with SHAP</p></li>
-<li><p>Guided Backpropagation</p></li>
-<li><p>Guided GradCam</p></li>
-<li><p>Deconvolution</p></li>
-<li><p>Layer-wise Relevance Propagation</p></li>
-<li><p>Gradient-Based Saliency</p></li>
-</ul>
-</section>
-<section id="id3">
-<h3>Toolkits<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>ecco</p></li>
-<li><p>bertviz</p></li>
-</ul>
-<p class="rubric">References</p>
-<p>[Visualize BERT sequence embeddings: An unseen way](<a class="reference external" href="https://towardsdatascience.com/visualize-bert-sequence-embeddings-an-unseen-way-1d6a351e4568">https://towardsdatascience.com/visualize-bert-sequence-embeddings-an-unseen-way-1d6a351e4568</a>)
-[Visualize attention in NLP Models](<a class="reference external" href="https://github.com/jessevig/bertviz">https://github.com/jessevig/bertviz</a>)
-[Interfaces for Explaining Transformer Language Models](<a class="reference external" href="https://jalammar.github.io/explaining-transformers/">https://jalammar.github.io/explaining-transformers/</a>)
-[Attention is not not Explanation](<a class="reference external" href="https://arxiv.org/pdf/1908.04626.pdf?ref=morioh.com&amp;utm_source=morioh.com">https://arxiv.org/pdf/1908.04626.pdf?ref=morioh.com&amp;utm_source=morioh.com</a>)
-[Attention is not Explanation](<a class="reference external" href="https://arxiv.org/abs/1902.10186?ref=morioh.com&amp;utm_source=morioh.com">https://arxiv.org/abs/1902.10186?ref=morioh.com&amp;utm_source=morioh.com</a>)
-[Attention Interpretability Across NLP Tasks](<a class="reference external" href="https://arxiv.org/pdf/1909.11218.pdf?ref=morioh.com&amp;utm_source=morioh.com">https://arxiv.org/pdf/1909.11218.pdf?ref=morioh.com&amp;utm_source=morioh.com</a>)</p>
-</section>
-</section>
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">activations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lm_layers_explainer.html#activations"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Provides visuals into what layers are activating tokens within the text segment</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>pytorch</em>) – large language model such as bert, gpt-2</p></li>
-<li><p><strong>text</strong> (<em>str</em>) – input text that is given to the model tokenizer</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>this class shows activations within the model layers</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>LayerActivations</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">attention_head_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lm_layers_explainer.html#attention_head_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>visualize attention importance within one or more attention head layers</p>
-<p>Usage:
-- Hover over any token on the left/right side of the visualization to filter attention from/to that token. The colors correspond to different attention heads.
-- Double-click on any of the colored tiles at the top to filter to the corresponding attention head.
-- Single-click on any of the colored tiles to toggle selection of the corresponding attention head.
-- Click on the Layer drop-down to change the model layer (zero-indexed).
-- The lines show the attention from each token (left) to every other token (right). Darker lines indicate higher attention weights.
-- When multiple heads are selected, the attention weights are overlaid on one another.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>pytorch</em>) – large language model such as bert, gpt-2</p></li>
-<li><p><strong>text</strong> (<em>str</em>) – input text that is given to the model tokenizer</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>this class shows activations within the model layers</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Activations</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">attention_model_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lm_layers_explainer.html#attention_model_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>shows token importance within the self-attention model view</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>pytorch</em>) – large language model such as bert, gpt-2</p></li>
-<li><p><strong>text</strong> (<em>str</em>) – input text that is given to the model tokenizer</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>this class shows activations within the model layers</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Activations</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">attention_neuron_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lm_layers_explainer.html#attention_neuron_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>shows token importance within the self-attention neuron view</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>pytorch</em>) – large language model such as bert, gpt-2</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>this class shows attention heads within the model layers</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Activations</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>Reference:</dt><dd><p><a class="reference external" href="https://github.com/jessevig/bertviz/blob/master/notebooks/neuron_view_bert.ipynb">https://github.com/jessevig/bertviz/blob/master/notebooks/neuron_view_bert.ipynb</a></p>
-</dd>
-</dl>
-</dd></dl>
-
+  <section class="tex2jax_ignore mathjax_ignore" id="explainers">
+<h1>Explainers<a class="headerlink" href="#explainers" title="Permalink to this heading"></a></h1>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-3 sd-row-cols-xs-3 sd-row-cols-sm-3 sd-row-cols-md-3 sd-row-cols-lg-3 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Feature Attributions</div>
+</div>
+<a class="sd-stretched-link reference external" href="/explainer/feature_attributions_explainer.html#feature-attributions-explainer"></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Language Models</div>
+</div>
+<a class="sd-stretched-link reference external" href="/explainer/lm_layers_explainer.html#language-model-explainer"></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Metrics</div>
+</div>
+<a class="sd-stretched-link reference external" href="/explainer/metrics_explainer.html#metrics-explainer"></a></div>
+</div>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 
 
@@ -382,7 +140,7 @@ for each token. Transformer based architectures are comprised of 2 major layers:
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Explainer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="feature_attributions_explainer.html" class="btn btn-neutral float-right" title="Feature Attributions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,15 +1,25 @@
 ---
-sd_hide_title: true
----
-(plugins)=
-# Plugins
+file_format: mystnb
+kernelspec:
+  name: xai-oneapi-aikit
+--- 
+# Explainers
 
+````{grid} 3
 
-```{eval-rst}
-.. automodule:: feature_attributions_explainer
-   :noindex:
-   :members:
-.. automodule:: lm_layers_explainer
-   :noindex:
-   :members:
+```{grid-item-card} Feature Attributions
+:text-align: center
+:link: /explainer/feature_attributions_explainer.html#feature-attributions-explainer
 ```
+
+```{grid-item-card}  Language Models
+:text-align: center
+:link: /explainer/lm_layers_explainer.html#language-model-explainer
+```
+
+```{grid-item-card}  Metrics
+:text-align: center
+:link: /explainer/metrics_explainer.html#metrics-explainer
+```
+
+````

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Language Models &mdash; Explainer</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Metrics" href="metrics_explainer.html" />
+    <link rel="prev" title="Feature Attributions" href="feature_attributions_explainer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Intel® Explainable AI Tools
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Explainer</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="categories.html">Explainers</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="feature_attributions_explainer.html">Feature Attributions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Language Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metrics_explainer.html">Metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html">CLI Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bibliography/index.html">Bibliography</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Explainer</a> &raquo;</li>
+          <li><a href="categories.html">Explainers</a> &raquo;</li>
+      <li>Language Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/explainer/lm_layers_explainer.md" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="language-models">
+<h1>Language Models<a class="headerlink" href="#language-models" title="Permalink to this heading"></a></h1>
+<div class="cell tag_remove-input docutils container">
+</div>
+<p>This plugin provides a set of functions to explore, visualize and interact with
+transformer based language models. These transformer models can be causal language models (clm),
+masked language models (mlm) or encoder-decoder language models (enc-dec).
+The functions within this plugin do not do any fine-tuning of the underlying transformer model,
+rather provide methods to:</p>
+<ul class="simple">
+<li><p>explain individual predictions by visualizing input token importance</p></li>
+<li><p>explain hidden state contributions and evolution across model layers</p></li>
+<li><p>visualize sequence embeddings</p></li>
+<li><p>visualize attention heads within the self-attention layer</p></li>
+</ul>
+<section id="algorithms">
+<h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this heading"></a></h2>
+<p>Transformer based language models take words as input, turn them into tokens
+and provide numeric scores for each token in the model’s vocabulary.
+A model’s final layer, called the softmax layer, provides a probability score
+for each token. Transformer based architectures are comprised of 2 major layers:</p>
+<ul class="simple">
+<li><p>the self-attention layer</p></li>
+<li><p>the feed forward neural network layer</p></li>
+</ul>
+</section>
+<section id="environment">
+<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>jupyter notebooks</p></li>
+</ul>
+</section>
+<section id="xai-methods">
+<h2>XAI Methods<a class="headerlink" href="#xai-methods" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Gradient saliency</p></li>
+<li><p>Input X Gradient saliency</p></li>
+<li><p>Integrated Gradients</p></li>
+<li><p>DeepLift</p></li>
+<li><p>DeepLife with SHAP</p></li>
+<li><p>Guided Backpropagation</p></li>
+<li><p>Guided GradCam</p></li>
+<li><p>Deconvolution</p></li>
+<li><p>Layer-wise Relevance Propagation</p></li>
+<li><p>Gradient-Based Saliency</p></li>
+</ul>
+</section>
+<section id="toolkits">
+<h2>Toolkits<a class="headerlink" href="#toolkits" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>ecco</p></li>
+<li><p>bertviz</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/visualize-bert-sequence-embeddings-an-unseen-way-1d6a351e4568">Visualize BERT sequence embeddings: An unseen way</a></p></li>
+<li><p><a class="reference external" href="https://github.com/jessevig/bertviz">Visualize attention in NLP Models</a></p></li>
+<li><p><a class="reference external" href="https://jalammar.github.io/explaining-transformers/">Interfaces for Explaining Transformer Language Models</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/pdf/1908.04626.pdf?ref=morioh.com&amp;utm_source=morioh.com">Attention is not not Explanation</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1902.10186?ref=morioh.com&amp;utm_source=morioh.com">Attention is not Explanation</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/pdf/1909.11218.pdf?ref=morioh.com&amp;utm_source=morioh.com">Attention Interpretability Across NLP Tasks</a></p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">activations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lm_layers_explainer.html#activations"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Provides visuals into what layers are activating tokens within the text segment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>pytorch</em>) – large language model such as bert, gpt-2</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – input text that is given to the model tokenizer</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>this class shows activations within the model layers</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>LayerActivations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">attention_head_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lm_layers_explainer.html#attention_head_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>visualize attention importance within one or more attention head layers</p>
+<p>Usage:
+- Hover over any token on the left/right side of the visualization to filter attention from/to that token. The colors correspond to different attention heads.
+- Double-click on any of the colored tiles at the top to filter to the corresponding attention head.
+- Single-click on any of the colored tiles to toggle selection of the corresponding attention head.
+- Click on the Layer drop-down to change the model layer (zero-indexed).
+- The lines show the attention from each token (left) to every other token (right). Darker lines indicate higher attention weights.
+- When multiple heads are selected, the attention weights are overlaid on one another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>pytorch</em>) – large language model such as bert, gpt-2</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – input text that is given to the model tokenizer</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>this class shows activations within the model layers</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Activations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">attention_model_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lm_layers_explainer.html#attention_model_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>shows token importance within the self-attention model view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>pytorch</em>) – large language model such as bert, gpt-2</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – input text that is given to the model tokenizer</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>this class shows activations within the model layers</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Activations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">attention_neuron_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lm_layers_explainer.html#attention_neuron_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>shows token importance within the self-attention neuron view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> (<em>pytorch</em>) – large language model such as bert, gpt-2</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>this class shows attention heads within the model layers</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Activations</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://github.com/jessevig/bertviz/blob/master/notebooks/neuron_view_bert.ipynb">https://github.com/jessevig/bertviz/blob/master/notebooks/neuron_view_bert.ipynb</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="feature_attributions_explainer.html" class="btn btn-neutral float-left" title="Feature Attributions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="metrics_explainer.html" class="btn btn-neutral float-right" title="Metrics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
