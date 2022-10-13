@@ -61,7 +61,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Explainer</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="categories.html">Explainers</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="explanations.html">Explanations</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="feature_attributions_explainer.html">Feature Attributions</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Language Models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="metrics_explainer.html">Metrics</a></li>
@@ -74,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="bibliography/index.html">Bibliography</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator (MCG)</a></li>
 </ul>
 
         </div>
@@ -91,7 +92,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Explainer</a> &raquo;</li>
-          <li><a href="categories.html">Explainers</a> &raquo;</li>
+          <li><a href="explanations.html">Explanations</a> &raquo;</li>
       <li>Language Models</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/explainer/lm_layers_explainer.md" rel="nofollow"> View page source</a>
@@ -106,11 +107,8 @@
 <h1>Language Models<a class="headerlink" href="#language-models" title="Permalink to this heading"></a></h1>
 <div class="cell tag_remove-input docutils container">
 </div>
-<p>This plugin provides a set of functions to explore, visualize and interact with
-transformer based language models. These transformer models can be causal language models (clm),
-masked language models (mlm) or encoder-decoder language models (enc-dec).
-The functions within this plugin do not do any fine-tuning of the underlying transformer model,
-rather provide methods to:</p>
+<p>Today transformer models provide SOTA performance across NLP and CV fields. Transformer model variants can be causal language models (clm), masked language models (mlm) or encoder-decoder language models (enc-dec). This set of functions explores, visualizes and interacts with transformer based language models.
+Specifically:</p>
 <ul class="simple">
 <li><p>explain individual predictions by visualizing input token importance</p></li>
 <li><p>explain hidden state contributions and evolution across model layers</p></li>

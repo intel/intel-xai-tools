@@ -10,10 +10,9 @@ kernelspec:
 from explainer.explainers import feature_attributions_explainer
 ```
 
-This plugin provides a set of functions to explore visualize and understand their model's features. 
-This plugin currently utilizes SHAP (SHapley Additive exPlanations) which is an approach to 
-explain the output of any machine learning model. Feature Attributions are an approach to 
-explaining a model's predictions based on how the model has weighted features it's been trained on.
+Feature Attributions are an approach to explaining a model's predictions based on how the model has weighted features it's been trained on.
+This set of functions visualizes features by utilizing [SHAP](https://github.com/slundberg/shap) (SHapley Additive exPlanations): an approach to 
+explain the output of ML/DL models. 
 
 ## Algorithm
 

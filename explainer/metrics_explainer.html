@@ -61,7 +61,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Explainer</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="types.html">Types</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="explanations.html">Explanations</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="feature_attributions_explainer.html">Feature Attributions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lm_layers_explainer.html">Language Models</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Metrics</a></li>
@@ -74,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="bibliography/index.html">Bibliography</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator (MCG)</a></li>
 </ul>
 
         </div>
@@ -91,7 +92,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Explainer</a> &raquo;</li>
-          <li><a href="types.html">Types</a> &raquo;</li>
+          <li><a href="explanations.html">Explanations</a> &raquo;</li>
       <li>Metrics</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/explainer/metrics_explainer.md" rel="nofollow"> View page source</a>
@@ -106,6 +107,46 @@
 <h1>Metrics<a class="headerlink" href="#metrics" title="Permalink to this heading"></a></h1>
 <div class="cell tag_remove-input docutils container">
 </div>
+<p>Several base metrics are provided for ML/DL classification models. These metrics cover model execution and performance and orient the data scientist to where there is potential for classification bias.</p>
+<section id="algorithms">
+<h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this heading"></a></h2>
+<p>Provided with a classfication model’s predictions and their corresponding ground truths, staple performance metrics can be calculated to determine prediction behaviors in the real world. These functions leverage scikit-learn and plotly (eventually) to calculate and visualize said metrics, respectively.</p>
+</section>
+<section id="environment">
+<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Jupyter Notebooks</p></li>
+</ul>
+</section>
+<section id="id1">
+<h2>Metrics<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Performance metrics</p>
+<ul>
+<li><p>Confusion Matrix</p></li>
+<li><p>Performance Plots</p></li>
+</ul>
+</li>
+<li><p>Execution metrics</p>
+<ul>
+<li><p>Python profiler</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="toolkits">
+<h2>Toolkits<a class="headerlink" href="#toolkits" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Scikit-learn</p></li>
+<li><p>Plotly</p></li>
+<li><p>Python Profilers</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="https://github.com/scikit-learn/scikit-learn">Scikit-learn</a><br />
+<a class="reference external" href="https://github.com/plotly">Plotly</a><br />
+<a class="reference external" href="https://github.com/python/cpython/blob/main/Lib/cProfile.py">Python Profiler</a></p>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">confusion_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groundtruth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/metrics_explainer.html#confusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
@@ -183,6 +224,7 @@ the groundtruth array</p></li>
 </dl>
 </dd></dl>
 
+</section>
 </section>
 
 

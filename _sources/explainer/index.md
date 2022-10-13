@@ -13,25 +13,37 @@ Explainable methods are grouped by type where each type of explainer provides va
 
 ````{grid} 3
 
-```{grid-item-card} Composable
+```{grid-item-card}
 :text-align: center
+:class-header: sd-font-weight-bold
+:class-body: sd-font-italic
+{octicon}`workflow` Composable
+^^^
 add to workflows in 2-3 lines of code
 ```
 
-```{grid-item-card} Extensible
+```{grid-item-card}
 :text-align: center
-includes many popular toolkits
+:class-header: sd-font-weight-bold
+:class-body: sd-font-italic
+{octicon}`stack` Extensible
+^^^
+easy to add new external toolkits
 ```
 
-```{grid-item-card} Community
+```{grid-item-card}
 :text-align: center
-new types added as wheels
+:class-header: sd-font-weight-bold
+:class-body: sd-font-italic
+{octicon}`package-dependencies` Community
+^^^
+contributions as python wheels
 ```
 
 ````
 
 
-## Types
+## Explanations
 
 ````{grid} 3
 

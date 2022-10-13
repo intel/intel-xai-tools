@@ -2,7 +2,6 @@
 file_format: mystnb
 kernelspec:
   name: xai-oneapi-aikit
-  orphan: true
 ---
 # Language Models
 
@@ -11,11 +10,8 @@ kernelspec:
 from explainer.explainers import lm_layers_explainer
 ```
 
-This plugin provides a set of functions to explore, visualize and interact with 
-transformer based language models. These transformer models can be causal language models (clm), 
-masked language models (mlm) or encoder-decoder language models (enc-dec).
-The functions within this plugin do not do any fine-tuning of the underlying transformer model, 
-rather provide methods to:
+Today transformer models provide SOTA performance across NLP and CV fields. Transformer model variants can be causal language models (clm), masked language models (mlm) or encoder-decoder language models (enc-dec). This set of functions explores, visualizes and interacts with transformer based language models. 
+Specifically:
 
 - explain individual predictions by visualizing input token importance
 - explain hidden state contributions and evolution across model layers

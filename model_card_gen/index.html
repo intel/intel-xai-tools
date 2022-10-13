@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model Card Generator &mdash; Explainer</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" type="text/css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Bibliography" href="../explainer/bibliography/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Intel® Explainable AI Tools
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model Card Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Model Card Generator</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/model_card_gen/index.md" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="model-card-generator">
+<span id="mcg"></span><h1>Model Card Generator<a class="headerlink" href="#model-card-generator" title="Permalink to this heading"></a></h1>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Intel® Explainable AI Tools
+
+## Model Card Generator
+
+Model Card Generator allows users to create interactive HTML reports of containing model performance and fairness metrics
+
+**Model Card Sections**
+
+&lt;table class=&quot;tg&quot;&gt;
+&lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th class=&quot;tg-0pky&quot;&gt;Section&lt;br&gt;&lt;/th&gt;
+    &lt;th class=&quot;tg-0pky&quot;&gt;Subsection&lt;/th&gt;
+    &lt;th class=&quot;tg-73oq&quot;&gt;Decription&lt;/th&gt;
+  &lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot; rowspan=&quot;9&quot;&gt;Model Details&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Overview&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;A brief, one-line description of the model card.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Documentation&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;A thorough description of the model and its usage.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Owners&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The individuals or teams who own the model.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Version&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The version of the schema&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Licenses&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The model&#39;s license for use.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;References&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Links providing more information about the model.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Citations&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;How to reference this model card.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Path&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The path where the model is stored.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Graphics&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Collection of overview graphics.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot; rowspan=&quot;6&quot;&gt;Model Parameters&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Model Architecture&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The architecture of the model.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Data&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The datasets used to train and evaluate the model.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Input Format&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The data format for inputs to the model.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Input Format Map&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The data format for inputs to the model, in key-value format.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Output Format&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The data format for outputs from the model.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Output Format Map&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The data format for outputs from the model, in key-value format.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot; rowspan=&quot;2&quot;&gt;Quantitative analysis&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Performance Metrics&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;The model performance metrics being reported.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Graphics&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Colleciton of performance graphics&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot; rowspan=&quot;5&quot;&gt;Considerations&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Users&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Who are the intended users of the model?&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Use Cases&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;What are the intended use cases of the model?&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Limitations&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;What are the known technical limitations of the model? E.g. What kind(s) of data should the model be expected not to perform well on? What are the factors that might degrade model performance?&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Tradeoffs&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;What are the known tradeoffs in accuracy/performance of the model?&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;Ethical Considerations&lt;/td&gt;
+    &lt;td class=&quot;tg-0pky&quot;&gt;What are the ethical (or environmental) risks involved in the application of this model?&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+### Install
+
+Step 1: Clone repo
+
+```shell
+git clone https://github.com/IntelAI/intel-xai-tools.git
+```
+
+Step 2: Navigate to `model-card-generator` package
+
+```shell
+cd intel-xai-tools/model_card_gen
+```
+
+Step 3: Install with pip
+
+```shell
+pip install .
+```
+```
+
+
+### Run
+
+**Populate Model Card user-defined fields**
+
+The Model Card object that is generated can be serialized/deserialized via the JSON schema defined in `schema/v*/model_card.schema.json`. You can use a Python dictionary to provide content to static fields like those contained in the &quot;model_details&quot; section of the `mc` variable below. Any field can be added to this dictionary of pre-defined fields as long as it is it coheres to the schema being used.
+
+```python
+mc = {
+  &quot;model_details&quot;: {
+    &quot;name&quot;: &quot;COMPAS (Correctional Offender Management Profiling for Alternative Sanctions)&quot;,
+    &quot;overview&quot;: &quot;COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) is a public dataset, which contains approximately 18,000 criminal cases from Broward County, Florida between January, 2013 and December, 2014. The data contains information about 11,000 unique defendants, including criminal history demographics, and a risk score intended to represent the defendant’s likelihood of reoffending (recidivism)&quot;,
+    &quot;owners&quot;: [
+      {
+        &quot;name&quot;: &quot;Intel XAI Team&quot;,
+        &quot;contact&quot;: &quot;xai@intel.com&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;reference&quot;: &quot;Wadsworth, C., Vera, F., Piech, C. (2017). Achieving Fairness Through Adversarial Learning: an Application to Recidivism Prediction. https://arxiv.org/abs/1807.00199.&quot;
+      },
+      {
+        &quot;reference&quot;: &quot;Chouldechova, A., G&#39;Sell, M., (2017). Fairer and more accurate, but for whom? https://arxiv.org/abs/1707.00046.&quot;
+      },
+      {
+        &quot;reference&quot;: &quot;Berk et al., (2017), Fairness in Criminal Justice Risk Assessments: The State of the Art, https://arxiv.org/abs/1703.09207.&quot;
+      }
+    ],
+    &quot;graphics&quot;: {
+      &quot;description&quot;: &quot; &quot;
+    }
+  },
+  &quot;quantitative_analysis&quot;: {
+    &quot;graphics&quot;: {
+      &quot;description&quot;: &quot; &quot;
+    }
+  },
+  &quot;schema_version&quot;: &quot;0.0.1&quot;
+}
+```
+
+**Model Card Generator Inputs**
+
+The `ModelCardGen.generate` classmethod requires three inputs and returns a `ModelCardGen` class instance: 
+
+* `data_sets` (dict) : dictionary containing the user-defined name of the dataset as key and the path to the tfrecrod or raw dataframe containing prediction values as value. For example, for `{&quot;eval&quot;: &#39;eval.tfrecord&#39;}` or for evaluating raw dataframes 
+
+```
+{&quot;eval&quot;: pd.Darafram(
+    {&quot;y_true&quot;: y_true, &quot;y_pred&quot;: ypred}
+)}
+```
+
+* `model_path` (str) : this field represents the path to the TensorFlow SavedModel and it is only required for TensorFlow models.
+
+* `eval_config` (tfma.EvalConfig or str) : this is either the path to the proto config file used by the tfma evaluator or the proto string to be parsed. For example, let us review the following file entitled &quot;eval_config.proto&quot; defined for the COMPAS proxy model found in `notebooks/compas-model-card-tfx.ipynb`. 
+
+In the   `model_specs` section it tells the evaluator &quot;label_key&quot; is the ground truth label. In the `metric_specs` section it defines the following metrics to be computed: &quot;BinaryAccuracy&quot;, &quot;AUC&quot;, &quot;ConfusionMatrixPlot&quot;, and &quot;FairnessIndicators&quot;. In the `slicing_specs` section it tells the evaluator to compute these metrics accross all datapoints and aggregate these metrics grouped by the &quot;race&quot; feature.
+
+
+```
+model_specs {
+    label_key: &#39;is_recid&#39;
+  }
+metrics_specs {
+  metrics {class_name: &quot;BinaryAccuracy&quot;}
+  metrics {class_name: &quot;AUC&quot;}
+  metrics {class_name: &quot;ConfusionMatrixPlot&quot;}
+  metrics {
+    class_name: &quot;FairnessIndicators&quot;
+      config: &#39;{&quot;thresholds&quot;: [0.25, 0.5, 0.75]}&#39;
+  }
+  }
+# The overall slice
+slicing_specs {}
+slicing_specs {
+    feature_keys: &#39;race&#39;
+    }
+options {
+    include_default_metrics { value: false }
+  }
+```
+
+If we are computing metrics on a raw dataframe we must add the &quot;prediction_key&quot; to  `model_specs` as follows
+
+```
+model_specs {
+    label_key: &#39;y_true&#39;
+    prediction_key: &#39;y_pred&#39;
+  }
+...
+```
+
+**Create Model Card**
+```python
+
+from model_card_gen.model_card_gen import ModelCardGen
+
+model_path = &#39;compas/model&#39;
+data_paths = {
+  &#39;eval&#39;: &#39;compas/eval.tfrecord&#39;,
+  &#39;train&#39;: &#39;compas/train.tfrecord&#39;
+}
+eval_config = &#39;compas/eval_config.proto&#39;
+
+mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config, model_card=mc)
+```
+
+### Test
+
+Step 1: Test by installing test dependencies:
+
+```shell
+pip install &quot;.[test]&quot;
+```
+
+Step 2: Run tests
+
+```shell
+python -m pytest model_card_gen/tests/
+```
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../explainer/bibliography/index.html" class="btn btn-neutral float-left" title="Bibliography" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
