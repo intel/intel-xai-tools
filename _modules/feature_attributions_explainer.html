@@ -58,6 +58,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
 </ul>
 
         </div>
@@ -127,8 +128,22 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">20</span><span class="p">,:])</span>
 
 <span class="k">class</span> <span class="nc">PartitionExplainer</span><span class="p">(</span><span class="n">FeatureAttributions</span><span class="p">):</span>
-  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">transformers</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">transformers</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">return_all_scores</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+
+  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">Explainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span>
+
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span><span class="p">[:,:,</span><span class="n">label</span><span class="p">])</span>
+    <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="kernel_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.kernel_explainer">[docs]</a><span class="k">def</span> <span class="nf">kernel_explainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
@@ -170,14 +185,19 @@
   <span class="k">return</span> <span class="n">GradientExplainer</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="partition_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.partition_explainer">[docs]</a><span class="k">def</span> <span class="nf">partition_explainer</span><span class="p">():</span>
+<div class="viewcode-block" id="partition_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.partition_explainer">[docs]</a><span class="k">def</span> <span class="nf">partition_explainer</span><span class="p">(</span><span class="n">task</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">     Sets up a SHAP PartitionExplainer</span>
+<span class="sd">     Uses HuggingFace pipeline to instantiate a model for a given task</span>
+<span class="sd">     Returns a SHAP PartitionExplainer</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">       task: the type of task for the pipeline</span>
+<span class="sd">       model: model </span>
 
 <span class="sd">     Returns:</span>
 <span class="sd">       PartitionExplainer</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">return</span> <span class="n">PartitionExplainer</span><span class="p">()</span></div>
+  <span class="k">return</span> <span class="n">PartitionExplainer</span><span class="p">(</span><span class="n">task</span><span class="p">,</span><span class="n">model</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="integratedgradients"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.integratedgradients">[docs]</a><span class="k">def</span> <span class="nf">integratedgradients</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>

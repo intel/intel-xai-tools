@@ -58,6 +58,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../model_card_gen/index.html">Model Card Generator</a></li>
 </ul>
 
         </div>
@@ -278,6 +279,8 @@
                             <span class="k">for</span> <span class="n">plugin_file</span> <span class="ow">in</span> <span class="n">plugin_dict</span><span class="p">:</span>
                                 <span class="n">fp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">plugin_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
                                 <span class="k">try</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span> <span class="ow">and</span> <span class="n">plugin_file</span><span class="o">.</span><span class="n">overwrite</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                                        <span class="k">continue</span>
                                     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                                         <span class="n">fc</span> <span class="o">=</span> <span class="n">plugin_file</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
                                         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fc</span><span class="p">)</span>

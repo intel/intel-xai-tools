@@ -74,7 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="bibliography/index.html">Bibliography</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator (MCG)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
 </ul>
 
         </div>
@@ -231,11 +231,18 @@ Shap accepts black box models and provides explanations through a game theoretic
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">partition_explainer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#partition_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Sets up a SHAP PartitionExplainer</p>
+<span class="sig-name descname"><span class="pre">partition_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#partition_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Uses HuggingFace pipeline to instantiate a model for a given task
+Returns a SHAP PartitionExplainer</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>PartitionExplainer</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> – the type of task for the pipeline</p></li>
+<li><p><strong>model</strong> – model</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>PartitionExplainer</p>
 </dd>
 </dl>
 </dd></dl>

@@ -45,6 +45,16 @@ contributions as python wheels
 
 ## Explanations
 
+```{mermaid}
+graph LR
+A(Explainer) --> B(Feature Attributions)
+A --> C(Language Models)
+A --> D(Metrics)
+click B "/explainer/feature_attributions_explainer.html#feature-attributions-explainer" "Feature Attributions"
+click C "/explainer/lm_layers_explainer.html#language-model-explainer" "Language Models"
+click D "/explainer/metrics_explainer.html#metrics-explainer" "Metrics"
+```
+
 ````{grid} 3
 
 ```{grid-item-card} Feature Attributions
