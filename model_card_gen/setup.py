@@ -32,7 +32,6 @@ REQUIRED_PACKAGES = [
     'tensorflow-data-validation>=1.6.0,<1.8.0',
     'plotly>=3.8.1,<6',
     'dataclasses;python_version<"3.7"',
-    'torch',
     'apache-beam==2.41.0'
 ]
 
@@ -42,17 +41,13 @@ TEST_PACKAGES = [
     'tensorflow-hub'
 ]
 
-NOTEBOOK_PACKAGES = [
-    'sklearn',
-    'tfx',
-    'tensorflow-hub',
-    'tensorflow-transform',
+PYTORCH_PACKAGES = [
     'torch'
 ]
 
 EXTRAS = {
     'test': TEST_PACKAGES,
-    'notebook': NOTEBOOK_PACKAGES,
+    'pytorch': PYTORCH_PACKAGES,
 }
 
 # Get version from version module.
@@ -76,6 +71,7 @@ setup(
     author_email='',
     packages=[
         'model_card_gen',
+        'model_card_gen.analyze',
         'model_card_gen.docs',
         'model_card_gen.docs.examples',
         'model_card_gen.graphics'

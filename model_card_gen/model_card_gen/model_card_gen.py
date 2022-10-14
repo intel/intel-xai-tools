@@ -28,7 +28,7 @@ import pandas as pd
 import tensorflow_data_validation as tfdv
 from IPython.display import display, HTML
 # Internal
-from model_card_gen.analyzer import ModelAnalyzer
+from model_card_gen.analyze import TFAnalyzer, PTAnalyzer, get_analysis
 from model_card_gen.model_card import ModelCard
 from model_card_gen.graphics.add_graphics import (
     add_dataset_feature_statistics_plots,
@@ -129,8 +129,101 @@ class ModelCardGen():
             model_card=model_card,
             output_dir=output_dir)
         self.data_stats = self.get_stats()
+        self.eval_results = get_analysis(model_path=model_path,
+                                         eval_config=eval_config,
+                                         datasets=data_sets,)
+        self.model_card_html = self.build_model_card()
+        return self
+    
+    @classmethod
+    def tf_generate(cls,
+                 data_sets: Dict[Text, DataFormat],
+                 eval_config: Union[tfma.EvalConfig, str],
+                 model_path: Text = '',
+                 model_card: Union[ModelCard, Dict[Text, Any], Text] = None,
+                 output_dir: Text = ''):
+        """Class Factory starting TFMA analysis and generating ModelCard
+
+        Args:
+            data_sets (dict): dictionary with keys of name of dataset and value to path
+            model_path (str): representing TF SavedModel path
+            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema 
+            output_dir (str): representing of where to output model card
+
+        Returns:
+            ModelCardGen
+
+        Raises:
+            ValueError: when invalid value for data_sets argument is empty
+            TypeError: when data_sets argument is  not type dict
+
+        Example:
+            >>> from model_card_gen.model_card_gen import ModelCardGen
+            >>> model_path = 'compas/model'
+            >>> data_paths = {
+                  'eval': 'compas/eval.tfrecord',
+                  'train': 'compas/train.tfrecord'}
+            >>> eval_config = 'compas/eval_config.proto'
+            >>> mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config)
+        """
+        self = cls(
+            data_sets,
+            model_path,
+            eval_config,
+            model_card=model_card,
+            output_dir=output_dir)
+        self.data_stats = self.get_stats()
         self.eval_results = [
-            ModelAnalyzer.analyze(
+            TFAnalyzer.analyze(
+                model_path=model_path,
+                dataset=dataset,
+                eval_config=eval_config)
+            for dataset in data_sets.values()]
+        self.model_card_html = self.build_model_card()
+        return self
+
+    @classmethod
+    def pt_generate(cls,
+                 data_sets: Dict[Text, DataFormat],
+                 eval_config: Union[tfma.EvalConfig, str],
+                 model_path: Text = '',
+                 model_card: Union[ModelCard, Dict[Text, Any], Text] = None,
+                 output_dir: Text = ''):
+        """Class Factory starting TFMA analysis and generating ModelCard
+
+        Args:
+            data_sets (dict): dictionary with keys of name of dataset and value to path
+            model_path (str): representing TF SavedModel path
+            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema 
+            output_dir (str): representing of where to output model card
+
+        Returns:
+            ModelCardGen
+
+        Raises:
+            ValueError: when invalid value for data_sets argument is empty
+            TypeError: when data_sets argument is  not type dict
+
+        Example:
+            >>> from model_card_gen.model_card_gen import ModelCardGen
+            >>> model_path = 'compas/model'
+            >>> data_paths = {
+                  'eval': 'compas/eval.tfrecord',
+                  'train': 'compas/train.tfrecord'}
+            >>> eval_config = 'compas/eval_config.proto'
+            >>> mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config)
+        """
+        self = cls(
+            data_sets,
+            model_path,
+            eval_config,
+            model_card=model_card,
+            output_dir=output_dir)
+        self.data_stats = self.get_stats()
+        self.eval_results = [
+            PTAnalyzer.analyze(
                 model_path=model_path,
                 dataset=dataset,
                 eval_config=eval_config)
