@@ -1,11 +1,11 @@
 ---
 file_format: mystnb
 kernelspec:
-  name: xai-oneapi-aikit
+  name: python3
 ---
 # Language Models
 
-```{code-cell} xai-oneapi-aikit
+```{code-cell} python3
 :tags: [remove-input]
 from explainer.explainers import lm_layers_explainer
 ```

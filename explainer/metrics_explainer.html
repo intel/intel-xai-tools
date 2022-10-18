@@ -74,7 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="bibliography/index.html">Bibliography</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator (MCG)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
 </ul>
 
         </div>
@@ -206,7 +206,8 @@ the groundtruth array</p></li>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">pstats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/metrics_explainer.html#pstats"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>executes cProfile.run and saves the results in the PStats class as panda DataFrames</p>
+<dd><p>Executes cProfile.run and saves the results in the PStats class as panda DataFrames.
+Two DataFrames are stored - A summary and a report which call PStats.summary and PStats.report respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>command</strong> – command to run</p>

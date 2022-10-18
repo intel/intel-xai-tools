@@ -1,12 +1,12 @@
 ---
 file_format: mystnb 
 kernelspec:
-  name: xai-oneapi-aikit
+  name: python3
   orphan: true
 ---
 # Metrics
  
-```{code-cell} xai-oneapi-aikit
+```{code-cell} python3
 :tags: [remove-input]
 from explainer.explainers import metrics_explainer
 ```

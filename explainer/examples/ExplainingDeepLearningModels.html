@@ -74,7 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../bibliography/index.html">Bibliography</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../model_card_gen/index.html">Model Card Generator (MCG)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../model_card_gen/index.html">Model Card Generator</a></li>
 </ul>
 
         </div>
@@ -176,7 +176,16 @@ from explainer.explainers import shap_explainer
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tensorflow version 2.9.1 Shap version 0.41.0
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">12</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">c_map</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
+<span class="ne">---&gt; </span><span class="mi">12</span> <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="kn">from</span> <span class="nn">tensorflow.keras.applications.vgg19</span> <span class="kn">import</span> <span class="n">VGG19</span><span class="p">,</span> <span class="n">preprocess_input</span><span class="p">,</span> <span class="n">decode_predictions</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;tensorflow&#39;
 </pre></div>
 </div>
 </div>
@@ -190,7 +199,14 @@ from explainer.explainers import shap_explainer
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Disable Eager Execution for SHAP to work
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">tensorflow.compat.v1.keras.backend</span> <span class="k">as</span> <span class="nn">K</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">disable_eager_execution</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Disable Eager Execution for SHAP to work&#39;</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;tensorflow&#39;
 </pre></div>
 </div>
 </div>
@@ -209,6 +225,17 @@ from explainer.explainers import shap_explainer
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">X</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">imagenet50</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="mi">224</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">inference_image</span> <span class="o">=</span> <span class="n">X</span><span class="p">[[</span><span class="mi">46</span><span class="p">]]</span>
+
+<span class="ne">NameError</span>: name &#39;shap&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="loading-the-model">
@@ -220,86 +247,12 @@ from explainer.explainers import shap_explainer
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-10-12 16:12:12.670993: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 FMA
-To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">model</span> <span class="o">=</span> <span class="n">VGG19</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">)</span>
 
-User settings:
-
-   KMP_AFFINITY=granularity=fine,verbose,compact,1,0
-   KMP_BLOCKTIME=1
-   KMP_DUPLICATE_LIB_OK=True
-   KMP_INIT_AT_FORK=FALSE
-   KMP_SETTINGS=1
-   KMP_WARNINGS=0
-
-Effective settings:
-
-   KMP_ABORT_DELAY=0
-   KMP_ADAPTIVE_LOCK_PROPS=&#39;1,1024&#39;
-   KMP_ALIGN_ALLOC=64
-   KMP_ALL_THREADPRIVATE=768
-   KMP_ATOMIC_MODE=2
-   KMP_BLOCKTIME=1
-   KMP_CPUINFO_FILE: value is not defined
-   KMP_DETERMINISTIC_REDUCTION=false
-   KMP_DEVICE_THREAD_LIMIT=2147483647
-   KMP_DISP_NUM_BUFFERS=7
-   KMP_DUPLICATE_LIB_OK=true
-   KMP_ENABLE_TASK_THROTTLING=true
-   KMP_FORCE_REDUCTION: value is not defined
-   KMP_FOREIGN_THREADS_THREADPRIVATE=true
-   KMP_FORKJOIN_BARRIER=&#39;2,2&#39;
-   KMP_FORKJOIN_BARRIER_PATTERN=&#39;hyper,hyper&#39;
-   KMP_GTID_MODE=3
-   KMP_HANDLE_SIGNALS=false
-   KMP_HOT_TEAMS_MAX_LEVEL=1
-   KMP_HOT_TEAMS_MODE=0
-   KMP_INIT_AT_FORK=true
-   KMP_LIBRARY=throughput
-   KMP_LOCK_KIND=queuing
-   KMP_MALLOC_POOL_INCR=1M
-   KMP_NUM_LOCKS_IN_BLOCK=1
-   KMP_PLAIN_BARRIER=&#39;2,2&#39;
-   KMP_PLAIN_BARRIER_PATTERN=&#39;hyper,hyper&#39;
-   KMP_REDUCTION_BARRIER=&#39;1,1&#39;
-   KMP_REDUCTION_BARRIER_PATTERN=&#39;hyper,hyper&#39;
-   KMP_SCHEDULE=&#39;static,balanced;guided,iterative&#39;
-   KMP_SETTINGS=true
-   KMP_SPIN_BACKOFF_PARAMS=&#39;4096,100&#39;
-   KMP_STACKOFFSET=64
-   KMP_STACKPAD=0
-   KMP_STACKSIZE=8M
-   KMP_STORAGE_MAP=false
-   KMP_TASKING=2
-   KMP_TASKLOOP_MIN_TASKS=0
-   KMP_TASK_STEALING_CONSTRAINT=1
-   KMP_TEAMS_THREAD_LIMIT=192
-   KMP_TOPOLOGY_METHOD=all
-   KMP_USE_YIELD=1
-   KMP_VERSION=false
-   KMP_WARNINGS=false
-   OMP_AFFINITY_FORMAT=&#39;OMP: pid %P tid %i thread %n bound to OS proc set {%A}&#39;
-   OMP_ALLOCATOR=omp_default_mem_alloc
-   OMP_CANCELLATION=false
-   OMP_DEFAULT_DEVICE=0
-   OMP_DISPLAY_AFFINITY=false
-   OMP_DISPLAY_ENV=false
-   OMP_DYNAMIC=false
-   OMP_MAX_ACTIVE_LEVELS=1
-   OMP_MAX_TASK_PRIORITY=0
-   OMP_NESTED: deprecated; max-active-levels-var=1
-   OMP_NUM_THREADS: value is not defined
-   OMP_PLACES: value is not defined
-   OMP_PROC_BIND=&#39;intel&#39;
-   OMP_SCHEDULE=&#39;static&#39;
-   OMP_STACKSIZE=8M
-   OMP_TARGET_OFFLOAD=DEFAULT
-   OMP_THREAD_LIMIT=2147483647
-   OMP_WAIT_POLICY=PASSIVE
-   KMP_AFFINITY=&#39;verbose,warnings,respect,granularity=fine,compact,1,0&#39;
-
-2022-10-12 16:12:12.682161: I tensorflow/core/common_runtime/process_util.cc:146] Creating new thread pool with default inter op setting: 
-2022-10-12 16:12:12.694158: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:354] MLIR V1 optimization pass is not enabled
+<span class="ne">NameError</span>: name &#39;VGG19&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -332,8 +285,15 @@ Effective settings:
 <h4>** optimized **<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># kernel: xai-oneapi-aikit</span>
-<span class="c1"># intel-python,  intel-tensorflow, numba-dpex, dpctl</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pstats</span> <span class="o">=</span> <span class="n">metrics_explainer</span><span class="p">[</span><span class="s1">&#39;pstats&#39;</span><span class="p">]</span>
+<span class="o">??</span>pstats
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># intel-python,  intel-tensorflow, numba-dpex, dpctl</span>
 <span class="n">model_input</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">layer_num</span><span class="p">]</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
 <span class="n">pstats</span> <span class="o">=</span> <span class="n">metrics_explainer</span><span class="p">[</span><span class="s1">&#39;pstats&#39;</span><span class="p">](</span><span class="s1">&#39;explainer = shap.GradientExplainer(model_input, map2layer(X, layer_num), local_smoothing=0)&#39;</span><span class="p">)</span>
 <span class="n">pstats</span><span class="o">.</span><span class="n">summary</span>
@@ -342,179 +302,42 @@ Effective settings:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:tensorflow:From /tmp/ipykernel_410087/1444819054.py:7: The name tf.keras.backend.get_session is deprecated. Please use tf.compat.v1.keras.backend.get_session instead.
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># intel-python,  intel-tensorflow, numba-dpex, dpctl</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">model_input</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">layer_num</span><span class="p">]</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">pstats</span> <span class="o">=</span> <span class="n">metrics_explainer</span><span class="p">[</span><span class="s1">&#39;pstats&#39;</span><span class="p">](</span><span class="s1">&#39;explainer = shap.GradientExplainer(model_input, map2layer(X, layer_num), local_smoothing=0)&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">pstats</span><span class="o">.</span><span class="n">summary</span>
+
+<span class="ne">NameError</span>: name &#39;model&#39; is not defined
 </pre></div>
 </div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>function calls</th>
-      <th>time</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1670988</td>
-      <td>2.108</td>
-    </tr>
-  </tbody>
-</table>
-</div></div><div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ncalls</th>
-      <th>tottime</th>
-      <th>percall</th>
-      <th>cumtime</th>
-      <th>percall</th>
-      <th>filename:lineno(function)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>1.296</td>
-      <td>1.296</td>
-      <td>1.296</td>
-      <td>1.296</td>
-      <td>method tensorflow.python.client._pywrap_tf_ses...</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>69761</td>
-      <td>0.113</td>
-      <td>0.000</td>
-      <td>0.113</td>
-      <td>0.000</td>
-      <td>method posix.lstat}</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>69767</td>
-      <td>0.088</td>
-      <td>0.000</td>
-      <td>0.141</td>
-      <td>0.000</td>
-      <td>posixpath.py:71(join)</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>80</td>
-      <td>0.085</td>
-      <td>0.001</td>
-      <td>0.775</td>
-      <td>0.010</td>
-      <td>inspect.py:727(getmodule)</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>5508</td>
-      <td>0.076</td>
-      <td>0.000</td>
-      <td>0.397</td>
-      <td>0.000</td>
-      <td>posixpath.py:397(_joinrealpath)</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>337</th>
-      <td>1</td>
-      <td>0.000</td>
-      <td>0.000</td>
-      <td>0.000</td>
-      <td>0.000</td>
-      <td>object_identity.py:106(deref)</td>
-    </tr>
-    <tr>
-      <th>338</th>
-      <td>1</td>
-      <td>0.000</td>
-      <td>0.000</td>
-      <td>0.000</td>
-      <td>0.000</td>
-      <td>'__enter__' of '_thread.lock' objects}</td>
-    </tr>
-    <tr>
-      <th>339</th>
-      <td></td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>340</th>
-      <td></td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>341</th>
-      <td></td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-    </tr>
-  </tbody>
-</table>
-<p>342 rows × 6 columns</p>
-</div></div></div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%%script false --no-raise-error</span>
-<span class="c1"># kernel: xai-oneapi-aikit</span>
 <span class="c1"># intel-python,  intel-tensorflow, numba-dpex, dpctl</span>
 <span class="c1"># pstats = metrics_explainer[&#39;pstats&#39;](&#39;shap_values, ind = explainer.shap_values(map2layer(inference_image, layer_num), ranked_outputs=4)&#39;)</span>
 <span class="c1"># pstats.summary</span>
 <span class="c1"># pstats.report</span>
 <span class="n">shap_values</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">map2layer</span><span class="p">(</span><span class="n">inference_image</span><span class="p">,</span> <span class="n">layer_num</span><span class="p">),</span> <span class="n">ranked_outputs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1">#%%script false --no-raise-error</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># intel-python,  intel-tensorflow, numba-dpex, dpctl</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># pstats = metrics_explainer[&#39;pstats&#39;](&#39;shap_values, ind = explainer.shap_values(map2layer(inference_image, layer_num), ranked_outputs=4)&#39;)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># pstats.summary</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># pstats.report</span>
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">shap_values</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">map2layer</span><span class="p">(</span><span class="n">inference_image</span><span class="p">,</span> <span class="n">layer_num</span><span class="p">),</span> <span class="n">ranked_outputs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;explainer&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -537,6 +360,18 @@ Effective settings:
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">13</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="k">return</span> <span class="n">classes</span><span class="p">,</span> <span class="n">class_names</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://raw.githubusercontent.com/WZMIAOMIAO/deep-learning-for-image-processing/master/pytorch_classification/mini_imagenet/imagenet_class_index.json&#39;</span>
+<span class="ne">---&gt; </span><span class="mi">13</span> <span class="n">imagenet_classes</span><span class="p">,</span> <span class="n">class_names</span> <span class="o">=</span> <span class="n">load_imagenet_classes</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;ind&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -546,10 +381,15 @@ Effective settings:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># plot the explanations</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">shap</span><span class="o">.</span><span class="n">image_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">inference_image</span><span class="p">,</span> <span class="n">class_names</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;shap&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/21e5f755a5bcf0e8dcf4109d4b86030d20b401a0c9b7e71263a635eba217f51e.png" src="../../_images/21e5f755a5bcf0e8dcf4109d4b86030d20b401a0c9b7e71263a635eba217f51e.png" />
 </div>
 </div>
 <p>From the above image, we can clearly see that based on the regions highlighted by the SHAP values how the model prediction is changing. When the model predicted the outcome as desktop computer, the region around the computer monitor keyboard and the desk got highlighted. Please observe that the man in the picture did not get highlighted. That is why the model did not predict the outcome as a man or human-being. Similarly, if you see that other possible predictions of desk monitor and screen, accordingly the different regions of the images are highlighted. This does provide a good explanation for the model outcome.</p>
@@ -717,6 +557,40 @@ sample_x_test = np.asarray(sample_x_test)
 # Checking the predictions
 predictions = model.predict(sample_x_test)
 predicted_class = np.argmax(predictions, axis=1)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Future exception was never retrieved
+future: &lt;Future finished exception=BrokenPipeError(32, &#39;Broken pipe&#39;)&gt;
+Traceback (most recent call last):
+  File &quot;/home/kdkasrav/.conda/envs/xai-oneapi-aikit/lib/python3.9/asyncio/unix_events.py&quot;, line 665, in write
+    n = os.write(self._fileno, data)
+BrokenPipeError: [Errno 32] Broken pipe
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Future exception was never retrieved
+future: &lt;Future finished exception=BrokenPipeError(32, &#39;Broken pipe&#39;)&gt;
+Traceback (most recent call last):
+  File &quot;/home/kdkasrav/.conda/envs/xai-oneapi-aikit/lib/python3.9/asyncio/unix_events.py&quot;, line 665, in write
+    n = os.write(self._fileno, data)
+BrokenPipeError: [Errno 32] Broken pipe
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Future exception was never retrieved
+future: &lt;Future finished exception=BrokenPipeError(32, &#39;Broken pipe&#39;)&gt;
+Traceback (most recent call last):
+  File &quot;/home/kdkasrav/.conda/envs/xai-oneapi-aikit/lib/python3.9/asyncio/unix_events.py&quot;, line 665, in write
+    n = os.write(self._fileno, data)
+BrokenPipeError: [Errno 32] Broken pipe
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Future exception was never retrieved
+future: &lt;Future finished exception=BrokenPipeError(32, &#39;Broken pipe&#39;)&gt;
+Traceback (most recent call last):
+  File &quot;/home/kdkasrav/.conda/envs/xai-oneapi-aikit/lib/python3.9/asyncio/unix_events.py&quot;, line 665, in write
+    n = os.write(self._fileno, data)
+BrokenPipeError: [Errno 32] Broken pipe
 </pre></div>
 </div>
 </div>

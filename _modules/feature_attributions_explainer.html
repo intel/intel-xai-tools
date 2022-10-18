@@ -145,6 +145,93 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span><span class="p">[:,:,</span><span class="n">label</span><span class="p">])</span>
     <span class="k">pass</span>
 
+<span class="k">class</span> <span class="nc">PipelineExplainer</span><span class="p">(</span><span class="n">FeatureAttributions</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">transformers</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">transformers</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span><span class="s1">&#39;sentiment-analysis&#39;</span><span class="p">,</span> <span class="n">return_all_scores</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+
+  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">Explainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span>
+
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span><span class="p">[:,:,</span><span class="n">label</span><span class="p">])</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">Captum_Saliency</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">Saliency</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">saliency</span> <span class="o">=</span> <span class="n">Saliency</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">input</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">original_image</span><span class="p">,</span><span class="n">imageTitle</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">visualization</span> <span class="k">as</span> <span class="n">viz</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">grads</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">saliency</span><span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">labels</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">grads</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grads</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">viz</span><span class="o">.</span><span class="n">visualize_image_attr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grads</span><span class="p">,</span> <span class="n">original_image</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;blended_heat_map&quot;</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;absolute_value&quot;</span><span class="p">,</span>
+                          <span class="n">show_colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">imageTitle</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Captum_IntegratedGradients</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">IntegratedGradients</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ig</span> <span class="o">=</span> <span class="n">IntegratedGradients</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+  
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">input</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">original_image</span><span class="p">,</span><span class="n">imageTitle</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">visualization</span> <span class="k">as</span> <span class="n">viz</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">attr_ig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ig</span><span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">baselines</span><span class="o">=</span><span class="nb">input</span> <span class="o">*</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">attr_ig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attr_ig</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">viz</span><span class="o">.</span><span class="n">visualize_image_attr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attr_ig</span><span class="p">,</span> <span class="n">original_image</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;blended_heat_map&quot;</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+                          <span class="n">show_colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">imageTitle</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Captum_DeepLift</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">DeepLift</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dl</span> <span class="o">=</span> <span class="n">DeepLift</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">input</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">original_image</span><span class="p">,</span><span class="n">imageTitle</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">visualization</span> <span class="k">as</span> <span class="n">viz</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">attr_dl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dl</span><span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">baselines</span><span class="o">=</span><span class="nb">input</span> <span class="o">*</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">attr_dl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attr_dl</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">viz</span><span class="o">.</span><span class="n">visualize_image_attr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attr_dl</span><span class="p">,</span> <span class="n">original_image</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;blended_heat_map&quot;</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="n">show_colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                          <span class="n">title</span><span class="o">=</span><span class="n">imageTitle</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Captum_SmoothGrad</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">IntegratedGradients</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">NoiseTunnel</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ig</span> <span class="o">=</span> <span class="n">IntegratedGradients</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nt</span> <span class="o">=</span> <span class="n">NoiseTunnel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ig</span><span class="p">)</span>
+    
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">input</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">original_image</span><span class="p">,</span><span class="n">imageTitle</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">visualization</span> <span class="k">as</span> <span class="n">viz</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">attr_ig_nt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nt</span><span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">baselines</span><span class="o">=</span><span class="nb">input</span> <span class="o">*</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nt_type</span><span class="o">=</span><span class="s1">&#39;smoothgrad_sq&#39;</span><span class="p">,</span>
+                                      <span class="n">nt_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">stdevs</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">attr_ig_nt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attr_ig_nt</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">viz</span><span class="o">.</span><span class="n">visualize_image_attr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attr_ig_nt</span><span class="p">,</span> <span class="n">original_image</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;blended_heat_map&quot;</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;absolute_value&quot;</span><span class="p">,</span> 
+                             <span class="n">outlier_perc</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">show_colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                             <span class="n">title</span><span class="o">=</span><span class="n">imageTitle</span><span class="p">)</span>
+
+  
+<span class="k">class</span> <span class="nc">Captum_FeatureAblation</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">FeatureAblation</span> 
+    <span class="bp">self</span><span class="o">.</span><span class="n">ablator</span> <span class="o">=</span> <span class="n">FeatureAblation</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>    
+
+  <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">input</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">original_image</span><span class="p">,</span><span class="n">imageTitle</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">visualization</span> <span class="k">as</span> <span class="n">viz</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">fa_attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ablator</span><span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">baselines</span><span class="o">=</span><span class="nb">input</span> <span class="o">*</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">fa_attr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa_attr</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">viz</span><span class="o">.</span><span class="n">visualize_image_attr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa_attr</span><span class="p">,</span> <span class="n">original_image</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;blended_heat_map&quot;</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="n">show_colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                          <span class="n">title</span><span class="o">=</span><span class="n">imageTitle</span><span class="p">)</span>
+  
 
 <div class="viewcode-block" id="kernel_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.kernel_explainer">[docs]</a><span class="k">def</span> <span class="nf">kernel_explainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
@@ -185,20 +272,31 @@
   <span class="k">return</span> <span class="n">GradientExplainer</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="partition_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.partition_explainer">[docs]</a><span class="k">def</span> <span class="nf">partition_explainer</span><span class="p">(</span><span class="n">task</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="partition_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.partition_explainer">[docs]</a><span class="k">def</span> <span class="nf">partition_explainer</span><span class="p">(</span><span class="n">task</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">     Uses HuggingFace pipeline to instantiate a model for a given task</span>
 <span class="sd">     Returns a SHAP PartitionExplainer</span>
 
 <span class="sd">     Args:</span>
-<span class="sd">       task: the type of task for the pipeline</span>
+<span class="sd">       task: the type of pipeline task</span>
 <span class="sd">       model: model </span>
 
 <span class="sd">     Returns:</span>
 <span class="sd">       PartitionExplainer</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">return</span> <span class="n">PartitionExplainer</span><span class="p">(</span><span class="n">task</span><span class="p">,</span><span class="n">model</span><span class="p">)</span></div>
+  <span class="k">return</span> <span class="n">PartitionExplainer</span><span class="p">(</span><span class="n">task</span><span class="p">,</span><span class="n">model</span><span class="p">)(</span><span class="n">data</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="saliency"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.saliency">[docs]</a><span class="k">def</span> <span class="nf">saliency</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Returns a Captum Saliency</span>
+<span class="sd">    </span>
+<span class="sd">     Args:</span>
+<span class="sd">       model: model</span>
+<span class="sd">    </span>
+<span class="sd">     Returns:</span>
+<span class="sd">       captum.attr.Saliency</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">Captum_Saliency</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="integratedgradients"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.integratedgradients">[docs]</a><span class="k">def</span> <span class="nf">integratedgradients</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
@@ -210,8 +308,7 @@
 <span class="sd">     Returns:</span>
 <span class="sd">       captum.attr.IntegratedGradients</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">IntegratedGradients</span>
-  <span class="k">return</span> <span class="n">IntegratedGradients</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+  <span class="k">return</span> <span class="n">Captum_IntegratedGradients</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="deeplift"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.deeplift">[docs]</a><span class="k">def</span> <span class="nf">deeplift</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
@@ -223,8 +320,32 @@
 <span class="sd">     Returns:</span>
 <span class="sd">       captum.attr.DeepLift</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="kn">from</span> <span class="nn">captum.attr</span> <span class="kn">import</span> <span class="n">DeepLift</span>
-  <span class="k">return</span> <span class="n">DeepLift</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+  <span class="k">return</span> <span class="n">Captum_DeepLift</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="smoothgrad"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.smoothgrad">[docs]</a><span class="k">def</span> <span class="nf">smoothgrad</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a Captum Integrated Gradients, Noise Tunnel SmoothGrad</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      model: model</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      captum.attr.NoiseTunnel</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">Captum_SmoothGrad</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+  
+<div class="viewcode-block" id="featureablation"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.featureablation">[docs]</a><span class="k">def</span> <span class="nf">featureablation</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a Captum FeatureAblation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      model: model</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      captum.attr.FeatureAblation</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">Captum_FeatureAblation</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+
 
 <span class="k">def</span> <span class="nf">zero_shot</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shap version used: </span><span class="si">{</span><span class="n">shap</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -235,6 +356,20 @@
   <span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">shap_values</span><span class="p">)</span>
   <span class="c1"># Let&#39;s visualize the feature importance towards the outcome - sports</span>
   <span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="s1">&#39;sports&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="sentiment_analysis"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.sentiment_analysis">[docs]</a><span class="k">def</span> <span class="nf">sentiment_analysis</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Uses HuggingFace pipeline to instantiate a model for a given task</span>
+<span class="sd">     Returns PipelineExplainer</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">       model: model </span>
+<span class="sd">       data: examples used for sentiment-analysis </span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">       PipelineExplainer</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">PipelineExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">)(</span><span class="n">data</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

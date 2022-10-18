@@ -1,7 +1,7 @@
 ---
 file_format: mystnb
 kernelspec:
-  name: xai-oneapi-aikit
+  name: python3
 --- 
 (examples)=
 # Examples
