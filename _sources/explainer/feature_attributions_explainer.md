@@ -63,7 +63,7 @@ Shap accepts black box models and provides explanations through a game theoretic
 - Captum
 
 ## References
-[SHAP](https://github.com/slundberg/shap)
+[SHAP](https://github.com/slundberg/shap)\
 [Captum](https://github.com/pytorch/captum)
 
 

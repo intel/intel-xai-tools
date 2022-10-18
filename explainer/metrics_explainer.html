@@ -107,7 +107,15 @@
 <h1>Metrics<a class="headerlink" href="#metrics" title="Permalink to this heading"></a></h1>
 <div class="cell tag_remove-input docutils container">
 </div>
-<p>Several base metrics are provided for ML/DL classification models. These metrics cover model execution and performance and orient the data scientist to where there is potential for classification bias.</p>
+<div class="mermaid">
+            graph LR
+A(metrics_explainer) --&gt; B(confusion_matrix)
+A --&gt; C(plot)
+A --&gt; D(pstats)
+click B &quot;/explainer/metrics_explainer.html#metrics_explainer.confusion_matrix&quot; &quot;confusion_matrix&quot;
+click C &quot;/explainer/metrics_explainer.html#metrics_explainer.plot&quot; &quot;plot&quot;
+click D &quot;/explainer/metrics_explainer.html#metrics_explainer.pstats&quot; &quot;pstats&quot;
+        </div><p>Several base metrics are provided for ML/DL classification models. These metrics cover model execution and performance and orient the data scientist to where there is potential for classification bias.</p>
 <section id="algorithms">
 <h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this heading"></a></h2>
 <p>Provided with a classfication model’s predictions and their corresponding ground truths, staple performance metrics can be calculated to determine prediction behaviors in the real world. These functions leverage scikit-learn and plotly (eventually) to calculate and visualize said metrics, respectively.</p>
@@ -147,9 +155,12 @@
 <p><a class="reference external" href="https://github.com/scikit-learn/scikit-learn">Scikit-learn</a><br />
 <a class="reference external" href="https://github.com/plotly">Plotly</a><br />
 <a class="reference external" href="https://github.com/python/cpython/blob/main/Lib/cProfile.py">Python Profiler</a></p>
+</section>
+<section id="module-metrics_explainer">
+<span id="entry-points"></span><h2>Entry Points<a class="headerlink" href="#module-metrics_explainer" title="Permalink to this heading"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">confusion_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groundtruth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/metrics_explainer.html#confusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dt class="sig sig-object py" id="metrics_explainer.confusion_matrix">
+<span class="sig-name descname"><span class="pre">confusion_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groundtruth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/metrics_explainer.html#confusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metrics_explainer.confusion_matrix" title="Permalink to this definition"></a></dt>
 <dd><p>Generates instatiation of a ConfusionMatrix object that holds necesarry information
 and metrics from the confusion matrix</p>
 <dl class="field-list simple">
@@ -176,8 +187,8 @@ that align with the groundtruth array</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groundtruth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/metrics_explainer.html#plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dt class="sig sig-object py" id="metrics_explainer.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groundtruth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/metrics_explainer.html#plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metrics_explainer.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Generates instatiation of a Plotter object that holds necesarry information
 to plot the precision-recall curve (plan to add ROC curve next)</p>
 <dl class="field-list simple">
@@ -204,8 +215,8 @@ the groundtruth array</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">pstats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/metrics_explainer.html#pstats"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dt class="sig sig-object py" id="metrics_explainer.pstats">
+<span class="sig-name descname"><span class="pre">pstats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/metrics_explainer.html#pstats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#metrics_explainer.pstats" title="Permalink to this definition"></a></dt>
 <dd><p>Executes cProfile.run and saves the results in the PStats class as panda DataFrames.
 Two DataFrames are stored - A summary and a report which call PStats.summary and PStats.report respectively.</p>
 <dl class="field-list simple">
