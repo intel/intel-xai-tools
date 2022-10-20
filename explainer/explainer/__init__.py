@@ -3,19 +3,26 @@
 This module init registers a finder and loader to
 import yaml files and create a ModuleSpec
 """
+__version__ = "0.1.0"
+
 import os
+import csv
 import sys
-import zipfile
+import re
+import datetime
+
 from dataclasses import dataclass
-from importlib.abc import Loader, MetaPathFinder
+from importlib.metadata import entry_points as entrypoints
+from importlib.abc import Loader, MetaPathFinder, ResourceReader, TraversableResources, Traversable
 from importlib.machinery import ModuleSpec
-from importlib.util import (LazyLoader, find_spec, module_from_spec,
-                            spec_from_loader)
+from importlib.resources import open_text
+from importlib.util import spec_from_loader
 from types import ModuleType
-from typing import Any, Callable, Type, TypedDict
+from typing import Any, BinaryIO, Callable, Iterable, List, Sequence, Text, Type, TypedDict, Union
+from typing_extensions import dataclass_transform
 
 import yaml
-from yaml import YAMLError
+from yaml import MarkedYAMLError
 
 EXT_YAML = '.yaml'
 
@@ -28,65 +35,234 @@ class TabularData:
     data: Any
 
 
+class DataSetResource(TraversableResources):
+    """Reads a dataset, inherits from TraversableResources
+    """
+
+    def __init__(self, path: str) -> None:
+        print("DatSetResource.__init__")
+        self._name: str = path
+        self._data: DataSetResource
+
+    @property
+    def data(self):
+        """Read data from from a path"""
+        if self._data:  # Data has already been read, return it directly
+            return self._data
+
+        # Read data and store it in self._data
+        with open_text("data", self._name) as fid:
+            rows = csv.DictReader(fid)
+            for row in rows:
+                country = self._data.setdefault(row["Location"], {})
+                population = float(row["PopTotal"]) * 1000
+                country[int(row["Time"])] = round(population)
+        return self._data
+
+    def files(self) -> Traversable:
+        """Return a Traversable object for the loaded package."""
+        return None
+
+    def open_resource(self, resource: Text) -> BinaryIO:
+        return self.files().joinpath(resource).open('rb')
+
+    def resource_path(self, resource: Text) -> Text:
+        raise FileNotFoundError(resource)
+
+    def is_resource(self, path: Text) -> bool:
+        return self.files().joinpath(path).is_file()
+
+    def contents(self) -> Iterable[str]:
+        return (item.name for item in self.files().iterdir())
+
+
 class ExplainerSpec(yaml.YAMLObject):
-    """An ExplainerSpec which holds name, data, model, entry_point and plugin path
+    """An ExplainerSpec which holds the following attributes:
+    
+    name, version, dataset, dependencies, entry_points, model and plugin
     """
     yaml_tag = "!ExplainerSpec"
 
-    def __init__(self, name: str, plugin: str, dataset: str = None,
-                 dependencies: list[str] = None, entry_point: str = None, model: str = None):
+    def __init__(self, name: str, version: Union[str,None]=None, dataset: Union[str,None]=None,
+                 dependencies: Union[List[str],None]=None, entry_points: Union[List[str],None]=None,
+                 model: Union[str,None]=None, plugin: Union[str,None]=None):
         self.name: str = name
-        self.dataset: str = dataset
-        self.dependencies: list[str] = dependencies
-        self.entry_point: str = entry_point
-        self.model: str = model
-        self.plugin: str = plugin
+        self.version: Union[str, None] = version
+        self.dataset: Union[str, None] = dataset
+        self.dependencies: Union[List[str],None] = dependencies
+        self.entry_points: Union[List[str],None] = entry_points
+        self.model: Union[str,None] = model
+        self.plugin: Union[str,None] = plugin
 
     def __repr__(self):
         info = f'{self.__class__.__name__}(name="{self.name}"'
+        if hasattr(self, 'version'):
+            info += f', version="{self.version}"'
         if hasattr(self, 'dataset'):
             info += f', dataset="{self.dataset}"'
         if hasattr(self, 'dependencies'):
             info += f', dependencies="{self.dependencies}"'
-        if hasattr(self, 'entry_point'):
-            info += f', entry_point="{self.entry_point}"'
+        if hasattr(self, 'entry_points'):
+            info += f', entry_points="{self.entry_points}"'
         if hasattr(self, 'model'):
             info += f', model="{self.model}"'
         if hasattr(self, 'plugin'):
-            info += f', plugin="{self.plugin}"'
+            info += f', plugin="{self.model}"'
         info += ")"
         return info
 
 
+@dataclass
+class ExplainerPluginFile:
+    name: str
+    create: Callable
+    overwrite: bool
+
+
+class ExplainerPlugin:
+    """ExplainerPlugin provides a to generate the set of files for an Explainer plugin,
+    where each filename has associated content. Each filename's content can be retreived 
+    by iterating through the list of filenames and calling the associated content generator.
+    """
+    
+    def __init__(self, spec: ExplainerSpec):
+        self.spec = spec
+        entry_point = re.sub('-', '_', self.spec.name)
+        self.files: List[ExplainerPluginFile] = [
+            ExplainerPluginFile("README.md", self.readme, False),
+            ExplainerPluginFile(f"{entry_point}.py", self.entry_point, False),
+            ExplainerPluginFile("Makefile", self.makefile, True),
+            ExplainerPluginFile("setup.py", self.setup_py, True),
+            ExplainerPluginFile("setup.cfg", self.setup_cfg, True),
+            #ExplainerPluginFile"test/test.py": self.test, True)
+        ]
+
+    @property
+    def autogenerated(self) -> str:
+        now = datetime.datetime.now()
+        return "AUTOGENERATED "+__version__
+
+    def entry_point(self) -> str:
+        header = "="*len(self.spec.name+" plugin")
+        subheaders = {
+            "Algorithm": "-"*len("Algorithm"),
+            "Environment": "-"*len("Environment"),
+            "XAI Methods": "-"*len("XAI Methods"),
+            "Toolkits": "-"*len("Toolkits"),
+            "References": "-"*len("References")
+        }
+        template = f'""""\n{self.autogenerated}\n\n{header}\n{self.spec.name} plugin\n{header}\n\n'
+        for k,v in subheaders.items():
+            template += "\n".join([v,k,v]) + "\n\n"
+        template += '\n"""'
+        entry_points = [template]
+        eps = self.spec.entry_points
+        if eps is not None:
+            for entry_point in eps:
+                parts: List[str] = entry_point.split(':')
+                ep = parts[1]
+                parts = ep.split()
+                epname = parts[0]
+                epdef = f"""def {epname}("""
+                if len(parts) > 1:
+                    epargs = parts[1]
+                    result = re.search(r"[A-Za-z0-9_,\b\d]+", epargs)
+                    if result is not None:
+                        args = result.group().split(',')
+                        if args is not None and len(args) > 0:
+                            nargs = len(args) - 1
+                            for arg in range(nargs):
+                                epdef = epdef + args[arg] + ","
+                            epdef = epdef + args[-1]
+                epdef = epdef + "):\n    pass"
+                entry_points.append(epdef)
+        content = "\n\n".join(entry_points)
+        return content
+
+    def makefile(self) -> str:
+        package_name = re.sub('-', '_', self.spec.name)
+        return f"""# {self.autogenerated}\n
+clean::
+\t@rm -rf build dist explainer_explainers_{package_name}.egg-info test/plugins/{package_name}
+
+wheel: clean
+\tpython setup.py bdist_wheel
+
+install: wheel
+\tcd test && pip install ../dist/explainer_explainers_{package_name}-0.1-py2.py3-none-any.whl --target plugins/{package_name}
+
+test: install
+\tcd test && python test.py
+        """
+
+    def readme(self) -> str:
+        return f"""# {self.spec.name}\n"""
+
+    def setup_py(self) -> str:
+        sections = []
+        package_name = re.sub('-', '_', self.spec.name)
+        section = f"""from setuptools import setup
+
+setup(
+    name='explainer-explainers-{self.spec.name}',
+    version='{self.spec.version}',
+    zip_safe=False,
+    platforms='any',
+    py_modules=['{package_name}'],
+    include_package_data=True,
+    install_requires=[\n"""
+        sections.append(section)
+        dps = self.spec.dependencies
+        if dps is not None:
+            for dp in dps:
+                sections.append("       '"+dp+"',\n")
+        section = """   ],\n"""
+        sections.append(section)
+        section = f"""   entry_points="""
+        sections.append(section+"{")
+        section = f"""
+        'explainer.explainers.{package_name}': [\n"""
+        sections.append(section)
+        eps = self.spec.entry_points
+        if eps is not None:
+            for ep in eps:
+                sections.append("           '"+ep+"',\n")
+        section_four = """       ]\n"""
+        sections.append(section_four)
+        section_five = """   },"""
+        sections.append(section_five)
+        section_six = f"""
+    python_requires='>=3.9'
+)
+"""
+        sections.append(section_six)
+        content = " ".join(sections)
+        return content
+    
+    def setup_cfg(self) -> str:
+        return """[bdist_wheel]\nuniversal = 1\n"""
+
+    def test(self) -> str:
+        pass
+
 class ExplainerModuleSpec(ModuleSpec):
-    """Extends the ModuleSpec to add ExplainerModuleSpec specific fields
+    """Extends the ModuleSpec to add
+       spec: ExplainerSpec
+       entry_points: EntryPoints
+       plugin_path: str
     """
 
-    def __init__(self, spec: ExplainerSpec, loader: Loader):
-        super().__init__(spec.name, loader=loader)
-        self.spec = spec
-        # for module in self.spec.dependencies:
-        #    self._lazy_import(module)
-
-    def _lazy_import(self, name: str) -> ModuleSpec:
-        """Calls importlib.util.LazyImport
-
-        Args:
-            name (str): name of the module to lazy import
-
-        Returns:
-            ModuleSpec: a dummy modulespec
-        """
-        spec = find_spec(name)
-        loader = LazyLoader(spec.loader)
-        spec.loader = loader
-        module = module_from_spec(spec)
-        sys.modules[name] = module
-        loader.exec_module(module)
-        return module
+    def __init__(self, spec: ExplainerSpec, loader: Union[Loader,None]=None, origin=None, loader_state=None,
+                 is_package=None, verbose: bool=False):
+        super().__init__(spec.name, loader=loader, origin=origin, loader_state=loader_state, is_package=is_package)
+        self.spec: ExplainerSpec = spec
+        self._verbose = verbose
+        self.plugin_path = None
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} __init__ {self!r}", file=sys.stderr)
 
     def __repr__(self):
-        info = f'{self.name}(name="{self.name}"'
+        info = f'{self.__class__.__name__}(name="{self.name}"'
         if hasattr(self, 'loader'):
             info += f', loader="{self.loader}"'
         if hasattr(self, 'origin'):
@@ -95,17 +271,83 @@ class ExplainerModuleSpec(ModuleSpec):
             info += f', submodule_search_locations="{self.submodule_search_locations}"'
         if hasattr(self, 'spec'):
             info += f', spec="{self.spec}"'
+        if hasattr(self, 'plugin_path'):
+            info += f', plugin_path="{self.plugin_path}"'
+        if hasattr(self, '__package__'):
+            info += f', __package__="{self.spec}"'
+        info += ")"
         return info
 
+    def __getitem__(self, key: str):
+        name: str = re.sub('-', '_', self.name)
+        group: str = f"explainer.explainers.{name}"
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} __getitem__ group={group} name={name} key={key}", file=sys.stderr)        
+        try:
+            eps_list = entrypoints()
+            eps = eps_list[group]
+            for ep in eps:
+                if ep.group == group and ep.name == key:
+                    ep_func = ep.load()
+                    if self._verbose is True:
+                        print(f"{self.__class__.__name__} __getitem__ ep_func={ep_func}", file=sys.stderr) 
+                    return ep_func
+        except KeyError as ke:
+            print(f"{self.__class__.__name__} KeyError group={group} name={name} key={key} {ke!r}", file=sys.stderr)
+        except Exception as e:
+            print(f"{self.__class__.__name__} Error group={group} name={name} key={key} {e!r}", file=sys.stderr)
+        return None
+
+    @property
+    def entry_points(self) -> bool:
+        name: str = re.sub('-', '_', self.name)
+        group: str = f"explainer.explainers.{name}"
+        try:
+            eps_list = entrypoints()
+            eps = eps_list[group]
+            entry_points = [ep for ep in eps]
+            for entry_point in entry_points:
+                name = entry_point.name
+                func = entry_point.load()
+                setattr(self, name, func)
+        except KeyError as k:
+            print(f"{self.__class__.__name__} KeyError group={group} name={name} {k}", file=sys.stderr)
+            return False
+        except Exception as e:
+            print(f"{self.__class__.__name__} Error group={group} name={name} {e}", file=sys.stderr)        
+            return False
+        return True
 
 class ExplainerLoader(Loader):
     """Loads yaml files that hold ExplainerSpec definitions
     """
-
-    def __init__(self, full_path: str):
+    def __init__(self, full_path: str, verbose: bool = False):
+        if verbose is True:
+            print(f"{self.__class__.__name__} __init__ full_path={full_path}", file=sys.stderr)
+        if os.path.exists(full_path) is not True:
+            print(f"{full_path}: does not exit", file=sys.stderr)
         self._full_path = full_path
+        self._module: Union[ExplainerModuleSpec,None] = None
+        self._loader: Union[Loader,None] = self
+        self._verbose = verbose
 
-    def create_module(self, spec: ModuleSpec=None) -> ModuleSpec:
+    @property
+    def module(self) -> Union[ExplainerModuleSpec,None]:
+        """Creates an ExplainerModuleSpec
+
+        Raises:
+            ImportError: Error in yaml file
+
+        Returns:
+            ExplainerModuleSpec: subclass of ModuleSpec
+        """
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} module", file=sys.stderr)
+        if self._module is None:
+            self.create_module()
+        return self._module
+
+    def create_module(self, spec: Union[ModuleSpec,None]=None) -> Union[ModuleSpec,None]:
         """Return a module to initialize and into which to load.
 
         Args:
@@ -115,37 +357,45 @@ class ExplainerLoader(Loader):
             ImportError: Unable to create a ModuleSpec
 
         Returns:
-            ModuleSpec:
+            ExplainerModuleSpec:
         """
-        loader = self
-        module: ModuleSpec = None
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} create_module", file=sys.stderr)
         if spec is not None and hasattr(spec, 'loader'):
-            loader = spec.loader
-        try:
-            with open(self._full_path, encoding="UTF-8") as yaml_file:
-                yamlspec = yaml.load(yaml_file, self.get_yaml_loader())
-                module = ExplainerModuleSpec(yamlspec, loader)
-                spec=module.spec
-                if hasattr(spec, "plugin"):
-                    zipname=spec.plugin
-                    zippath=os.path.join(os.path.dirname(self._full_path), zipname)
-                    dirname=os.path.splitext(zippath)[0]
-                    print(f"ExplainerLoader.create_module zippath={zippath} dirname={dirname}")
-                    if not os.path.exists(dirname) and os.path.exists(zippath):
-                        with zipfile.ZipFile(zippath, mode="r") as archive:
-                            print(f"extracting all to {dirname}")
-                            archive.extractall(dirname)
-                            os.remove(zippath)
-                    if os.path.exists(dirname) and dirname not in sys.path:
-                        print(f"*** inserting into sys.path {dirname} ***")
-                        sys.path.insert(0, dirname)
-        except YAMLError as exc:
-            if hasattr(exc, 'problem_mark'):
-                mark = exc.problem_mark
-                print(f"Error position: ({mark.line+1}:{mark.column+1})")
-        except Exception as error:
-            raise ImportError from error
-        return module
+            self._loader = spec.loader
+        if self._module is None:
+            try:
+                with open(self._full_path, encoding="UTF-8") as yaml_file:
+                    yamlspec: ExplainerSpec = yaml.load(yaml_file, self.get_yaml_loader())
+                    origin = None
+                    loader_state = None
+                    if spec is not None:
+                        origin = spec.origin
+                        loader_state = spec.loader_state
+                    self._module = ExplainerModuleSpec(yamlspec, loader=self._loader, origin=origin,
+                                                       loader_state=loader_state, is_package=True, verbose=self._verbose)
+            except MarkedYAMLError as exc:
+                if hasattr(exc, 'problem_mark'):
+                    mark = exc.problem_mark
+                    if mark is not None:
+                        print(f"Error position: ({mark.line+1}:{mark.column+1})", file=sys.stderr)
+            except Exception as error:
+                if self._verbose == True:
+                    print(f"throwing ImportError", file=sys.stderr)
+                raise ImportError from error
+            if self._module is not None:
+                if hasattr(self._module.spec, "name"):
+                    if self.load_plugin() is True:
+                        self._module.entry_points
+                if hasattr(self._module.spec, "dataset"):
+                    self.load_dataset()
+                if spec is not None:
+                    if hasattr(spec, "origin"):
+                        self._module.origin = spec.origin
+                    if hasattr(spec, "submodule_search_locations"):
+                        self._module.submodule_search_locations = spec.submodule_search_locations
+
+        return self._module
 
     def exec_module(self, _module: ModuleSpec):
         """needs to reify parts of _module.spec and add them to _module
@@ -156,199 +406,98 @@ class ExplainerLoader(Loader):
         Returns:
             _type_: _description_
         """
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} exec_module type={type(_module)}", file=sys.stderr)
         return None
+
+    def get_resource_reader(self, fullname: str) -> Union[ResourceReader,None]:
+        """Required for Loaders that implement resource loading
+
+        Args:
+            fullname (str): full name of the resource
+
+        Returns:
+            ResourceReader: _description_
+        """
+        if self._verbose is True:
+            print(f"get_resource_reader fullname={fullname}")
+        return None
+
+    def load_dataset(self) -> None:
+        """loads a dataset
+        """
+
+    def is_package(self, name) -> bool:
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} is_package name={name}", file=sys.stderr)
+        return True       
+
+    def load_plugin(self) -> bool:
+        """loads the plugin specified in self.module.spec
+
+        looks for explainers under explainer/explainers. These are yaml files.
+        looks for plugins under explainer/plugins. 
+        These are directories where explainer wheels have been installed
+
+        """
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} load_plugin full_path={self._full_path}", file=sys.stderr)
+        plugin_name = re.sub('-', '_', self._module.spec.name)
+        plugin_directory = os.path.dirname(self._full_path)
+        plugin_path = os.path.join(plugin_directory, plugin_name)
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} load_plugin plugin_path={plugin_path}", file=sys.stderr)        
+        # if plugin_path exists then load the plugin
+        if os.path.exists(plugin_path) and plugin_path not in sys.path:
+            if self._verbose is True:
+                print(f"{self.__class__.__name__} adding {plugin_path} to sys.path", file=sys.stderr)
+            self._module.plugin_path = plugin_path
+            sys.path.insert(0, plugin_path)
+            return True
+        return False
 
     def spec(self, loader: yaml.SafeLoader,
              node: yaml.nodes.MappingNode) -> ExplainerSpec:
         """Construct a ExplainerSpec"""
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} spec", file=sys.stderr)
         return ExplainerSpec(**loader.construct_mapping(node))
 
-    def get_yaml_loader(self) -> Type[yaml.SafeLoader]:
+    def get_yaml_loader(self) -> Type[yaml.FullLoader]:
         """Returns the yaml loader for the tag !ExplainerSpec
 
         Returns:
             Type[SafeLoader]: !ExplainerSpec
         """
+        if self._verbose is True:
+            print(f"{self.__class__.__name__} get_yaml_loader", file=sys.stderr)
         loader = yaml.FullLoader
-        loader.add_constructor(
-            "!ExplainerSpec", self.spec)
+        loader.add_constructor("!ExplainerSpec", self.spec)
         return loader
-
-# import csv
-# from importlib import resources
-
-# def read_population_file(year, variant="Medium"):
-#     population = {}
-
-#     print(f"Reading population data for {year}, {variant} scenario")
-#     with resources.open_text(
-#         "data", "WPP2019_TotalPopulationBySex.csv"
-#     ) as fid:
-#         rows = csv.DictReader(fid)
-
-#         # Read data, filter the correct year
-#         for row in rows:
-#             if row["Time"] == year and row["Variant"] == variant:
-#                 pop = round(float(row["PopTotal"]) * 1000)
-#                 population[row["Location"]] = pop
-
-#     return population
-
-
-# population.py
-
-# import csv
-# from importlib import resources
-
-# import matplotlib.pyplot as plt
-
-# class _Population:
-#     def __init__(self):
-#         """Prepare to read the population file"""
-#         self._data = {}
-#         self.variant = "Medium"
-
-#     @property
-#     def data(self):
-#         """Read data from disk"""
-#         if self._data:  # Data has already been read, return it directly
-#             return self._data
-
-#         # Read data and store it in self._data
-#         print(f"Reading population data for {self.variant} scenario")
-#         with resources.open_text(
-#             "data", "WPP2019_TotalPopulationBySex.csv"
-#         ) as fid:
-#             rows = csv.DictReader(fid)
-
-#             # Read data, filter the correct variant
-#             for row in rows:
-#                 if int(row["LocID"]) >= 900 or row["Variant"] != self.variant:
-#                     continue
-
-#                 country = self._data.setdefault(row["Location"], {})
-#                 population = float(row["PopTotal"]) * 1000
-#                 country[int(row["Time"])] = round(population)
-#         return self._data
-
-#     def get_country(self, country):
-#         """Get population data for one country"""
-#         country = self.data[country]
-#         years, population = zip(*country.items())
-#         return years, population
-
-#     def plot_country(self, country):
-#         """Plot data for one country, population in millions"""
-#         years, population = self.get_country(country)
-#         plt.plot(years, [p / 1e6 for p in population], label=country)
-
-#     def order_countries(self, year):
-#         """Sort countries by population in decreasing order"""
-#         countries = {c: self.data[c][year] for c in self.data}
-#         return sorted(countries, key=lambda c: countries[c], reverse=True)
-
-# # Instantiate the singleton
-# data = _Population()
-
 
 class ExplainerMetaPathFinder(MetaPathFinder):
     """ExplainerMetaPathFinder imports yaml files that define a
        explanation's model, data, entry_point and plugin path
     """
-
-    def find_spec(self, fullname: str, path: str, _target: ModuleType = None) -> ModuleSpec:
+    def find_spec(self, fullname: str, path: Union[Sequence[str],None], _target: Union[ModuleType,None] = None) -> ExplainerModuleSpec:
         """Returns ExplainerLoader if the path is a yaml file that includes a !ExplainerSpec tag
 
         Args:
-            fullname (str): _description_
-            path (str): _description_
-            _target (ModuleType, optional): _description_. Defaults to None.
+            fullname (str): package name
+            path (str): path to package
+            _target (ModuleType, optional): Defaults to None.
 
         Returns:
             ModuleSpec: _description_
         """
+        #print(f"{self.__class__.__name__} find_spec fullname={fullname} path={path}", file=sys.stderr)
         mod_name = fullname.split('.')[-1]
         paths = path if path else [os.path.abspath(os.curdir)]
         for check_path in paths:
             full_path = os.path.join(check_path, mod_name + EXT_YAML)
             if os.path.exists(full_path):
-                return spec_from_loader(fullname,  ExplainerLoader(full_path))
-        return None
-
-
-class MonkeypatchOnImportHook(MetaPathFinder, Loader):
-    """imports a module dyanmically
-    """
-    def __init__(self, module_to_monkeypatch):
-        self._modules_to_monkeypatch: TypedDict[str, Callable[[Any], None]] = module_to_monkeypatch
-        self._in_create_module = False
-
-    def find_module(self, fullname, path=None):
-        spec = self.find_spec(fullname, path)
-        if spec is None:
-            return None
-        return spec
-
-    def create_module(self, spec: ModuleSpec):
-        self._in_create_module = True
-
-        real_spec = find_spec(spec.name)
-
-        real_module = module_from_spec(real_spec)
-        real_spec.loader.exec_module(real_module)
-
-        self._modules_to_monkeypatch[spec.name](real_module)
-
-        self._in_create_module = False
-        return real_module
-
-    def exec_module(self, module: ModuleType):
-        """inherits from Loader
-
-        Args:
-            module (_type_): _description_
-        """
-        try:
-            _ = sys.modules.pop(module.__name__)
-        except KeyError:
-            print(f"module {module.__name__} is not in sys.modules")
-        sys.modules[module.__name__] = module
-        globals()[module.__name__] = module
-
-    def find_spec(self, fullname: str, _path=None, _target=None):
-        """finds the ModuleSpec
-
-        Args:
-            fullname (str): fullname of module
-            _path (_type_, optional): _description_. Defaults to None.
-            _target (_type_, optional): _description_. Defaults to None.
-
-        Returns:
-            _type_: _description_
-        """
-        if fullname not in self._modules_to_monkeypatch:
-            return None
-
-        if self._in_create_module:
-            # if we are in the create_module function,
-            # we return the real module (return None)
-            return None
-
-        spec = ModuleSpec(fullname, self)
-        return spec
-
-def test_perform_mpl_monkeypatch():
-    """test function
-    """
-    def perform_mpl_monkeypatch(_pyplot):
-        print(f"Monkeypatching pyplot {_pyplot}")
-    # Install monkeypatcher
-    sys.meta_path.insert(
-        0, MonkeypatchOnImportHook({
-            "matplotlib.pyplot": perform_mpl_monkeypatch
-        })
-    )
-    import matplotlib.pyplot
-
+                return spec_from_loader(check_path,  ExplainerLoader(full_path, verbose=False))  # type: ignore
+        #print(f"{self.__class__.__name__} find_spec returning None", file=sys.stderr)
+        return None  # type: ignore
 
 sys.meta_path.insert(0, ExplainerMetaPathFinder())

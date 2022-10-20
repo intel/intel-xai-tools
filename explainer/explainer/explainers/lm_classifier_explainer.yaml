@@ -1,0 +1,16 @@
+--- !ExplainerSpec
+name: lm-classifier-explainer
+version: 0.1
+plugin: explainer_explainers_lm_classifier_explainer-0.1-py2.py3-none-any.whl
+dependencies:
+- numpy==1.23.1
+- matplotlib==3.5.2
+- transformers-interpret==0.6.0
+- transformers==4.20.1
+entry_points:
+- 'classify = lm_classifier_explainer:classify [model,tokenizer]'
+#entry_point: |  
+#  # transformers interpret
+#  def entry_point(model, tokenizer):
+#    from transformers_interpret import SequenceClassificationExplainer
+#    return SequenceClassificationExplainer(model=model, tokenizer=tokenizer)

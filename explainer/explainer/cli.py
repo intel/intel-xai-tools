@@ -1,10 +1,10 @@
 """
-Explainer entry point
+Explainer CLI
 """
 import os
 import sys
 from importlib import import_module
-from typing import Any
+from typing import Any, List
 import click
 import click_completion
 from explainer.api import Explainer
@@ -12,6 +12,14 @@ from explainer.api import Explainer
 CONTEXT_SETTINGS = dict(auto_envvar_prefix="EXPLAINER")
 
 click_completion.init()
+
+
+def complete_explainers(ctx, param, incomplete) -> List[str]:
+    exp = Explainer()
+    if incomplete is not None:
+        return [e for e in exp.list if e.startswith(incomplete)]
+    return exp.list
+
 
 class Environment:
     """ Provides an Environment that can be passed to click subcommands"""
@@ -81,10 +89,11 @@ class ExplainerCLI(click.MultiCommand):
 
 
 @click.group()
-def explainercli():
+def explainer():
     """The explainer command group."""
 
-@explainercli.command(cls=ExplainerCLI, context_settings=CONTEXT_SETTINGS)
+
+@explainer.command(cls=ExplainerCLI, context_settings=CONTEXT_SETTINGS)
 @pass_environment
 def cli(_env: Environment):
-    """explainer entry point."""
+    """The explainer CLI enables a plugin model for XAI. Plugins are a recognized way to enable functional categories. See https://packaging.python.org/en/latest/specifications/entry-points/."""

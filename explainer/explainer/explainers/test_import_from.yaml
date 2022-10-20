@@ -1,5 +1,0 @@
---- !ExplainerSpec
-name: test import from
-plugin: test_import_from.zip
-dependencies:
-- shap==0.41.0

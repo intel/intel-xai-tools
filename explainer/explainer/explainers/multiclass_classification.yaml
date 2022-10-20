@@ -1,5 +1,0 @@
---- !ExplainerSpec
-name: multiclass classification
-plugin: multiclass_classification.zip
-dependencies:
-- transformers-interpret==0.6.0

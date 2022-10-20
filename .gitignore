@@ -1,3 +1,22 @@
+# ignore explainer  pkz, zip, bin, vscode
+**/*.pkz
+**/*.zip
+**/*.bin
+**/*.vscode
+
+# VGG-16 Model ignore
+**/*.hdf5
+**/*.tar.gz
+**/*.png
+**/*whl
+train_logmel/
+
+/docs/explainer/examples/data
+/docs/explainer/examples/models
+
+# ignore all plugin created directories
+/explainer/explainer/explainers/*/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

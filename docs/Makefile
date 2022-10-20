@@ -1,11 +1,12 @@
 
-clean::
-	rm -f conf.py && jupyter-book clean --all .
-
 html::
-	jupyter-book config sphinx . && \
-	sphinx-build . ./_build/html -b html
-	#jupyter-book build . --all
+	sphinx-build --keep-going . ./_build/html -b html
+
+clean::
+	rm -rf _build
+
+publish::
+	ghp-import -n -p -f _build/html
 
 serve::
 	python -m http.server --directory ./_build/html 9010

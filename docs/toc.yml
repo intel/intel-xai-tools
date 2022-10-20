@@ -1,0 +1,37 @@
+root: index.md
+options:
+  caption: Contents
+  maxdepth: 2
+  titlesonly: True
+entries:
+- file: explainer/index.md
+  options:
+    titlesonly: True
+  entries:
+  - file: explainer/explanations.md
+    entries:
+    - file: explainer/feature_attributions_explainer.md
+    - file: explainer/lm_layers_explainer.md
+    - file: explainer/metrics_explainer.md
+  - file: explainer/examples/index.md
+    options:
+      titlesonly: True
+    entries:
+    - file: explainer/examples/ExplainingDeepLearningModels.ipynb
+    - file: explainer/examples/partitionexplainer.ipynb
+    - file: explainer/examples/model_layers.ipynb
+  - file: explainer/quickstart.md
+    options:
+      titlesonly: True
+  - file: explainer/cli.md
+    options:
+      titlesonly: True
+  - file: explainer/api.md
+    options:
+      titlesonly: True
+  - file: explainer/bibliography/index.md
+    options:
+      titlesonly: True
+- file: model_card_gen/index.md
+  options:
+    titlesonly: True

@@ -1,6 +1,0 @@
---- !ExplainerSpec
-name: house prices regression
-model: BostonModel
-plugin: house_prices_regression.zip
-dependencies:
-- captum==0.5.0

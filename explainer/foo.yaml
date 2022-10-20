@@ -1,9 +1,0 @@
-name: bar
-loader:
-location:
-origin: 
-data:
-dependencies:
-- a
-- b
-model:

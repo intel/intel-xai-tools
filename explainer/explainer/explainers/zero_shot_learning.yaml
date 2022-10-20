@@ -1,5 +1,23 @@
 --- !ExplainerSpec
-name: zero shot learning
-plugin: zero_shot_learning.zip
+name: zero_shot_learning
+version: 0.1
+plugin: explainer_explainers_zero_shot_learning-0.1-py2.py3-none-any.whl
 dependencies:
+- numpy==1.22.4
+- matplotlib==3.5.2
 - shap==0.40.0
+- transformers==4.20.1
+- torch==1.12.0
+entry_points:
+- 'zero_shot = entry_point:zero_shot [pipe,text]'
+# SHAP Explainer
+# def entry_point(pipe, text):
+#   import shap
+#   print(f"Shap version used: {shap.__version__}")
+#   explainer = shap.Explainer(pipe)
+#   shap_values = explainer(text)
+#   prediction = pipe(text)
+#   print(f"Model predictions are: {prediction}")
+#   shap.plots.text(shap_values)
+#   # Let's visualize the feature importance towards the outcome - sports
+#   shap.plots.bar(shap_values[0,:,'sports'])
