@@ -14,7 +14,7 @@ dependencies = [
 
 setup(
     name='intel-xai-tools',
-    version='0.1.0',
+    version='0.2.0',
     url='https://github.com/IntelAI/intel-xai-tools',
     license='BSD',
     author='IntelAI',

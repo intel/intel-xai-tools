@@ -21,6 +21,7 @@ A --> G(kernel_explainer)
 A --> H(partition_explainer)
 A --> I(saliency)
 A --> J(smoothgrad)
+A --> K(sentiment_analysis)
 click B "/explainer/feature_attributions_explainer.html#feature_attributions_explainer.deep_explainer" "deep_explainer"
 click C "/explainer/feature_attributions_explainer.html#feature_attributions_explainer.deeplift" "deeplift"
 click D "/explainer/feature_attributions_explainer.html#feature_attributions_explainer.featureablation" "featureablation"
@@ -30,6 +31,7 @@ click G "/explainer/feature_attributions_explainer.html#feature_attributions_exp
 click H "/explainer/feature_attributions_explainer.html#feature_attributions_explainer.partition_explainer" "partition_explainer"
 click I "/explainer/feature_attributions_explainer.html#feature_attributions_explainer.saliency" "saliency"
 click J "/explainer/feature_attributions_explainer.html#feature_attributions_explainer.smoothgrad" "smoothgrad"
+click K "/explainer/feature_attributions_explainer.html#feature_attributions_explainer.sentiment_analysis" "sentiment_analysis"
 ```
 
 Feature Attributions are an approach to explaining a model's predictions based on how the model has weighted features it's been trained on.

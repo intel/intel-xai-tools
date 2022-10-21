@@ -17,7 +17,6 @@ kernelspec:
 
 ```{code-cell} ipython3
 from explainer.explainers import feature_attributions_explainer, metrics_explainer
-feature_attributions_explainer.entry_points
 ```
 
 ```{code-cell} ipython3
@@ -69,6 +68,8 @@ X_train.shape, X_test.shape
 ## Define the Model
 
 ```{code-cell} ipython3
+:tags: [remove-output]
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras import layers
 
@@ -88,6 +89,8 @@ model.summary()
 ## Compile and Train Model
 
 ```{code-cell} ipython3
+:tags: [remove-output]
+
 model.compile("adam", "sparse_categorical_crossentropy", metrics=["accuracy"])
 history = model.fit(X_train, Y_train, batch_size=256, epochs=5, validation_data=(X_test, Y_test))
 ```
@@ -95,6 +98,8 @@ history = model.fit(X_train, Y_train, batch_size=256, epochs=5, validation_data=
 ## Evaluate Model Performance
 
 ```{code-cell} ipython3
+:tags: [hide-output]
+
 from sklearn.metrics import accuracy_score, classification_report
 
 train_preds = model.predict(X_train)
@@ -124,23 +129,6 @@ plotter.pr_curve()
 plotter.roc_curve()
 ```
 
-## SHAP Partition Explainer
-
-```{code-cell} ipython3
-import shap
-def make_predictions(X_batch_text):
-    X_batch = vectorizer.transform(X_batch_text).toarray()
-    preds = model.predict(X_batch)
-    return preds
-
-masker = shap.maskers.Text(tokenizer=r"\W+")
-explainer = shap.Explainer(make_predictions, masker=masker, output_names=selected_categories)
-
-explainer
-```
-
-## Visualize SHAP Values Correct Predictions
-
 ```{code-cell} ipython3
 import re
 
@@ -155,19 +143,32 @@ for text in X_batch_text:
 preds_proba = model.predict(X_batch)
 preds = preds_proba.argmax(axis=1)
 
-# print("Actual    Target Values : {}".format([selected_categories[target] for target in Y_test[1:3]]))
-# print("Predicted Target Values : {}".format([selected_categories[target] for target in preds]))
-# print("Predicted Probabilities : {}".format(preds_proba.max(axis=1)))
+print("Actual    Target Values : {}".format([selected_categories[target] for target in Y_test[1:3]]))
+print("Predicted Target Values : {}".format([selected_categories[target] for target in preds]))
+print("Predicted Probabilities : {}".format(preds_proba.max(axis=1)))
+```
 
-shap_values = explainer(X_batch_text)
+## SHAP Partition Explainer
+
++++
+
+## Visualize SHAP Values Correct Predictions
+
+```{code-cell} ipython3
+:tags: [remove-output]
+
+def make_predictions(X_batch_text):
+    X_batch = vectorizer.transform(X_batch_text).toarray()
+    preds = model.predict(X_batch)
+    return preds
+
+partition_explainer = feature_attributions_explainer.partitionexplainer(make_predictions, r"\W+", selected_categories)(X_batch_text)
 ```
 
 ### Text Plot
 
 ```{code-cell} ipython3
-:tags: [remove-output]
-
-shap.text_plot(shap_values)
+partition_explainer.visualize()
 ```
 
 ### Bar Plots
@@ -177,7 +178,10 @@ shap.text_plot(shap_values)
 #### Bar Plot 1
 
 ```{code-cell} ipython3
-shap.plots.bar(shap_values[:,:, selected_categories[preds[0]]].mean(axis=0), max_display=15,
+shap = partition_explainer.shap
+shap_values = partition_explainer.shap_values
+
+shap.plots.bar(partition_explainer.shap_values[:,:, selected_categories[preds[0]]].mean(axis=0), max_display=15,
                order=shap.Explanation.argsort.flip)
 ```
 
@@ -226,4 +230,8 @@ tokens = re.split("\W+", X_batch_text[0].lower())
 shap.initjs()
 shap.force_plot(shap_values.base_values[0][preds[0]], shap_values[0][:, preds[0]].values,
                 feature_names = tokens[:-1], out_names=selected_categories[preds[0]])
+```
+
+```{code-cell} ipython3
+
 ```

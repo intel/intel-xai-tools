@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='explainer-explainers-feature-attributions-explainer',
-    version='0.1',
+    version='0.2',
     zip_safe=False,
     platforms='any',
     py_modules=['feature_attributions_explainer'],
@@ -23,7 +23,7 @@ setup(
             'kernelexplainer = feature_attributions_explainer:kernel_explainer [model,data]',
             'deepexplainer = feature_attributions_explainer:deep_explainer [model,backgroundImages,targetImages,labels]',
             'gradientexplainer = feature_attributions_explainer:gradient_explainer',
-            'partitionexplainer = feature_attributions_explainer:partition_explainer [task,model,data]',
+            'partitionexplainer = feature_attributions_explainer:partition_explainer [model,tokenizer,categories]',
             'integratedgradients = feature_attributions_explainer:integratedgradients [model]',
             'deeplift = feature_attributions_explainer:deeplift [model]',
             'smoothgrad = feature_attributions_explainer:smoothgrad [model]',

@@ -3,7 +3,7 @@
 This module init registers a finder and loader to
 import yaml files and create a ModuleSpec
 """
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 import os
 import csv
