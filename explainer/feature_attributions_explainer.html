@@ -118,6 +118,7 @@ A --&gt; G(kernel_explainer)
 A --&gt; H(partition_explainer)
 A --&gt; I(saliency)
 A --&gt; J(smoothgrad)
+A --&gt; K(sentiment_analysis)
 click B &quot;/explainer/feature_attributions_explainer.html#feature_attributions_explainer.deep_explainer&quot; &quot;deep_explainer&quot;
 click C &quot;/explainer/feature_attributions_explainer.html#feature_attributions_explainer.deeplift&quot; &quot;deeplift&quot;
 click D &quot;/explainer/feature_attributions_explainer.html#feature_attributions_explainer.featureablation&quot; &quot;featureablation&quot;
@@ -127,6 +128,7 @@ click G &quot;/explainer/feature_attributions_explainer.html#feature_attribution
 click H &quot;/explainer/feature_attributions_explainer.html#feature_attributions_explainer.partition_explainer&quot; &quot;partition_explainer&quot;
 click I &quot;/explainer/feature_attributions_explainer.html#feature_attributions_explainer.saliency&quot; &quot;saliency&quot;
 click J &quot;/explainer/feature_attributions_explainer.html#feature_attributions_explainer.smoothgrad&quot; &quot;smoothgrad&quot;
+click K &quot;/explainer/feature_attributions_explainer.html#feature_attributions_explainer.sentiment_analysis&quot; &quot;sentiment_analysis&quot;
         </div><p>Feature Attributions are an approach to explaining a model’s predictions based on how the model has weighted features it’s been trained on.
 This set of functions visualizes features by utilizing <a class="reference external" href="https://github.com/slundberg/shap">SHAP</a> (SHapley Additive exPlanations): an approach to
 explain the output of ML/DL models.</p>
@@ -181,7 +183,7 @@ Shap accepts black box models and provides explanations through a game theoretic
 <dl class="py function">
 <dt class="sig sig-object py" id="feature_attributions_explainer.deep_explainer">
 <span class="sig-name descname"><span class="pre">deep_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backgroundImages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetImages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#deep_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feature_attributions_explainer.deep_explainer" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a SHAP DeepExplainer</p>
+<dd><p>Returns a SHAP DeepExplainer that approximate SHAP values for deep learning models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -195,6 +197,10 @@ Shap accepts black box models and provides explanations through a game theoretic
 <dd class="field-even"><p>DeepExplainer</p>
 </dd>
 </dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -203,10 +209,14 @@ Shap accepts black box models and provides explanations through a game theoretic
 <dd><p>Returns a Captum DeepLift</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> – model</p>
+<dd class="field-odd"><p><strong>model</strong> – pytorch model</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>captum.attr.DeepLift</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://captum.ai/api/deep_lift.html">https://captum.ai/api/deep_lift.html</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -217,10 +227,14 @@ Shap accepts black box models and provides explanations through a game theoretic
 <dd><p>Returns a Captum FeatureAblation</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> – model</p>
+<dd class="field-odd"><p><strong>model</strong> – pytorch model</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>captum.attr.FeatureAblation</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://captum.ai/api/feature_ablation.html">https://captum.ai/api/feature_ablation.html</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -228,10 +242,17 @@ Shap accepts black box models and provides explanations through a game theoretic
 <dl class="py function">
 <dt class="sig sig-object py" id="feature_attributions_explainer.gradient_explainer">
 <span class="sig-name descname"><span class="pre">gradient_explainer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#gradient_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feature_attributions_explainer.gradient_explainer" title="Permalink to this definition"></a></dt>
-<dd><p>Sets up a SHAP GradientExplainer</p>
+<dd><p>Sets up a SHAP GradientExplainer, explains a model using expected gradients.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>GradientExplainer</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GradientExplainer</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -242,10 +263,14 @@ Shap accepts black box models and provides explanations through a game theoretic
 <dd><p>Returns a Captum IntegratedGradients</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> – model</p>
+<dd class="field-odd"><p><strong>model</strong> – pytorch model</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>captum.attr.IntegratedGradients</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://captum.ai/api/integrated_gradients.html">https://captum.ai/api/integrated_gradients.html</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -253,7 +278,8 @@ Shap accepts black box models and provides explanations through a game theoretic
 <dl class="py function">
 <dt class="sig sig-object py" id="feature_attributions_explainer.kernel_explainer">
 <span class="sig-name descname"><span class="pre">kernel_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#kernel_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feature_attributions_explainer.kernel_explainer" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a SHAP KernelExplainer</p>
+<dd><p>Returns a SHAP KernelExplainer, using the Kernel SHAP method
+to explain the output of any function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -265,36 +291,64 @@ Shap accepts black box models and provides explanations through a game theoretic
 <dd class="field-even"><p>KernelExplainer</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="feature_attributions_explainer.partition_explainer">
-<span class="sig-name descname"><span class="pre">partition_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#partition_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feature_attributions_explainer.partition_explainer" title="Permalink to this definition"></a></dt>
-<dd><p>Uses HuggingFace pipeline to instantiate a model for a given task
-Returns a SHAP PartitionExplainer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>task</strong> – the type of pipeline task</p></li>
-<li><p><strong>model</strong> – model</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>PartitionExplainer</p>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="feature_attributions_explainer.saliency">
-<span class="sig-name descname"><span class="pre">saliency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#saliency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feature_attributions_explainer.saliency" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a Captum Saliency</p>
+<dt class="sig sig-object py" id="feature_attributions_explainer.partition_explainer">
+<span class="sig-name descname"><span class="pre">partition_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#partition_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feature_attributions_explainer.partition_explainer" title="Permalink to this definition"></a></dt>
+<dd><p>Calls PartitionExplainer with the model, masker and categories
+Returns a SHAP PartitionExplainer that explain the output of any function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> – model</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>function</em>) – the model</p></li>
+<li><p><strong>tokenizer</strong> (<em>str</em>) – the tokens you want to mask</p></li>
+<li><p><strong>categories</strong> (<em>list</em>) – the category names</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html</a></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>PartitionExplainer</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">make_pred</span><span class="p">(</span><span class="n">X_batch_text</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>  <span class="n">X_batch</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_batch_text</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>  <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_batch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>  <span class="k">return</span> <span class="n">preds</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">explainer.explainers</span> <span class="kn">import</span> <span class="n">feature_attributions_explainer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">partition_explainer</span> <span class="o">=</span> <span class="n">feature_attributions_explainer</span><span class="o">.</span><span class="n">partitionexplainer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">partition_explainer</span> <span class="o">=</span> <span class="n">partitione_explainer</span><span class="p">(</span><span class="n">make_pred</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\W+&quot;</span><span class="p">,</span><span class="n">selected_categories</span><span class="p">)(</span><span class="n">X_batch_text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">partition_explainer</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feature_attributions_explainer.saliency">
+<span class="sig-name descname"><span class="pre">saliency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#saliency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feature_attributions_explainer.saliency" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a Captum Saliency. This provides a baseline approach for computing
+input attribution, returning the gradients with respect to inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – pytorch model</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>captum.attr.Saliency</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://captum.ai/api/saliency.html">https://captum.ai/api/saliency.html</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,7 +356,7 @@ Returns a SHAP PartitionExplainer</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="feature_attributions_explainer.sentiment_analysis">
 <span class="sig-name descname"><span class="pre">sentiment_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/feature_attributions_explainer.html#sentiment_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feature_attributions_explainer.sentiment_analysis" title="Permalink to this definition"></a></dt>
-<dd><p>Uses HuggingFace pipeline to instantiate a model for a given task
+<dd><p>Uses HuggingFace pipeline to instantiate a model for task ‘sentiment-analysis’
 Returns PipelineExplainer</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -315,6 +369,12 @@ Returns PipelineExplainer</p>
 <dd class="field-even"><p>PipelineExplainer</p>
 </dd>
 </dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">explainer.api</span> <span class="kn">import</span> <span class="n">ExplainerContextManager</span> <span class="k">as</span> <span class="n">ec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">ec</span><span class="p">(</span><span class="s1">&#39;feature_attributions_explainer&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fe</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>  <span class="n">fe</span><span class="o">.</span><span class="n">sentiment_analysis</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">raw_text_input</span><span class="p">)</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -323,10 +383,15 @@ Returns PipelineExplainer</p>
 <dd><p>Returns a Captum Integrated Gradients, Noise Tunnel SmoothGrad</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> – model</p>
+<dd class="field-odd"><p><strong>model</strong> – pytorch model</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>captum.attr.NoiseTunnel</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://captum.ai/api/integrated_gradients.html">https://captum.ai/api/integrated_gradients.html</a>
+<a class="reference external" href="https://captum.ai/api/noise_tunnel.html">https://captum.ai/api/noise_tunnel.html</a></p>
 </dd>
 </dl>
 </dd></dl>
