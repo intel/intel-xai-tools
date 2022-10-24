@@ -104,11 +104,12 @@ class Plotter:
     from sklearn.metrics import precision_recall_curve
     from sklearn.metrics import roc_curve as sk_roc_curve
     import pandas as pd
+    import numpy as np
     pd.options.plotting.backend = "plotly"
     
 
-    self.y_gt = groundtruth
-    self.y_pred = predictions
+    self.y_gt = np.array(groundtruth)
+    self.y_pred = np.array(predictions)
     self.labels = labels
     self.precision, self.recall = dict(), dict()
     self.tpr, self.fpr = dict(), dict()
@@ -201,14 +202,14 @@ def confusion_matrix(groundtruth,predictions,labels):
     Example:
       >>> y_true = [[0, 0, 1], [1, 0, 0], [0, 1, 0], [1, 0, 0], [0, 1, 0]]
       >>> y_pred = [[0, 0, 1], [0, 1, 0], [0, 1, 0], [1, 0, 0], [0, 1, 0]]
-      >>> label_names = ['cat', 'dog', 'chihuahua']
+      >>> label_names = ['cat', 'dog', 'horse']
       >>> from explainer.explainers import metrics_explainer
       >>> cm = metrics_explainer['confusionmatrix'](y_true, y_pred, label_names)
       >>> print(cm.df)
-                 cat  dog  chihuahua
+                 cat  dog  horse
       cat        0.5  0.5        0.0
       dog        0.0  1.0        0.0
-      chihuahua  0.0  0.0        1.0
+      horse  0.0  0.0        1.0
 
   """
   cm = ConfusionMatrix(groundtruth, predictions, labels) 
@@ -236,12 +237,12 @@ def plot(groundtruth,predictions,labels):
     Example:
       >>> y_true = [[0, 0, 1], [1, 0, 0], [0, 1, 0], [1, 0, 0], [0, 1, 0]]
       >>> y_pred = [[.002, .09, .89], [.01, .7, .29], [.3, .67, .03], [.55, .4, .05], [.03, .86, .11]]
-      >>> label_names = ['cat', 'dog', 'chihuahua']
+      >>> label_names = ['cat', 'dog', 'horse']
       >>> from explainer.explainers import metrics_explainer
-      >>> plotter = metrics_explainer['plot'](y_val, y, label_names)
-      >>> plotter.pr_curve()
+      >>> plotter = metrics_explainer['plot'](y_true, y_pred, label_names)
+      >>> plotter.recall
+      {0: array([1. , 1. , 0.5, 0.5, 0.5, 0. ]), 1: array([1. , 1. , 1. , 0.5, 0.5, 0. ]), 2: array([1., 1., 1., 1., 1., 0.])}
 
-      .. figure:: ../images/pr_curve_ex.png
   """
   plotter = Plotter(groundtruth,predictions,labels)
   return plotter
