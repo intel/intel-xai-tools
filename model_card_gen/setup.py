@@ -28,8 +28,8 @@ REQUIRED_PACKAGES = [
     'jinja2>=3,<4',
     'jsonschema>=3.2.0,<4',
     'intel-tensorflow',
-    'tensorflow-model-analysis>=0.37.0,<0.39.0',
-    'tensorflow-data-validation>=1.6.0,<1.8.0',
+    'tensorflow-model-analysis>=0.37.0,<0.42.0',
+    'tensorflow-data-validation>=1.6.0,<1.11.0',
     'plotly>=3.8.1,<6',
     'dataclasses;python_version<"3.7"',
     'apache-beam==2.41.0'
@@ -46,7 +46,7 @@ PYTORCH_PACKAGES = [
 ]
 
 EXTRAS = {
-    'test': TEST_PACKAGES,
+    'test': TEST_PACKAGES + PYTORCH_PACKAGES,
     'pytorch': PYTORCH_PACKAGES,
 }
 
