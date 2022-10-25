@@ -3,8 +3,11 @@ class FeatureAttributions:
         import shap
         shap.initjs()
         self.shap = shap
-        self.plots = shap.plots
-        self.force_plot = shap.force_plot
+        self.plots = self.shap.plots
+        self.bar_plot = self.plots.bar
+        self.force_plot = self.shap.force_plot
+        self.text_plot = self.plots.text
+        self.waterfall_plot = self.shap.waterfall_plot
 
     def __call__(self, *args, **kwargs):
         pass
@@ -63,7 +66,7 @@ class PartitionExplainer(FeatureAttributions):
         return self
 
     def visualize(self):
-        self.shap.plots.text(self.shap_values)
+        self.text_plot(self.shap_values)
 
 
 class PipelineExplainer(FeatureAttributions):
