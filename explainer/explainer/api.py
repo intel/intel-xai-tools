@@ -10,7 +10,7 @@ from subprocess import run, CalledProcessError, CompletedProcess, SubprocessErro
 from abc import ABC
 from typing import Any, Callable, List, Tuple, Union
 
-from . import ExplainerLoader, ExplainerModuleSpec, ExplainerPlugin, ExplainerSpec, EXT_YAML
+from . import ExplainerLoader, ExplainerModuleSpec, ExplainerSpec, ExplainerPlugin, ExplainerYaml, EXT_YAML
 
 explainers_folder = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "explainers"))
@@ -19,15 +19,16 @@ explainers_folder = os.path.abspath(
 class Explainer(ABC):
     """Explainer API base class
     """
-    def __init__(self, yamlpath:str=None):
+    def __init__(self, yamlname:str=None):
         """Implements the Explainer API
 
         """
         self._explainer: Callable
-        self._yamlpath = yamlpath
+        self._yamlname = yamlname
 
-    def __call__(self, **kwargs):
-        pass
+    def __call__(self, yamlname:str):
+        self._yamlname = yamlname
+        return self
 
     @property
     def explainer(self) -> Any:
@@ -69,22 +70,23 @@ class Explainer(ABC):
             return False
         return True
 
-    def get_fullpath(self, yamlpath, addsuffix=True):
+    def get_paths(self, yamlname, addsuffix=True):
         suffix = ''
         if addsuffix is True:
             suffix = EXT_YAML
-        if yamlpath is None:
-            yamlpath = self._yamlpath
-        if yamlpath is None:
+        if yamlname is None and self._yamlname is not None:
+            yamlname = re.sub('-', '_', self._yamlname)
+        if yamlname is None:
             return None, None
-        fullpath = os.path.abspath(os.path.join(explainers_folder, yamlpath+suffix))
-        return fullpath, yamlpath
+        yamlname = re.sub('-', '_', yamlname)
+        fullpath = os.path.abspath(os.path.join(explainers_folder, yamlname+suffix))
+        return fullpath, yamlname
 
-    def build(self, yamlpath:str=None) -> bool:
-        """builds the plugin (wheel) and moves it to explainer/plugins
+    def build(self, yamlname:str=None) -> bool:
+        """Builds the plugin (wheel) and moves it to explainer/plugins
 
         Args:
-            yamlpath (str): the yaml file path
+            yamlname (str): the yaml basename
 
         """
         def check_for_errors(cmd, sub_cmd, error) -> bool:
@@ -96,7 +98,7 @@ class Explainer(ABC):
                 return True
             return False
 
-        fullpath, yamlpath = self.get_fullpath(yamlpath)
+        fullpath, yamlname = self.get_paths(yamlname)
         module: Union[ExplainerModuleSpec, None] = None
         if os.path.exists(fullpath):
             module = ExplainerLoader(fullpath, verbose=False).module
@@ -127,28 +129,59 @@ class Explainer(ABC):
                                     mpath = move(whlpath, targetpath)
                                     if os.path.exists(mpath) is False:
                                       print(f"Could not move {whlpath} to {targetpath}.", file=sys.stderr)
+                                else:
+                                    print(f"Could not create {whlpath}.", file=sys.stderr)
                             except CalledProcessError as cpe:
                                 return check_for_errors(cmd, build_cmd, cpe) is False
                             except SubprocessError as sube:
                                 return check_for_errors(cmd, build_cmd, sube) is False
                             except ValueError as vae:
                                 return check_for_errors(cmd, build_cmd, vae) is False
+                            except Exception as e:
+                                return check_for_errors(cmd, build_cmd, e) is False
                         else:
-                            print(f"{pluginpath}: does not exist, use the generate subcommand to create the plugin", file=sys.stderr)
+                            print(f"{pluginpath}: does not exist, use the generate subcommand to create the plugin",
+                                  file=sys.stderr)
                             return False
         else:
             print(f"{fullpath}: does not exist", file=sys.stderr)
             return False
         return True
 
-    def extract(self, yamlpath:str=None) -> bool:
-        """unpacks the plugin (wheel) to the directory explainer/plugins
+    def create(self, yamlname:str=None) -> bool:
+        """Creates a yaml file under explainer/explainers. 
+           The name used to create the yaml file should not clash with top-level package names.
 
         Args:
-            yamlpath (str): the yaml file path
+            yamlname (str): the yaml name
+
+        Returns:
+            bool: whether the method succeeded
 
         """
-        fullpath, yamlpath = self.get_fullpath(yamlpath)
+        fullpath, yamlname = self.get_paths(yamlname)
+        if os.path.exists(fullpath) is False:
+            try:
+                explainer_yaml = ExplainerYaml(yamlname)
+                with open(fullpath, 'w', encoding='utf-8') as f:
+                    fc = explainer_yaml.create()
+                    f.write(fc)
+            except ValueError as vae:
+                print(f"could not create {fullpath}: {vae}", sys.stderr)
+                return False
+        else:
+            print(f"{fullpath}: exists", file=sys.stderr)
+            return False
+        return True
+
+    def extract(self, yamlname:str=None) -> bool:
+        """Unpacks the plugin (wheel) to the directory explainer/plugins
+
+        Args:
+            yamlname (str): the yaml file path
+
+        """
+        fullpath, yamlname = self.get_paths(yamlname)
         module: Union[ExplainerModuleSpec, None] = None
         if os.path.exists(fullpath):
             module = ExplainerLoader(fullpath, verbose=False).module
@@ -170,7 +203,7 @@ class Explainer(ABC):
                         pyfile = f"{pluginname}.py"
                         pypath = os.path.join(pluginpath, pyfile)
                         if os.path.exists(whlpath):
-                            self.generate(yamlpath)
+                            self.generate(yamlname)
                             archive = zipfile.ZipFile(whlpath)
                             for file in archive.namelist():
                                 if file.startswith(pyfile):
@@ -183,14 +216,14 @@ class Explainer(ABC):
             return False
         return True
 
-    def generate(self, yamlpath:str=None) -> bool:
-        """generates a template plugin directory under explainer/plugins
+    def generate(self, yamlname:str=None) -> bool:
+        """Generates a plugin directory under explainer/plugins using information from the yaml file
 
         Args:
-            yamlpath (str): the yaml file path
+            yamlname (str): the yaml file path
 
         """
-        fullpath, yamlpath = self.get_fullpath(yamlpath)
+        fullpath, yamlname = self.get_paths(yamlname)
         module: Union[ExplainerModuleSpec, None] = None
         if os.path.exists(fullpath):
             module = ExplainerLoader(fullpath, verbose=False).module
@@ -226,7 +259,7 @@ class Explainer(ABC):
             return False
         return True
 
-    def import_from(self, yamlpath:str=None) -> Union[ExplainerModuleSpec, None]:
+    def import_from(self, yamlname:str=None) -> Union[ExplainerModuleSpec, None]:
         """Import a plugin using a yaml file located under explainer/explainers
 
         If the yaml file specifies a name which is a directory under explainer/explainers then this is imported into 
@@ -235,31 +268,31 @@ class Explainer(ABC):
 
 
         Args:
-            yamlpath (str): path to the yaml file
+            yamlname (str): name of the yaml file
 
         Returns:
             ExplainerModuleSpec: A ModuleSpec subclass
         """
-        fullpath, yamlpath = self.get_fullpath(yamlpath)
+        fullpath, yamlname = self.get_paths(yamlname)
         return ExplainerLoader(full_path, verbose=False).module
 
-    def info(self, yamlpath:str=None) -> Union[ExplainerModuleSpec,None]:
-        """shows information about the yaml file
+    def info(self, yamlname:str=None) -> Union[ExplainerModuleSpec,None]:
+        """Shows information about the yaml file
 
         Args:
-            yamlpath (str): path to the yaml file
+            yamlname (str): name of the yaml file
 
         Returns:
             ExplainerModuleSpec: A ModuleSpec subclass
         """
-        fullpath, yamlpath = self.get_fullpath(yamlpath)
+        fullpath, yamlname = self.get_paths(yamlname)
         return ExplainerLoader(fullpath).module
 
-    def install(self, yamlpath:str=None, nowarnings=False) -> Union[ExplainerModuleSpec, None]:
-        """installs the plugin (wheel) under the directory explainer/explainers
+    def install(self, yamlname:str=None, nowarnings=False) -> Union[ExplainerModuleSpec, None]:
+        """Installs the plugin (wheel) under the directory explainer/explainers
 
         Args:
-            yamlpath (str): the yaml file path
+            yamlname (str): the yaml file path
 
         """
         def check_for_errors(cmd, sub_cmd, error) -> None:
@@ -268,7 +301,7 @@ class Explainer(ABC):
             if sub_cmd is not None and sub_cmd.stderr is not None:
                 print(f"{cmd}: {sub_cmd.stderr}", file=sys.stderr)
 
-        fullpath, yamlpath = self.get_fullpath(yamlpath)
+        fullpath, yamlname = self.get_paths(yamlname)
         module: Union[ExplainerModuleSpec, None] = None
         if os.path.exists(fullpath):
             module = ExplainerLoader(fullpath, verbose=False).module
@@ -287,7 +320,7 @@ class Explainer(ABC):
                         if os.path.exists(whlpath):
                             targetpath = os.path.join(explainers_folder, dirname)
                             if os.path.exists(targetpath) is True:
-                                pyfile = os.path.join(dirpath, yamlpath, yamlpath+'.py')
+                                pyfile = os.path.join(dirpath, yamlname, yamlname+'.py')
                                 if os.path.exists(pyfile) is True:
                                     if nowarnings == False:
                                         print(f"only copying {pyfile} to {targetpath}", file=sys.stderr)
@@ -313,14 +346,14 @@ class Explainer(ABC):
             print(f"{fullpath}: does not exit", file=sys.stderr)
         return module
 
-    def load(self, yamlpath:str=None) -> Union[ExplainerModuleSpec, None]:
-        """loads the plugin under the directory explainer/explainers
+    def load(self, yamlname:str=None) -> Union[ExplainerModuleSpec, None]:
+        """Loads the plugin under the directory explainer/explainers into the sys.path
 
         Args:
-            yamlpath (str): the yaml file path
+            yamlname (str): the yaml file path
 
         """
-        fullpath, yamlpath = self.get_fullpath(yamlpath, addsuffix=True)
+        fullpath, yamlname = self.get_paths(yamlname, addsuffix=True)
         module: Union[ExplainerModuleSpec, None] = None
         if os.path.exists(fullpath):
             module = ExplainerLoader(fullpath, verbose=False).module
@@ -328,14 +361,14 @@ class Explainer(ABC):
             print(f"{fullpath}: does not exit", file=sys.stderr)
         return module
 
-    def uninstall(self, yamlpath:str=None) -> bool:
-        """uninstalls the plugin related directory under explainer/explainers
+    def uninstall(self, yamlname:str=None) -> bool:
+        """Uninstalls the plugin related directory under explainer/explainers
 
         Args:
-            yamlpath (str): the yaml file path
+            yamlname (str): the yaml file path
 
         """
-        fullpath, yamlpath = self.get_fullpath(yamlpath, addsuffix=False)
+        fullpath, yamlname = self.get_paths(yamlname, addsuffix=False)
         if os.path.exists(fullpath):
             rmtree(fullpath, ignore_errors=True)
             if os.path.exists(fullpath):
@@ -346,23 +379,20 @@ class Explainer(ABC):
             return False
         return True
 
-    def unload(self, yamlpath:str=None) -> bool:
-        """Unload the plugin using info from the yaml file to get the plugin path
-
+    def unload(self, yamlname:str=None) -> bool:
+        """Unloads the plugin using info from the yaml file to get the plugin path.
         If the yaml file specifies a name which is a directory under explainer/explainers then 
         this function will unload the plugin from sys.path
 
-
         Args:
-            yamlpath (str): path to the yaml file
+            yamlname (str): name of the yaml file
 
         Returns:
             ExplainerModuleSpec: A ModuleSpec subclass
         """
-        fullpath, yamlpath = self.get_fullpath(yamlpath, addsuffix=False)
+        fullpath, yamlname = self.get_paths(yamlname, addsuffix=False)
         if os.path.exists(fullpath):
             if fullpath in sys.path:
-                #print(f"Calling sys.path.remove", file=sys.stderr)
                 sys.path.remove(fullpath)
                 if fullpath in sys.path:
                     print(f"Could not remove {fullpath} from sys.path", file=sys.stderr)
@@ -372,15 +402,14 @@ class Explainer(ABC):
         return True
 
 class ExplainerContextManager:
-    """ExplainerContextManager
-       
-       Will load a plugin for the duration of the context and then unload it
-       Example:
-
-       from explainer.api import ExplainerContextManager as ec
-           with ec('feature_attributions_explainer') as fe:
-               pe = fe.partitionexplainer
-               ??pe
+    """
+    Loads a plugin for the duration of the context and then unloads it.
+ 
+    Example:
+        >>> from explainer.api import ExplainerContextManager as ec
+        >>>     with ec('feature_attributions_explainer') as fe:
+        >>>         pe = fe.partitionexplainer
+        >>>         ??pe
     """
     def __init__(self, plugin_name, update=False):
         self.plugin_name = plugin_name
@@ -403,5 +432,4 @@ class ExplainerContextManager:
             print(f"An exception occurred in your with block: {exc_type}", file=sys.stderr)
             print(f"Exception message: {exc_value}", file=sys.stderr)
             return True
-        #print(f"contextmanager __exit__ sys.path={sys.path}", file=sys.stderr)
         return False

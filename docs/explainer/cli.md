@@ -15,7 +15,14 @@
 
 ```{eval-rst}
 .. automodule:: explainer.commands.cmd_build
-   :noindex:
+   :members:
+
+```
+
+## explainer create
+
+```{eval-rst}
+.. automodule:: explainer.commands.cmd_create
    :members:
 
 ```
@@ -24,7 +31,6 @@
 
 ```{eval-rst}
 .. automodule:: explainer.commands.cmd_extract
-   :noindex:
    :members:
 
 ```
@@ -33,7 +39,6 @@
 
 ```{eval-rst}
 .. automodule:: explainer.commands.cmd_generate
-   :noindex:
    :members:
 
 ```
@@ -42,7 +47,6 @@
 
 ```{eval-rst}
 .. automodule:: explainer.commands.cmd_import
-   :noindex:
    :members:
 
 ```
@@ -51,7 +55,6 @@
 
 ```{eval-rst}
 .. automodule:: explainer.commands.cmd_info
-   :noindex:
    :members:
 
 ```
@@ -60,7 +63,6 @@
 
 ```{eval-rst}
 .. automodule:: explainer.commands.cmd_install
-   :noindex:
    :members:
 
 ```
@@ -69,7 +71,6 @@
 
 ```{eval-rst}
 .. automodule:: explainer.commands.cmd_list
-   :noindex:
    :members:
 
 ```
@@ -78,7 +79,14 @@
 
 ```{eval-rst}
 .. automodule:: explainer.commands.cmd_uninstall
-   :noindex:
+   :members:
+
+```
+
+## explainer update
+
+```{eval-rst}
+.. automodule:: explainer.commands.cmd_update
    :members:
 
 ```

@@ -24,10 +24,14 @@ def complete_explainers(ctx, param, incomplete) -> List[str]:
 class Environment:
     """ Provides an Environment that can be passed to click subcommands"""
 
-    def __init__(self):
+    def __init__(self, yamlname:str=None):
         self.verbose: bool = False
         self.home: str = os.getcwd()
-        self.explainer: Explainer = Explainer()
+        self.explainer: Explainer = Explainer(yamlname)
+
+    def __call__(self, yamlname:str):
+        self.explainer = Explainer(yamlname)
+        return self
 
     def log(self, msg: str, *args):
         """Logs a message to stderr."""
