@@ -220,7 +220,7 @@ from explainer.explainers import shap_explainer
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-10-21 00:15:18.477289: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 FMA
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2022-10-26 19:31:31.077759: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 FMA
 To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
 
 User settings:
@@ -298,8 +298,8 @@ Effective settings:
    OMP_WAIT_POLICY=PASSIVE
    KMP_AFFINITY=&#39;verbose,warnings,respect,granularity=fine,compact,1,0&#39;
 
-2022-10-21 00:15:18.520149: I tensorflow/core/common_runtime/process_util.cc:146] Creating new thread pool with default inter op setting: 
-2022-10-21 00:15:18.568117: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:354] MLIR V1 optimization pass is not enabled
+2022-10-26 19:31:31.093930: I tensorflow/core/common_runtime/process_util.cc:146] Creating new thread pool with default inter op setting: 
+2022-10-26 19:31:31.106841: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:354] MLIR V1 optimization pass is not enabled
 </pre></div>
 </div>
 </div>
@@ -349,7 +349,7 @@ Effective settings:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:tensorflow:From /tmp/ipykernel_1129683/1444819054.py:7: The name tf.keras.backend.get_session is deprecated. Please use tf.compat.v1.keras.backend.get_session instead.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:tensorflow:From /tmp/ipykernel_243654/1444819054.py:7: The name tf.keras.backend.get_session is deprecated. Please use tf.compat.v1.keras.backend.get_session instead.
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -377,8 +377,8 @@ Effective settings:
   <tbody>
     <tr>
       <th>0</th>
-      <td>1671514</td>
-      <td>3.116</td>
+      <td>1748358</td>
+      <td>1.282</td>
     </tr>
   </tbody>
 </table>
@@ -412,45 +412,45 @@ Effective settings:
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>1.368</td>
-      <td>1.368</td>
-      <td>1.368</td>
-      <td>1.368</td>
+      <td>0.428</td>
+      <td>0.428</td>
+      <td>0.428</td>
+      <td>0.428</td>
       <td>method tensorflow.python.client._pywrap_tf_ses...</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>80</td>
-      <td>0.297</td>
-      <td>0.004</td>
-      <td>1.693</td>
-      <td>0.021</td>
-      <td>inspect.py:727(getmodule)</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>69782</td>
-      <td>0.216</td>
+      <td>75716</td>
+      <td>0.125</td>
       <td>0.000</td>
-      <td>0.216</td>
+      <td>0.125</td>
       <td>0.000</td>
       <td>method posix.lstat}</td>
     </tr>
     <tr>
-      <th>3</th>
-      <td>69788</td>
-      <td>0.166</td>
+      <th>2</th>
+      <td>75722</td>
+      <td>0.098</td>
       <td>0.000</td>
-      <td>0.266</td>
+      <td>0.157</td>
       <td>0.000</td>
       <td>posixpath.py:71(join)</td>
     </tr>
     <tr>
+      <th>3</th>
+      <td>80</td>
+      <td>0.087</td>
+      <td>0.001</td>
+      <td>0.818</td>
+      <td>0.010</td>
+      <td>inspect.py:727(getmodule)</td>
+    </tr>
+    <tr>
       <th>4</th>
-      <td>5510</td>
-      <td>0.144</td>
+      <td>5548</td>
+      <td>0.083</td>
       <td>0.000</td>
-      <td>0.752</td>
+      <td>0.437</td>
       <td>0.000</td>
       <td>posixpath.py:397(_joinrealpath)</td>
     </tr>
@@ -470,7 +470,7 @@ Effective settings:
       <td>0.000</td>
       <td>0.000</td>
       <td>0.000</td>
-      <td>module_wrapper.py:62(&lt;genexpr&gt;)</td>
+      <td>'__enter__' of '_thread.lock' objects}</td>
     </tr>
     <tr>
       <th>338</th>
@@ -479,7 +479,7 @@ Effective settings:
       <td>0.000</td>
       <td>0.000</td>
       <td>0.000</td>
-      <td>method builtins.issubclass}</td>
+      <td>session.py:1353(&lt;listcomp&gt;)</td>
     </tr>
     <tr>
       <th>339</th>
@@ -650,6 +650,16 @@ model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs = 15)
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Future exception was never retrieved
+future: &lt;Future finished exception=BrokenPipeError(32, &#39;Broken pipe&#39;)&gt;
+Traceback (most recent call last):
+  File &quot;/localdisk/home/kdkasrav/.conda/envs/xai-oneapi-aikit/lib/python3.9/asyncio/unix_events.py&quot;, line 665, in write
+    n = os.write(self._fileno, data)
+BrokenPipeError: [Errno 32] Broken pipe
+</pre></div>
+</div>
+</div>
 </div>
 <p>From the model scores, we can see that our model has a good training accuracy, but not so good validation accuracy, indicating that the model is clearly over-fitting</p>
 <div class="cell docutils container">
@@ -693,24 +703,6 @@ for ind, label in enumerate(y_train):
     if label not in images_dict.keys():
         images_dict[label] = x_train[ind].reshape((32, 32,3))
 images_dict = dict(sorted(images_dict.items()))
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Future exception was never retrieved
-future: &lt;Future finished exception=BrokenPipeError(32, &#39;Broken pipe&#39;)&gt;
-Traceback (most recent call last):
-  File &quot;/home/kdkasrav/.conda/envs/xai-oneapi-aikit/lib/python3.9/asyncio/unix_events.py&quot;, line 665, in write
-    n = os.write(self._fileno, data)
-BrokenPipeError: [Errno 32] Broken pipe
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Future exception was never retrieved
-future: &lt;Future finished exception=BrokenPipeError(32, &#39;Broken pipe&#39;)&gt;
-Traceback (most recent call last):
-  File &quot;/home/kdkasrav/.conda/envs/xai-oneapi-aikit/lib/python3.9/asyncio/unix_events.py&quot;, line 665, in write
-    n = os.write(self._fileno, data)
-BrokenPipeError: [Errno 32] Broken pipe
 </pre></div>
 </div>
 </div>
