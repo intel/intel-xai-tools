@@ -16,8 +16,8 @@ def test_end_to_end():
 
     eval_config = text_format.Parse("""
     model_specs {
-    label_key: 'true_values'
-    prediction_key: 'predicted_values'
+    label_key: 'label'
+    prediction_key: 'prediction'
     }
     metrics_specs {
         metrics {class_name: "BinaryAccuracy"}
