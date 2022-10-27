@@ -1,0 +1,39 @@
+name: MCG Unit Test
+on:
+  pull_request_review:
+     types: [submitted]
+  # run the workflow if changes pushed to main or release branches
+  push:
+    branches:
+      - develop
+      - main
+    tags:
+      - '**'
+    paths:
+      - '**'
+jobs:
+  mcg-unit-test:
+    if: github.event.review.state == 'approved' ||
+        github.event.pull_request.merged == true ||
+        github.event_name == 'push'
+    runs-on: [ aia-devops ]
+    container:
+      image: amr-registry.caas.intel.com/aiops/tlt-dev
+      env:
+        http_proxy: ${{ secrets.HTTP_PROXY }}
+        https_proxy: ${{ secrets.HTTPS_PROXY }}
+        no_proxy: ${{ secrets.NO_PROXY }}
+      credentials:
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+      volumes:
+        - /tf_dataset/dataset/transfer_learning:/tmp/data
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install virtualenv
+        run: pip install virtualenv
+      - name: Run Unit Test
+        shell: bash
+        working-directory: ./model_card_gen
+        continue-on-error: false
+        run: make test
