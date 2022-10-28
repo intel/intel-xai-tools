@@ -20,13 +20,22 @@
 """
 XAI Tools, Explainer
 """
-from setuptools import setup
+from setuptools import setup, find_packages
 
 dependencies = [
   'click~=8.1.3',
   'click-completion~=0.5.2',
   'pyyaml~=6.0',
   'urllib3[secure]~=1.26.11'
+]
+
+include_modules = [
+  "explainer",
+  "explainer.api",
+  "explainer.cli",
+  "explainer.version",
+  "explainer.commands",
+  "explainer.commands.*",
 ]
 
 test_dependencies = [
@@ -48,7 +57,7 @@ setup(
     author_email='kam.d.kasravi@intel.com',
     description='Explainer invokes an explainer given a model, dataset and features',
     long_description=__doc__,
-    py_modules=["explainer", "explainer.cli"],
+    packages=find_packages(include=include_modules),
     include_package_data=True,
     zip_safe=False,
     platforms='any',

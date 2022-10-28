@@ -1,6 +1,12 @@
 DOCS_DIR ?= ../docs
 explainer::
-	pip install -U -e .
+	pip install -e .
+
+explainer-whl::
+	python setup.py bdist_wheel
+
+clean::
+	@rm -rf build dist intel_xai_tools.egg-info
 
 test::
 	pytest tests
