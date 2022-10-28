@@ -3,26 +3,25 @@
 This module init registers a finder and loader to
 import yaml files and create a ModuleSpec
 """
-__version__ = "0.2.0"
-
 import os
 import csv
 import sys
 import re
 import datetime
 
-from dataclasses import dataclass, fields, Field
+from dataclasses import dataclass
 from importlib.metadata import entry_points as entrypoints
 from importlib.abc import Loader, MetaPathFinder, ResourceReader, TraversableResources, Traversable
 from importlib.machinery import ModuleSpec
 from importlib.resources import open_text
 from importlib.util import spec_from_loader
 from types import ModuleType
-from typing import Any, BinaryIO, Callable, Iterable, List, Sequence, Text, Type, TypedDict, Union
-from typing_extensions import dataclass_transform
+from typing import Any, BinaryIO, Callable, Iterable, List, Sequence, Text, Type, Union
 
 import yaml
 from yaml import MarkedYAMLError
+
+from .version import __version__
 
 EXT_YAML = '.yaml'
 

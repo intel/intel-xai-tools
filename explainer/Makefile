@@ -2,6 +2,13 @@ DOCS_DIR ?= ../docs
 explainer::
 	pip install -U -e .
 
+test::
+	pytest tests
+
+bump-version::
+	pip install bump2version==1.0.1
+	bump2version --current-version 0.2.0 minor explainer/version.py
+
 docs-install::
 	cd ${DOCS_DIR} && make install
 

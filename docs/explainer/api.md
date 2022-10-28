@@ -8,7 +8,6 @@ sd_hide_title: true
 ```{eval-rst}
 
 .. automodule:: explainer.api
-   :noindex:
    :members:
 
 ```
