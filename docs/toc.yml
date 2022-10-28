@@ -39,3 +39,6 @@ entries:
   - file: model_card_gen/api.md
     options:
       titlesonly: True
+  - file: model_card_gen/example.md
+    options:
+      titlesonly: True
