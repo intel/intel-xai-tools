@@ -4,16 +4,10 @@ kernelspec:
   name: python3
 ---
 (mcg)=
-# Model Card Generator
 
+```{include} ../../model_card_gen/README.md
+```
 `````{grid} 1
 
-
-````{grid-item-card}
-
-```{literalinclude} ../../model_card_gen/README.md
-```
-
-````
 
 `````

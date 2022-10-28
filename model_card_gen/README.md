@@ -1,6 +1,4 @@
-# Intel® Explainable AI Tools
-
-## Model Card Generator
+# Model Card Generator
 
 Model Card Generator allows users to create interactive HTML reports of containing model performance and fairness metrics
 
@@ -110,7 +108,7 @@ Model Card Generator allows users to create interactive HTML reports of containi
 </tbody>
 </table>
 
-### Install
+## Install
 
 Step 1: Clone repo
 
@@ -132,7 +130,7 @@ pip install .
 ```
 
 
-### Run
+## Run
 
 **Populate Model Card user-defined fields**
 
@@ -240,7 +238,7 @@ eval_config = 'compas/eval_config.proto'
 mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config, model_card=mc)
 ```
 
-### Test
+## Test
 
 Step 1: Test by installing test dependencies:
 

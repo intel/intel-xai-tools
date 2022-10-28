@@ -16,6 +16,10 @@
 #
 # SPDX-License-Identifier: EPL-2.0
 #
+"""
+This module allows users to classes for performing end to end workflows
+around model card generation.
+"""
 
 #Base
 import os
@@ -53,6 +57,17 @@ _MODEL_CARDS_DIR = 'model_cards'
 _DEFAULT_MODEL_CARD_FILE_NAME = 'model_card.html'
 
 class ModelCardGen():
+    """Generate ModelCard from with TFMA
+
+    Args:
+        data_sets (dict): dictionary with keys of name of dataset and value to path
+        model_path (str): representing TF SavedModel path
+        eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
+        model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
+        eval_results (tfma.EvalResults): pre-generated tfma results for when you do not wish to run evaluator
+        output_dir (str): representing of where to output model card
+    """
+
     def __init__(self,
                  data_sets: Dict[Text, Text] = {},
                  model_path: Text = '',
@@ -60,17 +75,7 @@ class ModelCardGen():
                  model_card: Union[ModelCard, Dict[Text, Any]] = None,
                  eval_results: Sequence[tfma.EvalResult] = None,
                  output_dir: Text = ''):
-        """
-        Generate ModelCard from with TFMA
 
-        Args:
-            data_sets (dict): dictionary with keys of name of dataset and value to path
-            model_path (str): representing TF SavedModel path
-            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
-            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
-            eval_results (tfma.EvalResults): pre-generated tfma results for when you do not wish to run evaluator
-            output_dir (str): representing of where to output model card
-        """
         self.data_sets = self.check_data_sets(data_sets)
         self.model_path = model_path
         self.eval_config = eval_config
@@ -276,7 +281,7 @@ class ModelCardGen():
         model_card (ModelCard): The updated model card to write back.
   
       Raises:
-         Error: when the given model_card is invalid with reference to the schema.
+        Error: when the given model_card is invalid with reference to the schema.
       """
       self._write_json_file(self._mc_json_file, model_card)
 
@@ -338,32 +343,30 @@ class ModelCardGen():
 
     @staticmethod
     def _read_json(model_card_json: Union[Dict[Text, Any], Text]) -> Optional[ModelCard]:
-      """Read serialized model card proto from the path."""
-      model_card = ModelCard()
-      model_card.merge_from_json(model_card_json)
-      return model_card
+        """Read serialized model card proto from the path."""
+        model_card = ModelCard()
+        model_card.merge_from_json(model_card_json)
+        return model_card
 
     def export_format(self, model_card: Optional[ModelCard] = None,
                       template_path: Optional[Text] = None,
                       output_file=_DEFAULT_MODEL_CARD_FILE_NAME) -> Text:
         """Generates a model card document based on the MC assets.
 
-        The model card document is both returned by this function, as well as saved
-        to output_file.
-
         Args:
-        model_card (ModelCard): The ModelCard object, generated from `scaffold_assets()`. If
-            not provided, it will be read from the ModelCard proto file in the
-            assets directory.
-        template_path (str): The file path of the Jinja template. If not provided, the
-            default template will be used.
-        output_file (str): The file name of the generated model card. If not provided,
-            the default 'model_card.html' will be used. If the file already exists,
-            then it will be overwritten.
+            model_card (ModelCard): The ModelCard object, generated from `scaffold_assets()`.
+                If not provided, it will be read from the ModelCard proto file in the
+                assets directory.
+            template_path (str): The file path of the Jinja template. If not provided, the
+                default template will be used.
+            output_file (str): The file name of the generated model card. If not provided,
+                the default 'model_card.html' will be used. If the file already exists,
+                then it will be overwritten.
 
         Returns:
-        The model card file content.
+            The model card file content.
         """
+
         if not template_path:
             template_path = os.path.join(self._mc_template_dir,
                                          _DEFAULT_UI_TEMPLATE_FILE)
