@@ -21,51 +21,8 @@ from torch.utils.data import random_split, TensorDataset
 from torch import TensorType
 import torch
 from numpy.typing import NDArray as Array
+from model_card_gen.datasets import BaseDataset
 import random
-
-class BaseDataset:
-    """
-    Base class for all datasets supported by ModelCardGen
-    """
-    def __init__(self, dataset_path=None, name=None):
-        self._dataset_path = dataset_path
-        self._dataset_name = name
-
-    @property
-    def dataset_path(self):
-        """
-        Returns the file path of the dataset
-        """
-        return self._dataset_path
-
-    @property
-    def name(self):
-        """
-        Returns the name of the dataset
-        """
-        return self._name
-    
-    @property
-    def description(self):
-        """
-        Returns the description of the dataset
-        """
-        return self._description
-
-class TensorflowDataset(BaseDataset):
-    """
-    Class wrapper for Tensorflow tfrecord
-    """
-    def __init__(self, dataset_path, name=""):
-        super().__init__(dataset_path, name)
-        self._framework = "tensorflow"
-    
-    @property
-    def framework(self):
-        """
-        Returns the framework for dataset
-        """
-        return self._framework
 
 class PytorchDataset(BaseDataset):
     """

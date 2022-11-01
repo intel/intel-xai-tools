@@ -72,6 +72,7 @@ setup(
     packages=[
         'model_card_gen',
         'model_card_gen.analyze',
+        'model_card_gen.datasets',
         'model_card_gen.docs',
         'model_card_gen.docs.examples',
         'model_card_gen.graphics',
