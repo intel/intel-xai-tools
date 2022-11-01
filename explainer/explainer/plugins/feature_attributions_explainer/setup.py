@@ -22,7 +22,7 @@ setup(
         'explainer.explainers.feature_attributions_explainer': [
             'kernelexplainer = feature_attributions_explainer:kernel_explainer [model,data]',
             'deepexplainer = feature_attributions_explainer:deep_explainer [model,backgroundImages,targetImages,labels]',
-            'gradientexplainer = feature_attributions_explainer:gradient_explainer',
+            'gradientexplainer = feature_attributions_explainer:gradient_explainer [model,backgroundImages,targetImages,rankedOutputs,labels]',
             'partitionexplainer = feature_attributions_explainer:partition_explainer [model,tokenizer,categories]',
             'integratedgradients = feature_attributions_explainer:integratedgradients [model]',
             'deeplift = feature_attributions_explainer:deeplift [model]',

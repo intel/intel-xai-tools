@@ -19,28 +19,36 @@ class FeatureAttributions:
 class DeepExplainer(FeatureAttributions):
     def __init__(self, model, background_images, target_images, labels):
         super().__init__()
+        self.target_images = target_images
         self.explainer = self.shap.DeepExplainer(model, background_images)
-        self.shap_values = self.shap.shap_values(target_images)
+        self.shap_values = self.explainer.shap_values(target_images)
         self.labels = labels
 
-    def visualize(self, target_images):
+    def visualize(self):
         import numpy as np
 
-        arr = np.full((len(self.labels.classes_)), " ")
-        shap.image_plot(
+        arr = np.full((len(self.labels)), " ")
+        self.shap.image_plot(
             self.shap_values,
-            target_images,
-            np.array([list(self.labels.classes_), arr, arr]),
+            self.target_images,
+            np.array([list(self.labels), arr, arr]),
         )
 
 
 class GradientExplainer(FeatureAttributions):
-    def __init__(self):
+    def __init__(self, model, background_images, target_images, ranked_outputs, labels ):
         super().__init__()
+        self.target_images = target_images
+        self.labels = labels
+        self.explainer = self.shap.GradientExplainer(model, background_images)
+        self.shap_values, self.indexes = self.explainer.shap_values(self.target_images, ranked_outputs=ranked_outputs)
 
-    def visualize(self, target_images):
-        shap.image_plot(
-            self.shap_values, target_images, self.labels.classes_[self.indexes]
+    def visualize(self):
+        import numpy as np
+        self.shap.image_plot(
+            self.shap_values, 
+            self.target_images, 
+            self.labels[self.indexes]
         )
 
 
@@ -259,12 +267,16 @@ def deep_explainer(model, backgroundImages, targetImages, labels):
     return DeepExplainer(model, backgroundImages, targetImages, labels)
 
 
-def gradient_explainer():
+def gradient_explainer(model, backgroundImages, targetImages, rankedOutputs, labels):
     """
     Sets up a SHAP GradientExplainer, explains a model using expected gradients.
 
     Args:
-      None
+      model: model
+      backgroundImages: list
+      targetImages: list
+      rankedOutputs: int
+      labels: list
 
     Returns:
       GradientExplainer
@@ -272,7 +284,7 @@ def gradient_explainer():
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html
     """
-    return GradientExplainer()
+    return GradientExplainer(model, backgroundImages, targetImages, rankedOutputs, labels)
 
 
 def partition_explainer(model, tokenizer, categories):
