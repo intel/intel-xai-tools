@@ -91,8 +91,10 @@
         <span class="kn">import</span> <span class="nn">shap</span>
         <span class="n">shap</span><span class="o">.</span><span class="n">initjs</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shap</span> <span class="o">=</span> <span class="n">shap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">datasets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">plots</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bar_plot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_plot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">image</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">force_plot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text_plot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">text</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">waterfall_plot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span>
@@ -107,28 +109,37 @@
 <span class="k">class</span> <span class="nc">DeepExplainer</span><span class="p">(</span><span class="n">FeatureAttributions</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">background_images</span><span class="p">,</span> <span class="n">target_images</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_images</span> <span class="o">=</span> <span class="n">target_images</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">DeepExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">background_images</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">target_images</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">target_images</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
 
-    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_images</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">classes_</span><span class="p">)),</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
-        <span class="n">shap</span><span class="o">.</span><span class="n">image_plot</span><span class="p">(</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)),</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">image_plot</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span><span class="p">,</span>
-            <span class="n">target_images</span><span class="p">,</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">classes_</span><span class="p">),</span> <span class="n">arr</span><span class="p">,</span> <span class="n">arr</span><span class="p">]),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_images</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">),</span> <span class="n">arr</span><span class="p">,</span> <span class="n">arr</span><span class="p">]),</span>
         <span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">GradientExplainer</span><span class="p">(</span><span class="n">FeatureAttributions</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">background_images</span><span class="p">,</span> <span class="n">target_images</span><span class="p">,</span> <span class="n">ranked_outputs</span><span class="p">,</span> <span class="n">labels</span> <span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_images</span> <span class="o">=</span> <span class="n">target_images</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">GradientExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">background_images</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_images</span><span class="p">,</span> <span class="n">ranked_outputs</span><span class="o">=</span><span class="n">ranked_outputs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)][</span><span class="mi">1</span><span class="p">])(</span><span class="bp">self</span><span class="o">.</span><span class="n">indexes</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_images</span><span class="p">):</span>
-        <span class="n">shap</span><span class="o">.</span><span class="n">image_plot</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">target_images</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">classes_</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">indexes</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">image_plot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shap_values</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_images</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">index_names</span>
         <span class="p">)</span>
 
 
@@ -309,6 +320,21 @@
             <span class="n">title</span><span class="o">=</span><span class="n">imageTitle</span><span class="p">,</span>
         <span class="p">)</span>
 
+<div class="viewcode-block" id="explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.explainer">[docs]</a><span class="k">def</span> <span class="nf">explainer</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calls FeatureAttributions</span>
+<span class="sd">    Returns FeatureAttributions which has native references as attributes</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      FeatureAttributions</span>
+<span class="sd">    </span>
+<span class="sd">    Example:</span>
+<span class="sd">      &gt;&gt;&gt; from explainer.explainers import feature_attributions_explainer</span>
+<span class="sd">      &gt;&gt;&gt; explainer = feature_attributions_explainer.explainer</span>
+<span class="sd">      &gt;&gt;&gt; ??explainer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">FeatureAttributions</span><span class="p">()</span></div>
+
 
 <div class="viewcode-block" id="kernel_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.kernel_explainer">[docs]</a><span class="k">def</span> <span class="nf">kernel_explainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -347,12 +373,16 @@
     <span class="k">return</span> <span class="n">DeepExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">backgroundImages</span><span class="p">,</span> <span class="n">targetImages</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="gradient_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.gradient_explainer">[docs]</a><span class="k">def</span> <span class="nf">gradient_explainer</span><span class="p">():</span>
+<div class="viewcode-block" id="gradient_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.gradient_explainer">[docs]</a><span class="k">def</span> <span class="nf">gradient_explainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">backgroundImages</span><span class="p">,</span> <span class="n">targetImages</span><span class="p">,</span> <span class="n">rankedOutputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sets up a SHAP GradientExplainer, explains a model using expected gradients.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">      None</span>
+<span class="sd">      model: model</span>
+<span class="sd">      backgroundImages: list</span>
+<span class="sd">      targetImages: list</span>
+<span class="sd">      rankedOutputs: int</span>
+<span class="sd">      labels: list</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">      GradientExplainer</span>
@@ -360,7 +390,7 @@
 <span class="sd">    Reference:</span>
 <span class="sd">      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">GradientExplainer</span><span class="p">()</span></div>
+    <span class="k">return</span> <span class="n">GradientExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">backgroundImages</span><span class="p">,</span> <span class="n">targetImages</span><span class="p">,</span> <span class="n">rankedOutputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="partition_explainer"><a class="viewcode-back" href="../explainer/feature_attributions_explainer.html#feature_attributions_explainer.partition_explainer">[docs]</a><span class="k">def</span> <span class="nf">partition_explainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">categories</span><span class="p">):</span>
