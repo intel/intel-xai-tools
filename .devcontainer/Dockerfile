@@ -1,0 +1,16 @@
+# See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.224.3/containers/codespaces-linux/.devcontainer/base.Dockerfile
+
+FROM mcr.microsoft.com/vscode/devcontainers/universal:1-focal
+
+# ** [Optional] Uncomment this section to install additional packages. **
+USER root
+#
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends direnv
+
+COPY library-scripts/vgrep /usr/local/bin
+RUN chown root /usr/local/bin/vgrep && \
+    chgrp root /usr/local/bin/vgrep && \
+    chmod 777 /usr/local/bin/vgrep
+
+USER codespace
