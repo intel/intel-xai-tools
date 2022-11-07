@@ -5,6 +5,9 @@ explainer::
 explainer-whl::
 	python setup.py bdist_wheel
 
+explainer-install::
+	pip install dist/intel_xai_tools-0.2.0-py2.py3-none-any.whl
+
 clean::
 	@rm -rf build dist intel_xai_tools.egg-info
 

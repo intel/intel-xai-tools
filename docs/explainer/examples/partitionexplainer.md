@@ -20,6 +20,11 @@ from explainer.explainers import feature_attributions_explainer, metrics_explain
 ```
 
 ```{code-cell} ipython3
+import warnings
+warnings.filterwarnings('ignore')
+import os
+os.environ['KMP_WARNINGS'] = 'off'
+
 import numpy as np
 from sklearn import datasets
 
@@ -83,6 +88,9 @@ def create_model():
 
 model = create_model()
 
+```
+
+```{code-cell} ipython3
 model.summary()
 ```
 

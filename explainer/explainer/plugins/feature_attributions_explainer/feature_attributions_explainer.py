@@ -3,8 +3,10 @@ class FeatureAttributions:
         import shap
         shap.initjs()
         self.shap = shap
+        self.datasets = shap.datasets
         self.plots = self.shap.plots
         self.bar_plot = self.plots.bar
+        self.image_plot = self.plots.image
         self.force_plot = self.shap.force_plot
         self.text_plot = self.plots.text
         self.waterfall_plot = self.shap.waterfall_plot
@@ -37,18 +39,19 @@ class DeepExplainer(FeatureAttributions):
 
 class GradientExplainer(FeatureAttributions):
     def __init__(self, model, background_images, target_images, ranked_outputs, labels ):
+        import numpy as np
         super().__init__()
         self.target_images = target_images
         self.labels = labels
         self.explainer = self.shap.GradientExplainer(model, background_images)
         self.shap_values, self.indexes = self.explainer.shap_values(self.target_images, ranked_outputs=ranked_outputs)
+        self.index_names = np.vectorize(lambda x: self.labels[str(x)][1])(self.indexes)
 
     def visualize(self):
-        import numpy as np
         self.shap.image_plot(
             self.shap_values, 
             self.target_images, 
-            self.labels[self.indexes]
+            self.index_names
         )
 
 
@@ -228,6 +231,21 @@ class Captum_FeatureAblation:
             show_colorbar=True,
             title=imageTitle,
         )
+
+def explainer():
+    """
+    Calls FeatureAttributions
+    Returns FeatureAttributions which has native references as attributes
+
+    Returns:
+      FeatureAttributions
+    
+    Example:
+      >>> from explainer.explainers import feature_attributions_explainer
+      >>> explainer = feature_attributions_explainer.explainer
+      >>> ??explainer
+    """
+    return FeatureAttributions()
 
 
 def kernel_explainer(model, data):

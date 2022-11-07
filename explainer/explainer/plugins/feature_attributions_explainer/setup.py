@@ -20,6 +20,7 @@ setup(
     ],
     entry_points={ 
         'explainer.explainers.feature_attributions_explainer': [
+            'explainer = feature_attributions_explainer:explainer',
             'kernelexplainer = feature_attributions_explainer:kernel_explainer [model,data]',
             'deepexplainer = feature_attributions_explainer:deep_explainer [model,backgroundImages,targetImages,labels]',
             'gradientexplainer = feature_attributions_explainer:gradient_explainer [model,backgroundImages,targetImages,rankedOutputs,labels]',
@@ -29,7 +30,7 @@ setup(
             'smoothgrad = feature_attributions_explainer:smoothgrad [model]',
             'featureablation = feature_attributions_explainer:featureablation [model]',
             'saliency = feature_attributions_explainer:saliency [model]',
-            'sentiment_analysis = feature_attributions_explainer:sentiment_analysis [model, text]',
+            'sentimentanalysis = feature_attributions_explainer:sentiment_analysis [model, text]',
         ]
     }, 
     python_requires='>=3.9'

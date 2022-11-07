@@ -3,6 +3,7 @@ import explainer
 sys.path.insert(0, os.path.abspath('../explainer/explainer/explainers/lm_layers_explainer'))
 sys.path.insert(0, os.path.abspath('../explainer/explainer/explainers/feature_attributions_explainer'))
 sys.path.insert(0, os.path.abspath('../explainer/explainer/explainers/metrics_explainer'))
+os.environ['KMP_WARNINGS'] = 'off'
 project = 'Intel® Explainable AI Tools'
 add_module_names = False
 author = 'IntelAI'
@@ -17,6 +18,7 @@ exclude_patterns = [
   'explainer/design.md',
   'explainer/examples/model_layers.md',
   'explainer/examples/partitionexplainer.md',
+  'explainer/examples/ExplainingDeepLearningModels.md',
   'explainer/examples/TorchVision_CIFAR_Interpret.ipynb',
   'explainer/examples/Explaining_Transformers.ipynb',
   'explainer/examples/heart_disease.ipynb',
@@ -53,7 +55,6 @@ extensions = [
   'sphinx_external_toc',
   'sphinx.ext.intersphinx',
   'sphinx.ext.autodoc',
-  'sphinx.ext.autosummary',
   'sphinx.ext.napoleon',
   'sphinx.ext.viewcode',
   'sphinxcontrib_autodocgen',

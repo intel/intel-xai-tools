@@ -8,6 +8,7 @@ dependencies:
 - scikit-learn==1.1.2
 - pandas==1.5.0
 - plotly==5.10.0
+- jupyter-plotly-dash==0.4.3
 entry_points:
 - 'confusionmatrix= metrics_explainer:confusion_matrix [groundtruth,predictions,labels]'
 - 'plot=metrics_explainer:plot [groundtruth,predictions,labels]'
