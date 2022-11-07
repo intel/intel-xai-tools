@@ -16,13 +16,18 @@
 #
 # SPDX-License-Identifier: EPL-2.0
 #
-from torch.utils.data import DataLoader as loader
-from torch.utils.data import random_split, TensorDataset
-from torch import TensorType
-import torch
+
 from numpy.typing import NDArray as Array
+from typing import Any
 from model_card_gen.datasets import BaseDataset
 import random
+TorchTensorType = Any
+try:
+    import torch
+    from torch.utils.data import DataLoader as loader
+    from torch.utils.data import random_split, TensorDataset
+    from torch import TensorType as TorchTensorType
+except: ImportError
 
 class PytorchDataset(BaseDataset):
     """
@@ -77,7 +82,7 @@ class PytorchNumpyDataset(PytorchDataset):
     def __init__(self,
                  input_array : Array,
                  target_array : Array,
-                 input_tensor_type: TensorType=None,
+                 input_tensor_type: TorchTensorType=None,
                  name : str='',
                 feature_names : list = []):
         dataset = self._make_dataset(input_array, target_array, input_tensor_type=input_tensor_type)
@@ -101,7 +106,7 @@ class PytorchNumpyDataset(PytorchDataset):
     def _make_dataset(self,
                       input_array: Array,
                       target_array: Array,
-                      input_tensor_type: TensorType=None):
+                      input_tensor_type: TorchTensorType=None):
 
         input_tensor = torch.from_numpy(input_array)
         if input_tensor_type:

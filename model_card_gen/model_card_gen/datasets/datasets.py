@@ -47,18 +47,3 @@ class BaseDataset:
         Returns the description of the dataset
         """
         return self._description
-
-class TensorflowDataset(BaseDataset):
-    """
-    Class wrapper for Tensorflow tfrecord
-    """
-    def __init__(self, dataset_path, name=""):
-        super().__init__(dataset_path, name)
-        self._framework = "tensorflow"
-    
-    @property
-    def framework(self):
-        """
-        Returns the framework for dataset
-        """
-        return self._framework
