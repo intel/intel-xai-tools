@@ -274,7 +274,7 @@ setup(
         section_five = """   },"""
         sections.append(section_five)
         section_six = f"""
-    python_requires='>=3.9'
+    python_requires='>=3.9,<3.10'
 )
 """
         sections.append(section_six)

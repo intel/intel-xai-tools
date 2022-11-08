@@ -22,5 +22,5 @@ setup(
             'pstats=metrics_explainer:pstats [command]',
         ]
     }, 
-    python_requires='>=3.9'
+    python_requires='>=3.9,<3.10'
 )

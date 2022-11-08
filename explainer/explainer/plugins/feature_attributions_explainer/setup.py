@@ -33,5 +33,5 @@ setup(
             'sentimentanalysis = feature_attributions_explainer:sentiment_analysis [model, text]',
         ]
     }, 
-    python_requires='>=3.9'
+    python_requires='>=3.9,<3.10'
 )
