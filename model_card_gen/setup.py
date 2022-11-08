@@ -67,8 +67,8 @@ setup(
     long_description=_LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     url='',
-    author='',
-    author_email='',
+    author='IntelAI',
+    author_email='IntelAI@intel.com',
     packages=[
         'model_card_gen',
         'model_card_gen.analyze',
