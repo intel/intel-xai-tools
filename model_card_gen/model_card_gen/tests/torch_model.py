@@ -64,7 +64,7 @@ def get_data():
                          torch.Tensor(y).type(torch.LongTensor)) , feature_names
 
 def get_trained_model(adult_dataset, feature_names):
-    tmp_train = tempfile.mktemp()
+    tmp_train = tempfile.mkstemp()
     net = AdultNN(len(feature_names))
     criterion = nn.CrossEntropyLoss()
     num_epochs = 200
