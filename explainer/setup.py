@@ -54,7 +54,7 @@ setup(
     url='https://github.com/IntelAI/intel-xai-tools',
     license='Apache 2.0',
     author='IntelAI',
-    author_email='kam.d.kasravi@intel.com',
+    author_email='IntelAI@intel.com',
     description='Explainer invokes an explainer given a model, dataset and features',
     long_description=__doc__,
     packages=find_packages(include=include_modules),

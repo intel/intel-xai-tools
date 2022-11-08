@@ -11,9 +11,9 @@ Requirements:
 
 1. Clone this repo and navigate to the repo directory:
    ```
-   git clone https://github.com/intel-innersource/frameworks.ai.explainable-ai.git
+   git clone https://github.com/IntelAI/intel-xai-tools.git
 
-   cd frameworks.ai.explainable-ai/explainer/
+   cd intel-xai-tools/explainer/
    ```
 2. Create and activate a Python3 virtual environment using `virtualenv`:
    ```
