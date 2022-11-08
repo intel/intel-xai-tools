@@ -10,7 +10,7 @@ import click
 from explainer.cli import (complete_explainers, pass_environment, Environment)
 
 
-@click.command("uninstall", short_help="uninstalls the plugin directory under the directory explainer/explainers.")
+@click.command("uninstall", short_help="uninstalls the plugin directory under the directory explainer/explainers")
 @click.argument("path", required=True, type=str, shell_complete=complete_explainers)
 @pass_environment
 def cli(env: Environment, path: str):

@@ -6,7 +6,7 @@
 Requirements:
 * Linux system (or WSL2 on Windows)
 * git
-* python >= 3.9
+* required python version: >=3.9,<3.10
 * `apt-get install build-essential python3-dev`
 
 1. Clone this repo and navigate to the repo directory:
@@ -45,12 +45,15 @@ command can be found using `explainer <command> --help` (like `explainer export 
 | Commands | Description | 
 |----------|-----------|
 |build | builds a wheel and moves it to explainer/plugins|
+|create | creates a yaml file under explainer/explainers|
 |extract | unpacks a wheel file to explainer/plugins|
 |generate | generates a template plugin directory under explainer/plugins|
 |import | imports an explainable's functionality as defined by ExplainerSpec|
 |info | shows info about an explainer under explainer.explainers|
+|install | installs the plugin (wheel) under the directory explainer/explainers|
 |list | lists available explainers|
-|visualize | Plots an explanation JSON definition|
+|uninstall |uninstalls the plugin directory under the directory explainer/explainers|
+|update | calls the generate, build and install apis|
 
 
 ## Running Notebooks

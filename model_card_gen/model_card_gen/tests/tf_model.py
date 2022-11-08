@@ -37,8 +37,8 @@ FEATURE_MAP = {
 MODEL_PATH = tempfile.gettempdir()
 
 def get_data_slice(first=1000):
-    tmp_train = tempfile.mktemp()
-    tmp_validate = tempfile.mktemp()
+    tmp_train = tempfile.mkstemp()
+    tmp_validate = tempfile.mkstemp()
     dataset_url = 'https://storage.googleapis.com/civil_comments_dataset/'
     train_tf_file = tf.keras.utils.get_file('train_tf_processed.tfrecord',
                                         dataset_url + 'train_tf_processed.tfrecord')

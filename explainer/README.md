@@ -11,7 +11,7 @@
 Requirements:
 * Linux system (or WSL2 on Windows)
 * git
-* python >= 3.9
+* required python version: >=3.9,<3.10
 * `apt-get install build-essential python3-dev`
 
 1. Clone this repo and navigate to the repo directory:
@@ -54,12 +54,15 @@ command can be found using `explainer <command> --help` (like `explainer export 
 | Commands | Description | 
 |----------|-----------|
 |build | builds a wheel and moves it to explainer/plugins|
+|create | creates a yaml file under explainer/explainers|
 |extract | unpacks a wheel file to explainer/plugins|
 |generate | generates a template plugin directory under explainer/plugins|
 |import | imports an explainable's functionality as defined by ExplainerSpec|
 |info | shows info about an explainer under explainer.explainers|
+|install | installs the plugin (wheel) under the directory explainer/explainers|
 |list | lists available explainers|
-|visualize | Plots an explanation JSON definition|
+|uninstall |uninstalls the plugin directory under the directory explainer/explainers|
+|update | calls the generate, build and install apis|
 
 ## Running Notebooks
 
@@ -69,9 +72,9 @@ Run the entry point install command for the desired notebook. You many need to r
 
 | Notebook | Entry Point Install Command | 
 |----------|-----------|
-|[ExplainingDeepLearningModels.ipynb](docs/explainer/examples/ExplainingDeepLearningModels.ipynb)| `explainer install feature_attributions_explainer` & `explainer install metrics_explainer`|
-|[heart_disease.ipynb](/docs/explainer/examples/heart_disease.ipynb)| `explainer install feature_attributions_explainer` & `explainer install metrics_explainer`|
-|[model_layers.ipynb](/docs/explainer/examples/model_layers.ipynb)|`explainer install lm_layers_explainer`|
-|[multiclass_classification.ipynb](/docs/explainer/examples/multiclass_classification.ipynb)|`explainer install lm_classifier_explainer`|
-|[test_explainer.ipynb](/docs/explainer/examples/test_explainer.ipynb)|`explainer install test_explainer`|
-|[zero_shot_learning.ipynb](/docs/explainer/examples/zero_shot_learning.ipynb)|`explainer install lm_zeroshot_explainer`|
+|[Explaining Deep Learning Models](/docs/explainer/examples/ExplainingDeepLearningModels.ipynb)| `explainer install feature_attributions_explainer` & `explainer install metrics_explainer`|
+|[Explaining Heart Disease](/docs/explainer/examples/heart_disease.ipynb)| `explainer install feature_attributions_explainer` & `explainer install metrics_explainer`|
+|[Explaining Language Model Activations](/docs/explainer/examples/model_layers.ipynb)| `explainer install lm_layers_explainer`|
+|[Explaining Text Classification](/docs/explainer/examples/partitionexplainer.ipynb)|  `explainer install feature_attributions_explainer` & `explainer install metrics_explainer`|
+|[TorchVision CIFAR Interpret](/docs/explainer/examples/TorchVision_CIFAR_Interpret.ipynb)| `explainer install feature_attributions_explainer` & `explainer install metrics_explainer`|
+|[Explaining Vision Transformers (Vit) ](/docs/explainer/examples/vit_transformer.ipynb)| `explainer install feature_attributions_explainer` & `explainer install metrics_explainer`|

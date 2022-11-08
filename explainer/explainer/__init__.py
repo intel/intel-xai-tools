@@ -94,20 +94,24 @@ class ExplainerSpec(yaml.YAMLObject):
         self.plugin: Union[str,None] = plugin
 
     def __repr__(self):
-        info = f'{self.__class__.__name__}(name="{self.name}"'
-        if hasattr(self, 'version'):
-            info += f', version="{self.version}"'
-        if hasattr(self, 'dataset'):
-            info += f', dataset="{self.dataset}"'
+        info = f'{self.__class__.__name__}:\n'
+        info += f'\tname: {self.name}\n'
+        if hasattr(self, 'version') and self.version is not None:
+            info += f'\tversion: {self.version}\n'
+        if hasattr(self, 'dataset') and self.dataset is not None:
+            info += f'\tdataset: {self.dataset}\n'
+        if hasattr(self, 'model') and self.model is not None:
+            info += f'\tmodel: {self.model}\n'
+        if hasattr(self, 'plugin') and self.plugin is not None:
+            info += f'\tplugin: {self.plugin}\n'
         if hasattr(self, 'dependencies'):
-            info += f', dependencies="{self.dependencies}"'
+            info += f'\tdependencies:\n'
+            for dependency in self.dependencies:
+                info += f'\t\t- {dependency}\n'
         if hasattr(self, 'entry_points'):
-            info += f', entry_points="{self.entry_points}"'
-        if hasattr(self, 'model'):
-            info += f', model="{self.model}"'
-        if hasattr(self, 'plugin'):
-            info += f', plugin="{self.model}"'
-        info += ")"
+            info += f'\tentry_points:\n'
+            for ep in self.entry_points:
+                info += f'\t\t- "{ep}"\n'
         return info
 
 @dataclass
@@ -217,7 +221,7 @@ install: wheel
 
 test: install
 \tcd test && python test.py
-        """
+"""
 
     def readme(self) -> str:
         header = "# "+self.spec.name
@@ -270,7 +274,7 @@ setup(
         section_five = """   },"""
         sections.append(section_five)
         section_six = f"""
-    python_requires='>=3.9'
+    python_requires='>=3.9,<3.10'
 )
 """
         sections.append(section_six)

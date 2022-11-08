@@ -22,7 +22,9 @@ import tensorflow_model_analysis as tfma
 from typing import Text, Union, Optional
 from model_card_gen.utils.types import DatasetType
 from model_card_gen.analyze.analyzer import ModelAnalyzer
-import torch
+try:
+    import torch
+except: ImportError
 
 class PTAnalyzer(ModelAnalyzer):
     def __init__(self,

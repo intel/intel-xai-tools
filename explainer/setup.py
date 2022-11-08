@@ -85,6 +85,6 @@ setup(
         'Topic :: Scientific/Engineering :: Mathematics',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
-    python_requires='>=3.9',
+    python_requires='>=3.9,<3.10',
     keywords='XAI, explainer',
 )

@@ -3,8 +3,10 @@ class FeatureAttributions:
         import shap
         shap.initjs()
         self.shap = shap
+        self.datasets = shap.datasets
         self.plots = self.shap.plots
         self.bar_plot = self.plots.bar
+        self.image_plot = self.plots.image
         self.force_plot = self.shap.force_plot
         self.text_plot = self.plots.text
         self.waterfall_plot = self.shap.waterfall_plot
@@ -19,28 +21,37 @@ class FeatureAttributions:
 class DeepExplainer(FeatureAttributions):
     def __init__(self, model, background_images, target_images, labels):
         super().__init__()
+        self.target_images = target_images
         self.explainer = self.shap.DeepExplainer(model, background_images)
-        self.shap_values = self.shap.shap_values(target_images)
+        self.shap_values = self.explainer.shap_values(target_images)
         self.labels = labels
 
-    def visualize(self, target_images):
+    def visualize(self):
         import numpy as np
 
-        arr = np.full((len(self.labels.classes_)), " ")
-        shap.image_plot(
+        arr = np.full((len(self.labels)), " ")
+        self.shap.image_plot(
             self.shap_values,
-            target_images,
-            np.array([list(self.labels.classes_), arr, arr]),
+            self.target_images,
+            np.array([list(self.labels), arr, arr]),
         )
 
 
 class GradientExplainer(FeatureAttributions):
-    def __init__(self):
+    def __init__(self, model, background_images, target_images, ranked_outputs, labels ):
+        import numpy as np
         super().__init__()
+        self.target_images = target_images
+        self.labels = labels
+        self.explainer = self.shap.GradientExplainer(model, background_images)
+        self.shap_values, self.indexes = self.explainer.shap_values(self.target_images, ranked_outputs=ranked_outputs)
+        self.index_names = np.vectorize(lambda x: self.labels[str(x)][1])(self.indexes)
 
-    def visualize(self, target_images):
-        shap.image_plot(
-            self.shap_values, target_images, self.labels.classes_[self.indexes]
+    def visualize(self):
+        self.shap.image_plot(
+            self.shap_values, 
+            self.target_images, 
+            self.index_names
         )
 
 
@@ -221,6 +232,21 @@ class Captum_FeatureAblation:
             title=imageTitle,
         )
 
+def explainer():
+    """
+    Calls FeatureAttributions
+    Returns FeatureAttributions which has native references as attributes
+
+    Returns:
+      FeatureAttributions
+    
+    Example:
+      >>> from explainer.explainers import feature_attributions_explainer
+      >>> explainer = feature_attributions_explainer.explainer
+      >>> ??explainer
+    """
+    return FeatureAttributions()
+
 
 def kernel_explainer(model, data):
     """
@@ -259,12 +285,16 @@ def deep_explainer(model, backgroundImages, targetImages, labels):
     return DeepExplainer(model, backgroundImages, targetImages, labels)
 
 
-def gradient_explainer():
+def gradient_explainer(model, backgroundImages, targetImages, rankedOutputs, labels):
     """
     Sets up a SHAP GradientExplainer, explains a model using expected gradients.
 
     Args:
-      None
+      model: model
+      backgroundImages: list
+      targetImages: list
+      rankedOutputs: int
+      labels: list
 
     Returns:
       GradientExplainer
@@ -272,7 +302,7 @@ def gradient_explainer():
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html
     """
-    return GradientExplainer()
+    return GradientExplainer(model, backgroundImages, targetImages, rankedOutputs, labels)
 
 
 def partition_explainer(model, tokenizer, categories):

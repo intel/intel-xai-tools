@@ -13,6 +13,7 @@ setup(
         'scikit-learn==1.1.2',
         'pandas==1.5.0',
         'plotly==5.10.0',
+        'jupyter-plotly-dash==0.4.3',
     ],
     entry_points={ 
         'explainer.explainers.metrics_explainer': [
@@ -21,5 +22,5 @@ setup(
             'pstats=metrics_explainer:pstats [command]',
         ]
     }, 
-    python_requires='>=3.9'
+    python_requires='>=3.9,<3.10'
 )

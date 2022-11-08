@@ -23,5 +23,5 @@ setup(
             'rankings = lm_layers_explainer:rankings [model]',
         ]
     }, 
-    python_requires='>=3.9'
+    python_requires='>=3.9,<3.10'
 )

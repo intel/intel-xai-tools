@@ -8,7 +8,7 @@ import click
 from explainer.cli import (complete_explainers, pass_environment, Environment)
 
 
-@click.command("update", short_help="Calls the generate, build and install apis")
+@click.command("update", short_help="calls the generate, build and install apis")
 @click.argument("yamlname", required=True, type=str, shell_complete=complete_explainers)
 @pass_environment
 def cli(env: Environment, yamlname: str):
