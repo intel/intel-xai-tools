@@ -1,0 +1,15 @@
+--- !ExplainerSpec
+name: metrics_explainer 
+version: 0.1
+plugin: explainer_explainers_metrics_explainer-0.1-py2.py3-none-any.whl
+dependencies:
+- matplotlib==3.6.0
+- seaborn==0.12.0
+- scikit-learn==1.1.2
+- pandas==1.5.0
+- plotly==5.10.0
+- jupyter-plotly-dash==0.4.3
+entry_points:
+- 'confusionmatrix= metrics_explainer:confusion_matrix [groundtruth,predictions,labels]'
+- 'plot=metrics_explainer:plot [groundtruth,predictions,labels]'
+- 'pstats=metrics_explainer:pstats [command]'

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2022 Intel Corporation
@@ -14,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# SPDX-License-Identifier: EPL-2.0
+# SPDX-License-Identifier: Apache-2.0
 #
 
 import plotly.express as px
@@ -76,8 +77,10 @@ class OverallPerformanceAtThreshold(_PlotlyGraph):
 
     def create_df(self, plots):
         df = plots_to_df(plots, self.eval_result_keys)
-        df['accuracy'] = ((df.truePositives + df.trueNegatives) / 
-            (df.truePositives + df.falsePositives + df.falseNegatives + df.trueNegatives))
+        num = df.get('truePositives', 0) + df.get('trueNegatives', 0)
+        dom = (df.get('truePositives', 0) + df.get('falsePositives', 0) + 
+               df.get('falseNegatives', 0) + df.get('trueNegatives', 0))
+        df['accuracy'] = num / dom
         df['f1'] = 2 * (df.precision * df.recall) / (df.precision + df.recall)
         return df
     
@@ -119,7 +122,7 @@ class DataStatsGraphs(_PlotlyGraph):
                      # button filter
                     df['feature'] = feature.name or feature.path.step[0]
                     # groupby feature
-                    df['dataset'] = 'Dataset {name}'.format(name=name.title())
+                    df['dataset'] = 'Dataset {name}'.format(name=str(name).title())
                     data = pd.concat([data, df])
         return data
 
@@ -172,8 +175,10 @@ class ConfusionMatrixAtThresholdsGraphs(_PlotlyGraph):
         
     def create_df(self, plots):
         df = plots_to_df(plots, self.eval_result_keys)
-        df['accuracy'] = ((df.truePositives + df.trueNegatives) / 
-            (df.truePositives + df.falsePositives + df.falseNegatives + df.trueNegatives))
+        num = df.get('truePositives', 0) + df.get('trueNegatives', 0)
+        dom = (df.get('truePositives', 0) + df.get('falsePositives', 0) + 
+               df.get('falseNegatives', 0) + df.get('trueNegatives', 0))
+        df['accuracy'] = num / dom
         df['f1'] = 2 * (df.precision * df.recall) / (df.precision + df.recall)
         return df
     
@@ -184,15 +189,20 @@ class ConfusionMatrixAtThresholdsGraphs(_PlotlyGraph):
         for metric in metrics:
             for group, df in dfs:
                 vis = True if metric == metrics[0] else False
+                feature = df.feature.iloc[0]
+                if feature == "Overall":
+                    title = feature
+                else:
+                    title = f'{feature}={group}'.replace('_', " ").title()
                 trace = go.Scatter(x=df[self.x_name],
                                 y=df[metric],
                                 mode='lines',
-                                name=group.title(),
+                                name=title,
                                 visible=vis)
                 fig.add_trace(trace)
                 
         def create_layout_button(metric, viz_arg):
-            return dict(label = metric.title(),
+            return dict(label = str(metric).title(),
                         method = 'update',
                         args = [{'visible': viz_arg},
                                 {'title': f'{metric} at {self.x_name}'.title()}])
@@ -234,11 +244,16 @@ class SlicingMetricGraphs(_PlotlyGraph):
         for metric in self.metrics:
             for group, df in dfs:
                 vis = True if metric == self.metrics[0] else False
+                feature = df.feature.iloc[0]
+                if feature == "Overall":
+                    title = feature
+                else:
+                    title = f'{df.feature.iloc[0]}={group}'.replace('_', " ").title()
                 trace = go.Bar(x=df[metric],
-                       y=df['group'],
+                       y=df['group'].astype(str),
                        orientation='h',
-                       name=f'{group}'.title(),
-                               hovertemplate = '%{y}: %{x}<extra></extra>',
+                       name=title,
+                       hovertemplate = '%{y}: %{x}<extra></extra>',
                        visible=vis)
                 fig.add_trace(trace)
 

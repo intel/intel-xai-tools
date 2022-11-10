@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2022 Intel Corporation
@@ -14,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# SPDX-License-Identifier: EPL-2.0
+# SPDX-License-Identifier: Apache-2.0
 #
 
 import pytest
@@ -35,14 +36,14 @@ MODEL_CARD_JSONS = [json.loads(json_str) for json_str in MODEL_CARD_STRS]
 def test_init(test_json):
     """Test ModelCardGen initialization
     """
-    mcg = ModelCardGen(test_json)
+    mcg = ModelCardGen(data_sets= {'test': ''}, model_card=test_json)
     assert mcg.model_card
 
 @pytest.mark.parametrize("test_json", MODEL_CARD_JSONS)
 def test_read_json(test_json):
     """Test ModelCardGen._read_json method
     """
-    mcg = ModelCardGen(model_card=test_json)
+    mcg = ModelCardGen(data_sets= {'test': ''}, model_card=test_json)
     assert mcg.model_card == ModelCardGen._read_json(test_json)
 
 @pytest.mark.parametrize("test_json", MODEL_CARD_JSONS)

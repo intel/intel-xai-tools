@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# SPDX-License-Identifier: EPL-2.0
+# SPDX-License-Identifier: Apache-2.0
 #
 
 from distutils.command import build
@@ -28,28 +28,26 @@ REQUIRED_PACKAGES = [
     'jinja2>=3,<4',
     'jsonschema>=3.2.0,<4',
     'intel-tensorflow',
-    'tensorflow-model-analysis>=0.37.0,<0.39.0',
-    'tensorflow-data-validation>=1.6.0,<1.8.0',
+    'tensorflow-model-analysis>=0.37.0,<0.42.0',
+    'tensorflow-data-validation>=1.6.0,<1.11.0',
     'plotly>=3.8.1,<6',
     'dataclasses;python_version<"3.7"',
+    'apache-beam==2.41.0'
 ]
 
 TEST_PACKAGES = [
     'pytest',
-    'httplib2<0.19.1'
-    'tensorflow-hub',
+    'httplib2<0.19.1',
+    'tensorflow-hub'
 ]
 
-NOTEBOOK_PACKAGES = [
-    'sklearn',
-    'tfx',
-    'tensorflow-hub',
-    'tensorflow-transform'
+PYTORCH_PACKAGES = [
+    'torch'
 ]
 
 EXTRAS = {
-    'test': TEST_PACKAGES,
-    'notebook': NOTEBOOK_PACKAGES,
+    'test': TEST_PACKAGES + PYTORCH_PACKAGES,
+    'pytorch': PYTORCH_PACKAGES,
 }
 
 # Get version from version module.
@@ -69,13 +67,16 @@ setup(
     long_description=_LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     url='',
-    author='',
-    author_email='',
+    author='IntelAI',
+    author_email='IntelAI@intel.com',
     packages=[
         'model_card_gen',
+        'model_card_gen.analyze',
+        'model_card_gen.datasets',
         'model_card_gen.docs',
         'model_card_gen.docs.examples',
-        'model_card_gen.graphics'
+        'model_card_gen.graphics',
+        'model_card_gen.utils',
     ],
     package_data={
         'model_card_gen': ['schema/**/*.json', 'template/**/*.jinja'],
