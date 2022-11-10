@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2022 Intel Corporation
@@ -14,8 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# SPDX-License-Identifier: EPL-2.0
+# SPDX-License-Identifier: Apache-2.0
 #
+
 from torch.utils.data import DataLoader as loader
 from torch.utils.data import random_split, TensorDataset
 from torch import TensorType
