@@ -1,8 +1,0 @@
---- !ExplainerSpec
-name: test-explainer
-version: 0.1
-plugin: explainer_explainers_test_explainer-0.1-py2.py3-none-any.whl
-dependencies:
-- colorama==0.4.5
-entry_points:
-- 'print = test_explainer:color_print [text]'

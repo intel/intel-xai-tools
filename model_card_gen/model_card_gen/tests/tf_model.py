@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2022 Intel Corporation
@@ -14,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# SPDX-License-Identifier: EPL-2.0
+# SPDX-License-Identifier: Apache-2.0
 #
 
 import tempfile
@@ -37,8 +38,8 @@ FEATURE_MAP = {
 MODEL_PATH = tempfile.gettempdir()
 
 def get_data_slice(first=1000):
-    tmp_train = tempfile.mktemp()
-    tmp_validate = tempfile.mktemp()
+    _, tmp_train = tempfile.mkstemp()
+    _, tmp_validate = tempfile.mkstemp()
     dataset_url = 'https://storage.googleapis.com/civil_comments_dataset/'
     train_tf_file = tf.keras.utils.get_file('train_tf_processed.tfrecord',
                                         dataset_url + 'train_tf_processed.tfrecord')

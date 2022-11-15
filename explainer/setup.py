@@ -15,8 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# SPDX-License-Identifier: EPL-2.0
+# SPDX-License-Identifier: Apache-2.0
 #
+
 """
 XAI Tools, Explainer
 """
@@ -54,7 +55,7 @@ setup(
     url='https://github.com/IntelAI/intel-xai-tools',
     license='Apache 2.0',
     author='IntelAI',
-    author_email='kam.d.kasravi@intel.com',
+    author_email='IntelAI@intel.com',
     description='Explainer invokes an explainer given a model, dataset and features',
     long_description=__doc__,
     packages=find_packages(include=include_modules),
@@ -85,6 +86,6 @@ setup(
         'Topic :: Scientific/Engineering :: Mathematics',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
-    python_requires='>=3.9',
+    python_requires='>=3.9,<3.10',
     keywords='XAI, explainer',
 )

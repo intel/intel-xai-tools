@@ -24,6 +24,8 @@ from explainer.explainers import lm_layers_explainer
 
 import warnings
 warnings.filterwarnings('ignore')
+import os
+os.environ['KMP_WARNINGS'] = 'off'
 ```
 
 ```{code-cell} ipython3

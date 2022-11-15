@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# SPDX-License-Identifier: EPL-2.0
+# SPDX-License-Identifier: Apache-2.0
 #
 
 from distutils.command import build
@@ -67,11 +67,12 @@ setup(
     long_description=_LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     url='',
-    author='',
-    author_email='',
+    author='IntelAI',
+    author_email='IntelAI@intel.com',
     packages=[
         'model_card_gen',
         'model_card_gen.analyze',
+        'model_card_gen.datasets',
         'model_card_gen.docs',
         'model_card_gen.docs.examples',
         'model_card_gen.graphics',

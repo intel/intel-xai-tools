@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2022 Intel Corporation
@@ -14,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# SPDX-License-Identifier: EPL-2.0
+# SPDX-License-Identifier: Apache-2.0
 #
 
 import pandas as pd
@@ -22,7 +23,9 @@ import tensorflow_model_analysis as tfma
 from typing import Text, Union, Optional
 from model_card_gen.utils.types import DatasetType
 from model_card_gen.analyze.analyzer import ModelAnalyzer
-import torch
+try:
+    import torch
+except: ImportError
 
 class PTAnalyzer(ModelAnalyzer):
     def __init__(self,
