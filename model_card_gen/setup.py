@@ -23,13 +23,13 @@ from setuptools import setup
 
 REQUIRED_PACKAGES = [
     'absl-py>=1.0.0',
-    'joblib<0.15,>=0.12',
+    'joblib>=1.2.0',
     'semantic-version>=2.8.0,<3',
     'jinja2>=3,<4',
     'jsonschema>=3.2.0,<4',
     'intel-tensorflow',
-    'tensorflow-model-analysis>=0.37.0,<0.42.0',
-    'tensorflow-data-validation>=1.6.0,<1.11.0',
+    'tensorflow-model-analysis>=0.42.0,<0.43.0',
+    'tensorflow-data-validation>=1.11.0,<1.12.0',
     'plotly>=3.8.1,<6',
     'dataclasses;python_version<"3.7"',
     'apache-beam==2.41.0'
