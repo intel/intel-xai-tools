@@ -48,12 +48,17 @@ class DeepExplainer(FeatureAttributions):
 
     def visualize(self):
         import numpy as np
-
+        import torch
+      
         arr = np.full((len(self.labels)), " ")
+        if torch.is_tensor(self.target_images):
+            self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
+            self.target_images = -np.swapaxes(np.swapaxes(self.target_images.numpy(), 1, -1), 1, 2)
+
         self.shap.image_plot(
             self.shap_values,
             self.target_images,
-            np.array([list(self.labels), arr, arr]),
+            np.array([list(self.labels)]*len(self.target_images)),
         )
 
 
@@ -62,16 +67,29 @@ class GradientExplainer(FeatureAttributions):
         import numpy as np
         super().__init__()
         self.target_images = target_images
+        self.ranked_outputs = ranked_outputs
         self.labels = labels
         self.explainer = self.shap.GradientExplainer(model, background_images)
         self.shap_values, self.indexes = self.explainer.shap_values(self.target_images, ranked_outputs=ranked_outputs)
-        self.index_names = np.vectorize(lambda x: self.labels[str(x)][1])(self.indexes)
 
     def visualize(self):
+        import numpy as np
+        import torch
+
+        if torch.is_tensor(self.target_images):
+            self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
+            self.target_images = -np.swapaxes(np.swapaxes(self.target_images.numpy(), 1, -1), 1, 2) 
+
+        # check if 
+        if self.ranked_outputs == 1 and len(self.labels[self.indexes]) == 1:
+            idxs_to_plot = np.expand_dims(np.expand_dims(self.labels[self.indexes], 0), 0)
+        else:
+            idxs_to_plot = self.labels[self.indexes]
+
         self.shap.image_plot(
             self.shap_values, 
             self.target_images, 
-            self.index_names
+            idxs_to_plot
         )
 
 
