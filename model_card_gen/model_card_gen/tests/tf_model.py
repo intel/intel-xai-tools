@@ -87,7 +87,7 @@ def build_and_train_model():
         hidden_units=[500, 100],
         weight_column='weight',
         feature_columns=[embedded_text_feature_column],
-        optimizer=tf.optimizers.Adagrad(learning_rate=0.003),
+        optimizer=tf.keras.optimizers.legacy.Adagrad(learning_rate=0.003),
         loss_reduction=tf.losses.Reduction.SUM,
         n_classes=2)
     classifier.train(input_fn=train_input_fn, steps=1000)

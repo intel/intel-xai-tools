@@ -13,6 +13,7 @@ train_logmel/
 
 /docs/explainer/examples/data
 /docs/explainer/examples/models
+**/mcg_tests
 
 # ignore all plugin created directories
 /explainer/explainer/explainers/*/
