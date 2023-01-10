@@ -99,31 +99,6 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="cli-reference">
 <span id="cli"></span><h1>CLI Reference<a class="headerlink" href="#cli-reference" title="Permalink to this heading"></a></h1>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Usage: explainer [OPTIONS] COMMAND [ARGS]...
-
-  The explainer CLI enables a plugin model for XAI. Plugins are a recognized
-  way to enable functional categories. See
-  https://packaging.python.org/en/latest/specifications/entry-points/.
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  build      builds a wheel and moves it to explainer/plugins
-  create     creates a yaml file under explainer/explainers
-  extract    unpacks a wheel file to explainer/plugins
-  generate   generates a template plugin directory under explainer/plugins
-  import     imports an explainable&#39;s functionality as defined by
-             ExplainerSpec
-  info       shows info about an explainer under explainer.explainers
-  install    installs the plugin (wheel) under the directory
-             explainer/explainers
-  list       lists available explainers
-  uninstall  uninstalls the plugin directory under the directory
-             explainer/explainers.
-  update     Calls the generate, build and install apis
-</pre></div>
-</div>
 <section id="module-explainer.commands.cmd_build">
 <span id="explainer-build"></span><h2>explainer build<a class="headerlink" href="#module-explainer.commands.cmd_build" title="Permalink to this heading"></a></h2>
 <p>CLI build subcommand</p>
@@ -139,12 +114,12 @@ using the install subcommand.</p>
 to the command which is base name of the yaml. The create command will add
 the yaml file’s attributes (see below), which then are filled in by the user.
 The name used to create the yaml file should not clash with any top-level package names.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"> </span><span class="kt">!ExplainerSpec</span><span class="w"></span>
-<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name&gt;</span><span class="w"></span>
-<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w"></span>
-<span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">explainer_explainers_&lt;name&gt;-&lt;version&gt;-py2.py3-none-any.whl</span><span class="w"></span>
-<span class="nt">dependencies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="nt">entry_points</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"> </span><span class="kt">!ExplainerSpec</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name&gt;</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">explainer_explainers_&lt;name&gt;-&lt;version&gt;-py2.py3-none-any.whl</span>
+<span class="nt">dependencies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="nt">entry_points</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 </pre></div>
 </div>
 </section>

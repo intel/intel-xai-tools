@@ -86,7 +86,27 @@
            <div itemprop="articleBody">
              
   <h1>Source code for explainer.api</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2022 Intel Corporation</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Explainer API</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -105,10 +125,10 @@
 
 
 <div class="viewcode-block" id="Explainer"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer">[docs]</a><span class="k">class</span> <span class="nc">Explainer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Explainer API base class</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Explainer API base class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Implements the Explainer API</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implements the Explainer API</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_explainer</span><span class="p">:</span> <span class="n">Callable</span>
@@ -120,7 +140,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">explainer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Loads the explainer and returns it</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads the explainer and returns it</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Any: any explainer for now</span>
@@ -129,7 +149,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Return the list of yaml files in the module explainer.explainers</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the list of yaml files in the module explainer.explainers</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            list: list of explainers</span>
@@ -171,7 +191,7 @@
         <span class="k">return</span> <span class="n">fullpath</span><span class="p">,</span> <span class="n">yamlname</span>
 
 <div class="viewcode-block" id="Explainer.build"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Builds the plugin (wheel) and moves it to explainer/plugins</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds the plugin (wheel) and moves it to explainer/plugins</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            yamlname (str): the yaml basename</span>
@@ -237,7 +257,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Explainer.create"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Creates a yaml file under explainer/explainers. </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a yaml file under explainer/explainers. </span>
 <span class="sd">           The name used to create the yaml file should not clash with top-level package names.</span>
 
 <span class="sd">        Args:</span>
@@ -263,7 +283,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Explainer.extract"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Unpacks the plugin (wheel) to the directory explainer/plugins</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unpacks the plugin (wheel) to the directory explainer/plugins</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            yamlname (str): the yaml file path</span>
@@ -305,7 +325,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Explainer.generate"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Generates a plugin directory under explainer/plugins using information from the yaml file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates a plugin directory under explainer/plugins using information from the yaml file</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            yamlname (str): the yaml file path</span>
@@ -348,7 +368,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Explainer.import_from"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.import_from">[docs]</a>    <span class="k">def</span> <span class="nf">import_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExplainerModuleSpec</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Import a plugin using a yaml file located under explainer/explainers</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Import a plugin using a yaml file located under explainer/explainers</span>
 
 <span class="sd">        If the yaml file specifies a name which is a directory under explainer/explainers then this is imported into </span>
 <span class="sd">        the current python environment and returned ExplainerModuleSpec overloads __getitem__ to return </span>
@@ -365,7 +385,7 @@
         <span class="k">return</span> <span class="n">ExplainerLoader</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">module</span></div>
 
 <div class="viewcode-block" id="Explainer.info"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExplainerModuleSpec</span><span class="p">,</span><span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Shows information about the yaml file</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shows information about the yaml file</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            yamlname (str): name of the yaml file</span>
@@ -377,7 +397,7 @@
         <span class="k">return</span> <span class="n">ExplainerLoader</span><span class="p">(</span><span class="n">fullpath</span><span class="p">)</span><span class="o">.</span><span class="n">module</span></div>
 
 <div class="viewcode-block" id="Explainer.install"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.install">[docs]</a>    <span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nowarnings</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExplainerModuleSpec</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Installs the plugin (wheel) under the directory explainer/explainers</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Installs the plugin (wheel) under the directory explainer/explainers</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            yamlname (str): the yaml file path</span>
@@ -435,7 +455,7 @@
         <span class="k">return</span> <span class="n">module</span></div>
 
 <div class="viewcode-block" id="Explainer.load"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExplainerModuleSpec</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Loads the plugin under the directory explainer/explainers into the sys.path</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads the plugin under the directory explainer/explainers into the sys.path</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            yamlname (str): the yaml file path</span>
@@ -450,7 +470,7 @@
         <span class="k">return</span> <span class="n">module</span></div>
 
 <div class="viewcode-block" id="Explainer.uninstall"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.uninstall">[docs]</a>    <span class="k">def</span> <span class="nf">uninstall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Uninstalls the plugin related directory under explainer/explainers</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Uninstalls the plugin related directory under explainer/explainers</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            yamlname (str): the yaml file path</span>
@@ -468,7 +488,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Explainer.unload"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.Explainer.unload">[docs]</a>    <span class="k">def</span> <span class="nf">unload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamlname</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Unloads the plugin using info from the yaml file to get the plugin path.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unloads the plugin using info from the yaml file to get the plugin path.</span>
 <span class="sd">        If the yaml file specifies a name which is a directory under explainer/explainers then </span>
 <span class="sd">        this function will unload the plugin from sys.path</span>
 
@@ -490,7 +510,7 @@
         <span class="k">return</span> <span class="kc">True</span></div></div>
 
 <div class="viewcode-block" id="ExplainerContextManager"><a class="viewcode-back" href="../../explainer/api.html#explainer.api.ExplainerContextManager">[docs]</a><span class="k">class</span> <span class="nc">ExplainerContextManager</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads a plugin for the duration of the context and then unloads it.</span>
 <span class="sd"> </span>
 <span class="sd">    Example:</span>
