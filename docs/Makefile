@@ -30,8 +30,10 @@ publish-install::
 publish::
 	ghp-import -n -p -f _build/html
 
+LISTEN_IP ?= 127.0.0.1
+LISTEN_PORT ?= 9999
 serve::
-	python -m http.server --directory ./_build/html 9010
+	python -m http.server --directory ./_build/html ${LISTEN_PORT} --bind ${LISTEN_IP}
 
 install::
 	pip install Sphinx==5.3.0 && pip install -U -r ./requirements.txt

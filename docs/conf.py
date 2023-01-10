@@ -77,7 +77,6 @@ extensions = [
   'sphinx.ext.autodoc',
   'sphinx.ext.napoleon',
   'sphinx.ext.viewcode',
-  'sphinxcontrib_autodocgen',
   'sphinxcontrib.mermaid',
   'sphinx_click.ext',
   'sphinxcontrib.bibtex',
