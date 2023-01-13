@@ -41,28 +41,29 @@ test: test-torch
 	@. $(ACTIVATE_TEST) && PYTHONPATH="$(CURDIR)/model_card_gen/tests" py.test -s -k "not torch"
 
 
-venv_docs: venv_test $(CURDIR)/docs/requirements-docs.txt
+venv_docs: venv_test
+	# $(CURDIR)/docs/requirements.txt
 	@echo "Installing docs dependencies..."
-	@. $(ACTIVATE_DOCS) && pip install -r $(CURDIR)/docs/requirements-docs.txt
+	@. $(ACTIVATE_DOCS) && pip install -r $(CURDIR)/../docs/requirements.txt
 
 html: venv_docs
 	@echo "Building Sphinx documentation..."
-	# @. $(ACTIVATE_DOCS) && $(MAKE) -C docs clean html
+	# @. $(ACTIVATE_DOCS) && $(MAKE) -C $(CURDIR)/../docs clean html
 
 test_docs: html
 	@echo "Testing Sphinx documentation..."
-	# @. $(ACTIVATE_DOCS) && $(MAKE) -C docs doctest
+	# @. $(ACTIVATE_DOCS) && $(MAKE) -C $(CURDIR)/../docs doctest
 
 dist: venv_docs
 	@echo "Create binary wheel..."
-	# @. $(ACTIVATE_DOCS) && python setup.py bdist_wheel
+	@. $(ACTIVATE_DOCS) && python setup.py bdist_wheel
 
 check_dist: dist
 	@echo "Testing the wheel..."
-	# @. $(ACTIVATE_DOCS) && \
-	# pip install twine && \
-	# python setup.py bdist_wheel && \
-	# twine check dist/*
+	@. $(ACTIVATE_DOCS) && \
+	pip install twine && \
+	python setup.py bdist_wheel && \
+	twine check dist/*
 
 clean:
 	rm -rf mcg_tests
