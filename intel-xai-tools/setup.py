@@ -38,12 +38,12 @@ ATTRIBUTIONS_PKGS = [
 ]
 
 CAM_PKGS = [
-        'grad-cam==1.4.6',
-        'matplotlib==3.6.2',
-        'numpy==1.23.5',
-        'opencv-python==4.6.0.66',
-        'torch==1.13.0',
-        'scipy==1.9.3',
+  'grad-cam==1.4.6',
+  'matplotlib==3.6.2',
+  'numpy==1.23.5',
+  'opencv-python==4.6.0.66',
+  'torch==1.13.0',
+  'scipy==1.10.0',
 ]
 
 METRICS_PKGS =  [

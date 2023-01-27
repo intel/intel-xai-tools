@@ -1,9 +1,17 @@
 class XGradCAM:
-    def __init__(self, model, targetLayer, targetClass, image, device):
+    def __init__(self, model, targetLayer, targetClass, image, dims, device):
+
+        # set any frozen layers to trainable
+        # gradcam cannot be calculated without it
+        for param in model.parameters():
+            if not param.requires_grad:
+                param.requires_grad = True
+
         self.model = model
         self.targetLayer = targetLayer
         self.targetClass = targetClass
         self.image = image
+        self.dims = dims
         self.device = device
 
     def visualize(self):
@@ -17,13 +25,12 @@ class XGradCAM:
 
         self.model.eval().to(self.device)
 
-        image = cv2.resize(self.image, (256, 256))
+        image = cv2.resize(self.image, self.dims)
         rgb_img = np.float32(image) / 255
         input_tensor = preprocess_image(rgb_img,
                                         mean=[0.485, 0.456, 0.406],
                                         std=[0.229, 0.224, 0.225])
         input_tensor = input_tensor.to(self.device)
-
         target_layer_edit = self.model
         for layer in self.targetLayer.split('.')[1:]:
             target_layer_edit = getattr(target_layer_edit, layer)
@@ -66,5 +73,5 @@ class XGradCAM:
 
         print("XGradCAM, Guided backpropagation, and Guided XGradCAM are generated. ")
 
-def xgradcam(model, targetLayer, targetClass, image, device):
-    return XGradCAM(model, targetLayer, targetClass, image, device)
+def xgradcam(model, targetLayer, targetClass, image, dims, device):
+    return XGradCAM(model, targetLayer, targetClass, image, dims, device)
