@@ -21,25 +21,51 @@
 """
 XAI Tools, Explainer
 """
-from setuptools import setup, find_packages
+from setuptools import setup
 
-dependencies = [
-  'click~=8.1.3',
-  'click-completion~=0.5.2',
-  'pyyaml~=6.0',
-  'urllib3[secure]~=1.26.11'
+ATTENTION_PKGS = ['bertviz~=1.4.0',
 ]
 
-include_modules = [
+ATTRIBUTIONS_PKGS = [
+  'intel-tensorflow==2.9.1',
+  'intel-scipy==1.7.3',
+  'captum==0.5.0',
+  'shap @ git+https://github.com/slundberg/shap@v0.41.0',
+  'scikit-plot==0.3.7',
+  'transformers==4.20.1',
+  'torch==1.13.0',
+  'opencv-python==4.6.0.66',
+]
+
+CAM_PKGS = [
+        'grad-cam==1.4.6',
+        'matplotlib==3.6.2',
+        'numpy==1.23.5',
+        'opencv-python==4.6.0.66',
+        'torch==1.13.0',
+        'scipy==1.9.3',
+]
+
+METRICS_PKGS =  [
+  'matplotlib~=3.6.0',
+  'seaborn==0.12.0',
+  'scikit-learn~=1.1.2',
+  'pandas==1.5.0',
+  'plotly==5.10.0',
+  'jupyter-plotly-dash==0.4.3',
+]
+
+REQUIRED_PACKAGES =  ATTENTION_PKGS + ATTRIBUTIONS_PKGS + CAM_PKGS + METRICS_PKGS
+
+PACKAGES = [
   "explainer",
-  "explainer.api",
-  "explainer.cli",
-  "explainer.version",
-  "explainer.commands",
-  "explainer.commands.*",
+  "explainer.attention_layers",
+  "explainer.cam",
+  "explainer.attributions",
+  "explainer.metrics",
 ]
 
-test_dependencies = [
+TEST_PACKAGES = [
     'pytest'
 ]
 
@@ -58,17 +84,12 @@ setup(
     author_email='IntelAI@intel.com',
     description='Explainer invokes an explainer given a model, dataset and features',
     long_description=__doc__,
-    packages=find_packages(include=include_modules),
+    install_requires=REQUIRED_PACKAGES,
+    tests_require=TEST_PACKAGES,
+    packages=PACKAGES,
     include_package_data=True,
     zip_safe=False,
     platforms='any',
-    install_requires=dependencies,
-    tests_require=test_dependencies,
-    entry_points={
-        'console_scripts': [
-            'explainer = explainer.cli:cli',
-        ],
-    },
     classifiers=[
         # As from http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 5 - Production/Stable',
