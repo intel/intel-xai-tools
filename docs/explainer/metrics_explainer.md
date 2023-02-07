@@ -1,1 +1,1 @@
-../../explainer/explainer/plugins/metrics_explainer/README.md
+../../intel-xai-tools/explainer/metrics/README.md

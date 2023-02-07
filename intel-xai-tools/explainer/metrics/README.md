@@ -8,7 +8,7 @@ kernelspec:
  
 ```{code-cell} python3
 :tags: [remove-input]
-from explainer.explainers import metrics_explainer
+from explainer import metrics
 ```
 
 ```{mermaid}

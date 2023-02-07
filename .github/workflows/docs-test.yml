@@ -28,16 +28,8 @@ jobs:
       run: pip install virtualenv
     - name: Install model-card-gen dependency
       run: cd model_card_gen && pip install .
-    - name: Build explainer whl
-      run: cd explainer && make explainer-whl explainer-install
-    - name: Install explainer dependency
-      run: cd explainer && make explainer-whl explainer-install
-    - name: Install feature_attributions_explainer
-      run: explainer update feature_attributions_explainer
-    - name: Install metrics_explainer
-      run: explainer update metrics_explainer
-    - name: Install lm_layers_explainer
-      run: explainer update lm_layers_explainer
+    - name: Install intel-xai-tools explainer
+      run: cd intel-xai-tools && pip install .
     - name: Install docs dependencies
       run: cd docs && make install
     # make documentation

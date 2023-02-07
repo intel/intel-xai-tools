@@ -27,22 +27,22 @@ ATTENTION_PKGS = ['bertviz~=1.4.0',
 ]
 
 ATTRIBUTIONS_PKGS = [
-  'intel-tensorflow==2.9.1',
-  'intel-scipy==1.7.3',
+  'intel-tensorflow<2.12.0',
+  'scipy==1.10.0',
   'captum==0.5.0',
   'shap @ git+https://github.com/slundberg/shap@v0.41.0',
   'scikit-plot==0.3.7',
   'transformers==4.20.1',
-  'torch==1.13.0',
+  'torch<1.14.0',
   'opencv-python==4.6.0.66',
 ]
 
 CAM_PKGS = [
   'grad-cam==1.4.6',
   'matplotlib==3.6.2',
-  'numpy==1.23.5',
+  'numpy<=1.23.5,>=1.17',
   'opencv-python==4.6.0.66',
-  'torch==1.13.0',
+  'torch<1.14.0',
   'scipy==1.10.0',
 ]
 
@@ -50,9 +50,8 @@ METRICS_PKGS =  [
   'matplotlib~=3.6.0',
   'seaborn==0.12.0',
   'scikit-learn~=1.1.2',
-  'pandas==1.5.0',
-  'plotly==5.10.0',
-  'jupyter-plotly-dash==0.4.3',
+  'pandas~=1.5.0',
+  'plotly>=3.8.1,<6',
 ]
 
 REQUIRED_PACKAGES =  ATTENTION_PKGS + ATTRIBUTIONS_PKGS + CAM_PKGS + METRICS_PKGS

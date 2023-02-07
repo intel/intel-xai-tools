@@ -19,10 +19,8 @@
 #
 
 import sys, os
+from explainer.version import __version__
 import explainer
-sys.path.insert(0, os.path.abspath('../explainer/explainer/explainers/lm_layers_explainer'))
-sys.path.insert(0, os.path.abspath('../explainer/explainer/explainers/feature_attributions_explainer'))
-sys.path.insert(0, os.path.abspath('../explainer/explainer/explainers/metrics_explainer'))
 os.environ['KMP_WARNINGS'] = 'off'
 project = 'Intel® Explainable AI Tools'
 add_module_names = False
@@ -36,6 +34,7 @@ exclude_patterns = [
   'xai/**',
   'explainer/criteria.md',
   'explainer/design.md',
+  'explainer/examples/*.ipynb',
   'explainer/examples/model_layers.md',
   'explainer/examples/partitionexplainer.md',
   'explainer/examples/ExplainingDeepLearningModels.md',
@@ -60,13 +59,11 @@ nb_execution_in_temp = False
 nb_execution_timeout = 600
 nb_execution_mode = "cache"
 nb_output_stderr = 'show'
-nb_custom_formats = {
-  ".py": ["jupytext.reads", {"fmt": "light"}]
-}
-release = explainer.__version__
-version = explainer.__version__
+
+release = __version__
+version = __version__
 extensions = [
-  'myst_nb',
+  'myst_parser',
   'sphinx_togglebutton',
   'sphinx_copybutton',
   'sphinx_comments',
@@ -78,17 +75,11 @@ extensions = [
   'sphinx.ext.napoleon',
   'sphinx.ext.viewcode',
   'sphinxcontrib.mermaid',
-  'sphinx_click.ext',
   'sphinxcontrib.bibtex',
 ]
 external_toc_path = "toc.yml"
 external_toc_exclude_missing = False
-source_suffix = {
-    '.rst': 'restructuredtext',
-    '.ipynb': 'myst-nb',
-    '.py': 'myst-nb',
-    '.myst': 'myst-nb',
-}
+
 html_baseurl = ''
 html_favicon = ''
 html_js_files = ['https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js']
@@ -100,7 +91,6 @@ myst_heading_anchors = 4
 intersphinx_mapping = {
   'ebp': ['https://executablebooks.org/en/latest/', None],
   'myst-parser': ['https://myst-parser.readthedocs.io/en/latest/', None],
-  'myst-nb': ['https://myst-nb.readthedocs.io/en/latest/', None],
   'sphinx': ['https://www.sphinx-doc.org/en/master', None],
   'nbformat': ['https://nbformat.readthedocs.io/en/latest', None]
 }
@@ -115,33 +105,6 @@ myst_enable_extensions = [
   'dollarmath',
   'html_image'
 ]
-myst_substitutions = {
-  'AutoClasses': '<a href="https://huggingface.co/docs/transformers/main/en/model_doc/auto#auto-classes" target="_blank">AutoClasses</a>', 
-	'DICEExample': '<a href="https://matthewpburruss.com/post/yaml/" target="_blank">PyYaml</a>', 
-  'EntryPointsForPlugins': '<a href="https://setuptools.pypa.io/en/latest/userguide/entry_point.html#entry-points-for-plugins" target="_blank">Entry Points for Plugins</a>', 
-  'ExplainableTransformers': '<a href="https://github.com/wilsonjr/explainable-transformers" target="_blank">explainable-transformers</a>', 
-  'HOLZINGER202128': '<a href="https://www.sciencedirect.com/science/article/pii/S1566253521000142" target="_blank">Towards multi-modal causability with Graph Neural Networks enabling information fusion for explainable AI</a> {cite}`ZHU202253`', 
-  'PluginArchitectureinPython': '<a href="https://dev.to/charlesw001/plugin-architecture-in-python-jla" target="_blank">Plugin Architecture in Python</a>', 
-  'Glue': '<a href="http://docs.glueviz.org/en/stable" target="_blank">Glue</a>', 
-  'Captum': '<a href="https://captum.ai/" target="_blank">Captum</a>', 
-  'MetaPathFinders': '<a href="https://python.plainenglish.io/metapathfinders-or-how-to-change-python-import-behavior-a1cf3b5a13ec" target="_blank">How to Change Python Import Behavior with MetaPathFinders</a>', 
-  'PathExplain': '<a href="https://github.com/suinleelab/path_explain" target="_blank">path-explain</a>', 
-  'PEP451': '<a href="https://peps.python.org/pep-0451/" target="_blank">PEP451</i></a>', 
-  'PEP690': '<a href="https://peps.python.org/pep-0690/" target="_blank">PEP690</i></a>', 
-  'PythonInteroperabilitySpecifications': '<a href="https://packaging.python.org/en/latest/specifications/" target="_blank">python interoperability specifications</a>',
-  'PythonEntryPointsDataModel': '<a href="https://packaging.python.org/en/latest/specifications/entry-points/#data-model" target="_blank">Data Model</a>',
-  'PythonEntryPointsFunction': '<a href="https://docs.python.org/3/library/importlib.metadata.html#entry-points" target="_blank">entry points</a>',
-  'PythonEntryPointsSpecification': '<a href="https://packaging.python.org/en/latest/specifications/entry-points/" target="_blank">python entry points specification</a>',
-  'PyTestPlugins': '<a href="https://www.wheelodex.org/entry-points/pytest11/" target="_blank">plugins</a>', 
-  'PyYaml': '<a href="https://matthewpburruss.com/post/yaml/" target="_blank">PyYaml</a>', 
-  'Transformers': '<a href="https://huggingface.co/docs/transformers/index" target="_blank">Transformers</a>', 
-  'TransformersInterpret': '<a href="https://github.com/cdpierse/transformers-interpret#install" target="_blank">transformers-interpret</a>', 
-  'XAI': '<a href="https://en.wikipedia.org/wiki/Explainable_artificial_intelligence" target="_blank">Explainable AI</a>', 
-  'YANG202229': '<a href="https://www.sciencedirect.com/science/article/pii/S1566253521001597" target="_blank">Unbox the black-box for the medical explainable AI via multi-modal and multi-centre data fusion&colon; A mini-review, two showcases and beyond</a> {cite}`YANG202229`', 
-  'YamlMissingBattery': '<a href="https://realpython.com/python-yaml/" target="_blank">YAML</a>', 
-  'ZHU202253': '<a href="https://www.sciencedirect.com/science/article/pii/S1566253521001548" target="_blank">Interpretable learning based Dynamic Graph Convolutional Networks for Alzheimer’s Disease analysis</a> {cite}`ZHU202253`', 
-  'ZipImporter': '<a href="https://docs.python.org/3/library/zipimport.html#zipimporter-objects" target="_blank">zipimport.zipimporter</a>'
-}
 myst_url_schemes = ['mailto', 'http', 'https']
 numfig = True
 # pygments_style = 'sphinx'

@@ -1,1 +1,1 @@
-../../explainer/explainer/plugins/feature_attributions_explainer/README.md
+../../intel-xai-tools/explainer/attributions/README.md

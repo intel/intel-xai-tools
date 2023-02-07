@@ -1,1 +1,1 @@
-../../explainer/explainer/plugins/cam_explainer/README.md
+../../intel-xai-tools/explainer/cam/README.md

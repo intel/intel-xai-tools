@@ -1,14 +1,11 @@
-Sphinx==5.3.0
+sphinx
 docutils~=0.17.1
 ghp-import~=2.1.0
 jupytext~=1.14.1
 linkify-it-py~=1.0.3
 markdown-it-py~=1.1.0
 mdit-py-plugins
-myst-nb~=0.17.1
 myst-parser~=0.18.1
-nbclient<0.6,>=0.2
-sphinx-click~=4.3.0
 sphinx-comments~=0.0.3
 sphinx-copybutton~=0.5.0
 sphinx-design==0.3.0

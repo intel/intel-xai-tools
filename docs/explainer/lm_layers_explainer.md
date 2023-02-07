@@ -1,1 +1,1 @@
-../../explainer/explainer/plugins/lm_layers_explainer/README.md
+../../intel-xai-tools/explainer/attention_layers/README.md

@@ -26,7 +26,7 @@ REQUIRED_PACKAGES = [
     'apache-beam==2.41.0',
     'attrs<22,>=19.3.0',
     'dataclasses;python_version<"3.7"',
-    'intel-tensorflow<1.12',
+    'intel-tensorflow<2.12.0',
     'jinja2>=3,<4',
     'joblib>=1.2.0',
     'jsonschema[format-nongpl]>=4.3.0',
