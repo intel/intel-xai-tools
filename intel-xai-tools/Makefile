@@ -41,7 +41,7 @@ test-mcg: test-torch
 	@echo "Testing the API..."
 	@. $(ACTIVATE_TEST) && PYTHONPATH="$(CURDIR)/model_card_gen/tests" pytest -s -k "not torch"
 
-intall:
+install:
 	@pip install --editable .
 
 xai-whl:
