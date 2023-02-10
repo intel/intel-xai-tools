@@ -26,8 +26,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: Install virtualenv
       run: pip install virtualenv
-    - name: Install model-card-gen dependency
-      run: cd model_card_gen && pip install .
     - name: Install intel-xai-tools explainer
       run: cd intel-xai-tools && pip install .
     - name: Install docs dependencies

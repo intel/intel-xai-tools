@@ -16,21 +16,42 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+ACTIVATE_TF = "intel_tf/bin/activate"
+ACTIVATE_PYT = "intel_pyt/bin/activate"
+ACTIVATE_TEST = "test_env/bin/activate"
+ACTIVATE_DOCS = $(ACTIVATE_TEST)
+
+LISTEN_IP ?= 127.0.0.1
+LISTEN_PORT ?= 9090
 DOCS_DIR ?= ../docs
-explainer::
-	pip install -e .
 
-explainer-whl::
-	python setup.py bdist_wheel
+venv-test:
+	@echo "Creating a virtualenv test_env..."
+	@test -d test_env || virtualenv -p python test_env
 
-explainer-install::
-	pip install dist/intel_xai_tools-0.2.0-py2.py3-none-any.whl
+	@echo "Building the TLT API in test_env env..."
+	@. $(ACTIVATE_TEST) && pip install --editable .[test]
+
+# TODO: running all tests in one py.test session randomly causes torch test to hang at last epoch
+test-torch: venv-test
+	@echo "Testing the API..."
+	@. $(ACTIVATE_TEST) && PYTHONPATH="$(CURDIR)/model_card_gen/tests" pytest -s model_card_gen/tests/test_end_to_end_torch.py
+
+test-mcg: test-torch
+	@echo "Testing the API..."
+	@. $(ACTIVATE_TEST) && PYTHONPATH="$(CURDIR)/model_card_gen/tests" pytest -s -k "not torch"
+
+intall::
+	@pip install --editable .
+
+xai-whl::
+	@python setup.py bdist_wheel
 
 clean::
 	@rm -rf build dist intel_xai_tools.egg-info
+	@rm -rf test_env
 
-test::
-	pytest tests
+test: clean test-mcg
 
 bump-version::
 	pip install bump2version==1.0.1
@@ -45,8 +66,6 @@ docs::
 docs-publish::
 	ghp-import -n -p -f ${DOCS_DIR}/_build/html
 
-LISTEN_IP ?= 127.0.0.1
-LISTEN_PORT ?= 9090
 docs-serve::
 	@echo serve docs locally on ${LISTEN_IP}:${LISTEN_PORT}
 	@python -m http.server --directory ${DOCS_DIR}/_build/html ${LISTEN_PORT} --bind ${LISTEN_IP}

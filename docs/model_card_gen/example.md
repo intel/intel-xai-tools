@@ -7,7 +7,7 @@ sd_hide_title: true
 ```{eval-rst}
 
 .. raw:: html
-   :file: ../../model_card_gen/model_card_gen/docs/examples/html/compas_model_card.html
+   :file: ../../intel-xai-tools/model_card_gen/docs/examples/html/compas_model_card.html
 
 ```
 

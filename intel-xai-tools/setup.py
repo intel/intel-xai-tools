@@ -40,7 +40,7 @@ ATTRIBUTIONS_PKGS = [
 CAM_PKGS = [
   'grad-cam==1.4.6',
   'matplotlib==3.6.2',
-  'numpy<=1.23.5,>=1.17',
+  'numpy<1.23.0,>=1.17',
   'opencv-python==4.6.0.66',
   'torch<1.14.0',
   'scipy==1.10.0',
@@ -54,7 +54,36 @@ METRICS_PKGS =  [
   'plotly>=3.8.1,<6',
 ]
 
-REQUIRED_PACKAGES =  ATTENTION_PKGS + ATTRIBUTIONS_PKGS + CAM_PKGS + METRICS_PKGS
+MCG_PKGS = [
+    'absl-py>=1.0.0',
+    'attrs<22,>=19.3.0',
+    'intel-tensorflow<2.12.0',
+    'dataclasses;python_version<"3.7"',
+    'jinja2>=3,<4',
+    'joblib>=1.2.0',
+    'jsonschema[format-nongpl]>=4.3.0',
+    'plotly>=3.8.1,<6',
+    'semantic-version>=2.8.0,<3',
+    'tensorflow-data-validation>=1.11.0,<1.12.0',
+    'tensorflow-model-analysis>=0.42.0,<0.43.0',
+]
+
+PYTORCH_PKGS = [
+    'torch<1.14',
+]
+
+REQUIRED_PKGS =  (
+  ATTENTION_PKGS + 
+  ATTRIBUTIONS_PKGS + 
+  CAM_PKGS +
+  METRICS_PKGS +
+  MCG_PKGS
+)
+
+TEST_PKGS = [
+    'pytest',
+    'tensorflow-hub',
+]
 
 PACKAGES = [
   "explainer",
@@ -62,11 +91,20 @@ PACKAGES = [
   "explainer.cam",
   "explainer.attributions",
   "explainer.metrics",
+  'model_card_gen',
+  'model_card_gen.analyze',
+  'model_card_gen.datasets',
+  'model_card_gen.docs',
+  'model_card_gen.docs.examples',
+  'model_card_gen.graphics',
+  'model_card_gen.utils',
 ]
 
-TEST_PACKAGES = [
-    'pytest'
-]
+
+EXTRAS = {
+    'test': TEST_PKGS + PYTORCH_PKGS,
+    'pytorch': PYTORCH_PKGS,
+}
 
 # Get version from version module.
 with open('explainer/version.py') as fp:
@@ -83,8 +121,9 @@ setup(
     author_email='IntelAI@intel.com',
     description='Explainer invokes an explainer given a model, dataset and features',
     long_description=__doc__,
-    install_requires=REQUIRED_PACKAGES,
-    tests_require=TEST_PACKAGES,
+    install_requires=REQUIRED_PKGS,
+    tests_require=TEST_PKGS,
+    extras_require=EXTRAS,
     packages=PACKAGES,
     include_package_data=True,
     zip_safe=False,
