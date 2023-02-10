@@ -9,8 +9,8 @@ Currently the following features are provided by this project:
       
 | Core Feature | Description | 
 |----------|-----------|
-| [Model Card Generator](/model_card_gen) | <li> Allows users to create interactive HTML reports containing model performance and fairness metrics. |
-|[Explainer](/explainer) | <li> Allows injection of XAI methods into python workflows / notebooks without requiring version compatibility of resident packages in the active python environment. |
+| [Model Card Generator](/intel-xai-tools/model_card_gen) | <li> Allows users to create interactive HTML reports containing model performance and fairness metrics. |
+|[Explainer](/intel-xai-tools/explainer) | <li> Allows injection of XAI methods into python workflows / notebooks without requiring version compatibility of resident packages in the active python environment. |
 
 ## Build and Install
 

@@ -18,7 +18,7 @@ Requirements:
    ```
    git clone https://github.com/IntelAI/intel-xai-tools.git
 
-   cd intel-xai-tools/explainer/
+   cd intel-xai-tools
    ```
 2. Create and activate a Python3 virtual environment using `virtualenv`:
    ```
@@ -31,7 +31,7 @@ Requirements:
    conda create --name xai_env python=3.9
    conda activate xai_env
    ```
-3. Install this tool with `make explainer`.
+3. Install this tool with `make install`.
 4. Optional: Build our documentation
    ```
    make docs-install
@@ -45,24 +45,6 @@ Requirements:
    ```
    LISTEN_PORT=9999 make docs-serve
    ```
-
-## Getting Started with the CLI
-
-Use `explainer --help` to see the list of CLI commands. More detailed information on each
-command can be found using `explainer <command> --help` (like `explainer export --help`).
-
-| Commands | Description | 
-|----------|-----------|
-|build | builds a wheel and moves it to explainer/plugins|
-|create | creates a yaml file under explainer/explainers|
-|extract | unpacks a wheel file to explainer/plugins|
-|generate | generates a template plugin directory under explainer/plugins|
-|import | imports an explainable's functionality as defined by ExplainerSpec|
-|info | shows info about an explainer under explainer.explainers|
-|install | installs the plugin (wheel) under the directory explainer/explainers|
-|list | lists available explainers|
-|uninstall |uninstalls the plugin directory under the directory explainer/explainers|
-|update | calls the generate, build and install apis|
 
 ## Running Notebooks
 

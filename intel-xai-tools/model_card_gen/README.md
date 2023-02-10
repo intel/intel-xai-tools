@@ -116,10 +116,10 @@ Model Card Generator allows users to create interactive HTML reports of containi
 git clone https://github.com/IntelAI/intel-xai-tools.git
 ```
 
-**Step 2**: Navigate to `model-card-generator` package.
+**Step 2**: Navigate to `intel-xai-tools` package.
 
 ```shell
-cd intel-xai-tools/model_card_gen
+cd intel-xai-tools/
 ```
 
 **Step 3**: Install package with `pip`.
