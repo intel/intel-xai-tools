@@ -83,6 +83,7 @@ REQUIRED_PKGS =  (
 TEST_PKGS = [
     'pytest',
     'tensorflow-hub',
+    'deepdiff'
 ]
 
 PACKAGES = [

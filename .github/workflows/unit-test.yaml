@@ -1,4 +1,4 @@
-name: MCG Unit Test
+name: Unit Test
 on:
   pull_request_review:
      types: [submitted]
@@ -36,4 +36,4 @@ jobs:
         shell: bash
         working-directory: ./intel-xai-tools
         continue-on-error: false
-        run: make test-mcg
+        run: make test
