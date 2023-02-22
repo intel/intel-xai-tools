@@ -26,6 +26,12 @@ class XGradCAM:
         self.model.eval().to(self.device)
 
         image = cv2.resize(self.image, self.dims)
+        # convert to rgb if image is grayscale
+        converted = False
+        if len(image.shape) == 2:
+            converted = True 
+            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+        
         rgb_img = np.float32(image) / 255
         input_tensor = preprocess_image(rgb_img,
                                         mean=[0.485, 0.456, 0.406],
@@ -40,6 +46,11 @@ class XGradCAM:
         else:
             targets = [ClassifierOutputTarget(self.targetClass)]
         cam = XGradCAM(self.model, target_layers, use_cuda=torch.cuda.is_available())
+
+        # convert back to grayscale if that is the initial dim
+        if converted:
+            input_tensor = input_tensor[:, 0:1, :, :]
+
         grayscale_cam = cam(input_tensor=input_tensor, targets=targets, aug_smooth=False,
                             eigen_smooth=False)
         grayscale_cam = grayscale_cam[0, :]
