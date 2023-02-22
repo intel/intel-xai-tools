@@ -1,0 +1,46 @@
+name: Notebook tests
+on:
+  pull_request_review:
+     types: [submitted]
+  # run the workflow if changes pushed to main or release branches
+  push:
+    branches:
+      - develop
+      - main
+    tags:
+      - '**'
+    paths:
+      - '**'
+jobs:
+  nb-test:
+    if: github.event.review.state == 'approved' ||
+        github.event.pull_request.merged == true ||
+        github.event_name == 'push'
+    runs-on: [ aia-devops ] 
+    container:
+      image: amr-registry.caas.intel.com/aiops/tlt-dev
+      env:
+        http_proxy: ${{ secrets.HTTP_PROXY }}
+        https_proxy: ${{ secrets.HTTPS_PROXY }}
+        no_proxy: ${{ secrets.NO_PROXY }}
+      credentials:
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+      volumes:
+        - /tf_dataset/dataset/transfer_learning:/tmp/data
+    steps:
+      - id: repo
+        name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - id: env 
+        name: Install virtualenv
+        run: pip install virtualenv
+
+      - id: test
+        name: Test Notebooks
+        shell: bash
+        working-directory: ./intel-xai-tools
+        continue-on-error: false
+        run: make test-notebook
+      

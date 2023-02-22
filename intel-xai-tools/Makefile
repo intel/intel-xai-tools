@@ -20,6 +20,7 @@ ACTIVATE_TF = "intel_tf/bin/activate"
 ACTIVATE_PYT = "intel_pyt/bin/activate"
 ACTIVATE_TEST = "test_env/bin/activate"
 ACTIVATE_DOCS = $(ACTIVATE_TEST)
+ACTIVATE_NOTEBOOK = $(ACTIVATE_TEST)
 
 LISTEN_IP ?= 127.0.0.1
 LISTEN_PORT ?= 9090
@@ -72,3 +73,8 @@ docs-publish:
 docs-serve:
 	@echo serve docs locally on ${LISTEN_IP}:${LISTEN_PORT}
 	@python -m http.server --directory ${DOCS_DIR}/_build/html ${LISTEN_PORT} --bind ${LISTEN_IP}
+
+test-notebook: venv-test
+	@echo "Testing Jupyter notebooks..."
+	@. $(ACTIVATE_NOTEBOOK) && \
+	bash run_notebooks.sh $(CURDIR)/../docs/explainer/examples/ExplainingImageClassification.ipynb
