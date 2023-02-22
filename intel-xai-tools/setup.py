@@ -126,6 +126,11 @@ setup(
     tests_require=TEST_PKGS,
     extras_require=EXTRAS,
     packages=PACKAGES,
+    package_data={
+        'model_card_gen': ['schema/**/*.json', 'template/**/*.jinja'],
+        'model_card_gen.docs.examples': ['docs/examples/**/*.html',
+                                         'docs/examples/**/*.json'],
+    },
     include_package_data=True,
     zip_safe=False,
     platforms='any',
