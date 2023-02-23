@@ -27,7 +27,11 @@ jobs:
     - name: Install virtualenv
       run: pip install virtualenv
     - name: Install intel-xai-tools explainer
-      run: cd intel-xai-tools && pip install .
+      run: |
+        apt-get clean
+        apt-get install --no-install-recommends --fix-missing -y git
+        cd intel-xai-tools
+        pip install .
     - name: Install docs dependencies
       run: cd docs && make install
     # make documentation

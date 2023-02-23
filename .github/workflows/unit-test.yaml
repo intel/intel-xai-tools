@@ -36,4 +36,7 @@ jobs:
         shell: bash
         working-directory: ./intel-xai-tools
         continue-on-error: false
-        run: make test
+        run: |
+          apt-get clean
+          apt-get install --no-install-recommends --fix-missing -y git
+          make test
