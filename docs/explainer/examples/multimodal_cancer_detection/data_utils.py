@@ -25,7 +25,6 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from collections import defaultdict
 
-
 def copy_files_src_to_tgt(samples, fns_dict, src_folder, tgt_folder):
     '''Copies the image files from the original dataset to the target, grouped
     dataset folder.
@@ -37,7 +36,6 @@ def copy_files_src_to_tgt(samples, fns_dict, src_folder, tgt_folder):
             src_fn = os.path.join(src_folder, _file)
             tgt_fn = os.path.join(tgt_folder, _file)
             shutil.copy2(src_fn, tgt_fn)
-
 
 def split_images(src_folder, tgt_folder):
     '''Splits the original image dataset in the src_folder such
@@ -79,18 +77,26 @@ def get_subject_id(image_name):
     return patient_id
 
 
-def create_patient_id_list(image_data_folder, folder):
+def create_patient_id_list(train_image_data_folder, test_image_data_folder, folder):
     '''returns the list of PIDs in order that aligned with 
     the image dataset.
 
     '''
-    folder_pth = os.path.join(folder, image_data_folder)
-    patient_id_list = []
-    for fldr in os.listdir(folder_pth):
-        for f in os.listdir(os.path.join(folder_pth, fldr)):
-            patient_id_list.append(get_subject_id(f))
+    train_folder_pth = os.path.join(folder, train_image_data_folder)
+    test_folder_pth = os.path.join(folder, test_image_data_folder)
 
-    return np.unique(patient_id_list)
+    train_patient_id_list = []
+    test_patient_id_list = []
+
+    for fldr in os.listdir(train_folder_pth):
+        for f in os.listdir(os.path.join(train_folder_pth, fldr)):
+            train_patient_id_list.append(get_subject_id(f))
+
+    for fldr in os.listdir(test_folder_pth):
+        for f in os.listdir(os.path.join(test_folder_pth, fldr)):
+            test_patient_id_list.append(get_subject_id(f))
+    
+    return np.unique(train_patient_id_list), np.unique(test_patient_id_list)
 
 
 def read_annotation_file(
@@ -150,45 +156,56 @@ def label2map(df, label_column):
     return label_map, reverse_label_map
 
 
-def create_train_test_set(df, patient_id, patient_id_list):
+def create_train_test_set(df, patient_id, train_patient_id_list, test_patient_id_list):
     '''Splits the DataFrame df into a training and
     testing DataFrame and returns them.
 
     '''
+    '''
     train_label, test_label = train_test_split(
         patient_id_list, test_size=0.33, random_state=42
     )
+    '''
 
-    df_test = df[df[patient_id].isin(test_label)]
-    df_train = df[df[patient_id].isin(train_label)]
+    df_test = df[df[patient_id].isin(test_patient_id_list)]
+    df_train = df[df[patient_id].isin(train_patient_id_list)]
 
     return df_train, df_test
 
 
-def split_annotation(folder, file_name, image_data_folder):
+def split_annotation(folder, file_name, train_image_data_folder, test_image_data_folder):
     '''Restructures the original csv file_name such that each PID's
     collection of text entries is concatenated together as one example.
     This is done so that PIDs are not seen in both training and testing.
     Returns a DataFrame with the grouped examples.
 
     '''
-
     label_column = "label"
     data_column = "symptoms"
     patient_id = "Patient_ID"
     patient_id_list = None
 
-    df, label_map, reverse_label_map = read_annotation_file(
+    train_df, label_map, reverse_label_map = read_annotation_file(
         folder,
         file_name,
         label_column,
         data_column,
         patient_id,
         patient_id_list,
-        image_data_folder
+        train_image_data_folder
     )
+    test_df, label_map, reverse_label_map = read_annotation_file(
+        folder,
+        file_name,
+        label_column,
+        data_column,
+        patient_id,
+        patient_id_list,
+        test_image_data_folder
+    )
+    df = pd.concat([train_df, test_df])
 
-    patient_id_list = create_patient_id_list(image_data_folder, folder)
-    df_train, df_test = create_train_test_set(df, patient_id, patient_id_list)
-
-    return df_train 
+    train_patient_id_list, test_patient_id_list = create_patient_id_list(train_image_data_folder, test_image_data_folder, folder)
+    df_train, df_test = create_train_test_set(df, patient_id, train_patient_id_list, test_patient_id_list)
+    
+    return df_train, df_test 
