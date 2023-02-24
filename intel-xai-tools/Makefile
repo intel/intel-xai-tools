@@ -57,24 +57,30 @@ test-explainer: venv-test
 
 test: clean test-mcg test-explainer
 
-bump-version:
-	pip install bump2version==1.0.1
-	bump2version --current-version 0.2.0 minor explainer/version.py
+venv-docs: venv-test ${DOCS_DIR}/requirements-docs.txt
+	@echo "Installing docs dependencies..."
+	@. $(ACTIVATE_DOCS) && pip install -r ${DOCS_DIR}/requirements-docs.txt
 
-docs-install:
-	cd ${DOCS_DIR} && make install
+html: venv-docs
+	@echo "Building Sphinx documentation..."
+	@. $(ACTIVATE_DOCS) && $(MAKE) -C ${DOCS_DIR} clean html
 
-docs:
-	cd ${DOCS_DIR} && make html
-
-docs-publish:
-	ghp-import -n -p -f ${DOCS_DIR}/_build/html
-
-docs-serve:
-	@echo serve docs locally on ${LISTEN_IP}:${LISTEN_PORT}
-	@python -m http.server --directory ${DOCS_DIR}/_build/html ${LISTEN_PORT} --bind ${LISTEN_IP}
+test-docs: html
+	@echo "Testing Sphinx documentation..."
+	@. $(ACTIVATE_DOCS) && $(MAKE) -C ${DOCS_DIR} doctest
 
 test-notebook: venv-test
 	@echo "Testing Jupyter notebooks..."
 	@. $(ACTIVATE_NOTEBOOK) && \
 	bash run_notebooks.sh $(CURDIR)/../docs/explainer/examples/ExplainingImageClassification.ipynb
+
+dist: venv-test
+	@echo "Create binary wheel..."
+	@. $(ACTIVATE_DOCS) && python setup.py bdist_wheel
+
+check-dist: dist
+	@echo "Testing the wheel..."
+	@. $(ACTIVATE_DOCS) && \
+	pip install twine && \
+	python setup.py bdist_wheel && \
+	twine check dist/*

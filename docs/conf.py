@@ -76,6 +76,7 @@ extensions = [
   'sphinx.ext.viewcode',
   'sphinxcontrib.mermaid',
   'sphinxcontrib.bibtex',
+  'sphinx.ext.doctest',
 ]
 external_toc_path = "toc.yml"
 external_toc_exclude_missing = False

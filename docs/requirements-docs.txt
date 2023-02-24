@@ -27,3 +27,4 @@ sphinxcontrib-qthelp~=1.0.3
 sphinxcontrib-serializinghtml~=1.1.5
 sphinxext-rediraffe~=0.2.7
 sympy~=1.10.1
+ghp-import~=2.1.0

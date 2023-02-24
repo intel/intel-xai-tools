@@ -123,11 +123,9 @@ class ModelCardGen():
         Example:
             >>> from model_card_gen.model_card_gen import ModelCardGen
             >>> model_path = 'compas/model'
-            >>> data_paths = {
-                  'eval': 'compas/eval.tfrecord',
-                  'train': 'compas/train.tfrecord'}
+            >>> data_paths = {'eval': 'compas/eval.tfrecord', 'train': 'compas/train.tfrecord'}
             >>> eval_config = 'compas/eval_config.proto'
-            >>> mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config)
+            >>> mcg = ModelCardGen.generate(data_paths, model_path, eval_config)
         """
         self = cls(
             data_sets,
@@ -164,15 +162,6 @@ class ModelCardGen():
         Raises:
             ValueError: when invalid value for data_sets argument is empty
             TypeError: when data_sets argument is  not type dict
-
-        Example:
-            >>> from model_card_gen.model_card_gen import ModelCardGen
-            >>> model_path = 'compas/model'
-            >>> data_paths = {
-                  'eval': 'compas/eval.tfrecord',
-                  'train': 'compas/train.tfrecord'}
-            >>> eval_config = 'compas/eval_config.proto'
-            >>> mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config)
         """
         self = cls(
             data_sets,
@@ -212,15 +201,6 @@ class ModelCardGen():
         Raises:
             ValueError: when invalid value for data_sets argument is empty
             TypeError: when data_sets argument is  not type dict
-
-        Example:
-            >>> from model_card_gen.model_card_gen import ModelCardGen
-            >>> model_path = 'compas/model'
-            >>> data_paths = {
-                  'eval': 'compas/eval.tfrecord',
-                  'train': 'compas/train.tfrecord'}
-            >>> eval_config = 'compas/eval_config.proto'
-            >>> mcg = ModelCardGen.generate(_data_paths, _model_path, _eval_config)
         """
         self = cls(
             data_sets,
