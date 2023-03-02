@@ -42,8 +42,4 @@ jobs:
         shell: bash
         working-directory: intel-xai-tools
         continue-on-error: false
-        run: |
-          apt-get clean
-          apt-get -y update
-          apt-get install --no-install-recommends --fix-missing -y git
-          make test-notebook
+        run: make test-notebook

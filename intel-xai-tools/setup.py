@@ -30,7 +30,7 @@ ATTRIBUTIONS_PKGS = [
   'intel-tensorflow<2.12.0',
   'scipy==1.10.0',
   'captum==0.5.0',
-  'shap @ git+https://github.com/slundberg/shap@v0.41.0',
+  'shap==0.41.0',
   'scikit-plot==0.3.7',
   'transformers==4.20.1',
   'torch<1.14.0',
