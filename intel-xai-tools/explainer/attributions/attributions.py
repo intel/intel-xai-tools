@@ -94,13 +94,15 @@ class GradientExplainer(FeatureAttributions):
 
 
 class KernelExplainer(FeatureAttributions):
-    def __init__(self, model, data):
+    def __init__(self, model, background, targets, nsamples):
         super().__init__()
-        self.explainer = shap.KernelExplainer(model, data.iloc[:50, :])
-        self.shap_values = self.shap.shap_values(data.iloc[20, :], nsamples=500)
+        self.bg = background
+        self.targets = targets
+        self.explainer = self.shap.KernelExplainer(model, self.bg)
+        self.shap_values = self.explainer.shap_values(self.targets, nsamples=nsamples)
 
-    def visualize(self, data):
-        self.force_plot(self.shap.expected_value, self.values[0], data.iloc[20, :])
+    def visualize(self):
+        return self.force_plot(self.explainer.expected_value, self.shap_values[0], self.targets)
 
 
 class PartitionExplainer(FeatureAttributions):
@@ -286,7 +288,7 @@ def explainer():
     return FeatureAttributions()
 
 
-def kernel_explainer(model, data):
+def kernel_explainer(model, background, targets, nsamples=500):
     """
     Returns a SHAP KernelExplainer, using the Kernel SHAP method
     to explain the output of any function.
@@ -301,7 +303,7 @@ def kernel_explainer(model, data):
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html
     """
-    return KernelExplainer(model, data)
+    return KernelExplainer(model, background, targets, nsamples=nsamples)
 
 
 def deep_explainer(model, backgroundImages, targetImages, labels):
