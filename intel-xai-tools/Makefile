@@ -30,7 +30,7 @@ venv-test:
 	@echo "Creating a virtualenv test_env..."
 	@test -d test_env || virtualenv -p python test_env
 
-	@echo "Building the TLT API in test_env env..."
+	@echo "Building the XAI API in test_env env..."
 	@. $(ACTIVATE_TEST) && pip install --editable .[test]
 
 # TODO: running all tests in one pytest session randomly causes torch test to hang at last epoch

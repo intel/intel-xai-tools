@@ -23,75 +23,79 @@ XAI Tools, Explainer
 """
 from setuptools import setup
 
-ATTENTION_PKGS = ['bertviz~=1.4.0',
+ATTENTION_PKGS = [
+  'bertviz',
 ]
 
 ATTRIBUTIONS_PKGS = [
-  'intel-tensorflow<2.12.0',
-  'scipy==1.10.0',
-  'captum==0.5.0',
-  'shap==0.41.0',
-  'scikit-plot==0.3.7',
-  'transformers==4.20.1',
-  'torch<1.14.0',
-  'opencv-python==4.6.0.66',
+  'captum',
+  'intel-tensorflow==2.11.0',
+  'numpy>=1.14.3,<1.23.0',
+  'opencv-python',
+  'scikit-plot',
+  'scipy',
+  'shap',
+  'torch==1.13.1',
+  'transformers',
 ]
 
 CAM_PKGS = [
-  'grad-cam==1.4.6',
-  'matplotlib==3.6.2',
-  'numpy<1.23.0,>=1.17',
-  'opencv-python==4.6.0.66',
-  'torch<1.14.0',
-  'scipy==1.10.0',
+  'grad-cam',
+  'matplotlib',
+  'numpy>=1.14.3,<1.23.0',
+  'opencv-python',
+  'scipy',
+  'torch==1.13.1',
 ]
 
 METRICS_PKGS =  [
-  'matplotlib~=3.6.0',
-  'seaborn==0.12.0',
-  'scikit-learn~=1.1.2',
-  'pandas~=1.5.0',
-  'plotly>=3.8.1,<6',
+  'matplotlib',
+  'pandas',
+  'plotly',
+  'scikit-learn',
+  'seaborn',
 ]
 
 MCG_PKGS = [
-    'absl-py>=1.0.0',
-    'attrs<22,>=19.3.0',
-    'intel-tensorflow<2.12.0',
+    'absl-py',
+    'attrs>=19.3.0,<22',
     'dataclasses;python_version<"3.7"',
-    'jinja2>=3,<4',
+    'grpcio-status<1.49',
+    'intel-tensorflow==2.11.0',
+    'jinja2',
     'joblib>=1.2.0',
-    'jsonschema[format-nongpl]>=4.3.0',
-    'plotly>=3.8.1,<6',
-    'semantic-version>=2.8.0,<3',
-    'tensorflow-data-validation>=1.11.0,<1.12.0',
-    'tensorflow-model-analysis>=0.42.0,<0.43.0',
+    'jsonschema[format-nongpl]',
+    'plotly',
+    'protobuf<3.20,>=3.9.2',
+    'semantic-version',
+    'tensorflow-data-validation',
+    'tensorflow-model-analysis',
 ]
 
 PYTORCH_PKGS = [
-    'torch<1.14',
+    'torch==1.13.1',
 ]
 
 REQUIRED_PKGS =  (
-  ATTENTION_PKGS + 
-  ATTRIBUTIONS_PKGS + 
+  ATTENTION_PKGS +
+  ATTRIBUTIONS_PKGS +
   CAM_PKGS +
   METRICS_PKGS +
   MCG_PKGS
 )
 
 TEST_PKGS = [
+    'deepdiff',
     'pytest',
     'tensorflow-hub',
-    'deepdiff'
 ]
 
 PACKAGES = [
-  "explainer",
-  "explainer.attention_layers",
-  "explainer.cam",
-  "explainer.attributions",
-  "explainer.metrics",
+  'explainer',
+  'explainer.attention_layers',
+  'explainer.attributions',
+  'explainer.cam',
+  'explainer.metrics',
   'model_card_gen',
   'model_card_gen.analyze',
   'model_card_gen.datasets',
@@ -103,8 +107,8 @@ PACKAGES = [
 
 
 EXTRAS = {
-    'test': TEST_PKGS + PYTORCH_PKGS,
     'pytorch': PYTORCH_PKGS,
+    'test': TEST_PKGS + PYTORCH_PKGS,
 }
 
 # Get version from version module.
