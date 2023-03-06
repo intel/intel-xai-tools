@@ -11,7 +11,7 @@ This notebook demonstrates how to use the CAM explainer API to explain an ImageN
 ## Running the notebook
 
 To run `ExplainingImageClassification.ipynb`, install the following dependencies:
-1. [Intel® Explainable AI](https://github.com/intel-innersource/frameworks.ai.explainable-ai)
+1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
 2. `pip install scikit-image`
 
 ## References
