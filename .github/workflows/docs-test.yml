@@ -12,7 +12,7 @@ jobs:
   docs-test:
     runs-on: [ aia-devops ]
     container:
-      image: amr-registry.caas.intel.com/aiops/tlt-dev
+      image: ${{ vars.GHA_IMAGE }}
       env:
         http_proxy: ${{ secrets.HTTP_PROXY }}
         https_proxy: ${{ secrets.HTTPS_PROXY }}
