@@ -30,6 +30,7 @@ long_description = (this_directory / "../README.md").read_text()
 
 ATTENTION_PKGS = [
   'bertviz',
+  'ecco',
 ]
 
 ATTRIBUTIONS_PKGS = [
