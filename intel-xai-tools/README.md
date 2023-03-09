@@ -8,12 +8,19 @@
 * Provides an avenue for community contributions. Plugin architectures have had tremendous success in python’s ecosystem. New plugins are created as wheels and published to python’s pypi or used locally on disk.
 
 ## Build and Install
+
 Requirements:
 * Linux system (or WSL2 on Windows)
 * git
 * required python version: >=3.9,<3.10
 * `apt-get install build-essential python3-dev`
 
+Basic Installation:
+```
+pip install intel-xai-tools
+```
+
+Advanced/Developer Installation:
 1. Clone this repo and navigate to the repo directory:
    ```
    git clone https://github.com/IntelAI/intel-xai-tools.git

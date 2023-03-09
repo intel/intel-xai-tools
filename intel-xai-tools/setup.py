@@ -21,7 +21,12 @@
 """
 XAI Tools, Explainer
 """
+from pathlib import Path
 from setuptools import setup
+
+# read the contents of your README file
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 ATTENTION_PKGS = [
   'bertviz',
@@ -124,8 +129,9 @@ setup(
     license='Apache 2.0',
     author='IntelAI',
     author_email='IntelAI@intel.com',
-    description='Explainer invokes an explainer given a model, dataset and features',
-    long_description=__doc__,
+    description='Intel® Explainable AI Tools',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     install_requires=REQUIRED_PKGS,
     tests_require=TEST_PKGS,
     extras_require=EXTRAS,
