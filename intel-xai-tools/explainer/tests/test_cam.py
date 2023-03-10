@@ -31,7 +31,7 @@ def test_grad_cam(custom_pyt_CNN):
     model, test_loader, class_names = custom_pyt_CNN 
     X_test = next(iter(test_loader))[0].to(device)[0]
     image = torch.movedim(X_test, 0, 2).numpy()
-    target_layer = 'model.conv_layers'
+    target_layer = model.conv_layers
     # use the highest-scoring category as the target class
     target_class = None
     image_dims = (28, 28)
