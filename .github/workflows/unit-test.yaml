@@ -12,7 +12,7 @@ on:
     paths:
       - '**'
 jobs:
-  mcg-unit-test:
+  unit-tests:
     if: github.event.review.state == 'approved' ||
         github.event.pull_request.merged == true ||
         github.event_name == 'push'

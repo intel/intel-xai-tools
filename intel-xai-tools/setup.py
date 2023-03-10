@@ -28,11 +28,6 @@ from setuptools import setup
 this_directory = Path(__file__).parent
 long_description = (this_directory / "../README.md").read_text()
 
-ATTENTION_PKGS = [
-  'bertviz',
-  'ecco',
-]
-
 ATTRIBUTIONS_PKGS = [
   'captum',
   'intel-tensorflow==2.11.0',
@@ -83,7 +78,6 @@ PYTORCH_PKGS = [
 ]
 
 REQUIRED_PKGS =  (
-  ATTENTION_PKGS +
   ATTRIBUTIONS_PKGS +
   CAM_PKGS +
   METRICS_PKGS +
@@ -98,7 +92,6 @@ TEST_PKGS = [
 
 PACKAGES = [
   'explainer',
-  'explainer.attention_layers',
   'explainer.attributions',
   'explainer.cam',
   'explainer.metrics',
