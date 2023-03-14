@@ -5,13 +5,14 @@ This repository provides tools for data scientists and MLOps engineers that have
 ## Features
 | Core Feature | Description | 
 |----------|-----------|
-| [Model Card Generator](/intel-xai-tools/model_card_gen) |  Allows users to create interactive HTML reports containing model performance and fairness metrics. |
-|[Explainer](/intel-xai-tools/explainer) | Allows injection of XAI methods into python workflows / notebooks without requiring version compatibility of resident packages in the active python environment. |
+| [Model Card Generator](intel-xai-tools/model_card_gen) |  **Allows users to create interactive HTML reports containing model performance and fairness metrics.** |
+|[Explainer](intel-xai-tools/explainer) | **Allows users to run post-hoc model distillation and visualization methods to examine predictive behavior for both TensorFlow and PyTorch models via a simple Python API including the following modules:** <li> [Attributions](intel-xai-tools/explainer/attributions/): visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions <li> [CAM](intel-xai-tools/explainer/cam/): create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping <li> [Metrics](intel-xai-tools/explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow |
+
 ## Build and Install
 Requirements:
 * Linux system (or WSL2 on Windows)
 * git
-* required python version: >=3.9,<3.10
+* required python version: 3.9
 * `apt-get install build-essential python3-dev`
 
 ### Basic Installation:
@@ -25,9 +26,9 @@ pip install intel-xai-tools
 
    cd intel-xai-tools
    ```
-2. Create and activate a Python3 virtual environment using `virtualenv`:
+2. Create and activate a Python3.9 virtual environment using `virtualenv`:
    ```
-   python3 -m virtualenv xai_env
+   python3.9 -m virtualenv xai_env
    source xai_env/bin/activate
    ```
 
@@ -43,4 +44,4 @@ pip install intel-xai-tools
 
 ## Running Notebooks
 
-Run [example notebooks](/notebooks/) that show how to use the explainer and model card generator API in various ML domains and use cases. Notebooks may require additional dependencies listed in their associated README's.
+Run [example notebooks](notebooks/) that show how to use the explainer and model card generator API in various ML domains and use cases. Notebooks may require additional dependencies listed in their associated README's.
