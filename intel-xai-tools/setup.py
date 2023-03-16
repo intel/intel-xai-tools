@@ -75,6 +75,7 @@ MCG_PKGS = [
 
 PYTORCH_PKGS = [
     'torch==1.13.1',
+    'torchvision==0.14.1',
 ]
 
 REQUIRED_PKGS =  (
