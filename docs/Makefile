@@ -1,7 +1,3 @@
-#
-# Copyright (c) 2022 Intel Corporation
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -16,25 +12,29 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-all: html
+# Minimal makefile for Sphinx documentation
+#
 
-html:: clean
-	sphinx-build --keep-going . ./_build/html -b html
+# You can set these variables from the command line, and also
+# from the environment for the first two.
 
-clean::
-	rm -rf _build
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
+SOURCEDIR     = .
+BUILDDIR      = _build
 
-publish-install::
-	pip install ghp-import~=2.1.0
+# Put it first so that "make" without argument is like "make help".
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-publish::
-	ghp-import -n -p -f _build/html
+.PHONY: help Makefile
 
-serve::
-	python -m http.server --directory ./_build/html 9010
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-install::
-	pip install Sphinx==5.3.0 && pip install -U -r ./requirements.txt
-
-autodoc::
-	sphinx-apidoc -o /tmp explainer
+LISTEN_IP ?= 127.0.0.1
+LISTEN_PORT ?= 9999
+serve:
+	@python -m http.server --directory ./_build/html ${LISTEN_PORT} --bind ${LISTEN_IP}

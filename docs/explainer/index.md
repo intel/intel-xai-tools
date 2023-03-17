@@ -50,9 +50,11 @@ graph LR
 A(Explainer) --> B(Feature Attributions)
 A --> C(Language Models)
 A --> D(Metrics)
+A --> E(Class Activation Mapping)
 click B "/explainer/feature_attributions_explainer.html#feature-attributions-explainer" "Feature Attributions"
 click C "/explainer/lm_layers_explainer.html#language-model-explainer" "Language Models"
 click D "/explainer/metrics_explainer.html#metrics-explainer" "Metrics"
+click E "/explainer/cam_explainer.html#cam-explainer" "Class Activation Mapping"
 ```
 
 ````{grid} 3
@@ -73,6 +75,12 @@ transformer visualizations
 :text-align: center
 :link: /explainer/metrics_explainer.html#metrics-explainer
 profiling, confusion matrix
+```
+
+```{grid-item-card}  Class Activation Mapping
+:text-align: center
+:link: /explainer/cam_explainer.html#metrics-explainer
+CAM explainers
 ```
 
 ````

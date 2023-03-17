@@ -5,7 +5,7 @@ kernelspec:
 ---
 (mcg)=
 
-```{include} ../../model_card_gen/README.md
+```{include} ../../intel-xai-tools/model_card_gen/README.md
 ```
 `````{grid} 1
 

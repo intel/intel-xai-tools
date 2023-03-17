@@ -23,12 +23,6 @@ entries:
   - file: explainer/quickstart.md
     options:
       titlesonly: True
-  - file: explainer/cli.md
-    options:
-      titlesonly: True
-  - file: explainer/api.md
-    options:
-      titlesonly: True
   - file: explainer/bibliography/index.md
     options:
       titlesonly: True

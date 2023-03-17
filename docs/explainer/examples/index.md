@@ -23,5 +23,15 @@ kernelspec:
 :link: /explainer/examples/model_layers.html#explaining-a-language-model-s-layer-activations
 ```
 
+```{grid-item-card}  Explaining Image Classification Models
+:text-align: center
+:link: /explainer/examples/ExplainingImageClassification.html#Explaining-an-image-classification-model-using-CAM
+```
+
+```{grid-item-card}  Explaining Object Detection Models
+:text-align: center
+:link: /explainer/examples/ExplainingObjectDetection.html#Explaining-a-object-detection-model-using-CAM
+```
+
 ````
 

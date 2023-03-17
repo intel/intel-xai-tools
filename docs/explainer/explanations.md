@@ -22,4 +22,9 @@ kernelspec:
 :link: /explainer/metrics_explainer.html#metrics-explainer
 ```
 
+```{grid-item-card}  Class Activation Mapping
+:text-align: center
+:link: /explainer/cam_explainer.html#cam-explainer
+```
+
 ````
