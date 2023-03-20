@@ -17,7 +17,7 @@ Requirements:
 
 ### Basic Installation:
 ```
-pip install intel-xai-tools
+pip install intel-xai
 ```
 ### Advanced/Developer Installation:
 1. Clone this repo and navigate to the repo directory:

@@ -2,7 +2,7 @@
 
 ## Sphinx Documentation
 
-Install `intel-xai-tools` and it's dependencies for developers as described [here](/README.md##build-and-install)
+Install `intel-xai` and it's dependencies for developers as described [here](/README.md##build-and-install)
 ```bash
 # Run these commands from intel-xai-tools project folder
 python3 -m virtualenv xai_env
