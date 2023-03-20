@@ -1,2 +1,2 @@
-include explainer/explainers/*.yaml
-include explainer/plugins/*/*
+recursive-include explainer *
+recursive-include model_card_gen *
