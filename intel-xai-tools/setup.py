@@ -118,7 +118,7 @@ with open('explainer/version.py') as fp:
 __version__ = globals_dict['__version__']
 
 setup(
-    name='intel-xai-tools',
+    name='intel-xai',
     version=__version__,
     url='https://github.com/IntelAI/intel-xai-tools',
     license='Apache 2.0',
