@@ -13,7 +13,7 @@ Requirements:
 * Linux system (or WSL2 on Windows)
 * git
 * required python version: 3.9
-* `apt-get install build-essential python3-dev`
+* `apt-get install build-essential python3-dev libgl1 libglib2.0-0`
 
 ### Basic Installation:
 ```
