@@ -17,9 +17,9 @@ jobs:
         http_proxy: ${{ secrets.HTTP_PROXY }}
         https_proxy: ${{ secrets.HTTPS_PROXY }}
         no_proxy: ${{ secrets.NO_PROXY }}
-      credentials:
-        username: ${{ secrets.REGISTRY_USER }}
-        password: ${{ secrets.REGISTRY_TOKEN }}
+      # credentials:
+      #   username: ${{ secrets.REGISTRY_USER }}
+      #   password: ${{ secrets.REGISTRY_TOKEN }}
       volumes:
         - /tf_dataset/dataset/transfer_learning:/tmp/data
     steps:
