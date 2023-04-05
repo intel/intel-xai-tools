@@ -30,8 +30,7 @@ class ConfusionMatrix:
     are normalized across each ground truth (row).
 
     Args:
-      ground truth: 2-d array (n_samples, n_classes) of the ground truth, integer one-hot-encoded, 
-        correct target values that correspond to the examples used in testing
+      ground truth: 1-d or 2-d array (if one-hot-encoded) of the integer ground truth labels
       predictions: 2-d array (n_samples, n_classes) of the one-hot-encoded, predicted probabilities 
         that align with the ground truth array
       labels: 1-d array of strings that index the label names to the one-hot encodings
@@ -60,8 +59,11 @@ class ConfusionMatrix:
     pd.options.plotting.backend = "plotly"
     import numpy as np
 
-    # ground truth
-    self.y_gt = np.argmax(groundtruth, axis=1)
+    # if gt is one-hot-encoded, flatten to original
+    if len(np.array(groundtruth).shape) == 2:
+      self.y_gt = np.argmax(groundtruth, axis=1)
+    else:
+      self.y_gt = np.array(groundtruth)
     # model predictions
     self.y_pred = np.argmax(predictions, axis=1)
     # label names
@@ -74,13 +76,19 @@ class ConfusionMatrix:
     # str representation of metrics containing precision, recall, f1 and acc for each class
     self.report = classification_report(self.y_gt, self.y_pred, target_names=self.labels)
 
-
   def visualize(self):
     import matplotlib.pyplot as plt
     import seaborn as sn
-    plt.figure(figsize=(10,7))
-    sn.heatmap(self.df, annot=True)
-
+    plt.figure(figsize=(10,10))
+    s = sn.heatmap(self.df, 
+                   annot=True, 
+                   cmap=sn.color_palette("Blues", as_cmap=True),
+                   linewidths=2,
+                   cbar=False)
+    s.set_xlabel('Predict', fontsize=14)
+    s.set_ylabel('True', fontsize=14)
+    s.set_title('Confusion Matrix', fontsize=18)
+    s.tick_params(left=False, bottom=False)
 
 class Plotter:
   """
@@ -92,8 +100,7 @@ class Plotter:
     This class accepts both binary and multi-class classification.
 
     Args:
-      ground truth: 2-d array (n_samples, n_classes) of the ground truth, integer one-hot-encoded, 
-        correct target values that correspond to the examples used in testing
+      ground truth: 1-d or 2-d array (if one-hot-encoded) of the integer ground truth labels
       predictions: 2-d array (n_samples, n_classes) of the one-hot-encoded, predicted probabilities 
         that align with the ground truth array
       labels: 1-d array of strings that index the label names to the one-hot encodings
@@ -126,9 +133,13 @@ class Plotter:
     import pandas as pd
     import numpy as np
     pd.options.plotting.backend = "plotly"
-    
 
-    self.y_gt = np.array(groundtruth)
+    # one-hot encode gt if it is not already
+    if len(np.array(groundtruth).shape) == 1:
+      self.y_gt = np.eye(len(labels))[np.array(groundtruth).astype(int)]
+    else:
+      self.y_gt = np.array(groundtruth)
+      
     self.y_pred = np.array(predictions)
     self.labels = labels
     self.precision, self.recall = dict(), dict()
