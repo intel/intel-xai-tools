@@ -1,3 +1,67 @@
+class TFGradCAM:
+    def __init__(self, model, target_layer, target_class, image):
+        
+        self.model = model
+        self.target_layer = target_layer
+        self.target_class = target_class
+        self.image = image
+        self.dims = (image.shape[0], image.shape[1])
+        
+        self.gradcam = self._get_gradcam()
+    
+    def _get_gradcam(self):
+        import numpy as np
+        import tensorflow as tf
+        import cv2
+
+        last_conv_layer_model = tf.keras.Model(self.model.inputs, self.target_layer.output)
+        classifier_input = tf.keras.Input(shape=self.target_layer.output.shape[1:])
+        x = classifier_input
+        
+        # get the last conv layer and all the proceeding layers  
+        last_layers = []
+        for layer in reversed(self.model.layers):
+            last_layers.append(layer.name)
+            if 'conv' in layer.name or 'pool' in layer.name:
+                break
+        
+        # create the classifier model to get the gradient for the
+        # target class
+        for layer_name in reversed(last_layers):
+            x = self.model.get_layer(layer_name)(x)
+        classifier_model = tf.keras.Model(classifier_input, x)
+        
+        with tf.GradientTape() as tape:
+            inputs = self.image[np.newaxis, ...]
+            last_conv_layer_output = last_conv_layer_model(inputs)
+            tape.watch(last_conv_layer_output)
+            preds = classifier_model(last_conv_layer_output)
+            top_class_channel = preds[:, self.target_class]
+
+        grads = tape.gradient(top_class_channel, last_conv_layer_output)
+        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2)).numpy()
+        
+        last_conv_layer_output = last_conv_layer_output.numpy()[0]
+        for i in range(pooled_grads.shape[-1]):
+            last_conv_layer_output[:, :, i] *= pooled_grads[i]
+        
+        # Average over all the filters to get a single 2D array
+        gradcam = np.mean(last_conv_layer_output, axis=-1)
+        # Clip the values (equivalent to applying ReLU)
+        # and then normalise the values
+        gradcam = np.clip(gradcam, 0, np.max(gradcam)) / np.max(gradcam)
+        return cv2.resize(gradcam, self.dims)
+        
+        
+
+    def visualize(self):
+        import matplotlib.pyplot as plt
+        
+        plt.imshow(self.image)
+        plt.imshow(self.gradcam, alpha=0.5)
+        plt.axis('off')
+
+
 class XGradCAM:
     def __init__(self, model, targetLayer, targetClass, image, dims, device):
 
@@ -84,8 +148,7 @@ class XGradCAM:
 
         print("XGradCAM, Guided backpropagation, and Guided XGradCAM are generated. ")
 
-def xgradcam(model, targetLayer, targetClass, image, dims, device):
-    return XGradCAM(model, targetLayer, targetClass, image, dims, device)
+
 
 class EigenCAM:
     def __init__(self, model, targetLayer, boxes, classes, colors, reshape, image, device):
@@ -149,6 +212,28 @@ class EigenCAM:
         display(Image.fromarray(np.hstack((cam_image, eigencam_image_renormalized))))
 
         print("EigenCAM is generated. ")
+
+def tf_gradcam(model, target_layer, target_class, image):
+    """
+    Generates TFGradCAM object that calculates the gradient-weighted class activation
+    mapping of a given image and CNN.
+
+    Args:
+      model (tf.keras.Functional): the CNN used for classification 
+      target_layer (tf.keras.KerasLayer): the convolution layer that you want to analyze (usually the last) 
+      target_class (int): the index of the target class
+      image (numpy.ndarray): image to be analzed with a shape (h,w,c)
+
+    Returns:
+      TFGradCAM
+
+    Reference:
+       https://github.com/ismailuddin/gradcam-tensorflow-2/blob/master/notebooks/GradCam.ipynb
+    """
+    return TFGradCAM(model, target_layer, target_class, image)
+
+def xgradcam(model, targetLayer, targetClass, image, dims, device):
+    return XGradCAM(model, targetLayer, targetClass, image, dims, device)
 
 def eigencam(model, targetLayer, boxes, classes, colors, reshape, image, device):
     return EigenCAM(model, targetLayer, boxes, classes, colors, reshape, image, device)

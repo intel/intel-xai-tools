@@ -27,7 +27,7 @@ from explainer import cam
 
 device = torch.device('cpu')
 
-def test_grad_cam(custom_pyt_CNN):
+def test_xgradcam(custom_pyt_CNN):
     model, test_loader, class_names = custom_pyt_CNN 
     X_test = next(iter(test_loader))[0].to(device)[0]
     image = torch.movedim(X_test, 0, 2).numpy()
@@ -37,4 +37,18 @@ def test_grad_cam(custom_pyt_CNN):
     image_dims = (28, 28)
     gcam = cam.xgradcam(model, target_layer, target_class, image, image_dims, device)
     assert isinstance(gcam, cam.XGradCAM)
+    gcam.visualize()
+
+def test_tf_gradcam_vgg(tf_VGG, dog_cat_image):
+    target_class = 281
+    target_layer = tf_VGG.get_layer('block5_conv3')
+    gcam = cam.tf_gradcam(tf_VGG, target_layer, target_class, dog_cat_image)
+    assert isinstance(gcam, cam.TFGradCAM)
+    gcam.visualize()
+
+def test_tf_gradcam_resnet50(tf_resnet50, dog_cat_image):
+    target_class = 281
+    target_layer = tf_resnet50.get_layer('conv5_block3_out')
+    gcam = cam.tf_gradcam(tf_resnet50, target_layer, target_class, dog_cat_image)
+    assert isinstance(gcam, cam.TFGradCAM)
     gcam.visualize()

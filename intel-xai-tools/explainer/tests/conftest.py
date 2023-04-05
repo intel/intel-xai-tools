@@ -81,3 +81,26 @@ def custom_pyt_CNN():
     class_names = np.array(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
 
     return model, test_loader, class_names
+
+@pytest.fixture(scope='session')
+def dog_cat_image():
+    '''Loads the cat-dog image exampe from imagenet.'''
+    from PIL import Image
+    import requests
+    from io import BytesIO
+    response = requests.get("https://raw.githubusercontent.com/jacobgil/pytorch-grad-cam/master/examples/both.png")
+    return np.array(Image.open(BytesIO(response.content)))
+
+@pytest.fixture(scope='session')
+def tf_VGG():
+    '''Loads the keras.applications VGG16 pretrained on imagenet'''
+    from tensorflow.keras.applications import VGG16
+
+    return VGG16()
+
+@pytest.fixture(scope='session')
+def tf_resnet50():
+    '''Loads the keras.applications ResNet50 pretrained on imagenet'''
+    from tensorflow.keras.applications.resnet50 import ResNet50
+
+    return ResNet50() 
