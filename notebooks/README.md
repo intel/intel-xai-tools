@@ -1,4 +1,4 @@
-# XAI Notebooks
+# Example Notebooks
 
 This directory has Jupyter notebooks that demonstrate explainable AI with the Intel® Explainable AI Tool. 
 

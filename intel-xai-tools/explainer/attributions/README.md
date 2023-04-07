@@ -1,6 +1,6 @@
 # Feature Attributions
 
-```{code-cell} python3
+```python3
 from explainer import attributions
 ```
 

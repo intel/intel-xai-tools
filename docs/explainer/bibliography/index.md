@@ -1,6 +1,0 @@
-(bibliography)=
-# Bibliography
-
-
-```{bibliography}
-```
