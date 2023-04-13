@@ -22,7 +22,7 @@ import pytest
 import torch 
 torch.manual_seed(0)
 ### library to be tested ###
-from explainer import cam 
+from explainer import cam
 ###################################
 
 device = torch.device('cpu')
@@ -51,4 +51,25 @@ def test_tf_gradcam_resnet50(tf_resnet50, dog_cat_image):
     target_layer = tf_resnet50.get_layer('conv5_block3_out')
     gcam = cam.tf_gradcam(tf_resnet50, target_layer, target_class, dog_cat_image)
     assert isinstance(gcam, cam.TFGradCAM)
+    gcam.visualize()
+
+
+def test_gradcam_tf_resnet50(tf_resnet50, dog_cat_image):
+    target_class = 281
+    target_layer = tf_resnet50.get_layer('conv5_block3_out')
+    gcam = cam.GradCAM(tf_resnet50, target_layer, target_class, dog_cat_image)
+    assert isinstance(gcam, cam.TFGradCAM)
+    gcam.visualize()
+
+
+def test_gradcam_pytorch(custom_pyt_CNN):
+    model, test_loader, class_names = custom_pyt_CNN 
+    X_test = next(iter(test_loader))[0].to(device)[0]
+    image = torch.movedim(X_test, 0, 2).numpy()
+    target_layer = model.conv_layers
+    # use the highest-scoring category as the target class
+    target_class = None
+    image_dims = (28, 28)
+    gcam = cam.GradCAM(model, target_layer, target_class, image, image_dims, device)
+    assert isinstance(gcam, cam.XGradCAM)
     gcam.visualize()
