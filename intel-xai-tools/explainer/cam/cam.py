@@ -1,4 +1,18 @@
-class TFGradCAM:
+from ..utils.model.model_framework import is_tf_model, is_pt_model, raise_unknown_model_error
+
+
+class GradCAM:
+    """GradCAM class for PyTorch and Tensorflow models"""
+    def __new__(cls, model, *args):    
+        if is_tf_model(model):
+            return super().__new__(TFGradCAM)
+        elif is_pt_model(model):
+            return super().__new__(XGradCAM)
+        else:
+            raise_unknown_model_error()
+        
+
+class TFGradCAM(GradCAM):
     def __init__(self, model, target_layer, target_class, image):
         
         self.model = model
@@ -62,7 +76,7 @@ class TFGradCAM:
         plt.axis('off')
 
 
-class XGradCAM:
+class XGradCAM(GradCAM):
     def __init__(self, model, targetLayer, targetClass, image, dims, device):
 
         # set any frozen layers to trainable

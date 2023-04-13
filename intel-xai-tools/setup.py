@@ -96,6 +96,7 @@ PACKAGES = [
   'explainer.attributions',
   'explainer.cam',
   'explainer.metrics',
+  'explainer.utils.model',
   'model_card_gen',
   'model_card_gen.analyze',
   'model_card_gen.datasets',
