@@ -234,13 +234,13 @@ def confusion_matrix(groundtruth,predictions,labels):
       >>> y_true = [[0, 0, 1], [1, 0, 0], [0, 1, 0], [1, 0, 0], [0, 1, 0]]
       >>> y_pred = [[0, 0, 1], [0, 1, 0], [0, 1, 0], [1, 0, 0], [0, 1, 0]]
       >>> label_names = ['cat', 'dog', 'horse']
-      >>> from explainer.explainers import metrics_explainer
-      >>> cm = metrics_explainer['confusionmatrix'](y_true, y_pred, label_names)
+      >>> from explainer import metrics
+      >>> cm = metrics.confusion_matrix(y_true, y_pred, label_names)
       >>> print(cm.df)
-                 cat  dog  horse
-      cat        0.5  0.5        0.0
-      dog        0.0  1.0        0.0
-      horse  0.0  0.0        1.0
+             cat  dog  horse
+      cat    0.5  0.5    0.0
+      dog    0.0  1.0    0.0
+      horse  0.0  0.0    1.0
 
   """
   cm = ConfusionMatrix(groundtruth, predictions, labels) 
@@ -269,8 +269,8 @@ def plot(groundtruth,predictions,labels):
       >>> y_true = [[0, 0, 1], [1, 0, 0], [0, 1, 0], [1, 0, 0], [0, 1, 0]]
       >>> y_pred = [[.002, .09, .89], [.01, .7, .29], [.3, .67, .03], [.55, .4, .05], [.03, .86, .11]]
       >>> label_names = ['cat', 'dog', 'horse']
-      >>> from explainer.explainers import metrics_explainer
-      >>> plotter = metrics_explainer['plot'](y_true, y_pred, label_names)
+      >>> from explainer import metrics
+      >>> plotter = metrics.plot(y_true, y_pred, label_names)
       >>> plotter.recall
       {0: array([1. , 1. , 0.5, 0.5, 0.5, 0. ]), 1: array([1. , 1. , 1. , 0.5, 0.5, 0. ]), 2: array([1., 1., 1., 1., 1., 0.])}
 

@@ -31,4 +31,4 @@ jobs:
       shell: bash
       working-directory: ./intel-xai-tools
       continue-on-error: false
-      run: make html
+      run: make test-docs
