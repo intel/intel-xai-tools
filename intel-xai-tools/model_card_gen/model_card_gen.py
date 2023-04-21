@@ -125,7 +125,7 @@ class ModelCardGen():
             >>> model_path = 'compas/model'
             >>> data_paths = {'eval': 'compas/eval.tfrecord', 'train': 'compas/train.tfrecord'}
             >>> eval_config = 'compas/eval_config.proto'
-            >>> mcg = ModelCardGen.generate(data_paths, model_path, eval_config)
+            >>> mcg = ModelCardGen.generate(data_paths, model_path, eval_config) #doctest:+SKIP
         """
         self = cls(
             data_sets,
