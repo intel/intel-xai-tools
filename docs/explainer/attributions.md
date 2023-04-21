@@ -5,7 +5,7 @@
 
 ```{eval-rst}
 
-.. automodule:: explainer.attributions
+.. automodule:: explainer.attributions.attributions
    :members:
 
 ```

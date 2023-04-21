@@ -5,7 +5,7 @@
 
 ```{eval-rst}
 
-.. automodule:: explainer.cam
+.. automodule:: explainer.cam.cam
    :members:
 
 ```
