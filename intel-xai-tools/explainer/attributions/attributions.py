@@ -281,9 +281,11 @@ def explainer():
       FeatureAttributions
     
     Example:
-      >>> from explainer.explainers import feature_attributions_explainer
-      >>> explainer = feature_attributions_explainer.explainer
-      >>> ??explainer
+      >>> from explainer import attributions
+      >>> explainer = attributions.explainer()
+      <IPython.core.display.HTML object>
+      >>> explainer.shap.__version__
+      '0.41.0' 
     """
     return FeatureAttributions()
 
@@ -360,17 +362,6 @@ def partition_explainer(model, tokenizer, categories):
 
     Returns:
       PartitionExplainer
-    
-    Example:
-      >>> def make_pred(X_batch_text):
-      >>>   X_batch = vectorizer.transform(X_batch_text).toarray()
-      >>>   preds = model.predict(X_batch)
-      >>>   return preds
-      >>>
-      >>> from explainer.explainers import feature_attributions_explainer
-      >>> partition_explainer = feature_attributions_explainer.partitionexplainer
-      >>> partition_explainer = partitione_explainer(make_pred, r"\W+",selected_categories)(X_batch_text)
-      >>> partition_explainer.visualize()
     """
     return PartitionExplainer(model, tokenizer, categories)
 
@@ -479,10 +470,5 @@ def sentiment_analysis(model, data):
 
     Returns:
       PipelineExplainer
-
-    Example:
-      >>> from explainer.api import ExplainerContextManager as ec
-      >>> with ec('feature_attributions_explainer') as fe:
-      >>>   fe.sentiment_analysis(model.model, raw_text_input).visualize(1)
     """
     return PipelineExplainer('sentiment-analysis', model)(data)
