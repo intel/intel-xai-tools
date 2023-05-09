@@ -2,7 +2,9 @@ from ..utils.model.model_framework import is_tf_model, is_pt_model, raise_unknow
 
 
 class GradCAM:
-    """GradCAM class for PyTorch and Tensorflow models"""
+    """GradCAM base class. Depending on the model framework, GradCAM is a superclass to TFGradCAM or XGradCAM.
+    Note that EiganCAM (only supports PyTorch) is not included yet.
+    """
     def __new__(cls, model, *args):    
         if is_tf_model(model):
             return super().__new__(TFGradCAM)
@@ -13,6 +15,32 @@ class GradCAM:
         
 
 class TFGradCAM(GradCAM):
+    '''
+    Holds the calculations for the gradient-weighted class activation mapping (gradCAM) of a 
+    given image and TensorFlow CNN.
+
+    Args:
+      model (tf.keras.functional): the CNN used for classification 
+      target_layer (tf.keras.KerasLayer): the convolution layer that you want to analyze (usually the last) 
+      target_class (int): the index of the target class
+      image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
+
+        
+    Attributes:
+      model: the CNN being used
+      target_layer: the target convolution being used 
+      target_class: the target class being used
+      image: the image being used
+      dims: the dimensions of the image being used
+      gradcam: the result of the gradCAM calculation from the model's target_layer on the image
+
+
+    Methods:
+      visualize: superimpose the gradCAM result on top of the original image
+
+    Reference:
+      https://github.com/ismailuddin/gradcam-tensorflow-2/blob/master/notebooks/GradCam.ipynb 
+    '''
     def __init__(self, model, target_layer, target_class, image):
         
         self.model = model
@@ -77,6 +105,33 @@ class TFGradCAM(GradCAM):
 
 
 class XGradCAM(GradCAM):
+    '''
+    Holds the calculations for the axiom-based gradient-weighted class activation mapping (XgradCAM) of a 
+    given image and PyTorch CNN.
+
+    Args:
+      model (torch.nn.Module): the CNN used for classification 
+      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last) 
+      target_class (int): the index of the target class
+      image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
+      dims (tuple of ints): dimension of image (h, w)
+      device (torch.device): torch.device('cpu') or torch.device('gpu') for PyTorch optimizations
+
+        
+    Attributes:
+      model: the CNN being used
+      target_layer: the target convolution being used 
+      target_class: the target class being used
+      image: the image being used
+      dims: the dimensions of the image being used
+      device: device being used by PyTorch
+
+    Methods:
+      visualize: superimpose the gradCAM result on top of the original image
+
+    Reference:
+       https://github.com/jacobgil/pytorch-grad-cam
+    '''
     def __init__(self, model, targetLayer, targetClass, image, dims, device):
 
         # set any frozen layers to trainable
@@ -165,6 +220,40 @@ class XGradCAM(GradCAM):
 
 
 class EigenCAM:
+
+    '''
+    Holds the calculations for the eigan-based gradient-weighted class activation mapping (EiganCAM) of a 
+    given image and PyTorch CNN for object detection.
+
+    Args:
+      model (torch.nn.Module): the CNN used for classification 
+      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last) 
+      boxes (list): list of coordinates where the object is detected
+      classes (list): list of classes that are predicted from boxes
+      colors (list): list of colors corresponding to the classes
+      reshape (function): the reshape transformation function responsible for processing the output tensors. Can be None
+        if not needed for particular model (such as YOLO)
+      image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
+      device (torch.device): torch.device('cpu') or torch.device('gpu') for PyTorch optimizations
+
+        
+    Attributes:
+      model: the CNN being used
+      target_layer: the target convolution being used 
+      boxes: the list of coordinates being used
+      classes: the list of classes being used
+      colors: the list of colors being used for the classes
+      reshape: the transformation function being used to process model output
+      image: the image being used
+      device: device being used by PyTorch
+
+    Methods:
+      visualize: superimpose the EiganCAM  result on top of the original image
+
+    Reference:
+       https://github.com/jacobgil/pytorch-grad-cam 
+    '''
+
     def __init__(self, model, targetLayer, boxes, classes, colors, reshape, image, device):
         self.model = model
         self.targetLayer = targetLayer
@@ -236,7 +325,7 @@ def tf_gradcam(model, target_layer, target_class, image):
       model (tf.keras.Functional): the CNN used for classification 
       target_layer (tf.keras.KerasLayer): the convolution layer that you want to analyze (usually the last) 
       target_class (int): the index of the target class
-      image (numpy.ndarray): image to be analzed with a shape (h,w,c)
+      image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
 
     Returns:
       TFGradCAM

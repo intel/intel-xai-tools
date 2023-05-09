@@ -151,6 +151,9 @@ class Plotter:
       self.fpr[i], self.tpr[i], _ = sk_roc_curve(self.y_gt[:, i], self.y_pred[:, i])
 
   def pr_curve(self):
+    '''
+    Plot the Precision-Recall Curve
+    '''
     import plotly.express as px
     fig = px.line(title='PR Curve').update_layout(yaxis_title='Precision', xaxis_title='Recall')
     for i in range(len(self.labels)):
@@ -159,6 +162,9 @@ class Plotter:
     return fig
 
   def roc_curve(self):
+    '''
+    Plot the receiver operating charactersitic curve
+    '''
     import plotly.express as px
     fig = px.line(title="ROC Curve").update_layout(yaxis_title='TPR', xaxis_title='FPR')
     for i in range(len(self.labels)):
@@ -168,6 +174,19 @@ class Plotter:
 
 
 class PStats:
+  """
+    Executes cProfile.run and saves the results in the PStats class as panda DataFrames. 
+    Two DataFrames are stored - A summary and a report which call PStats.summary and PStats.report respectively.
+
+    Args:
+      command (string): the command to be analyzed  
+
+    Attributes:
+      profile: tokenized results of cProfile.run() on the command in a list of strings
+
+    Reference:
+      https://docs.python.org/3/library/profile.html
+  """ 
   def __init__(self, command):
     import cProfile
     import io
@@ -179,28 +198,22 @@ class PStats:
 
   @property
   def summary(self):
+    '''Pandas DataFrame summarizing duration of each function'''
     import pstats
     import pandas as pd
     import numpy as np
     cols = ['function calls', 'time']
     summary_data = self.profile[:4]
-#    return summary_data[0].strip()
     data = np.array(summary_data[0].split())[[0,-2]].reshape(1,2)
-#    data = data.astype(float)
     data_ = pd.DataFrame(data)
     data_.columns=cols
     data_['function calls'].astype(int)
     data_['time'].astype(float)
-#    def swap_columns(df, col1, col2):
-#      col_list = list(df.columns)
-#      x, y = col_list.index(col1), col_list.index(col2)
-#      col_list[y], col_list[x] = col_list[x], col_list[y]
-#      df = df[col_list]
-#      return df
     return data_
 
   @property
   def report(self):
+    '''Pandas DataFrame in-depth report of the duration of each call '''
     import pstats
     import pandas as pd
     core_profile = self.profile[4:]
@@ -281,16 +294,31 @@ def plot(groundtruth,predictions,labels):
 
 def pstats(command):
   """
-     Executes cProfile.run and saves the results in the PStats class as panda DataFrames. 
-     Two DataFrames are stored - A summary and a report which call PStats.summary and PStats.report respectively.
+    Executes cProfile.run and saves the results in the PStats class as panda DataFrames. 
+    Two DataFrames are stored - A summary and a report which call PStats.summary and PStats.report respectively.
 
-     Args:
-       command: command to run
+    Args:
+      command: command to run
 
-     Returns:
-       PStats: this class provides summary and report methods to display the DataFrames
+    Returns:
+      PStats: this class provides summary and report methods to display the DataFrames
 
-     Reference:
-       https://docs.python.org/3/library/profile.html
+    Reference:
+      https://docs.python.org/3/library/profile.html
+
+
+    Example:
+      >>> import random
+      >>> from explainer import metrics
+      >>> stats = metrics.pstats('[i**2 for i in range(100000)]')
+      >>> stats.report #doctest:+SKIP
+            ncalls tottime percall cumtime percall                 filename:lineno(function)
+      0      1   0.025   0.025   0.025   0.025                    <string>:1(<listcomp>)
+      1      1   0.001   0.001   0.026   0.026                      <string>:1(<module>)
+      2      1   0.000   0.000   0.027   0.027                     method builtins.exec}
+      3      1   0.000   0.000   0.000   0.000  'disable' of '_lsprof.Profiler' objects}
+      4           None    None    None    None                                      None
+      5           None    None    None    None                                      None
+      6           None    None    None    None                                      None 
   """
   return PStats(command)
