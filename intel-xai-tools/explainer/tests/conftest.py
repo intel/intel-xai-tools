@@ -96,11 +96,21 @@ def tf_VGG():
     '''Loads the keras.applications VGG16 pretrained on imagenet'''
     from tensorflow.keras.applications import VGG16
 
-    return VGG16()
+    return VGG16(weights='imagenet')
 
 @pytest.fixture(scope='session')
 def tf_resnet50():
     '''Loads the keras.applications ResNet50 pretrained on imagenet'''
     from tensorflow.keras.applications.resnet50 import ResNet50
 
-    return ResNet50() 
+    return ResNet50(weights='imagenet') 
+
+@pytest.fixture(scope='session')
+def imagenet_class_names():
+    # load the ImageNet class names as a vectorized mapping function from ids to names
+    import shap
+    import json
+    url = "https://s3.amazonaws.com/deep-learning-models/image-models/imagenet_class_index.json"
+    with open(shap.datasets.cache(url)) as file:
+        class_names = [v[1] for v in json.load(file).values()]
+    return class_names
