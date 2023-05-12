@@ -89,6 +89,7 @@ TEST_PKGS = [
     'deepdiff',
     'pytest',
     'tensorflow-hub',
+    'datasets',
 ]
 
 PACKAGES = [

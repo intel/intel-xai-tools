@@ -106,7 +106,7 @@ class GradientExplainer(FeatureAttributions):
       ranked_outputs: the number of top label predictions
       explainer: the shap GradientExplainer object
       shap_values: the resulting shap value estimations on the target images
-      self.indexes: indexes where for the corresponding rankings of the each target image ranking
+      indexes: indexes where for the corresponding rankings of the each target image ranking
       labels: the class labels of the given classification problem 
 
 
@@ -186,8 +186,66 @@ class KernelExplainer(FeatureAttributions):
 class PartitionExplainer(FeatureAttributions):
     '''
     Approximate an extension of shap values, known as Owen values, by recursively computing shap values 
-    through a hierarchy of features that define feature coalitions. This application of partition explainer
-    is currently only for text/NLP use cases (using HuggingFace Transformers API)
+    through a hierarchy of features that define feature coalitions. This is the base partition explainer class
+    that generates partition explainer children objects for text or image classification.
+
+    Args:
+      task_type (string): 'text' or 'image' to choose which classification domain to be explained
+      *args: the remaining arguments required for child class instantiation
+    '''
+    def __new__(cls, task_type, *args):
+        if task_type == 'text':
+            return super().__new__(PartitionTextExplainer)
+        elif task_type == 'image':
+            return super().__new__(PartitionImageExplainer)
+        else:
+            raise ValueError(f"Task type {type(task_type)} is unsupported: please use 'text' or 'image'")
+    
+
+
+class PartitionImageExplainer(PartitionExplainer, FeatureAttributions):
+    '''
+    Image classification-based partition explanation. 
+    
+    Args:
+      task_type (string): 'text' or 'image' used in PartitionExplainer generator class. It is not used in this 
+      child class.
+      model (function): "black box" prediction function that takes an input array of shape (n samples, m features)
+      and outputs an array of n predictions.
+      labels (list): list of label names (strings) for the given classification problem
+      shape (tuple): height (int) and width (int) of images to be analyzed
+
+    Attributes:
+      explainer: shap PartitionExplainer object
+      shap_values: the resulting shap value estimations on the target images 
+    '''
+    def __init__(self, task_type, model, labels, shape):
+        FeatureAttributions.__init__(self)
+        PartitionExplainer.__init__(self)
+        self.shap_values = None
+        self.explainer = self.shap.Explainer(model, self.shap.maskers.Image('inpaint_telea', shape), output_names=labels)      
+
+    def run_explainer(self, target_images, top_n=1, max_evals=64):
+        '''
+        Execute the partition explanation on the target_images.
+
+        Args:
+          target_images (numpy.ndarray): n images in the shape (n, height, width, channels)
+          max_evals (int): number of evaluations used in the shap estimation. The higher the number result 
+          in a better the estimation. Defaults to 64. 
+          top_n (int): gather shap values for the top n most probable classes per image. Defaults to 1.
+
+        Returns:
+          None
+        '''
+        self.shap_values = self.explainer(target_images, max_evals=max_evals, outputs=self.shap.Explanation.argsort.flip[:top_n])
+    
+    def visualize(self):
+        self.image_plot(self.shap_values)
+
+class PartitionTextExplainer(PartitionExplainer, FeatureAttributions):
+    '''
+    Text classification-based partition explanation (using HuggingFace Transformers API). 
 
     Args:
       model (function): "black box" prediction function that takes an input array of shape (n samples, m features)
@@ -196,7 +254,6 @@ class PartitionExplainer(FeatureAttributions):
       categories: list of label names for the given classification problem
 
     Attributes:
-      masker: shap masker object that masks strings according to the given tokenizer
       explainer: shap PartitionExplainer object
       shap_values: the resulting shap value estimations on the target examples 
 
@@ -206,15 +263,25 @@ class PartitionExplainer(FeatureAttributions):
     Reference:
     https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html 
     '''
-    def __init__(self, model, tokenizer, categories):
-        super().__init__()
-        self.masker = self.shap.maskers.Text(tokenizer=tokenizer)
-        self.explainer = self.shap.Explainer(model, masker=self.masker, output_names=categories)
+    def __init__(self, task_type, model, labels, tokenizer):
+        FeatureAttributions.__init__(self)
+        PartitionExplainer.__init__(self)
+        self.shap_values = None
+        self.explainer = self.shap.Explainer(model, masker=self.shap.maskers.Text(tokenizer=tokenizer), output_names=labels)
 
-    def __call__(self, *args, **kwargs):
-        data = args[0]
-        self.shap_values = self.explainer(data)
-        return self
+    def run_explainer(self, target_text, max_evals=64):
+        '''
+        Execute the partition explanation on the target_text.
+
+        Args:
+          target_text (numpy.ndarray): 1-d numpy array of strings holding the text examples
+          max_evals (int): number of evaluations used in the shap estimation. The higher the number result 
+          in a better the estimation. Defaults to 64. 
+
+        Returns:
+          None
+        '''
+        self.shap_values = self.explainer(target_text, max_evals=max_evals)
 
     def visualize(self):
         self.text_plot(self.shap_values)
@@ -559,10 +626,9 @@ def gradient_explainer(model, backgroundImages, targetImages, rankedOutputs, lab
     return GradientExplainer(model, backgroundImages, targetImages, rankedOutputs, labels)
 
 
-def partition_explainer(model, tokenizer, categories):
+def partition_text_explainer(model, labels, target_text, tokenizer, max_evals=64):
     """
-    Calls PartitionExplainer with the model, masker and categories
-    Returns a SHAP PartitionExplainer that explain the output of a function.
+    Instantiates PartitionExplainer for text classification and executes run_explainer()
 
     Args:
       model (function): the model
@@ -575,8 +641,29 @@ def partition_explainer(model, tokenizer, categories):
     Returns:
       PartitionExplainer
     """
-    return PartitionExplainer(model, tokenizer, categories)
+    pe = PartitionExplainer('text', model, labels, tokenizer)
+    pe.run_explainer(target_text, max_evals=max_evals)
+    return pe
 
+
+def partition_image_explainer(model, labels, target_images, top_n=1, max_evals=64):
+    """
+    Instantiates PartitionExplainer for image classification and executes run_explainer()
+
+    Args:
+      model (function): the model
+      tokenizer (string or callable): the tokens you want to mask
+      categories (list): the category names
+
+    Reference:
+      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html
+
+    Returns:
+      PartitionImageExplainer
+    """
+    pe = PartitionExplainer('image', model, labels, target_images[0].shape)
+    pe.run_explainer(target_images, top_n=top_n, max_evals=max_evals)
+    return pe
 
 def saliency(model):
     """
