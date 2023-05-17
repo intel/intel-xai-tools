@@ -178,7 +178,7 @@ class XGradCAM(GradCAM):
         else:
             targets = [ClassifierOutputTarget(self.targetClass)]
 
-        cam = XGradCAM(self.model, self.targetLayer, use_cuda=torch.cuda.is_available())
+        cam = XGradCAM(self.model, self.targetLayer)
 
         # convert back to grayscale if that is the initial dim
         if converted:
@@ -190,7 +190,7 @@ class XGradCAM(GradCAM):
         cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
         cam_image = cv2.cvtColor(cam_image, cv2.COLOR_RGB2BGR)
 
-        gb_model = GuidedBackpropReLUModel(model=self.model, use_cuda=torch.cuda.is_available())
+        gb_model = GuidedBackpropReLUModel(model=self.model, use_cuda=False)
         gb = gb_model(input_tensor, target_category=None)
         cam_mask = cv2.merge([grayscale_cam, grayscale_cam, grayscale_cam])
         cam_gb = deprocess_image(cam_mask * gb)
@@ -285,9 +285,9 @@ class EigenCAM:
         self.targetLayer = [self.targetLayer]
 
         if self.reshape is None:
-            cam = EigenCAM(self.model, self.targetLayer, use_cuda=torch.cuda.is_available())
+            cam = EigenCAM(self.model, self.targetLayer)
         else:
-            cam = EigenCAM(self.model, self.targetLayer, use_cuda=torch.cuda.is_available(),
+            cam = EigenCAM(self.model, self.targetLayer,
                            reshape_transform=self.reshape)
         targets = []
         grayscale_cam = cam(input_tensor=input_tensor, targets=targets, aug_smooth=False,
