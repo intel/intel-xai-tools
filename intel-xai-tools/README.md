@@ -24,7 +24,7 @@ pip install intel-xai
    ```
    git clone https://github.com/IntelAI/intel-xai-tools.git
 
-   cd intel-xai-tools
+   cd intel-xai-tools/intel-xai-tools
    ```
 2. Create and activate a Python3.9 virtual environment using `virtualenv`:
    ```

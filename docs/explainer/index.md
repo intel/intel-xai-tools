@@ -1,7 +1,7 @@
 (explainer)=
 # Explainer
 
-Explainer is a Python module in Intel Explainable AI Tools that provides explainability methods for PyTorch and Tensorflow models.
+Explainer is a Python module in Intel® Explainable AI Tools that provides explainability methods for PyTorch and Tensorflow models.
 
 ## Goals
 

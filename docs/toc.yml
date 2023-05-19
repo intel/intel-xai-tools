@@ -4,6 +4,8 @@ options:
   maxdepth: 2
   titlesonly: True
 entries:
+- file: overview.rst
+- file: install.rst
 - file: explainer/index.md
   entries:
   - file: explainer/attributions.md
@@ -11,8 +13,11 @@ entries:
   - file: explainer/metrics.md 
 - file: model_card_gen/index.md
   entries:
-  - file: model_card_gen/api.md
+  - file: model_card_gen/api.rst
   - file: model_card_gen/example.md
-- file: explainer/examples.md
+- file: notebooks.rst
   entries:
-  - glob: notebooks/*
+  - file: noteooks/ExplainingImageClassification.nblink
+- file: legal.rst
+- url: https://github.com/IntelAI/intel-xai-tools
+  title: GitHub Repository
