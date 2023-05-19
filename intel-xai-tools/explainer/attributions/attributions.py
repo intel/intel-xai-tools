@@ -18,9 +18,15 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+import torch
+import pandas as pd
+import numpy as np
+from typing import Union, Optional, Callable, List
+
+
 class FeatureAttributions:
     '''
-    Attributions base class. Holds the SHAP API.
+    Attributions base class. Holds the shap API.
     '''
     def __init__(self):
         import shap
@@ -59,22 +65,25 @@ class DeepExplainer(FeatureAttributions):
       shap_values: the resulting shap value estimations on the target images
       labels: the class labels of the given classification problem 
     
-    Methods:
-      visualize: superimpose SHAP estimations on top of original image(s) across all labels predictions
-
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html
     '''
-    def __init__(self, model, background_images, target_images, labels):
+    def __init__(self, 
+                 model, 
+                 background_images: Union[np.ndarray,  pd.DataFrame, torch.Tensor], 
+                 target_images: Union[np.ndarray,  pd.DataFrame, torch.Tensor], 
+                 labels: Union[List[str], np.ndarray]
+                 ) -> None:
         super().__init__()
         self.target_images = target_images
         self.explainer = self.shap.DeepExplainer(model, background_images)
         self.shap_values = self.explainer.shap_values(target_images)
         self.labels = labels
 
-    def visualize(self):
-        import numpy as np
-        import torch
+    def visualize(self) -> None:
+        '''
+        plot superposition of shap estimations on original image(s) across all labels predictions
+        '''
       
         arr = np.full((len(self.labels)), " ")
         if torch.is_tensor(self.target_images):
@@ -98,8 +107,8 @@ class GradientExplainer(FeatureAttributions):
       background_images (numpy.ndarray, pandas.DataFrame or torch.tensor): the selection of background images 
         used to integrate output features across each target image
       target_images (numpy.ndarray, pandas.DataFrame or torch.tensor): the images to be interpreted
-      ranked_outputs (int): the number of top label predictions to be analyzed
       labels (list of strings): list of label names for the given classification problem
+      ranked_outputs (int): the number of top label predictions to be analyzed. Defaults to 1.
 
     Attributes:
       target_images: images used to explain predictions
@@ -109,15 +118,16 @@ class GradientExplainer(FeatureAttributions):
       indexes: indexes where for the corresponding rankings of the each target image ranking
       labels: the class labels of the given classification problem 
 
-
-    Methods:
-      visualize: superimpose expected gradients estimations on top of original image(s) across the top ranked_outputs predictions
-
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html
     '''
-    def __init__(self, model, background_images, target_images, ranked_outputs, labels):
-        import numpy as np
+    def __init__(self, 
+                 model, 
+                 background_images: Union[np.ndarray, pd.DataFrame, torch.Tensor], 
+                 target_images: Union[np.ndarray, pd.DataFrame, torch.Tensor], 
+                 labels: Union[List[str], np.ndarray],
+                 ranked_outputs: Optional[int] = 1,
+                 ) -> None:
         super().__init__()
         self.target_images = target_images
         self.ranked_outputs = ranked_outputs
@@ -125,9 +135,10 @@ class GradientExplainer(FeatureAttributions):
         self.explainer = self.shap.GradientExplainer(model, background_images)
         self.shap_values, self.indexes = self.explainer.shap_values(self.target_images, ranked_outputs=ranked_outputs)
 
-    def visualize(self):
-        import numpy as np
-        import torch
+    def visualize(self) -> None:
+        '''
+        plot superposition of shap estimations on original image(s) across top ranked_outputs 
+        '''
 
         if torch.is_tensor(self.target_images):
             self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
@@ -157,8 +168,7 @@ class KernelExplainer(FeatureAttributions):
       background (numpy.ndarray or pandas.DataFrame): the selection of background examples used to integrate output features
         across each target example
       targets (numpy.ndarray or pandas.DataFrame): the target examples to be interpreted
-      ranked_outputs (int): the number of top label predictions to be analyzed
-      labels (list of strings): list of label names for the given classification problem
+      nsamples (int): the number of times to re-evaluate the model per prediction. Defaults to 64.
 
     Attributes:
       bg: background examples
@@ -166,21 +176,26 @@ class KernelExplainer(FeatureAttributions):
       explainer: shap KernelExplainer object
       shap_values: the resulting shap value estimations on the target examples 
 
-    Methods:
-      visualize: display the force plot of the of the target example(s)
-
     Reference:
     https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html
     '''
-    def __init__(self, model, background, targets, nsamples):
+    def __init__(self, 
+                 model: Callable[[np.ndarray], np.ndarray], 
+                 background: Union[np.ndarray, pd.DataFrame],
+                 targets: Union[np.ndarray, pd.DataFrame], 
+                 nsamples: int = 64
+                 ) -> None:
         super().__init__()
         self.bg = background
         self.targets = targets
         self.explainer = self.shap.KernelExplainer(model, self.bg)
         self.shap_values = self.explainer.shap_values(self.targets, nsamples=nsamples)
 
-    def visualize(self):
-        return self.force_plot(self.explainer.expected_value, self.shap_values[0], self.targets)
+    def visualize(self) -> None:
+        '''
+        Display the force plot of the of the target example(s)
+        '''
+        self.force_plot(self.explainer.expected_value, self.shap_values[0], self.targets)
 
 
 class PartitionExplainer(FeatureAttributions):
@@ -193,7 +208,7 @@ class PartitionExplainer(FeatureAttributions):
       task_type (string): 'text' or 'image' to choose which classification domain to be explained
       *args: the remaining arguments required for child class instantiation
     '''
-    def __new__(cls, task_type, *args):
+    def __new__(cls, task_type: str, *args) -> None:
         if task_type == 'text':
             return super().__new__(PartitionTextExplainer)
         elif task_type == 'image':
@@ -219,28 +234,40 @@ class PartitionImageExplainer(PartitionExplainer, FeatureAttributions):
       explainer: shap PartitionExplainer object
       shap_values: the resulting shap value estimations on the target images 
     '''
-    def __init__(self, task_type, model, labels, shape):
+    def __init__(self, 
+                 task_type: str, 
+                 model: Callable[[np.ndarray], np.ndarray], 
+                 labels: List[str], 
+                 shape: tuple[int, int] 
+                 ) -> None:
         FeatureAttributions.__init__(self)
         PartitionExplainer.__init__(self)
         self.shap_values = None
         self.explainer = self.shap.Explainer(model, self.shap.maskers.Image('inpaint_telea', shape), output_names=labels)      
 
-    def run_explainer(self, target_images, top_n=1, max_evals=64):
+    def run_explainer(self, 
+                      target_images: np.ndarray, 
+                      top_n: int = 1, 
+                      max_evals: int = 64
+                      ) -> None:
         '''
         Execute the partition explanation on the target_images.
 
         Args:
           target_images (numpy.ndarray): n images in the shape (n, height, width, channels)
-          max_evals (int): number of evaluations used in the shap estimation. The higher the number result 
           in a better the estimation. Defaults to 64. 
           top_n (int): gather shap values for the top n most probable classes per image. Defaults to 1.
+          max_evals (int): number of evaluations used in the shap estimation. The higher the number result 
 
         Returns:
           None
         '''
         self.shap_values = self.explainer(target_images, max_evals=max_evals, outputs=self.shap.Explanation.argsort.flip[:top_n])
     
-    def visualize(self):
+    def visualize(self) -> None:
+        '''
+        Plot superposition of shap estimations on original image(s) across top ranked_outputs 
+        '''
         self.image_plot(self.shap_values)
 
 class PartitionTextExplainer(PartitionExplainer, FeatureAttributions):
@@ -248,28 +275,34 @@ class PartitionTextExplainer(PartitionExplainer, FeatureAttributions):
     Text classification-based partition explanation (using HuggingFace Transformers API). 
 
     Args:
+      task_type (string): 'text' or 'image' used in PartitionExplainer generator class. It is not used in this 
+      child class.
       model (function): "black box" prediction function that takes an input array of shape (n samples, m features)
       and outputs an array of n predictions.
+      labels (list): list of label names (strings) for the given classification problem
       tokenizer (string or callable): tokenizer used to break apart strings during masking of the text
-      categories: list of label names for the given classification problem
 
     Attributes:
       explainer: shap PartitionExplainer object
       shap_values: the resulting shap value estimations on the target examples 
 
-    Methods:
-      visualize: display the text plot of the of the target example(s)
-
     Reference:
     https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html 
     '''
-    def __init__(self, task_type, model, labels, tokenizer):
+    def __init__(self, 
+                 task_type: str, 
+                 model: Callable[[np.ndarray], np.ndarray], 
+                 labels: List[str], 
+                 tokenizer: Union[Callable[[str], str], str]) -> None:
+
         FeatureAttributions.__init__(self)
         PartitionExplainer.__init__(self)
         self.shap_values = None
         self.explainer = self.shap.Explainer(model, masker=self.shap.maskers.Text(tokenizer=tokenizer), output_names=labels)
 
-    def run_explainer(self, target_text, max_evals=64):
+    def run_explainer(self, 
+                      target_text: str, 
+                      max_evals: int = 64) -> None:
         '''
         Execute the partition explanation on the target_text.
 
@@ -284,6 +317,9 @@ class PartitionTextExplainer(PartitionExplainer, FeatureAttributions):
         self.shap_values = self.explainer(target_text, max_evals=max_evals)
 
     def visualize(self):
+        '''
+        Display the force plot of the of the target example(s)
+        '''
         self.text_plot(self.shap_values)
 
 
@@ -322,12 +358,16 @@ class Captum_Saliency:
     Reference:
     https://captum.ai/docs/attribution_algorithms    
     '''
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         from captum.attr import Saliency
 
         self.saliency = Saliency(model)
 
-    def visualize(self, input, labels, original_image, imageTitle):
+    def visualize(self, 
+                  input: torch.Tensor, 
+                  labels: torch.Tensor, 
+                  original_image: np.ndarray, 
+                  imageTitle: str) -> None:
         '''
         Visualize the saliency result with a blended heatmap
 
@@ -337,7 +377,6 @@ class Captum_Saliency:
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
         '''
-        import numpy as np
         from captum.attr import visualization as viz
 
         self.grads = self.saliency.attribute(input, target=labels.item())
@@ -368,12 +407,15 @@ class Captum_IntegratedGradients:
     Reference:
     https://captum.ai/docs/attribution_algorithms 
     '''
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         from captum.attr import IntegratedGradients
 
         self.ig = IntegratedGradients(model)
-
-    def visualize(self, input, labels, original_image, imageTitle):
+    def visualize(self, 
+                  input: torch.Tensor, 
+                  labels: torch.Tensor, 
+                  original_image: np.ndarray, 
+                  imageTitle: str) -> None:
         '''
         Visualize the integrated gradients result with a blended heatmap
 
@@ -383,7 +425,6 @@ class Captum_IntegratedGradients:
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
         '''
-        import numpy as np
         from captum.attr import visualization as viz
 
         self.attr_ig = self.ig.attribute(input, target=labels, baselines=input * 0)
@@ -414,12 +455,16 @@ class Captum_DeepLift:
     Reference:
     https://captum.ai/docs/attribution_algorithms 
     '''
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         from captum.attr import DeepLift
 
         self.dl = DeepLift(model)
 
-    def visualize(self, input, labels, original_image, imageTitle):
+    def visualize(self, 
+                  input: torch.Tensor, 
+                  labels: torch.Tensor, 
+                  original_image: np.ndarray, 
+                  imageTitle: str) -> None:
         '''
         Visualize the DeepLIFT attributions with a blended heatmap
 
@@ -429,7 +474,6 @@ class Captum_DeepLift:
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
         '''
-        import numpy as np
         from captum.attr import visualization as viz
 
         self.attr_dl = self.dl.attribute(input, target=labels, baselines=input * 0)
@@ -461,14 +505,18 @@ class Captum_SmoothGrad:
     Reference:
     https://captum.ai/docs/attribution_algorithms 
     '''
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         from captum.attr import IntegratedGradients
         from captum.attr import NoiseTunnel
 
         self.ig = IntegratedGradients(model)
         self.nt = NoiseTunnel(self.ig)
-
-    def visualize(self, input, labels, original_image, imageTitle):
+            
+    def visualize(self, 
+                  input: torch.Tensor, 
+                  labels: torch.Tensor, 
+                  original_image: np.ndarray, 
+                  imageTitle: str) -> None:
         '''
         Visualize the smooth grad attributions with a blended heatmap
 
@@ -478,7 +526,6 @@ class Captum_SmoothGrad:
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
         '''
-        import numpy as np
         from captum.attr import visualization as viz
 
         self.attr_ig_nt = self.nt.attribute(
@@ -518,12 +565,15 @@ class Captum_FeatureAblation:
     Reference:
     https://captum.ai/docs/attribution_algorithms 
     '''
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         from captum.attr import FeatureAblation
 
         self.ablator = FeatureAblation(model)
-
-    def visualize(self, input, labels, original_image, imageTitle):
+    def visualize(self, 
+                  input: torch.Tensor, 
+                  labels: torch.Tensor, 
+                  original_image: np.ndarray, 
+                  imageTitle: str) -> None:
         '''
         Visualize the feature ablation attributions with a blended heatmap
 
@@ -533,7 +583,6 @@ class Captum_FeatureAblation:
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
         '''
-        import numpy as np
         from captum.attr import visualization as viz
 
         self.fa_attr = self.ablator.attribute(
@@ -587,7 +636,7 @@ def kernel_explainer(model, background, targets, nsamples=500):
     return KernelExplainer(model, background, targets, nsamples=nsamples)
 
 
-def deep_explainer(model, backgroundImages, targetImages, labels):
+def deep_explainer(model, backgroundImages, targetImages, labels) -> DeepExplainer:
     """
     Returns a SHAP DeepExplainer that approximate SHAP values for deep learning models.
 
@@ -606,16 +655,21 @@ def deep_explainer(model, backgroundImages, targetImages, labels):
     return DeepExplainer(model, backgroundImages, targetImages, labels)
 
 
-def gradient_explainer(model, backgroundImages, targetImages, rankedOutputs, labels):
+def gradient_explainer(model, 
+                       background_images: Union[np.ndarray,  pd.DataFrame, torch.Tensor], 
+                       target_images: Union[np.ndarray,  pd.DataFrame, torch.Tensor], 
+                       labels: Union[List[str], np.ndarray],
+                       ranked_outputs: Optional[int] = 1,
+                 ) -> GradientExplainer:
     """
     Sets up a SHAP GradientExplainer, explains a model using expected gradients.
 
     Args:
       model: model
-      backgroundImages: list
-      targetImages: list
-      rankedOutputs: int
+      background_images: list
+      target_images: list
       labels: list
+      ranked_outputs: int (options and defaults to 1)
 
     Returns:
       GradientExplainer
@@ -623,7 +677,7 @@ def gradient_explainer(model, backgroundImages, targetImages, rankedOutputs, lab
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html
     """
-    return GradientExplainer(model, backgroundImages, targetImages, rankedOutputs, labels)
+    return GradientExplainer(model, background_images, target_images, labels, ranked_outputs)
 
 
 def partition_text_explainer(model, labels, target_text, tokenizer, max_evals=64):
