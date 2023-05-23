@@ -18,4 +18,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from .cam import *
+from .tf_cam import TFGradCAM,  tf_gradcam
+from .pt_cam import XGradCAM, EigenCAM, xgradcam, eigencam
+from .cam import GradCAM
