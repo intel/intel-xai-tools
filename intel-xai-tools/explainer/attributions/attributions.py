@@ -18,6 +18,13 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+import torch
+import pandas as pd
+import numpy as np
+from typing import Union, Optional, Callable, List
+from .attributions_info import force_plot_info_panel
+from explainer.utils.graphics.info import InfoPanel
+
 class FeatureAttributions:
     def __init__(self):
         import shap
@@ -30,12 +37,19 @@ class FeatureAttributions:
         self.force_plot = self.shap.force_plot
         self.text_plot = self.plots.text
         self.waterfall_plot = self.shap.waterfall_plot
+        self.info_panel = {}
 
     def __call__(self, *args, **kwargs):
         pass
 
     def visualize(self, data):
         pass
+
+    def get_info(self):
+        """Display into panel in Jupyter Enviornment"""
+        if self.info_panel:
+            info = InfoPanel(**self.info_panel)
+            info.show()
 
 
 class DeepExplainer(FeatureAttributions):
@@ -100,6 +114,7 @@ class KernelExplainer(FeatureAttributions):
         self.targets = targets
         self.explainer = self.shap.KernelExplainer(model, self.bg)
         self.shap_values = self.explainer.shap_values(self.targets, nsamples=nsamples)
+        self.info_panel = force_plot_info_panel
 
     def visualize(self):
         return self.force_plot(self.explainer.expected_value, self.shap_values[0], self.targets)

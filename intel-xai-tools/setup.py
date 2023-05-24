@@ -31,6 +31,7 @@ long_description = (this_directory / "../README.md").read_text()
 ATTRIBUTIONS_PKGS = [
   'captum',
   'intel-tensorflow==2.11.0',
+  'ipywidgets',
   'numpy>=1.14.3,<1.23.0',
   'opencv-python',
   'scikit-plot',
@@ -96,6 +97,8 @@ PACKAGES = [
   'explainer.attributions',
   'explainer.cam',
   'explainer.metrics',
+  'explainer.utils.model',
+  'explainer.utils.graphics',
   'model_card_gen',
   'model_card_gen.analyze',
   'model_card_gen.datasets',
