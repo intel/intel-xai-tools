@@ -29,6 +29,6 @@ jobs:
     # make documentation
     - name: Make documentation
       shell: bash
-      working-directory: ./intel-xai-tools
+      working-directory: .
       continue-on-error: false
       run: make html

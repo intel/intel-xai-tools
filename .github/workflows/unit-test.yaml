@@ -34,6 +34,6 @@ jobs:
         run: pip install virtualenv
       - name: Run Unit Test
         shell: bash
-        working-directory: ./intel-xai-tools
+        working-directory: .
         continue-on-error: false
         run: make test

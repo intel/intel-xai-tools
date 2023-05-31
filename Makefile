@@ -24,7 +24,7 @@ ACTIVATE_NOTEBOOK = $(ACTIVATE_TEST)
 
 LISTEN_IP ?= 127.0.0.1
 LISTEN_PORT ?= 9090
-DOCS_DIR ?= ../docs
+DOCS_DIR ?= docs
 
 venv-test:
 	@echo "Creating a virtualenv test_env..."
@@ -72,7 +72,7 @@ test-docs: html
 test-notebook: venv-test
 	@echo "Testing Jupyter notebooks..."
 	@. $(ACTIVATE_NOTEBOOK) && \
-	bash run_notebooks.sh $(CURDIR)/../notebooks/explainer/imagenet_with_cam/ExplainingImageClassification.ipynb
+	bash run_notebooks.sh $(CURDIR)/notebooks/explainer/imagenet_with_cam/ExplainingImageClassification.ipynb
 
 dist: venv-test
 	@echo "Create binary wheel..."

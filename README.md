@@ -2,31 +2,32 @@
 
 This repository provides tools for data scientists and MLOps engineers that have requirements specific to AI model interpretability.
 
-## Features
-| Core Feature | Description | 
-|----------|-----------|
-| [Model Card Generator](intel-xai-tools/model_card_gen) |  **Allows users to create interactive HTML reports containing model performance and fairness metrics.** |
-|[Explainer](intel-xai-tools/explainer) | **Allows users to run post-hoc model distillation and visualization methods to examine predictive behavior for both TensorFlow and PyTorch models via a simple Python API including the following modules:** <li> [Attributions](intel-xai-tools/explainer/attributions/): visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions <li> [CAM](intel-xai-tools/explainer/cam/): create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping <li> [Metrics](intel-xai-tools/explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow |
+## Overview
 
-## Build and Install
-Requirements:
-* Linux system (or WSL2 on Windows)
-* git
-* required python version: 3.9
-* `apt-get install build-essential python3-dev`
+The Intel Explainable AI Tools are designed to help users detect and mitigate against issues of fairness and interpretability, while running best on Intel hardware.
+There are two Python* components in the repository:
 
-### Basic Installation:
-```
-pip install intel-xai
-```
-### Advanced/Developer Installation:
-1. Clone this repo and navigate to the repo directory:
-   ```
-   git clone https://github.com/IntelAI/intel-xai-tools.git
+* [Model Card Generator](model_card_gen)
+  * Creates interactive HTML reports containing model performance and fairness metrics
+* [Explainer](explainer)
+  * Runs post-hoc model distillation and visualization methods to examine predictive behavior for both TensorFlow* and PyTorch* models via a simple Python API including the following modules:
+    * [Attributions](explainer/attributions/): Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions
+    * [CAM (Class Activation Mapping)](explainer/cam/): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
+    * [Metrics](explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
 
-   cd intel-xai-tools
-   ```
-2. Create and activate a Python3.9 virtual environment using `virtualenv`:
+## Get Started
+
+### Requirements
+* Linux system or WSL2 on Windows (validated on Ubuntu* 20.04/22.04 LTS)
+* Python 3.9
+* Install required OS packages with `apt-get install build-essential python3-dev`
+* git (only required for the "Developer Installation")
+
+### Create and activate a Python3 virtual environment
+We encourage you to use a python virtual environment (virtualenv or conda) for consistent package management.
+There are two ways to do this:
+
+a. Using `virtualenv`:
    ```
    python3.9 -m virtualenv xai_env
    source xai_env/bin/activate
@@ -37,14 +38,40 @@ pip install intel-xai
    conda create --name xai_env python=3.9
    conda activate xai_env
    ```
-3. Install this tool with 
+
+### Basic Installation
+```
+pip install intel-xai
+```
+### Developer Installation
+Use these instructions to install the Intel Explainable AI Tools with a clone of the
+GitHub repository. This can be done instead of the basic pip install, if you plan
+on making code changes.
+
+1. Clone this repo and navigate to the repo directory:
+   ```
+   git clone https://github.com/IntelAI/intel-xai-tools.git
+
+   cd intel-xai-tools
+   ```
+2. Install the Intel Explainable AI Tools using the following command:
    ```
    make install
    ```
 
 ## Running Notebooks
 
-Run [example notebooks](notebooks/) that show how to use the explainer and model card generator API in various ML domains and use cases. Notebooks may require additional dependencies listed in their associated README's.
+The following links have Jupyter* notebooks showing how to use the Explainer and Model Card Generator APIs in various ML domains and use cases:
+* [Model Card Generator Notebooks](/model_card_gen/notebooks)
+* [Explainer Notebooks](notebooks/)
+
+## Support
+
+The Intel Explainable AI Tools team tracks bugs and enhancement requests using
+[GitHub issues](https://github.com/intelai/intel-xai-tools/issues). Before submitting a
+suggestion or bug report, search the existing GitHub issues to see if your issue has already been reported.
+
+*Other names and brands may be claimed as the property of others. [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)
 
 #### DISCLAIMER: ####
 These scripts are not intended for benchmarking Intel platforms. For any performance and/or benchmarking information on specific Intel platforms, visit https://www.intel.ai/blog.
