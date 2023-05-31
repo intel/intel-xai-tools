@@ -1,7 +1,7 @@
 
 (metrics)=
 
-```{include} ../../intel-xai-tools/explainer/metrics/README.md
+```{include} ../../explainer/metrics/README.md
 ```
 ## API Refrence
 

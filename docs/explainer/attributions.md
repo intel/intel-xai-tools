@@ -1,6 +1,6 @@
 (attributions)=
 
-```{include} ../../intel-xai-tools/explainer/attributions/README.md
+```{include} ../../explainer/attributions/README.md
 ```
 
 ```{eval-rst}
