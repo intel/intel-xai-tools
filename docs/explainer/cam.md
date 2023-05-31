@@ -1,6 +1,6 @@
 (cam)=
 
-```{include} ../../intel-xai-tools/explainer/cam/README.md
+```{include} ../../explainer/cam/README.md
 ```
 
 ```{eval-rst}

@@ -40,6 +40,6 @@ jobs:
       - id: test
         name: Test Notebooks
         shell: bash
-        working-directory: intel-xai-tools
+        working-directory: . 
         continue-on-error: false
         run: make test-notebook

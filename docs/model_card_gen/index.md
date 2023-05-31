@@ -1,4 +1,4 @@
 (mcg)=
 
-```{include} ../../intel-xai-tools/model_card_gen/README.md
+```{include} ../../model_card_gen/README.md
 ```

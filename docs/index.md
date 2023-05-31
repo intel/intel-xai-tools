@@ -1,2 +1,2 @@
-```{include} ../intel-xai-tools/README.md
+```{include} ../README.md
 ```

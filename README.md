@@ -7,13 +7,13 @@ This repository provides tools for data scientists and MLOps engineers that have
 The Intel Explainable AI Tools are designed to help users detect and mitigate against issues of fairness and interpretability, while running best on Intel hardware.
 There are two Python* components in the repository:
 
-* [Model Card Generator](intel-xai-tools/model_card_gen)
+* [Model Card Generator](model_card_gen)
   * Creates interactive HTML reports containing model performance and fairness metrics
-* [Explainer](intel-xai-tools/explainer)
+* [Explainer](explainer)
   * Runs post-hoc model distillation and visualization methods to examine predictive behavior for both TensorFlow* and PyTorch* models via a simple Python API including the following modules:
-    * [Attributions](intel-xai-tools/explainer/attributions/): Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions
-    * [CAM (Class Activation Mapping)](intel-xai-tools/explainer/cam/): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
-    * [Metrics](intel-xai-tools/explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
+    * [Attributions](explainer/attributions/): Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions
+    * [CAM (Class Activation Mapping)](explainer/cam/): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
+    * [Metrics](explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
 
 ## Get Started
 
@@ -52,7 +52,7 @@ on making code changes.
    ```
    git clone https://github.com/IntelAI/intel-xai-tools.git
 
-   cd intel-xai-tools/intel-xai-tools
+   cd intel-xai-tools
    ```
 2. Install the Intel Explainable AI Tools using the following command:
    ```
@@ -73,7 +73,7 @@ python -c "from model_card_gen import version; print(version.__version__)"
 ## Running Notebooks
 
 The following links have Jupyter* notebooks showing how to use the Explainer and Model Card Generator APIs in various ML domains and use cases:
-* [Model Card Generator Notebooks](/intel-xai-tools/model_card_gen/notebooks)
+* [Model Card Generator Notebooks](/model_card_gen/notebooks)
 * [Explainer Notebooks](notebooks/)
 
 ## Support
