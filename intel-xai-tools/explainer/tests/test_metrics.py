@@ -77,26 +77,12 @@ def test_confusion_matrix(simple_data):
     assert cm.df.equals(data.cm)
 
 def test_confusion_matrix_pyt(custom_pyt_CNN):
-    device = torch.device('cpu')
-    model, test_loader, class_names = custom_pyt_CNN 
+    model, X_test, class_names, y_true = custom_pyt_CNN 
 
     # test the model
     model.eval()
-    test_loss = 0
-    correct = 0
-    y_true = torch.empty(0)
-    y_pred = torch.empty((0, 10))
-    X_test = torch.empty((0, 1, 28, 28))
-
     with torch.no_grad():
-        for data, target in test_loader:
-            data, target = data.to(device), target.to(device)
-            output = model(data)
-            X_test = torch.cat((X_test, data))
-            y_true, y_pred = torch.cat((y_true, target)), torch.cat((y_pred, output))
-    
-    # one-hot-encode for metrics explanation
-    oh_y_true = torch.from_numpy(np.eye(int(torch.max(y_true)+1))[list(y_true.numpy().astype(int))])
-    cm = metrics.confusion_matrix(oh_y_true, y_pred, class_names)
+        output = model(X_test)
+    cm = metrics.confusion_matrix(y_true, output, class_names)
     assert isinstance(cm, metrics.metrics.ConfusionMatrix)
     cm.visualize()

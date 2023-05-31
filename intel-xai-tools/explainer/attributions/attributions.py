@@ -18,12 +18,13 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-import torch
 import pandas as pd
 import numpy as np
 from typing import Union, Optional, Callable, List
 from .attributions_info import force_plot_info_panel
 from explainer.utils.graphics.info import InfoPanel
+from explainer.utils.types import TorchTensor
+from ..utils.model.model_framework import is_tf_model, is_pt_model, raise_unknown_model_error
 
 class FeatureAttributions:
     '''
@@ -54,7 +55,6 @@ class FeatureAttributions:
             info = InfoPanel(**self.info_panel)
             info.show()
 
-
 class DeepExplainer(FeatureAttributions):
     '''
     Approximate conditional expectations of shap values for deep learning models using a variation of the DeepLIFT algorithm
@@ -76,10 +76,20 @@ class DeepExplainer(FeatureAttributions):
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html
     '''
+    def __new__(cls, model, *args):    
+        if is_tf_model(model):
+            # do nothing 
+            return super().__new__(cls)
+        elif is_pt_model(model):
+            from .pt_attributions import PTDeepExplainer
+            return super().__new__(PTDeepExplainer)
+        else:
+            raise_unknown_model_error()
+
     def __init__(self, 
                  model, 
-                 background_images: Union[np.ndarray,  pd.DataFrame, torch.Tensor], 
-                 target_images: Union[np.ndarray,  pd.DataFrame, torch.Tensor], 
+                 background_images: Union[np.ndarray,  pd.DataFrame, TorchTensor], 
+                 target_images: Union[np.ndarray,  pd.DataFrame, TorchTensor], 
                  labels: Union[List[str], np.ndarray]
                  ) -> None:
         super().__init__()
@@ -88,15 +98,12 @@ class DeepExplainer(FeatureAttributions):
         self.shap_values = self.explainer.shap_values(target_images)
         self.labels = labels
 
+    
+
     def visualize(self) -> None:
         '''
         plot superposition of shap estimations on original image(s) across all labels predictions
         '''
-      
-        arr = np.full((len(self.labels)), " ")
-        if torch.is_tensor(self.target_images):
-            self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
-            self.target_images = -np.swapaxes(np.swapaxes(self.target_images.numpy(), 1, -1), 1, 2)
 
         self.shap.image_plot(
             self.shap_values,
@@ -129,10 +136,21 @@ class GradientExplainer(FeatureAttributions):
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html
     '''
+
+    def __new__(cls, model, *args):    
+        if is_tf_model(model):
+            # do nothing
+            return super().__new__(cls)
+        elif is_pt_model(model):
+            from .pt_attributions import PTGradientExplainer
+            return super().__new__(PTGradientExplainer)
+        else:
+            raise_unknown_model_error()
+
     def __init__(self, 
                  model, 
-                 background_images: Union[np.ndarray, pd.DataFrame, torch.Tensor], 
-                 target_images: Union[np.ndarray, pd.DataFrame, torch.Tensor], 
+                 background_images: Union[np.ndarray, pd.DataFrame, TorchTensor], 
+                 target_images: Union[np.ndarray, pd.DataFrame, TorchTensor], 
                  labels: Union[List[str], np.ndarray],
                  ranked_outputs: Optional[int] = 1,
                  ) -> None:
@@ -143,25 +161,19 @@ class GradientExplainer(FeatureAttributions):
         self.explainer = self.shap.GradientExplainer(model, background_images)
         self.shap_values, self.indexes = self.explainer.shap_values(self.target_images, ranked_outputs=ranked_outputs)
 
+        if self.indexes.shape == (1,1):
+            self.idxs_to_plot = [self.labels[self.indexes[0][0]]]
+        else:
+            self.idxs_to_plot = np.array(self.labels)[self.indexes]
+
     def visualize(self) -> None:
         '''
         plot superposition of shap estimations on original image(s) across top ranked_outputs 
         '''
-
-        if torch.is_tensor(self.target_images):
-            self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
-            self.target_images = -np.swapaxes(np.swapaxes(self.target_images.numpy(), 1, -1), 1, 2) 
-
-        # check if 
-        if self.ranked_outputs == 1 and len(self.labels[self.indexes]) == 1:
-            idxs_to_plot = np.expand_dims(np.expand_dims(self.labels[self.indexes], 0), 0)
-        else:
-            idxs_to_plot = self.labels[self.indexes]
-
         self.shap.image_plot(
             self.shap_values, 
             self.target_images, 
-            idxs_to_plot
+            self.idxs_to_plot
         )
 
 
@@ -353,261 +365,7 @@ class PipelineExplainer(FeatureAttributions):
         self.shap.plots.text(self.shap_values[:, :, label])
 
 
-class Captum_Saliency:
-    '''
-    Calculate the gradients of the output with respect to the inputs.
 
-    Args:
-      model (pytorch.nn.Module): a differentiable model to be interpreted
-
-    Attributes:
-      saliency: the captum saliency object
-      grads: the gradients calculated from the saliency algorithm (created only after visualize() is called)
-
-    Reference:
-    https://captum.ai/docs/attribution_algorithms    
-    '''
-    def __init__(self, model) -> None:
-        from captum.attr import Saliency
-
-        self.saliency = Saliency(model)
-
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
-        Visualize the saliency result with a blended heatmap
-
-        Args:
-          input (pytorch.Tensor): the image to be used for interpretation - requires_grad must be set to True.
-          labels (pytorch.Tensor): list of the label names
-          original_image (numpy.ndarray): the original image to be interpreted
-          imageTitle (string): title of the visualization
-        '''
-        from captum.attr import visualization as viz
-
-        self.grads = self.saliency.attribute(input, target=labels.item())
-        self.grads = np.transpose(
-            self.grads.squeeze().cpu().detach().numpy(), (1, 2, 0)
-        )
-        viz.visualize_image_attr(
-            self.grads,
-            original_image,
-            method="blended_heat_map",
-            sign="absolute_value",
-            show_colorbar=True,
-            title=imageTitle,
-        )
-
-
-class Captum_IntegratedGradients:
-    '''
-    Approximate the integration of gradients with respect to inputs along the path from 
-    a given input.
-
-    Args:
-      model (pytorch.nn.Module): a differentiable model to be interpreted
-
-    Attributes:
-      ig: the captum integrated gradients object
-      attr_ig: the integrated gradients resulting from from ig.attribute() (created only after visualize() is called)
-    Reference:
-    https://captum.ai/docs/attribution_algorithms 
-    '''
-    def __init__(self, model) -> None:
-        from captum.attr import IntegratedGradients
-
-        self.ig = IntegratedGradients(model)
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
-        Visualize the integrated gradients result with a blended heatmap
-
-        Args:
-          input (pytorch.Tensor): the image to be used for interpretation - requires_grad must be set to True.
-          labels (pytorch.Tensor): list of the label names
-          original_image (numpy.ndarray): the original image to be interpreted
-          imageTitle (string): title of the visualization
-        '''
-        from captum.attr import visualization as viz
-
-        self.attr_ig = self.ig.attribute(input, target=labels, baselines=input * 0)
-        self.attr_ig = np.transpose(
-            self.attr_ig.squeeze().cpu().detach().numpy(), (1, 2, 0)
-        )
-        viz.visualize_image_attr(
-            self.attr_ig,
-            original_image,
-            method="blended_heat_map",
-            sign="all",
-            show_colorbar=True,
-            title=imageTitle,
-        )
-
-
-class Captum_DeepLift:
-    '''
-    Approximate attributions using DeepLIFT's back-propagation based algorithm.
-
-    Args:
-      model (pytorch.nn.Module): a differentiable model to be interpreted
-
-    Attributes:
-      dl: the captum deepLIFT object
-      attr_dl: captum's DeepLIFT attributions resulting from dl.attribute() (created only after visualize() is called)
-
-    Reference:
-    https://captum.ai/docs/attribution_algorithms 
-    '''
-    def __init__(self, model) -> None:
-        from captum.attr import DeepLift
-
-        self.dl = DeepLift(model)
-
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
-        Visualize the DeepLIFT attributions with a blended heatmap
-
-        Args:
-          input (pytorch.Tensor): the image to be used for interpretation - requires_grad must be set to True.
-          labels (pytorch.Tensor): list of the label names
-          original_image (numpy.ndarray): the original image to be interpreted
-          imageTitle (string): title of the visualization
-        '''
-        from captum.attr import visualization as viz
-
-        self.attr_dl = self.dl.attribute(input, target=labels, baselines=input * 0)
-        self.attr_dl = np.transpose(
-            self.attr_dl.squeeze(0).cpu().detach().numpy(), (1, 2, 0)
-        )
-        viz.visualize_image_attr(
-            self.attr_dl,
-            original_image,
-            method="blended_heat_map",
-            sign="all",
-            show_colorbar=True,
-            title=imageTitle,
-        )
-
-
-class Captum_SmoothGrad:
-    '''
-    Use the Gaussian kernel to average the integrated gradients attributions via noise tunneling.
-
-    Args:
-      model (pytorch.nn.Module): a differentiable model to be interpreted
-
-    Attributes:
-      ig: the captum integrated gradients object
-      nt: the captum noise tunnel object
-      attr_ig_nt: resulting attributions from nt.attribute() (created only after visualize() is called)
-
-    Reference:
-    https://captum.ai/docs/attribution_algorithms 
-    '''
-    def __init__(self, model) -> None:
-        from captum.attr import IntegratedGradients
-        from captum.attr import NoiseTunnel
-
-        self.ig = IntegratedGradients(model)
-        self.nt = NoiseTunnel(self.ig)
-            
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
-        Visualize the smooth grad attributions with a blended heatmap
-
-        Args:
-          input (pytorch.Tensor): the image to be used for interpretation - requires_grad must be set to True.
-          labels (pytorch.Tensor): list of the label names
-          original_image (numpy.ndarray): the original image to be interpreted
-          imageTitle (string): title of the visualization
-        '''
-        from captum.attr import visualization as viz
-
-        self.attr_ig_nt = self.nt.attribute(
-            input,
-            target=labels,
-            baselines=input * 0,
-            nt_type="smoothgrad_sq",
-            nt_samples=100,
-            stdevs=0.2,
-        )
-        self.attr_ig_nt = np.transpose(
-            self.attr_ig_nt.squeeze(0).cpu().detach().numpy(), (1, 2, 0)
-        )
-        viz.visualize_image_attr(
-            self.attr_ig_nt,
-            original_image,
-            method="blended_heat_map",
-            sign="absolute_value",
-            outlier_perc=10,
-            show_colorbar=True,
-            title=imageTitle,
-        )
-
-
-class Captum_FeatureAblation:
-    '''
-    Approximate attributions using perturbation by replacing each input feature with a reference
-    value and computing the difference 
-
-    Args:
-      model (pytorch.nn.Module): a differentiable model to be interpreted
-
-    Attributes:
-      ablator: the captum feature ablation object
-      fa_attr: attributes resulting from ablator.attribute() (created only after visualize() is called)
-    
-    Reference:
-    https://captum.ai/docs/attribution_algorithms 
-    '''
-    def __init__(self, model) -> None:
-        from captum.attr import FeatureAblation
-
-        self.ablator = FeatureAblation(model)
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
-        Visualize the feature ablation attributions with a blended heatmap
-
-        Args:
-          input (pytorch.Tensor): the image to be used for interpretation - requires_grad must be set to True.
-          labels (pytorch.Tensor): list of the label names
-          original_image (numpy.ndarray): the original image to be interpreted
-          imageTitle (string): title of the visualization
-        '''
-        from captum.attr import visualization as viz
-
-        self.fa_attr = self.ablator.attribute(
-            input, target=labels, baselines=input * 0
-        )
-        self.fa_attr = np.transpose(
-            self.fa_attr.squeeze(0).cpu().detach().numpy(), (1, 2, 0)
-        )
-        viz.visualize_image_attr(
-            self.fa_attr,
-            original_image,
-            method="blended_heat_map",
-            sign="all",
-            show_colorbar=True,
-            title=imageTitle,
-        )
 
 def explainer():
     """
@@ -665,8 +423,8 @@ def deep_explainer(model, backgroundImages, targetImages, labels) -> DeepExplain
 
 
 def gradient_explainer(model, 
-                       background_images: Union[np.ndarray,  pd.DataFrame, torch.Tensor], 
-                       target_images: Union[np.ndarray,  pd.DataFrame, torch.Tensor], 
+                       background_images: Union[np.ndarray,  pd.DataFrame, TorchTensor],
+                       target_images: Union[np.ndarray,  pd.DataFrame, TorchTensor], 
                        labels: Union[List[str], np.ndarray],
                        ranked_outputs: Optional[int] = 1,
                  ) -> GradientExplainer:
@@ -727,88 +485,6 @@ def partition_image_explainer(model, labels, target_images, top_n=1, max_evals=6
     pe = PartitionExplainer('image', model, labels, target_images[0].shape)
     pe.run_explainer(target_images, top_n=top_n, max_evals=max_evals)
     return pe
-
-def saliency(model):
-    """
-    Returns a Captum Saliency. This provides a baseline approach for computing
-    input attribution, returning the gradients with respect to inputs.
-
-    Args:
-      model: pytorch model
-
-    Returns:
-      captum.attr.Saliency
-
-    Reference:
-      https://captum.ai/api/saliency.html
-    """
-    return Captum_Saliency(model)
-
-
-def integratedgradients(model):
-    """
-    Returns a Captum IntegratedGradients
-
-    Args:
-      model: pytorch model
-
-    Returns:
-      captum.attr.IntegratedGradients
-
-    Reference:
-      https://captum.ai/api/integrated_gradients.html
-    """
-    return Captum_IntegratedGradients(model)
-
-
-def deeplift(model):
-    """
-    Returns a Captum DeepLift
-
-    Args:
-      model: pytorch model
-
-    Returns:
-      captum.attr.DeepLift
-
-    Reference:
-      https://captum.ai/api/deep_lift.html
-    """
-    return Captum_DeepLift(model)
-
-
-def smoothgrad(model):
-    """
-    Returns a Captum Integrated Gradients, Noise Tunnel SmoothGrad
-
-    Args:
-      model: pytorch model
-
-    Returns:
-      captum.attr.NoiseTunnel
-
-    Reference:
-      https://captum.ai/api/integrated_gradients.html
-      https://captum.ai/api/noise_tunnel.html
-    """
-    return Captum_SmoothGrad(model)
-
-
-def featureablation(model):
-    """
-    Returns a Captum FeatureAblation
-
-    Args:
-      model: pytorch model
-
-    Returns:
-      captum.attr.FeatureAblation
-
-    Reference:
-      https://captum.ai/api/feature_ablation.html
-    """
-    return Captum_FeatureAblation(model)
-
 
 def zero_shot(pipe, text):
     print(f"Shap version used: {shap.__version__}")
