@@ -19,15 +19,17 @@
 #
 
 ### libraries to support tests ###
-
 import pytest
 import numpy as np
+import pandas as pd
 import torch
 import scipy as sp
 import transformers
 torch.manual_seed(0)
 ### library to be tested ###
 from explainer import attributions
+from attributions.plots import shap_waterwall_plot
+from attributions.widgets import ShapUI
 ###################################
 
 @pytest.mark.parametrize("custom_CNN", ['custom_pyt_CNN', 'custom_tf_CNN'])
@@ -147,3 +149,26 @@ def test_partition_text():
     pe = attributions.partition_text_explainer(f, labels, ['i didnt feel humiliated'], tokenizer)
     assert isinstance(pe, attributions.PartitionTextExplainer)
     pe.visualize()
+
+
+def test_shap_waterwall_plot():
+    kwargs = dict(expected_value=.5,
+                  shap_values=np.random.normal(0, 1, 10),
+                  feature_values=np.random.rand(10),
+                  columns=list(range(10)),
+                  y_true=0)
+
+    assert shap_waterwall_plot(**kwargs)
+
+
+def test_shap_ui():
+    kwargs = dict(df=pd.DataFrame({"Feature 1": np.random.rand(10), 
+                                   "Feature 2": np.random.rand(10)}),
+                  shap_values=np.random.normal(0, 1, (10, 2)),
+                  expected_value=.5,
+                  y_true=np.random.randint(0, 2, 10),
+                  y_pred=np.random.randint(0, 2, 10))
+
+    ui = ShapUI(**kwargs)
+    ui.show()
+    assert ui.view
