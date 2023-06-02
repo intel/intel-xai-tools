@@ -24,6 +24,11 @@ import numpy as np
 from typing import Union, Optional, Callable, List
 from .attributions_info import force_plot_info_panel
 from explainer.utils.graphics.info import InfoPanel
+from explainer.utils.types import TorchTensor
+from explainer.utils.model.model_framework import (is_tf_model,
+                                                   is_pt_model,
+                                                   raise_unknown_model_error)
+
 
 class FeatureAttributions:
     def __init__(self):
