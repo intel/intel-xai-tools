@@ -34,7 +34,7 @@ import pandas as pd
 import tensorflow_data_validation as tfdv
 from IPython.display import display, HTML
 # Internal
-from model_card_gen.analyze import TFAnalyzer, PTAnalyzer, get_analysis
+from model_card_gen.analyze import get_analysis
 from model_card_gen.model_card import ModelCard
 from model_card_gen.graphics.add_graphics import (
     add_dataset_feature_statistics_plots,
@@ -163,6 +163,8 @@ class ModelCardGen():
             ValueError: when invalid value for data_sets argument is empty
             TypeError: when data_sets argument is  not type dict
         """
+        from model_card_gen.analyze import TFAnalyzer
+
         self = cls(
             data_sets,
             model_path,
@@ -202,6 +204,8 @@ class ModelCardGen():
             ValueError: when invalid value for data_sets argument is empty
             TypeError: when data_sets argument is  not type dict
         """
+        from model_card_gen.analyze import PTAnalyzer
+
         self = cls(
             data_sets,
             model_path,

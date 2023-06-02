@@ -26,7 +26,7 @@
         <h2 class="icon details">Model Details</h2>
           {% if model_details.overview %}<h3>Overview</h3>
               {{  model_details.overview }}{% endif %}
-          {% if model_details.graphics %}<h3>Model Performace</h3>
+          {% if model_details.graphics %}<h3>Model Performance</h3>
               {{ macro.render_metrics_graphics(model_details.graphics) }}{% endif %}
           {% if model_details.version and model_details.version.name %}
             <h3>Version</h3>

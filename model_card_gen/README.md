@@ -251,3 +251,28 @@ Step 2: Run tests
 ```shell
 python -m pytest model_card_gen/tests/
 ```
+
+### Markers
+
+The following custom markers have been defined in the Model Card Generator tests:
+```
+@pytest.mark.tensorflow: test requires tensorflow to be installed
+
+@pytest.mark.pytorch: test requires pytorch and tensorflow-model-analysis to be installed
+
+@pytest.mark.common: test does not require a specific framework to be installed
+```
+Note that running PyTorch tests still requires TensorFlow libararies for model analysis.
+
+### Sample test commands using markers
+
+Run only the TensorFlow tests:
+```shell
+python -m pytest model_card_gen/tests/ -m tensorflow
+```
+
+Run the PyTorch and common tests:
+```shell
+python -m pytest model_card_gen/tests/ -m "pytorch or common"
+```
+
