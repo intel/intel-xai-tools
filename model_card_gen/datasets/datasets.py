@@ -18,8 +18,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from numpy.typing import NDArray as Array
-import random
 
 class BaseDataset:
     """
