@@ -35,12 +35,9 @@ elif [[ ${COMMAND} == "html" ]]; then
     cp ../README.md ${TEMP_DIR}/Welcome.md
 
     # Convert links to go to sphinx docs
-    sed -i 's#model_card_gen#<model_card_gen/index>#g' ${TEMP_DIR}/Welcome.md
-    sed -i 's#explainer/attributions/#<explainer/attributions>#g' ${TEMP_DIR}/Welcome.md
-    sed -i 's#explainer/cam/#<explainer/cam>#g' ${TEMP_DIR}/Welcome.md
-    sed -i 's#explainer/metrics/#<explainer/metrics>#g' ${TEMP_DIR}/Welcome.md
-    sed -i 's#explainer#<explainer/index>#g' ${TEMP_DIR}/Welcome.md
     sed -i 's#DATASETS.md#<datasets>#g' ${TEMP_DIR}/Welcome.md
+    sed -i 's#notebooks\#model-card-generator-tutorial-notebooks#<notebooks>#g' ${TEMP_DIR}/Welcome.md
+    sed -i 's#notebooks\#explainer-tutorial-notebooks#<notebooks>#g' ${TEMP_DIR}/Welcome.md
 
     # Create an Overview doc
     sed -n '/^ *## Overview *$/,/^ *## Get Started *$/p' ${TEMP_DIR}/Welcome.md > ${TEMP_DIR}/Overview.md

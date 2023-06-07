@@ -73,8 +73,8 @@ python -c "from model_card_gen import version; print(version.__version__)"
 ## Running Notebooks
 
 The following links have Jupyter* notebooks showing how to use the Explainer and Model Card Generator APIs in various ML domains and use cases:
-* [Model Card Generator Notebooks](/model_card_gen/notebooks)
-* [Explainer Notebooks](notebooks/)
+* [Model Card Generator Notebooks](notebooks#model-card-generator-tutorial-notebooks)
+* [Explainer Notebooks](notebooks#explainer-tutorial-notebooks)
 
 ## Support
 
