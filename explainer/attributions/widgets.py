@@ -191,9 +191,9 @@ class ErrorFilterWidget(_FilterWidget):
         view (widgets.VBox) : widget class to display in Jupyter enviornment
         max_values (int) : max number of values supported by interface
     """
-    def __init__(self, y_true, y_pred, max_values=2000):
+    def __init__(self, y_true, y_pred, index, max_values=2000):
         self.title = "Error Analysis"
-        df = pd.DataFrame({"Actual Value": y_true, "Predicted Value": y_pred})
+        df = pd.DataFrame({"Actual Value": y_true, "Predicted Value": y_pred}, index=index)
         super().__init__(df, max_values=max_values)
 
 
@@ -313,6 +313,7 @@ class ShapUI:
                                    max_values=self.max_values),
                ErrorFilterWidget(self.y_true,
                                  self.y_pred,
+                                 self.df.index,
                                  max_values=self.max_values),
                ShapFilterWidget(self.shap_values,
                                 self.features,

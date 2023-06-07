@@ -135,7 +135,7 @@ def shap_waterwall_plot(expected_value: float,
 
     if y_true is not None:
         fig.add_annotation(
-            text=r"$\text{Ground truth}\\" + "y={}$".format(y_true),
+            text=r"Ground truth y={}".format(y_true),
             y=1.17,
             xref='paper',
             yref='paper',
