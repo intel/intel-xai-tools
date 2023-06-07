@@ -1,15 +1,24 @@
 # Example Notebooks
 
-This directory has Jupyter notebooks that demonstrate explainable AI with the Intel® Explainable AI Tool. 
+This directory has Jupyter notebooks that demonstrate explainability and model card generation with the Intel® Explainable AI Tools.
 
 ## Explainer Tutorial Notebooks
 
 | Notebook | Domain: Use Case | Framework| Description |
 | ---------| ---------|----------|-------------|
-| [Explaining ResNet50 ImageNet Classification Using the CAM Explainer](explainer/imagenet_with_cam) | CV: Image Classification | PyTorch, TensorFlow and Intel® Explainable AI API | Demonstrates how to use the CAM explainer API to explain an ImageNet classification example using a ResNet50 CNN from the Torch Vision model hub and TF's keras.applications model hub. |
+| [Explaining ResNet50 ImageNet Classification Using the CAM Explainer](explainer/imagenet_with_cam) | CV: Image Classification | PyTorch*, TensorFlow* and Intel® Explainable AI API | Demonstrates how to use the CAM explainer API to explain an ImageNet classification example using a ResNet50 CNN from the Torch Vision model hub and TF's keras.applications model hub. |
 | [Explaining Custom CNN MNIST Classification Using the Attributions Explainer](explainer/mnist_with_attributions_and_metrics) | CV: Image Classification | PyTorch and Intel® Explainable AI API | Demonstrates how to use the attributions explainer API to explain an MNIST classification example using a Custom PyTorch CNN. |
 | [Explaining Custom NN NewsGroups Classification Using the Attributions Explainer](explainer/newsgroups_with_attributions_and_metrics) | NLP: Text Classification | PyTorch and Intel® Explainable AI API | Demonstrates how to use the attributions explainer API to explain a NewsGroups dataset text classification example using a Custom TensorFlow NN. |
 | [Explaining Custom CNN CIFAR-10 Classification Using the Attributions Explainer](explainer/cifar_with_attributions) | CV: Image Classification | PyTorch and Intel® Explainable AI API | Demonstrates how to use the attributions explainer API to explain the CIFAR-10 dataset image classification example using a Custom PyTorch CNN. |
 | [Multimodal Breast Cancer Detection Explainability using the Intel® Explainable AI API](explainer/multimodal_cancer_detection) | CV: Image Classification & NLP: Text Classification| PyTorch, HuggingFace, Intel® Explainable AI API & Intel® Transfer Learning Tool API | Demonstrates how to use the attributions and metrics explainer API's to explain the classification of a text and image breast cancer dataset using a PyTorch ResNet50 CNN and a HuggingFace ClinicalBert Transformer. |
 | [Explaining Fine Tuned Text Classifier with PyTorch using the Intel® Explainable AI API](explainer/transfer_learning_text_classification) | NLP: Text Classification| PyTorch, HuggingFace, Intel® Explainable AI API & Intel® Transfer Learning Tool API | Demonstrates how to use the attributions explainer API's to explain the classification of a text using  HuggingFace Transformer. |
 | [Explaining a Custom Neural Network Heart Disease Classification Using the Attributions Explainer ](explainer/heart_disease_with_attributions) | Numerical/Categorical: Tabular Classification | TensorFlow & Intel® Explainable AI API | Demonstrates how to use the attributions explainer API's to explain the classification of a Tabular data using a TensorFlow custom NN. |
+
+## Model Card Generator Tutorial Notebooks
+| Notebook | Domain: Use Case | Framework| Description |
+| ---------| ---------|----------|-------------|
+| [Generating a Model Card with PyTorch](model_card_gen/adult-pytorch-model-card.ipynb) | Numerical/Categorical: Tabular Classification | PyTorch | Demonstrates training a multilayer network using the "Adult" dataset from the UCI repository to predict whether a person has a salary greater or less than $50,000, then uses the Model Card Generator to create a model card with interactive graphics to analyze the model. |
+| [Detecting Issues in Fairness by Generate Model Card from TensorFlow Estimators](model_card_gen/compas-model-card-tfx.ipynb) | Numerical/Categorical: Tabular Classification  | TensorFlow | Uses a TFX pipeline to train and evaluate a model using the COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) dataset to generate a risk score indended to determine a defendant's likelihood of reoffending. The Model Card Generator is then used to create interative graphics visualizing racial bias in the model's predictions. |
+| [Creating Model Card for Toxic Comments Classification in TensorFlow](model_card_gen/toxicity-tfma-model-card.ipynb) | Numerical/Categorical: Tabular Classification | TensorFlow | Adapts a [TensorFlow Fairness Exercise notebook](https://colab.research.google.com/github/google/eng-edu/blob/main/ml/pc/exercises/fairness_text_toxicity_part1.ipynb?utm_source=practicum-fairness&utm_campaign=colab-external&utm_medium=referral&utm_content=fairnessexercise1-colab#scrollTo=2z_xzJ40j9Q-) to use the Model Card Generator. The notebook trains a model to detect toxicity in online coversations and graphically analyzes accuracy metrics by gender. |
+
+*Other names and brands may be claimed as the property of others. [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)

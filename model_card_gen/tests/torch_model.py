@@ -48,7 +48,7 @@ CATEGORICAL_FEATURE_KEYS = [
     'relationship',
     'race',
     'sex',
-    'country',
+    'native-country',
 ]
 
 DROP_COLUMNS = ['fnlwgt', 'education']
@@ -71,14 +71,17 @@ class AdultNN(nn.Module):
         return self.softmax(self.linear3(sigmoid_out2))
 
 def get_data():
-    uci_url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data'
-    adult_data = pd.read_csv(uci_url, names=COLUMNS)
+    from sklearn.datasets import fetch_openml
+    data = fetch_openml(data_id=1590, as_frame=True)
+    raw_data = data.data
+    raw_data[LABEL_KEY] = data.target
+    adult_data = raw_data.copy()
     adult_data = adult_data.drop(DROP_COLUMNS, axis=1)
     adult_data = pd.get_dummies(adult_data, columns=CATEGORICAL_FEATURE_KEYS)
-    adult_data['label'] = adult_data['label'].map({' <=50K': 0, ' >50K': 1})
-    feature_names = adult_data.columns.drop('label')
-    y = adult_data['label'].to_numpy()
-    X = adult_data.drop(['label'], axis=1).to_numpy()
+    adult_data[LABEL_KEY] = adult_data[LABEL_KEY].map({'<=50K': 0, '>50K': 1})
+    feature_names = list(adult_data.drop([LABEL_KEY], axis=1).columns)
+    y = adult_data[LABEL_KEY].to_numpy()
+    X = adult_data.drop([LABEL_KEY], axis=1).to_numpy()
 
     return TensorDataset(torch.Tensor(X).type(torch.FloatTensor),
                          torch.Tensor(y).type(torch.LongTensor)) , feature_names
@@ -91,7 +94,7 @@ def get_trained_model(adult_dataset, feature_names):
 
     optimizer = torch.optim.Adam(net.parameters(), lr=0.001)
     input_tensor, label_tensor = adult_dataset[:]
-    for epoch in range(num_epochs):    
+    for epoch in range(num_epochs):
         output = net(input_tensor)
         loss = criterion(output, label_tensor)
         optimizer.zero_grad()
