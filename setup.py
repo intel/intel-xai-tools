@@ -82,8 +82,8 @@ PYTORCH_PKGS = [
 REQUIRED_PKGS =  (
   ATTRIBUTIONS_PKGS +
   CAM_PKGS +
-  METRICS_PKGS +
-  MCG_PKGS
+  METRICS_PKGS
+  # MCG_PKGS
 )
 
 TEST_PKGS = [
@@ -99,13 +99,13 @@ PACKAGES = [
   'explainer.metrics',
   'explainer.utils.model',
   'explainer.utils.graphics',
-  'model_card_gen',
-  'model_card_gen.analyze',
-  'model_card_gen.datasets',
-  'model_card_gen.docs',
-  'model_card_gen.docs.examples',
-  'model_card_gen.graphics',
-  'model_card_gen.utils',
+  # 'model_card_gen',
+  # 'model_card_gen.analyze',
+  # 'model_card_gen.datasets',
+  # 'model_card_gen.docs',
+  # 'model_card_gen.docs.examples',
+  # 'model_card_gen.graphics',
+  # 'model_card_gen.utils',
 ]
 
 
@@ -159,6 +159,6 @@ setup(
         'Topic :: Scientific/Engineering :: Mathematics',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
-    python_requires='>=3.9,<3.10',
+    python_requires='>=3.9,<3.11',
     keywords='XAI, explainer',
 )
