@@ -39,7 +39,7 @@ ATTRIBUTIONS_PKGS = [
   'shap',
   'torch==1.13.1',
   'transformers',
-  'plotly==1.14.1'
+  'plotly==5.14.1'
 ]
 
 CAM_PKGS = [
