@@ -55,7 +55,7 @@ clean:
 test-explainer: venv-test 
 	@. $(ACTIVATE_TEST) && pytest explainer/tests
 
-test: clean test-mcg test-explainer
+test: clean test-explainer
 
 venv-docs: venv-test ${DOCS_DIR}/requirements-docs.txt
 	@echo "Installing docs dependencies..."

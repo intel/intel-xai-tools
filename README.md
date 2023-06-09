@@ -15,6 +15,12 @@ There are two Python* components in the repository:
     * [CAM (Class Activation Mapping)](explainer/cam/): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
     * [Metrics](explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
 
+
+  * [ShapUI](explainer/attributions/widgets.py#L254): A user interface to explore and compare impact scores of model predictions for each record of a tabular data set and discover insights of a model's behavior:
+    * **Error Analysis** allows the user to filter data points based on their error type.
+    * **Impact Analysis** allows users to filter data points based on their associated SHAP impact score for top important features.
+    * **Feature Analysis** allows users to filter data points by feature values for top important features.
+
 ## Get Started
 
 ### Requirements
