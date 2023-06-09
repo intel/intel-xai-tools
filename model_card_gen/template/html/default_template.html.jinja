@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+{% import 'macros/default_macros.html.jinja' as macro %}
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% include 'style/default_style.html.jinja' %}
+<title>
+  Model Card for {{ model_details.name }}
+</title>
+{% include 'js/plotly_js_header.html.jinja' %}
+</head>
+<body>
+  <div class="banner">
+  <h1>
+    {{ model_details.name }}
+  </h1>
+  <div class="bottom-banner">
+    Model Card v0 <br/>
+    {{ macro.render_if_exist('name', model_details.version.name) }}
+    {{ macro.render_if_exist('date', model_details.version.date) }}
+    {{ macro.render_if_exist('diff', model_details.version.diff) }}
+  </div>
+  </div>
+    <div class="row">
+      <div class="col card">
+        <h2 class="icon details">Model Details</h2>
+          {% if model_details.overview %}<h3>Overview</h3>
+              {{  model_details.overview }}{% endif %}
+          {% if model_details.graphics %}<h3>Model Performance</h3>
+              {{ macro.render_metrics_graphics(model_details.graphics) }}{% endif %}
+          {% if model_details.version and model_details.version.name %}
+            <h3>Version</h3>
+              {{ macro.render_if_exist('name', model_details.version.name) }}
+              {{ macro.render_if_exist('date', model_details.version.date) }}
+              {{ macro.render_if_exist('diff', model_details.version.diff) }}
+          {% endif %}
+          {% if model_details.documentation %}<h3>Documentation</h3>
+              {{ model_details.documentation }}
+          {% endif %}
+          {% if model_details.owners %}<h3>Owners</h3>
+            {% if model_details.owners|length > 1 %}
+              {% for owner in model_details.owners %}
+                <li>{{ owner.name }}, {{ owner.contact }}</li>
+              {% endfor %}
+            {% else %}
+              {{ model_details.owners[0].name }}, {{ model_details.owners[0].contact }}
+            {% endif %}
+          {% endif %}
+          {% if model_details.licenses %}
+            <h3>Licenses</h3>
+              <ul>{% for license in model_details.licenses %}{{ macro.render_license(license) }}{% endfor %}
+              </ul>{% endif %}
+          {% if model_details.references %}
+            <h3>References</h3>
+              <ul>
+              {% for reference in model_details.references %}
+                <li><a href="{{ reference.reference }}">{{ reference.reference }}</a></li>
+              {% endfor %}
+              </ul>{% endif %}
+          {% if model_details.citations %}
+            <h3>Citations</h3>
+              <ul>
+              {% for citation in model_details.citations %}
+                <li>{{ citation.citation }}</li>
+              {% endfor %}
+              </ul>{% endif %}
+          </div>
+        </div>
+      {% if model_parameters.model_architecture or model_parameters.input_format or model_parameters.input_format_map or model_parameters.output_format or model_parameters.output_format_map %}
+        <div class="col card">
+          <h2>Model Parameters</h2>
+            {% if model_parameters.model_architecture %}
+              <h3>Model Architecture</h3>
+                <div style="white-space:pre-wrap;">{{ model_parameters.model_architecture }}</div>{% endif %}
+            {% if model_parameters.input_format %}<h3>Input Format</h3>
+              <div style="white-space:pre-wrap;">{{ model_parameters.input_format }}</div>{% endif %}
+            {% if model_parameters.input_format_map %}
+              <h3>Input Format</h3>
+              <table>
+              <tr><th>Key</th><th>Value</th></tr>
+              {% for kv in model_parameters.input_format_map %}
+              <tr><td>{{ kv.key }}</td><td>{{ kv.value }}</td></tr>{% endfor %}</table>{% endif %}
+            {% if model_parameters.output_format %}<h3>Output Format</h3>
+              <div style="white-space:pre-wrap;">{{ model_parameters.output_format }}</div>{% endif %}
+            {% if model_parameters.output_format_map %}
+              <h3>Output Format</h3>
+              <table>
+              <tr><th>Key</th><th>Value</th></tr>
+              {% for kv in model_parameters.output_format_map %}
+              <tr><td>{{ kv.key }}</td><td>{{ kv.value }}</td></tr>{% endfor %}</table>{% endif %}
+      {% endif %}
+      {% if considerations and (considerations.users or considerations.use_cases or considerations.limitations or considerations.tradeoffs or considerations.ethical_considerations) %}
+      <div class="col card">
+        <h2>Considerations</h2>
+          {% if considerations.users %}
+            <h3>Intended Users</h3>
+              {{ macro.render_considerations(considerations.users) }}
+          {% endif %}
+          {% if considerations.use_cases %}
+            <h3>Use Cases</h3>
+              {{ macro.render_considerations(considerations.use_cases) }}
+          {% endif %}
+          {% if considerations.limitations %}
+            <h3>Limitations</h3>
+              {{ macro.render_considerations(considerations.limitations) }}
+          {% endif %}
+          {% if considerations.tradeoffs %}
+            <h3>Tradeoffs</h3>
+              {{ macro.render_considerations(considerations.tradeoffs) }}
+          {% endif %}
+          {% if considerations.ethical_considerations %}
+            <h3>Ethical Considerations</h3>
+              <ul>{% for risk in considerations.ethical_considerations %}
+                <li>
+                  <div>Risk: {{ risk.name }}</div>
+                  <div>Mitigation Strategy: {{ risk.mitigation_strategy }}</div>
+                </li>{% endfor %} </ul>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% if model_parameters.data %}
+      {{ macro.render_all_datasets(model_parameters.data) }}
+    {% endif %}
+    {% if quantitative_analysis.performance_metrics or quantitative_analysis.graphics.collection %}
+      {{ macro.render_quantitative_analysis(quantitative_analysis) }}
+    {% endif %}
+</body>
+</html>
