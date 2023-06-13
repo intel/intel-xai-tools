@@ -29,50 +29,50 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 ATTRIBUTIONS_PKGS = [
-  'captum',
-  'intel-tensorflow==2.11.0',
-  'ipywidgets',
-  'numpy>=1.14.3,<1.23.0',
-  'opencv-python',
-  'scikit-plot',
-  'scipy',
-  'shap',
+  'captum~=0.6.0',
+  'intel-tensorflow==2.12.0',
+  'ipywidgets~=7.7.5',
+  'numpy~=1.22.4',
+  'opencv-python~=4.7.0.72',
+  'plotly~=5.15.0',
+  'scikit-plot~=0.3.7',
+  'scipy~=1.10.1',
+  'shap~=0.41.0',
   'torch==1.13.1',
-  'transformers',
-  'plotly==5.14.1'
+  'transformers~=4.30.0',
 ]
 
 CAM_PKGS = [
-  'grad-cam',
-  'matplotlib',
-  'numpy>=1.14.3,<1.23.0',
-  'opencv-python',
-  'scipy',
+  'grad-cam~=1.4.6',
+  'matplotlib~=3.7.1',
+  'numpy~=1.22.4',
+  'opencv-python~=4.7.0.72',
+  'scipy~=1.10.1',
   'torch==1.13.1',
 ]
 
 METRICS_PKGS =  [
-  'matplotlib',
-  'pandas',
-  'plotly',
-  'scikit-learn',
-  'seaborn',
+  'matplotlib~=3.7.1',
+  'pandas~=1.5.3',
+  'plotly~=5.15.0',
+  'scikit-learn~=1.2.2',
+  'seaborn~=0.12.2',
 ]
 
 MCG_PKGS = [
-    'absl-py',
-    'attrs>=19.3.0,<22',
-    'dataclasses;python_version<"3.7"',
-    'grpcio-status<1.49',
-    'intel-tensorflow==2.11.0',
-    'jinja2',
-    'joblib>=1.2.0',
-    'jsonschema[format-nongpl]',
-    'plotly',
-    'protobuf<3.20,>=3.9.2',
-    'semantic-version',
-    'tensorflow-data-validation',
-    'tensorflow-model-analysis',
+    'Jinja2~=3.1.2',
+    'absl-py~=1.4.0',
+    'attrs~=21.4.0',
+    'dataclasses~=2.10.1;python_version<"3.7"',
+    'grpcio-status~=1.48.2',
+    'intel-tensorflow==2.12.0',
+    'joblib~=1.2.0',
+    'jsonschema[format-nongpl]~=4.17.3',
+    'plotly~=5.15.0',
+    'protobuf~=3.20.3',
+    'semantic-version~=2.10.0',
+    'tensorflow-data-validation~=1.13.0',
+    'tensorflow-model-analysis~=0.44.0',
 ]
 
 PYTORCH_PKGS = [
@@ -88,10 +88,10 @@ REQUIRED_PKGS =  (
 )
 
 TEST_PKGS = [
-    'deepdiff',
-    'pytest',
-    'tensorflow-hub',
-    'datasets',
+    'datasets~=2.10.1',
+    'deepdiff~=6.3.0',
+    'pytest~=7.3.2',
+    'tensorflow-hub~=0.13.0',
 ]
 
 PACKAGES = [
