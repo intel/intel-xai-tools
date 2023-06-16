@@ -134,9 +134,9 @@ pip install .
 
 The `ModelCardGen.generate` classmethod requires three inputs and returns a `ModelCardGen` class instance: 
 
-* `data_sets` (dict) : dictionary containing the user-defined name of the dataset as key and the path to the tfrecrod or raw dataframe containing prediction values as value. 
+* `data_sets` (dict) : dictionary containing the user-defined name of the dataset as key and the path to the tfrecords or raw dataframe containing prediction values as value.
 
-  * For TensorFlow TFRecords `{'eval': TensorflowDataset(dataset_path='eval.tfrecord')}`
+  * For TensorFlow TFRecords `{'eval': TensorflowDataset(dataset_path='eval.tfrecord*')}` (file glob pattern)
   * For PyTorch Dataset `{'eval': PytorchDataset(pytorch_dataset, feature_names=feature_names)}`
   * For Pandas DataFrames `{'eval': pd.Daraframe({"y_true": y_true, "y_pred": ypred})}`
 

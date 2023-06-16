@@ -43,7 +43,7 @@ ATTRIBUTIONS_PKGS = [
 ]
 
 CAM_PKGS = [
-  'grad-cam~=1.4.6',
+  'grad-cam==1.4.6',
   'matplotlib~=3.7.1',
   'numpy~=1.22.4',
   'opencv-python~=4.7.0.72',
