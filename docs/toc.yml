@@ -4,35 +4,20 @@ options:
   maxdepth: 2
   titlesonly: True
 entries:
+- file: overview.rst
+- file: install.rst
 - file: explainer/index.md
-  options:
-    titlesonly: True
   entries:
-  - file: explainer/explanations.md
-    entries:
-    - file: explainer/feature_attributions_explainer.md
-    - file: explainer/lm_layers_explainer.md
-    - file: explainer/metrics_explainer.md
-  - file: explainer/examples/index.md
-    options:
-      titlesonly: True
-    entries:
-    - file: explainer/examples/ExplainingDeepLearningModels.ipynb
-    - file: explainer/examples/partitionexplainer.ipynb
-    - file: explainer/examples/model_layers.ipynb
-  - file: explainer/quickstart.md
-    options:
-      titlesonly: True
-  - file: explainer/bibliography/index.md
-    options:
-      titlesonly: True
+  - file: explainer/attributions.md
+  - file: explainer/cam.md
+  - file: explainer/metrics.md 
 - file: model_card_gen/index.md
-  options:
-    titlesonly: True
   entries:
-  - file: model_card_gen/api.md
-    options:
-      titlesonly: True
+  - file: model_card_gen/api.rst
   - file: model_card_gen/example.md
-    options:
-      titlesonly: True
+- file: notebooks.rst
+  entries:
+  - file: noteooks/ExplainingImageClassification.nblink
+- file: legal.rst
+- url: https://github.com/IntelAI/intel-xai-tools
+  title: GitHub Repository

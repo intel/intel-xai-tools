@@ -1,0 +1,113 @@
+{% macro render_if_exist(name, value) %}
+  {% if value %}
+    <div>{{name}}: {{value}}</div>
+  {%- endif %}
+{% endmacro %}
+
+{% macro render_considerations(list) %}
+  {% if list %}
+  <ul>
+  {% for item in list %}
+    <li>{{ item.description }}</li>
+  {% endfor %}
+  </ul>
+  {%- endif %}
+{% endmacro %}
+
+{% macro render_uri_list(list) %}
+  {% if list %}
+  <ul>
+  {% for item in list %}
+    <li><a href="{{ item }}">{{ item }}</a></li>
+  {% endfor %}
+  </ul>
+  {%- endif %}
+{% endmacro %}
+
+{% macro render_all_datasets(datasets) %}
+  <div class="col card">
+    <h2 class="icon datasets">Datasets</h2>
+    {% for dataset in datasets %}
+      <div class="row">
+        <div class="col card">
+          {% if dataset.name %}<h3>{{ dataset.name }}</h3>{% endif %}
+            {% if dataset.description %}<p>{{ dataset.description }}</p>{% endif %}
+            {% if dataset.link %}<a href="{{ dataset.link }}">{{ dataset.link }}</a>{% endif %}
+            {% if dataset.graphics and dataset.graphics.collection %}
+              {{ render_graphics(dataset.graphics.collection) }}
+            {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+{% macro render_graphics(graphics) %}
+  {% if graphics.description %}<p>{{ graphics.description }}</p>{% endif %}
+  {% for graph in graphics %}
+      {% if graph.name %}<h3>{{ graph.name }}</h3>{% endif %}
+      {% if graph.html %}
+        <div class="interactive-graph">{{ graph.html|safe }}</div>
+      {% elif graph.image %}
+        <div class="img-item">
+          <img src='data:image/jpeg;base64,{{ graph.image }}' alt='{{ graph.name }}' />
+        </div>
+      {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro render_plotly_graphics(graphics) %}
+  <div class="img-container">
+  {% for graph in graphics %}
+    <div class="plotly-graphic">
+      {{graph.html_content|safe}}
+    </div>
+  {% endfor %}
+  </div>
+{% endmacro %}
+
+{% macro render_license(license) %}
+{% if license.identifier %}
+                <li>{{ license.identifier }}{% endif %}{% if license.custom_text %}{{ license.custom_text }}{% endif %}</li>
+{% endmacro %}
+
+{% macro metric_name(metric) %}
+{{ metric.type }}{% if metric.threshold %}@{{ metric.threshold }}{% endif %}{% if metric.slice %}, {{ metric.slice }}{% endif %}
+{% endmacro %}
+
+{% macro metric_value(metric) %}
+{{ metric.value }}{% if metric.confidence_interval %} ({{ metric.confidence_interval.lower_bound }}, {{ metric.confidence_interval.upper_bound }}){% endif %}
+{% endmacro %}
+
+{% macro render_quantitative_analysis(quantitative_analysis) %}
+<div class="col card">
+  <h2 class="icon qa">Quantitative Analysis</h2>
+  {% if quantitative_analysis.performance_metrics %}
+    {{ render_metrics_table(quantitative_analysis.performance_metrics )}}
+  {% endif %}
+  {% if quantitative_analysis.graphics.collection %}
+    {{ render_metrics_graphics(quantitative_analysis.graphics) }}
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% macro render_metrics_table(metrics) %}
+<table class="center">
+  <caption>Performance Metrics</caption>
+  <tr><th>Name</th><th>Value</th></tr>
+{% for metric in metrics %}
+  <tr><td>{{ metric_name(metric) }}</td><td>{{ metric_value(metric) }}</td></tr>
+{% endfor %}
+</table>
+{% endmacro %}
+
+{% macro render_metrics_graphics(graphics) %}
+  <div class="row">
+    <div class="col">
+    {% if graphics.description %}
+      {{ graphics.description }}
+    {% endif %}
+      {{ render_graphics(graphics.collection) }}
+    </div>
+  </div>
+{% endmacro %}

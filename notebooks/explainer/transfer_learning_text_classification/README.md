@@ -16,6 +16,7 @@ The notebook performs the following steps:
 3. Prepare the Model for Fine Tuning and Evaluation
 4. Export the model
 5. Reload the model and make predictions
+6. Get Explainations with Intel Explainable AI Tools
 
 ## Running the notebook
 
