@@ -19,5 +19,5 @@
 #
 
 from .tf_cam import TFGradCAM,  tf_gradcam
-from .pt_cam import XGradCAM, EigenCAM, xgradcam, eigencam
+from .pt_cam import XGradCAM, EigenCAM, x_gradcam, eigencam
 from .cam import GradCAM

@@ -28,8 +28,7 @@ class TFGradCAM(GradCAM):
     Args:
       model (tf.keras.functional): the CNN used for classification 
       target_layer (tf.keras.KerasLayer): the convolution layer that you want to analyze (usually the last) 
-      target_class (int): the index of the target class
-      image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
+      dims (tuple of ints): dimension of image (h, w)
 
         
     Attributes:
@@ -37,31 +36,32 @@ class TFGradCAM(GradCAM):
       target_layer: the target convolution being used 
       target_class: the target class being used
       image: the image being used
-      dims: the dimensions of the image being used
       gradcam: the result of the gradCAM calculation from the model's target_layer on the image
-
-
-    Methods:
-      visualize: superimpose the gradCAM result on top of the original image
 
     Reference:
       https://github.com/ismailuddin/gradcam-tensorflow-2/blob/master/notebooks/GradCam.ipynb 
     '''
-    def __init__(self, model, target_layer, target_class, image):
+    def __init__(self, model, target_layer):
         
         self.model = model
         self.target_layer = target_layer
-        self.target_class = target_class
-        self.image = image
-        self.dims = (image.shape[0], image.shape[1])
         
-        self.gradcam = self._get_gradcam()
     
-    def _get_gradcam(self):
+    def run_explainer(self, image, target_class):
+        '''
+        Execute the gradient-based class activation mapping algorithm on target image.
+
+        Args:
+          image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
+          target_class (int): the index of the target class
+        '''
+
         import numpy as np
         import tensorflow as tf
         import cv2
 
+        self.dims = (image.shape[0], image.shape[1]) 
+        self.image = image
         last_conv_layer_model = tf.keras.Model(self.model.inputs, self.target_layer.output)
         classifier_input = tf.keras.Input(shape=self.target_layer.output.shape[1:])
         x = classifier_input
@@ -80,11 +80,11 @@ class TFGradCAM(GradCAM):
         classifier_model = tf.keras.Model(classifier_input, x)
         
         with tf.GradientTape() as tape:
-            inputs = self.image[np.newaxis, ...]
+            inputs = image[np.newaxis, ...]
             last_conv_layer_output = last_conv_layer_model(inputs)
             tape.watch(last_conv_layer_output)
             preds = classifier_model(last_conv_layer_output)
-            top_class_channel = preds[:, self.target_class]
+            top_class_channel = preds[:, target_class]
 
         grads = tape.gradient(top_class_channel, last_conv_layer_output)
         pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2)).numpy()
@@ -98,9 +98,12 @@ class TFGradCAM(GradCAM):
         # Clip the values (equivalent to applying ReLU)
         # and then normalise the values
         gradcam = np.clip(gradcam, 0, np.max(gradcam)) / np.max(gradcam)
-        return cv2.resize(gradcam, self.dims)
+        self.gradcam = cv2.resize(gradcam, self.dims)
         
     def visualize(self):
+        '''
+        Plot the gradCAM superimposed on top of the original image.
+        '''
         import matplotlib.pyplot as plt
         
         plt.imshow(self.image)
@@ -117,6 +120,7 @@ def tf_gradcam(model, target_layer, target_class, image):
       target_layer (tf.keras.KerasLayer): the convolution layer that you want to analyze (usually the last) 
       target_class (int): the index of the target class
       image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
+      dims (tuple of ints): dimension of image (h, w)
 
     Returns:
       TFGradCAM
@@ -124,4 +128,6 @@ def tf_gradcam(model, target_layer, target_class, image):
     Reference:
        https://github.com/ismailuddin/gradcam-tensorflow-2/blob/master/notebooks/GradCam.ipynb
     """
-    return TFGradCAM(model, target_layer, target_class, image)
+    gc = TFGradCAM(model, target_layer)
+    gc.run_explainer(image, target_class)
+    return gc
