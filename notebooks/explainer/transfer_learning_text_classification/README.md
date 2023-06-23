@@ -20,7 +20,10 @@ The notebook performs the following steps:
 
 ## Running the notebook
 
-To run the notebook, follow the instructions to setup the [PyTorch notebook environment](/notebooks#pytorch-environment).
+
+To run `PyTorch_Text_Classifier_fine_tuning_with_Attributions.ipynb`, install the following dependencies:
+1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
+2. `pip install intel-transfer-learning-tool==0.5`
 
 ## References
 
