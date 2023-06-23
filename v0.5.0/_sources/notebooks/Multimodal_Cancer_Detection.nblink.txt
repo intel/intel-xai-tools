@@ -1,0 +1,3 @@
+{
+    "path": "../../notebooks/explainer/multimodal_cancer_detection/Multimodal_Cancer_Detection.ipynb"
+}

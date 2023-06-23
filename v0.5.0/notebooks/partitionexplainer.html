@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explaining Custom NN NewsGroups Classification Using the Attributions Explainer &mdash; Intel® Explainable AI Tools 0.5.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+              <div class="version">
+                0.5.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/IntelAI/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Explaining Custom NN NewsGroups Classification Using the Attributions Explainer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/partitionexplainer.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Explaining-Custom-NN-NewsGroups-Classification-Using-the-Attributions-Explainer">
+<h1><a class="reference external" href="https://coderzcolumn.com/tutorials/artificial-intelligence/explain-text-classification-models-using-shap-values-keras">Explaining Custom NN NewsGroups Classification Using the Attributions Explainer</a><a class="headerlink" href="#Explaining-Custom-NN-NewsGroups-Classification-Using-the-Attributions-Explainer" title="Permalink to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">explainer</span> <span class="kn">import</span> <span class="n">attributions</span><span class="p">,</span> <span class="n">metrics</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;KMP_WARNINGS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;off&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="n">all_categories</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;alt.atheism&#39;</span><span class="p">,</span><span class="s1">&#39;comp.graphics&#39;</span><span class="p">,</span><span class="s1">&#39;comp.os.ms-windows.misc&#39;</span><span class="p">,</span><span class="s1">&#39;comp.sys.ibm.pc.hardware&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;comp.sys.mac.hardware&#39;</span><span class="p">,</span><span class="s1">&#39;comp.windows.x&#39;</span><span class="p">,</span> <span class="s1">&#39;misc.forsale&#39;</span><span class="p">,</span><span class="s1">&#39;rec.autos&#39;</span><span class="p">,</span><span class="s1">&#39;rec.motorcycles&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;rec.sport.baseball&#39;</span><span class="p">,</span><span class="s1">&#39;rec.sport.hockey&#39;</span><span class="p">,</span><span class="s1">&#39;sci.crypt&#39;</span><span class="p">,</span><span class="s1">&#39;sci.electronics&#39;</span><span class="p">,</span><span class="s1">&#39;sci.med&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;sci.space&#39;</span><span class="p">,</span><span class="s1">&#39;soc.religion.christian&#39;</span><span class="p">,</span><span class="s1">&#39;talk.politics.guns&#39;</span><span class="p">,</span><span class="s1">&#39;talk.politics.mideast&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;talk.politics.misc&#39;</span><span class="p">,</span><span class="s1">&#39;talk.religion.misc&#39;</span><span class="p">]</span>
+
+<span class="n">selected_categories</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;alt.atheism&#39;</span><span class="p">,</span><span class="s1">&#39;comp.graphics&#39;</span><span class="p">,</span><span class="s1">&#39;rec.motorcycles&#39;</span><span class="p">,</span><span class="s1">&#39;sci.space&#39;</span><span class="p">,</span><span class="s1">&#39;talk.politics.misc&#39;</span><span class="p">]</span>
+
+<span class="n">X_train_text</span><span class="p">,</span> <span class="n">Y_train</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="n">selected_categories</span><span class="p">,</span> <span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X_test_text</span> <span class="p">,</span> <span class="n">Y_test</span>  <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="n">selected_categories</span><span class="p">,</span> <span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">X_train_text</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_train_text</span><span class="p">)</span>
+<span class="n">X_test_text</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_test_text</span><span class="p">)</span>
+
+<span class="n">classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">Y_train</span><span class="p">)</span>
+<span class="n">mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">selected_categories</span><span class="p">))</span>
+
+<span class="nb">len</span><span class="p">(</span><span class="n">X_train_text</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_test_text</span><span class="p">),</span> <span class="n">classes</span><span class="p">,</span> <span class="n">mapping</span>
+</pre></div>
+</div>
+</div>
+<section id="Vectorize-Text-Data">
+<h2>Vectorize Text Data<a class="headerlink" href="#Vectorize-Text-Data" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sklearn</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span><span class="p">,</span> <span class="n">TfidfVectorizer</span>
+
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">max_features</span><span class="o">=</span><span class="mi">50000</span><span class="p">)</span>
+
+<span class="n">vectorizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X_train_text</span><span class="p">,</span> <span class="n">X_test_text</span><span class="p">)))</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train_text</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test_text</span><span class="p">)</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">X_test</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+
+<span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">X_test</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Define-the-Model">
+<h2>Define the Model<a class="headerlink" href="#Define-the-Model" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tensorflow.keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">layers</span>
+
+<span class="k">def</span> <span class="nf">create_model</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">Sequential</span><span class="p">([</span>
+                        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span>
+                        <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">),</span>
+                        <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">),</span>
+                        <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;softmax&quot;</span><span class="p">),</span>
+                    <span class="p">])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">()</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Compile-and-Train-Model">
+<h2>Compile and Train Model<a class="headerlink" href="#Compile-and-Train-Model" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;adam&quot;</span><span class="p">,</span> <span class="s2">&quot;sparse_categorical_crossentropy&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
+<span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Evaluate-Model-Performance">
+<h2>Evaluate Model Performance<a class="headerlink" href="#Evaluate-Model-Performance" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="n">train_preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">test_preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Train Accuracy : </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">train_preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test  Accuracy : </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">test_preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">test_preds</span><span class="p">,</span> <span class="n">selected_categories</span><span class="p">)</span>
+<span class="n">cm</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">test_preds</span><span class="p">,</span> <span class="n">selected_categories</span><span class="p">)</span>
+<span class="n">plotter</span><span class="o">.</span><span class="n">pr_curve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">X_batch_text</span> <span class="o">=</span> <span class="n">X_test_text</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">X_batch</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Samples : &quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">X_batch_text</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W+&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+<span class="n">preds_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_batch</span><span class="p">)</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">preds_proba</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Actual    Target Values : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">([</span><span class="n">selected_categories</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">Y_test</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted Target Values : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">([</span><span class="n">selected_categories</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">preds</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted Probabilities : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">preds_proba</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="SHAP-Partition-Explainer">
+<h2>SHAP Partition Explainer<a class="headerlink" href="#SHAP-Partition-Explainer" title="Permalink to this heading"></a></h2>
+</section>
+<section id="Visualize-SHAP-Values-Correct-Predictions">
+<h2>Visualize SHAP Values Correct Predictions<a class="headerlink" href="#Visualize-SHAP-Values-Correct-Predictions" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_predictions</span><span class="p">(</span><span class="n">X_batch_text</span><span class="p">):</span>
+    <span class="n">X_batch</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_batch_text</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_batch</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">preds</span>
+
+<span class="n">partition_explainer</span> <span class="o">=</span> <span class="n">attributions</span><span class="o">.</span><span class="n">partition_text_explainer</span><span class="p">(</span><span class="n">make_predictions</span><span class="p">,</span> <span class="n">selected_categories</span><span class="p">,</span> <span class="n">X_batch_text</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\W+&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Text-Plot">
+<h3>Text Plot<a class="headerlink" href="#Text-Plot" title="Permalink to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">partition_explainer</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Bar-Plots">
+<h3>Bar Plots<a class="headerlink" href="#Bar-Plots" title="Permalink to this heading"></a></h3>
+<section id="Bar-Plot-1">
+<h4>Bar Plot 1<a class="headerlink" href="#Bar-Plot-1" title="Permalink to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span> <span class="o">=</span> <span class="n">partition_explainer</span><span class="o">.</span><span class="n">shap</span>
+<span class="n">shap_values</span> <span class="o">=</span> <span class="n">partition_explainer</span><span class="o">.</span><span class="n">shap_values</span>
+
+<span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">partition_explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">[:,:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+               <span class="n">order</span><span class="o">=</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="o">.</span><span class="n">argsort</span><span class="o">.</span><span class="n">flip</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Bar-Plot-2">
+<h4>Bar Plot 2<a class="headerlink" href="#Bar-Plot-2" title="Permalink to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]],</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+               <span class="n">order</span><span class="o">=</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="o">.</span><span class="n">argsort</span><span class="o">.</span><span class="n">flip</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Bar-Plot-3">
+<h3>Bar Plot 3<a class="headerlink" href="#Bar-Plot-3" title="Permalink to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[:,:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+               <span class="n">order</span><span class="o">=</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="o">.</span><span class="n">argsort</span><span class="o">.</span><span class="n">flip</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Bar-Plot-4">
+<h3>Bar Plot 4<a class="headerlink" href="#Bar-Plot-4" title="Permalink to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">1</span><span class="p">]]],</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+               <span class="n">order</span><span class="o">=</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="o">.</span><span class="n">argsort</span><span class="o">.</span><span class="n">flip</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Waterfall-Plots">
+<h2>Waterfall Plots<a class="headerlink" href="#Waterfall-Plots" title="Permalink to this heading"></a></h2>
+<section id="Waterfall-Plot-1">
+<h3>Waterfall Plot 1<a class="headerlink" href="#Waterfall-Plot-1" title="Permalink to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]],</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Waterfall-Plot-2">
+<h3>Waterfall Plot 2<a class="headerlink" href="#Waterfall-Plot-2" title="Permalink to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">1</span><span class="p">]]],</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Force-Plot">
+<h2>Force Plot<a class="headerlink" href="#Force-Plot" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="n">tokens</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;\W+&quot;</span><span class="p">,</span> <span class="n">X_batch_text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+<span class="n">shap</span><span class="o">.</span><span class="n">initjs</span><span class="p">()</span>
+<span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="o">.</span><span class="n">base_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                <span class="n">feature_names</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">out_names</span><span class="o">=</span><span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

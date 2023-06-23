@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feature Attributions &mdash; Intel® Explainable AI Tools 0.5.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CAM (Class Activation Mapping)" href="cam.html" />
+    <link rel="prev" title="Explainer" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+              <div class="version">
+                0.5.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Explainer</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Feature Attributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cam.html">CAM (Class Activation Mapping)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/IntelAI/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Explainer</a></li>
+      <li class="breadcrumb-item active">Feature Attributions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/explainer/attributions.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="feature-attributions">
+<span id="attributions"></span><h1>Feature Attributions<a class="headerlink" href="#feature-attributions" title="Permalink to this heading"></a></h1>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">explainer</span> <span class="kn">import</span> <span class="n">attributions</span>
+</pre></div>
+</div>
+<p>Feature Attributions are an approach to explaining a model’s predictions based on how the model has weighted the features it’s been trained on.
+This set of functions visualizes features by utilizing <a class="reference external" href="https://github.com/slundberg/shap">SHAP</a> (SHapley Additive exPlanations): an approach to explain the output of ML/DL models.</p>
+<section id="algorithm">
+<h2>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this heading"></a></h2>
+<p>Determining feature importance within a model is done by utilizing the SHAP package.
+Shap accepts black box models and provides explanations through a game theoretic approach.</p>
+</section>
+<section id="environment">
+<h2>Environment<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Jupyter Notebooks</p></li>
+</ul>
+</section>
+<section id="xai-methods">
+<h2>XAI Methods<a class="headerlink" href="#xai-methods" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Shap Explainers</p>
+<ul>
+<li><p>Deep Explainer</p></li>
+<li><p>Gradient Explainer</p></li>
+<li><p>Kernel Explainer</p></li>
+<li><p>Partition Explainer</p></li>
+<li><p>Zero Shot Explainer</p></li>
+<li><p>Sentiment Analysis</p></li>
+</ul>
+</li>
+<li><p>Captum</p>
+<ul>
+<li><p>Integrated Gradients</p></li>
+<li><p>Deep Lift</p></li>
+<li><p>Saliency</p></li>
+<li><p>Smooth Grad via Noise Tunnel</p></li>
+<li><p>Feature Ablation</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="toolkits">
+<h2>Toolkits<a class="headerlink" href="#toolkits" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Shap</p></li>
+<li><p>Captum</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="https://github.com/slundberg/shap">SHAP</a><br />
+<a class="reference external" href="https://github.com/pytorch/captum">Captum</a></p>
+<span class="target" id="module-explainer.attributions.attributions"></span><dl class="py class">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.DeepExplainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">DeepExplainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#DeepExplainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.DeepExplainer" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Approximate conditional expectations of shap values for deep learning models using a variation of the DeepLIFT algorithm</dt><dd><p>(Shrikumar, Greenside, and Kundaje, arXiv 2017)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>tf.keras.functional</em><em> or </em><em>pytorch.nn.Module</em>) – CNN model to be interpreted</p></li>
+<li><p><strong>background_images</strong> (<em>numpy.ndarray</em><em>, </em><em>pandas.DataFrame</em><em> or </em><em>torch.tensor</em>) – the selection of background images used to integrate output features
+across each target image</p></li>
+<li><p><strong>targetImages</strong> (<em>numpy.ndarray</em><em>, </em><em>pandas.DataFrame</em><em> or </em><em>torch.tensor</em>) – the images to be interpreted</p></li>
+<li><p><strong>labels</strong> (<em>list</em><em> of </em><em>strings</em>) – list of label names for the given classification problem</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.DeepExplainer.target_images">
+<span class="sig-name descname"><span class="pre">target_images</span></span><a class="headerlink" href="#explainer.attributions.attributions.DeepExplainer.target_images" title="Permalink to this definition"></a></dt>
+<dd><p>images used to explain predictions</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.DeepExplainer.explainer">
+<span class="sig-name descname"><span class="pre">explainer</span></span><a class="headerlink" href="#explainer.attributions.attributions.DeepExplainer.explainer" title="Permalink to this definition"></a></dt>
+<dd><p>the shap DeepExplainer object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.DeepExplainer.shap_values">
+<span class="sig-name descname"><span class="pre">shap_values</span></span><a class="headerlink" href="#explainer.attributions.attributions.DeepExplainer.shap_values" title="Permalink to this definition"></a></dt>
+<dd><p>the resulting shap value estimations on the target images</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.DeepExplainer.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><a class="headerlink" href="#explainer.attributions.attributions.DeepExplainer.labels" title="Permalink to this definition"></a></dt>
+<dd><p>the class labels of the given classification problem</p>
+</dd></dl>
+
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html</a></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.DeepExplainer.visualize">
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#DeepExplainer.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.DeepExplainer.visualize" title="Permalink to this definition"></a></dt>
+<dd><p>plot superposition of shap estimations on original image(s) across all labels predictions</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.FeatureAttributions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">FeatureAttributions</span></span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#FeatureAttributions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.FeatureAttributions" title="Permalink to this definition"></a></dt>
+<dd><p>Attributions base class. Holds the shap API.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.FeatureAttributions.get_info">
+<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#FeatureAttributions.get_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.FeatureAttributions.get_info" title="Permalink to this definition"></a></dt>
+<dd><p>Display into panel in Jupyter Enviornment</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.GradientExplainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">GradientExplainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#GradientExplainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.GradientExplainer" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Approximate expected gradients of differentiable models using a variation of the integrated gradients algorithm</dt><dd><p>(Sundararajan et al. 2017)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>tf.keras.functional</em><em> or </em><em>pytorch.nn.Module</em>) – CNN model to be interpreted</p></li>
+<li><p><strong>background_images</strong> (<em>numpy.ndarray</em><em>, </em><em>pandas.DataFrame</em><em> or </em><em>torch.tensor</em>) – the selection of background images
+used to integrate output features across each target image</p></li>
+<li><p><strong>target_images</strong> (<em>numpy.ndarray</em><em>, </em><em>pandas.DataFrame</em><em> or </em><em>torch.tensor</em>) – the images to be interpreted</p></li>
+<li><p><strong>labels</strong> (<em>list</em><em> of </em><em>strings</em>) – list of label names for the given classification problem</p></li>
+<li><p><strong>ranked_outputs</strong> (<em>int</em>) – the number of top label predictions to be analyzed. Defaults to 1.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.GradientExplainer.target_images">
+<span class="sig-name descname"><span class="pre">target_images</span></span><a class="headerlink" href="#explainer.attributions.attributions.GradientExplainer.target_images" title="Permalink to this definition"></a></dt>
+<dd><p>images used to explain predictions</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.GradientExplainer.ranked_outputs">
+<span class="sig-name descname"><span class="pre">ranked_outputs</span></span><a class="headerlink" href="#explainer.attributions.attributions.GradientExplainer.ranked_outputs" title="Permalink to this definition"></a></dt>
+<dd><p>the number of top label predictions</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.GradientExplainer.explainer">
+<span class="sig-name descname"><span class="pre">explainer</span></span><a class="headerlink" href="#explainer.attributions.attributions.GradientExplainer.explainer" title="Permalink to this definition"></a></dt>
+<dd><p>the shap GradientExplainer object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.GradientExplainer.shap_values">
+<span class="sig-name descname"><span class="pre">shap_values</span></span><a class="headerlink" href="#explainer.attributions.attributions.GradientExplainer.shap_values" title="Permalink to this definition"></a></dt>
+<dd><p>the resulting shap value estimations on the target images</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.GradientExplainer.indexes">
+<span class="sig-name descname"><span class="pre">indexes</span></span><a class="headerlink" href="#explainer.attributions.attributions.GradientExplainer.indexes" title="Permalink to this definition"></a></dt>
+<dd><p>indexes where for the corresponding rankings of the each target image ranking</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.GradientExplainer.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><a class="headerlink" href="#explainer.attributions.attributions.GradientExplainer.labels" title="Permalink to this definition"></a></dt>
+<dd><p>the class labels of the given classification problem</p>
+</dd></dl>
+
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html</a></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.GradientExplainer.visualize">
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#GradientExplainer.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.GradientExplainer.visualize" title="Permalink to this definition"></a></dt>
+<dd><p>plot superposition of shap estimations on original image(s) across top ranked_outputs</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.KernelExplainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">KernelExplainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#KernelExplainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.KernelExplainer" title="Permalink to this definition"></a></dt>
+<dd><p>Approximate shap values via a combination of local interpretable model-agnostic explanations (LIME) and
+a weighted linear regression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>function</em>) – “black box” prediction function that takes an input array of shape (n samples, m features)</p></li>
+<li><p><strong>predictions.</strong> (<em>and outputs an array</em><em> of </em><em>n</em>) – </p></li>
+<li><p><strong>background</strong> (<em>numpy.ndarray</em><em> or </em><em>pandas.DataFrame</em>) – the selection of background examples used to integrate output features
+across each target example</p></li>
+<li><p><strong>targets</strong> (<em>numpy.ndarray</em><em> or </em><em>pandas.DataFrame</em>) – the target examples to be interpreted</p></li>
+<li><p><strong>nsamples</strong> (<em>int</em>) – the number of times to re-evaluate the model per prediction. Defaults to 64.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.KernelExplainer.bg">
+<span class="sig-name descname"><span class="pre">bg</span></span><a class="headerlink" href="#explainer.attributions.attributions.KernelExplainer.bg" title="Permalink to this definition"></a></dt>
+<dd><p>background examples</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.KernelExplainer.targets">
+<span class="sig-name descname"><span class="pre">targets</span></span><a class="headerlink" href="#explainer.attributions.attributions.KernelExplainer.targets" title="Permalink to this definition"></a></dt>
+<dd><p>target examples</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.KernelExplainer.explainer">
+<span class="sig-name descname"><span class="pre">explainer</span></span><a class="headerlink" href="#explainer.attributions.attributions.KernelExplainer.explainer" title="Permalink to this definition"></a></dt>
+<dd><p>shap KernelExplainer object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.KernelExplainer.shap_values">
+<span class="sig-name descname"><span class="pre">shap_values</span></span><a class="headerlink" href="#explainer.attributions.attributions.KernelExplainer.shap_values" title="Permalink to this definition"></a></dt>
+<dd><p>the resulting shap value estimations on the target examples</p>
+</dd></dl>
+
+<p>Reference:
+<a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.KernelExplainer.visualize">
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#KernelExplainer.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.KernelExplainer.visualize" title="Permalink to this definition"></a></dt>
+<dd><p>Display the force plot of the of the target example(s)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionExplainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">PartitionExplainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#PartitionExplainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.PartitionExplainer" title="Permalink to this definition"></a></dt>
+<dd><p>Approximate an extension of shap values, known as Owen values, by recursively computing shap values
+through a hierarchy of features that define feature coalitions. This is the base partition explainer class
+that generates partition explainer children objects for text or image classification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_type</strong> (<em>string</em>) – ‘text’ or ‘image’ to choose which classification domain to be explained</p></li>
+<li><p><strong>*args</strong> – the remaining arguments required for child class instantiation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionImageExplainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">PartitionImageExplainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#PartitionImageExplainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.PartitionImageExplainer" title="Permalink to this definition"></a></dt>
+<dd><p>Image classification-based partition explanation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_type</strong> (<em>string</em>) – ‘text’ or ‘image’ used in PartitionExplainer generator class. It is not used in this</p></li>
+<li><p><strong>class.</strong> (<em>child</em>) – </p></li>
+<li><p><strong>model</strong> (<em>function</em>) – “black box” prediction function that takes an input array of shape (n samples, m features)</p></li>
+<li><p><strong>predictions.</strong> (<em>and outputs an array</em><em> of </em><em>n</em>) – </p></li>
+<li><p><strong>labels</strong> (<em>list</em>) – list of label names (strings) for the given classification problem</p></li>
+<li><p><strong>shape</strong> (<em>tuple</em>) – height (int) and width (int) of images to be analyzed</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionImageExplainer.explainer">
+<span class="sig-name descname"><span class="pre">explainer</span></span><a class="headerlink" href="#explainer.attributions.attributions.PartitionImageExplainer.explainer" title="Permalink to this definition"></a></dt>
+<dd><p>shap PartitionExplainer object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionImageExplainer.shap_values">
+<span class="sig-name descname"><span class="pre">shap_values</span></span><a class="headerlink" href="#explainer.attributions.attributions.PartitionImageExplainer.shap_values" title="Permalink to this definition"></a></dt>
+<dd><p>the resulting shap value estimations on the target images</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionImageExplainer.run_explainer">
+<span class="sig-name descname"><span class="pre">run_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_evals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#PartitionImageExplainer.run_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.PartitionImageExplainer.run_explainer" title="Permalink to this definition"></a></dt>
+<dd><p>Execute the partition explanation on the target_images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_images</strong> (<em>numpy.ndarray</em>) – n images in the shape (n, height, width, channels)</p></li>
+<li><p><strong>64.</strong> (<em>in a better the estimation. Defaults to</em>) – </p></li>
+<li><p><strong>top_n</strong> (<em>int</em>) – gather shap values for the top n most probable classes per image. Defaults to 1.</p></li>
+<li><p><strong>max_evals</strong> (<em>int</em>) – number of evaluations used in the shap estimation. The higher the number result</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionImageExplainer.visualize">
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#PartitionImageExplainer.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.PartitionImageExplainer.visualize" title="Permalink to this definition"></a></dt>
+<dd><p>Plot superposition of shap estimations on original image(s) across top ranked_outputs</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionTextExplainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">PartitionTextExplainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#PartitionTextExplainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.PartitionTextExplainer" title="Permalink to this definition"></a></dt>
+<dd><p>Text classification-based partition explanation (using HuggingFace Transformers API).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_type</strong> (<em>string</em>) – ‘text’ or ‘image’ used in PartitionExplainer generator class. It is not used in this</p></li>
+<li><p><strong>class.</strong> (<em>child</em>) – </p></li>
+<li><p><strong>model</strong> (<em>function</em>) – “black box” prediction function that takes an input array of shape (n samples, m features)</p></li>
+<li><p><strong>predictions.</strong> (<em>and outputs an array</em><em> of </em><em>n</em>) – </p></li>
+<li><p><strong>labels</strong> (<em>list</em>) – list of label names (strings) for the given classification problem</p></li>
+<li><p><strong>tokenizer</strong> (<em>string</em><em> or </em><em>callable</em>) – tokenizer used to break apart strings during masking of the text</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionTextExplainer.explainer">
+<span class="sig-name descname"><span class="pre">explainer</span></span><a class="headerlink" href="#explainer.attributions.attributions.PartitionTextExplainer.explainer" title="Permalink to this definition"></a></dt>
+<dd><p>shap PartitionExplainer object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionTextExplainer.shap_values">
+<span class="sig-name descname"><span class="pre">shap_values</span></span><a class="headerlink" href="#explainer.attributions.attributions.PartitionTextExplainer.shap_values" title="Permalink to this definition"></a></dt>
+<dd><p>the resulting shap value estimations on the target examples</p>
+</dd></dl>
+
+<p>Reference:
+<a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionTextExplainer.run_explainer">
+<span class="sig-name descname"><span class="pre">run_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_evals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#PartitionTextExplainer.run_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.PartitionTextExplainer.run_explainer" title="Permalink to this definition"></a></dt>
+<dd><p>Execute the partition explanation on the target_text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_text</strong> (<em>numpy.ndarray</em>) – 1-d numpy array of strings holding the text examples</p></li>
+<li><p><strong>max_evals</strong> (<em>int</em>) – number of evaluations used in the shap estimation. The higher the number result</p></li>
+<li><p><strong>64.</strong> (<em>in a better the estimation. Defaults to</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PartitionTextExplainer.visualize">
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#PartitionTextExplainer.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.PartitionTextExplainer.visualize" title="Permalink to this definition"></a></dt>
+<dd><p>Display the force plot of the of the target example(s)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.PipelineExplainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">PipelineExplainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#PipelineExplainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.PipelineExplainer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.deep_explainer">
+<span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">deep_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backgroundImages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetImages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#explainer.attributions.attributions.DeepExplainer" title="explainer.attributions.attributions.DeepExplainer"><span class="pre">DeepExplainer</span></a></span></span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#deep_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.deep_explainer" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a SHAP DeepExplainer that approximate SHAP values for deep learning models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – model</p></li>
+<li><p><strong>backgroundImages</strong> – list</p></li>
+<li><p><strong>targetImages</strong> – list</p></li>
+<li><p><strong>labels</strong> – list</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DeepExplainer</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.explainer">
+<span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">explainer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.explainer" title="Permalink to this definition"></a></dt>
+<dd><p>Calls FeatureAttributions
+Returns FeatureAttributions which has native references as attributes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>FeatureAttributions</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">explainer</span> <span class="kn">import</span> <span class="n">attributions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">explainer</span> <span class="o">=</span> <span class="n">attributions</span><span class="o">.</span><span class="n">explainer</span><span class="p">()</span>
+<span class="go">&lt;IPython.core.display.HTML object&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">explainer</span><span class="o">.</span><span class="n">shap</span><span class="o">.</span><span class="n">__version__</span>
+<span class="go">&#39;0.41.0&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.gradient_explainer">
+<span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">gradient_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranked_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#explainer.attributions.attributions.GradientExplainer" title="explainer.attributions.attributions.GradientExplainer"><span class="pre">GradientExplainer</span></a></span></span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#gradient_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.gradient_explainer" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up a SHAP GradientExplainer, explains a model using expected gradients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – model</p></li>
+<li><p><strong>background_images</strong> – list</p></li>
+<li><p><strong>target_images</strong> – list</p></li>
+<li><p><strong>labels</strong> – list</p></li>
+<li><p><strong>ranked_outputs</strong> – int (options and defaults to 1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GradientExplainer</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.kernel_explainer">
+<span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">kernel_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#kernel_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.kernel_explainer" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a SHAP KernelExplainer, using the Kernel SHAP method
+to explain the output of any function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – model</p></li>
+<li><p><strong>data</strong> – dataframe</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>KernelExplainer</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.partition_image_explainer">
+<span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">partition_image_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_evals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#partition_image_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.partition_image_explainer" title="Permalink to this definition"></a></dt>
+<dd><p>Instantiates PartitionExplainer for image classification and executes run_explainer()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>function</em>) – the model</p></li>
+<li><p><strong>tokenizer</strong> (<em>string</em><em> or </em><em>callable</em>) – the tokens you want to mask</p></li>
+<li><p><strong>categories</strong> (<em>list</em>) – the category names</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html</a></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PartitionImageExplainer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.partition_text_explainer">
+<span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">partition_text_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_evals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#partition_text_explainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.partition_text_explainer" title="Permalink to this definition"></a></dt>
+<dd><p>Instantiates PartitionExplainer for text classification and executes run_explainer()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>function</em>) – the model</p></li>
+<li><p><strong>tokenizer</strong> (<em>string</em><em> or </em><em>callable</em>) – the tokens you want to mask</p></li>
+<li><p><strong>categories</strong> (<em>list</em>) – the category names</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Reference:</dt><dd><p><a class="reference external" href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html">https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html</a></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PartitionExplainer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="explainer.attributions.attributions.sentiment_analysis">
+<span class="sig-prename descclassname"><span class="pre">explainer.attributions.attributions.</span></span><span class="sig-name descname"><span class="pre">sentiment_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/explainer/attributions/attributions.html#sentiment_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#explainer.attributions.attributions.sentiment_analysis" title="Permalink to this definition"></a></dt>
+<dd><p>Uses HuggingFace pipeline to instantiate a model for task ‘sentiment-analysis’
+Returns PipelineExplainer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – model</p></li>
+<li><p><strong>data</strong> – examples used for sentiment-analysis</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>PipelineExplainer</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Explainer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cam.html" class="btn btn-neutral float-right" title="CAM (Class Activation Mapping)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+{
+    "path": "../../notebooks/model_card_gen/toxicity-tfma-model-card.ipynb"
+}

@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explaining Fine Tuned Text Classifier with PyTorch using the Intel® Explainable AI API &mdash; Intel® Explainable AI Tools 0.5.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+              <div class="version">
+                0.5.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/IntelAI/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Explaining Fine Tuned Text Classifier with PyTorch using the Intel® Explainable AI API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/PyTorch_Text_Classifier_fine_tuning_with_Attributions.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Explaining-Fine-Tuned-Text-Classifier-with-PyTorch-using-the-Intel®-Explainable-AI-API">
+<h1>Explaining Fine Tuned Text Classifier with PyTorch using the Intel® Explainable AI API<a class="headerlink" href="#Explaining-Fine-Tuned-Text-Classifier-with-PyTorch-using-the-Intel®-Explainable-AI-API" title="Permalink to this heading"></a></h1>
+<p>This notebook demonstrates fine tuning pretrained models from <a class="reference external" href="https://huggingface.co">Hugging Face</a> using text classification datasets from the <a class="reference external" href="https://huggingface.co/datasets">Hugging Face Datasets catalog</a> or a custom dataset. The notebook uses <a class="reference external" href="https://github.com/intel/intel-extension-for-pytorch">Intel® Extension for PyTorch*</a>, which extends PyTorch with optimizations for an extra performance boost on Intel hardware.</p>
+<p>Please install the dependencies from the <a class="reference external" href="/notebooks/pytorch_requirements.txt">pytorch_requirements.txt</a> file before executing this notebook.</p>
+<p>The notebook performs the following steps: 1. <a class="reference internal" href="#1.-Import-dependencies-and-setup-parameters"><span class="std std-ref">Import dependencies and setup parameters</span></a> 2. <a class="reference internal" href="#2.-Prepare-the-dataset"><span class="std std-ref">Prepare the dataset</span></a> 3. <a class="reference internal" href="#3.-Prepare-the-Model-for-Fine-Tuning-and-Evaluation"><span class="std std-ref">Prepare the Model for Fine Tuning and Evaluation</span></a> 4. <a class="reference internal" href="#4.-Export-the-model"><span class="std std-ref">Export the model</span></a> 5. <a class="reference internal" href="#5.-Reload-the-model-and-make-predictions"><span class="std std-ref">Reload the model and make predictions</span></a> 6. <a class="reference internal" href="#6.-Get-Explainations-with-Intel-Explainable-AI-Tools"><span class="std std-ref">Get Explainations with Intel Explainable AI
+Tools</span></a></p>
+<section id="1.-Import-dependencies-and-setup-parameters">
+<h2>1. Import dependencies and setup parameters<a class="headerlink" href="#1.-Import-dependencies-and-setup-parameters" title="Permalink to this heading"></a></h2>
+<p>This notebook assumes that you have already followed the instructions in the <a class="reference external" href="/notebooks/README.md">README.md</a> to setup a PyTorch environment with all the dependencies required to run the notebook.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">intel_extension_for_pytorch</span> <span class="k">as</span> <span class="nn">ipex</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">torch.optim</span> <span class="kn">import</span> <span class="n">AdamW</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">ClassLabel</span><span class="p">,</span> <span class="n">load_dataset</span><span class="p">,</span> <span class="n">load_metric</span><span class="p">,</span> <span class="n">Split</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">logging</span> <span class="k">as</span> <span class="n">datasets_logging</span>
+<span class="kn">from</span> <span class="nn">transformers.utils</span> <span class="kn">import</span> <span class="n">logging</span> <span class="k">as</span> <span class="n">transformers_logging</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AutoModelForSequenceClassification</span><span class="p">,</span>
+    <span class="n">AutoTokenizer</span><span class="p">,</span>
+    <span class="n">Trainer</span><span class="p">,</span>
+    <span class="n">TrainingArguments</span><span class="p">,</span>
+    <span class="n">get_scheduler</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">tlt.utils.file_utils</span> <span class="kn">import</span> <span class="n">download_and_extract_zip_file</span>
+
+<span class="c1"># Set the logging stream to stdout</span>
+<span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">transformers_logging</span><span class="o">.</span><span class="n">_get_library_root_logger</span><span class="p">()</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
+    <span class="n">handler</span><span class="o">.</span><span class="n">setStream</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+<span class="n">sh</span> <span class="o">=</span> <span class="n">datasets_logging</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+<span class="n">datasets_logging</span><span class="o">.</span><span class="n">set_verbosity_error</span><span class="p">()</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TRANSFORMERS_NO_ADVISORY_WARNINGS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specify the name of the Hugging Face pretrained model to use (https://huggingface.co/models)</span>
+<span class="c1"># For example:</span>
+<span class="c1">#   albert-base-v2</span>
+<span class="c1">#   bert-base-uncased</span>
+<span class="c1">#   distilbert-base-uncased</span>
+<span class="c1">#   distilbert-base-uncased-finetuned-sst-2-english</span>
+<span class="c1">#   roberta-base</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;distilbert-base-uncased&quot;</span>
+
+<span class="c1"># Define an output directory</span>
+<span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OUTPUT_DIR&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;OUTPUT_DIR&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="k">else</span> \
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;HOME&quot;</span><span class="p">],</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+
+<span class="c1"># Define a dataset directory</span>
+<span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DATASET_DIR&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;DATASET_DIR&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="k">else</span> \
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;HOME&quot;</span><span class="p">],</span> <span class="s2">&quot;dataset&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model name:&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output directory:&quot;</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset directory:&quot;</span><span class="p">,</span> <span class="n">dataset_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Prepare-the-dataset">
+<h2>2. Prepare the dataset<a class="headerlink" href="#2.-Prepare-the-dataset" title="Permalink to this heading"></a></h2>
+<p>The notebook has two options for getting a dataset: * Option A: Use a dataset from the <a class="reference external" href="https://huggingface.co/datasets">Hugging Face Datasets catalog</a> * Option B: Use a custom dataset (downloaded from another source or from your local system)</p>
+<p>In both cases, the code ends up defining <code class="docutils literal notranslate"><span class="pre">`datasets.Dataset</span></code> &lt;<a class="reference external" href="https://huggingface.co/docs/datasets/package_reference/main_classes#datasets.Dataset">https://huggingface.co/docs/datasets/package_reference/main_classes#datasets.Dataset</a>&gt;`__ objects for the train and evaluation splits.</p>
+<p>Execute the following cell to load the tokenizer and declare the base class used for the dataset setup.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the tokenizer</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">TextClassificationData</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class used for defining the text classification dataset being used. Defines Hugging Face datasets.Dataset</span>
+<span class="sd">    objects for train and evaluations splits, along with helper functions for preprocessing the dataset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">sentence1_key</span><span class="p">,</span> <span class="n">sentence2_key</span><span class="p">,</span> <span class="n">label_key</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">tokenizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_name</span> <span class="o">=</span> <span class="n">dataset_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_labels</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Tokenized train and eval ds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_ds</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Column keys</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sentence1_key</span> <span class="o">=</span> <span class="n">sentence1_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span> <span class="o">=</span> <span class="n">sentence2_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_key</span> <span class="o">=</span> <span class="n">label_key</span>
+
+    <span class="k">def</span> <span class="nf">tokenize_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">examples</span><span class="p">):</span>
+        <span class="c1"># Define the tokenizer args, depending on if the data has 2 sentences or just 1</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">((</span><span class="n">examples</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sentence1_key</span><span class="p">],)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span> <span class="ow">is</span> <span class="kc">None</span> \
+                 <span class="k">else</span> <span class="p">(</span><span class="n">examples</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sentence1_key</span><span class="p">],</span> <span class="n">examples</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;max_length&quot;</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">tokenize_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+        <span class="c1"># Apply the tokenize function to the dataset</span>
+        <span class="n">tokenized_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokenize_function</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Remove the raw text from the tokenized dataset</span>
+        <span class="n">raw_text_columns</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sentence1_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span> <span class="k">else</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sentence1_key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">tokenized_dataset</span><span class="o">.</span><span class="n">remove_columns</span><span class="p">(</span><span class="n">raw_text_columns</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">define_train_eval_splits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">train_split_name</span><span class="p">,</span> <span class="n">eval_split_name</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eval_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">train_split_name</span><span class="p">]</span><span class="o">.</span><span class="n">shuffle</span><span class="p">()</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">train_size</span><span class="p">))</span> <span class="k">if</span> <span class="n">train_size</span> \
+            <span class="k">else</span> <span class="n">tokenized_dataset</span><span class="p">[</span><span class="n">train_split_name</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_ds</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">eval_split_name</span><span class="p">]</span><span class="o">.</span><span class="n">shuffle</span><span class="p">()</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">eval_size</span><span class="p">))</span> <span class="k">if</span> <span class="n">eval_size</span> \
+            <span class="k">else</span> <span class="n">tokenized_dataset</span><span class="p">[</span><span class="n">eval_split_name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">get_label_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_labels</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_labels</span><span class="o">.</span><span class="n">names</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Class labels were not defined&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">display_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_name</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+        <span class="c1"># Display a sample of the raw data</span>
+        <span class="n">sentence1_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">split_name</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">sentence1_key</span><span class="p">][:</span><span class="n">sample_size</span><span class="p">]</span>
+        <span class="n">sentence2_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">split_name</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span><span class="p">][:</span><span class="n">sample_size</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">label_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">split_name</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">label_key</span><span class="p">][:</span><span class="n">sample_size</span><span class="p">]</span>
+        <span class="n">dataset_sample</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sentence1_sample</span><span class="p">,</span> <span class="n">sentence2_sample</span><span class="p">,</span> <span class="n">label_sample</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span> \
+            <span class="k">else</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sentence1_sample</span><span class="p">,</span> <span class="n">label_sample</span><span class="p">)</span>
+
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sentence1_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_key</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentence2_key</span> <span class="k">else</span> \
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sentence1_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_key</span><span class="p">]</span>
+
+        <span class="c1"># Display the sample using a dataframe</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset_sample</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sample</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">hide_index</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Now that the base class is defined, either run <a class="reference internal" href="#Option-A:-Use-a-Hugging-Face-dataset"><span class="std std-ref">Option A to use the Hugging Face Dataset catalog</span></a> or <a class="reference internal" href="#Option-B:-Use-a-custom-dataset"><span class="std std-ref">Option B for a custom dataset</span></a> downloaded from online or from your local system.</p>
+<section id="Option-A:-Use-a-Hugging-Face-dataset">
+<h3>Option A: Use a Hugging Face dataset<a class="headerlink" href="#Option-A:-Use-a-Hugging-Face-dataset" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://huggingface.co/datasets">Hugging Face Datasets</a> has a catalog of datasets that can be specified by name. Information about the dataset is available in the catalog (including information on the size of the dataset and the splits).</p>
+<p>The next cell gets the <a class="reference external" href="https://huggingface.co/datasets/imdb">IMDb movie review dataset</a> using the Hugging Face datasets API. If the notebook is executed multiple times, the dataset will be used from the dataset directory, to speed up the time that it takes to run.</p>
+<p>The IMDb dataset in Hugging Face has 3 splits: <code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">test</span></code>, and <code class="docutils literal notranslate"><span class="pre">unsupervised</span></code>. This notebook will be using data from the <code class="docutils literal notranslate"><span class="pre">train</span></code> split for training and data from the <code class="docutils literal notranslate"><span class="pre">test</span></code> split for evaluation. The data has 2 columns: <code class="docutils literal notranslate"><span class="pre">text</span></code> (string with the movie review) and <code class="docutils literal notranslate"><span class="pre">label</span></code> (integer class label). The code in the next cell is setup to run using the IMDb dataset, so note that if a different dataset is being used, you may need to change the split names and/or the column names.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">HFDSTextClassificationData</span><span class="p">(</span><span class="n">TextClassificationData</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class used for loading and preprocessing text classification datasets from the Hugging Face datasets catalog</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">dataset_dir</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">train_size</span><span class="p">,</span> <span class="n">eval_size</span><span class="p">,</span> <span class="n">train_split_name</span><span class="p">,</span>
+                 <span class="n">eval_split_name</span><span class="p">,</span> <span class="n">sentence1_key</span><span class="p">,</span> <span class="n">sentence2_key</span><span class="p">,</span> <span class="n">label_key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the HFDSTextClassificationData class for a text classification dataset from Hugging Face.</span>
+
+<span class="sd">        :param tokenizer: Tokenizer to preprocess the dataset</span>
+<span class="sd">        :param dataset_dir: Cache directory used when loading the dataset</span>
+<span class="sd">        :param dataset_name: Name of the dataset to load from the Hugging Face catalog</span>
+<span class="sd">        :param train_size: Size of the training dataset. For quicker training or debug, use a subset of the data.</span>
+<span class="sd">                           Set to `None` to use all the data.</span>
+<span class="sd">        :param eval_size: Size of the evaluation dataset.</span>
+<span class="sd">        :param train_split_name: String specifying which split to load for training (e.g. &quot;train[:80%]&quot;). See the</span>
+<span class="sd">                                 https://www.tensorflow.org/datasets/splits documentation for more information on</span>
+<span class="sd">                                 defining splits.</span>
+<span class="sd">        :param eval_split_name: String specifying the split to load for evaluation.</span>
+<span class="sd">        :param sentence1_key: Name of the sentence1 column</span>
+<span class="sd">        :param sentence2_key: Name of the sentence2 column or `None` if there&#39;s only one text column</span>
+<span class="sd">        :param label_key: Name of the label column</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Init base class</span>
+        <span class="n">TextClassificationData</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">sentence1_key</span><span class="p">,</span> <span class="n">sentence2_key</span><span class="p">,</span> <span class="n">label_key</span><span class="p">)</span>
+
+        <span class="c1"># Load the dataset from the Hugging Face dataset API</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">dataset_dir</span><span class="p">)</span>
+
+        <span class="c1"># Tokenize the dataset</span>
+        <span class="n">tokenized_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenize_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># Get the training and eval dataset based on the specified dataset sizes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_train_eval_splits</span><span class="p">(</span><span class="n">tokenized_dataset</span><span class="p">,</span> <span class="n">train_split_name</span><span class="p">,</span> <span class="n">eval_split_name</span><span class="p">,</span> <span class="n">train_size</span><span class="p">,</span> <span class="n">eval_size</span><span class="p">)</span>
+
+        <span class="c1"># Save the class label information to use later when predicting</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">train_split_name</span><span class="p">]</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">label_key</span><span class="p">]</span>
+
+<span class="c1"># Name of the Hugging Face dataset</span>
+<span class="n">dataset_name</span> <span class="o">=</span> <span class="s2">&quot;imdb&quot;</span>
+
+<span class="c1"># For quicker training and debug runs, use a subset of the dataset by specifying the size of the train/eval datasets.</span>
+<span class="c1"># Set the sizes `None` to use the full dataset. The full IMDb dataset has 25,000 training and 25,000 test examples.</span>
+<span class="n">train_dataset_size</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">eval_dataset_size</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="c1"># Name of the columns in the dataset (the column names may vary if you are not using the IMDb dataset)</span>
+<span class="n">sentence1_key</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span>
+<span class="n">sentence2_key</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">label_key</span> <span class="o">=</span> <span class="s2">&quot;label&quot;</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">HFDSTextClassificationData</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">dataset_dir</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">train_dataset_size</span><span class="p">,</span> <span class="n">eval_dataset_size</span><span class="p">,</span>
+                                     <span class="n">Split</span><span class="o">.</span><span class="n">TRAIN</span><span class="p">,</span> <span class="n">Split</span><span class="o">.</span><span class="n">TEST</span><span class="p">,</span> <span class="n">sentence1_key</span><span class="p">,</span> <span class="n">sentence2_key</span><span class="p">,</span> <span class="n">label_key</span><span class="p">)</span>
+
+<span class="c1"># Print a sample of the data</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">display_sample</span><span class="p">(</span><span class="n">Split</span><span class="o">.</span><span class="n">TRAIN</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Skip to Step 3 Get the model and setup the Trainer to continue using the dataset from the Hugging Face catalog.</p>
+</section>
+<section id="Option-B:-Use-a-custom-dataset">
+<h3>Option B: Use a custom dataset<a class="headerlink" href="#Option-B:-Use-a-custom-dataset" title="Permalink to this heading"></a></h3>
+<p>Instead of using a dataset from the Hugging Face dataset catalog, a custom dataset from your local system or a download can be used.</p>
+<p>In this example, we download the <a class="reference external" href="https://archive-beta.ics.uci.edu/ml/datasets/sms+spam+collection">SMS Spam Collection dataset</a>. The zip file has a single tab-separated value file with two columns. The first column is the label (<code class="docutils literal notranslate"><span class="pre">ham</span></code> or <code class="docutils literal notranslate"><span class="pre">spam</span></code>) and the second column is the text of the SMS message:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;ham or spam&gt;   &lt;text&gt;
+&lt;ham or spam&gt;   &lt;text&gt;
+&lt;ham or spam&gt;   &lt;text&gt;
+...
+</pre></div>
+</div>
+<p>If you are using a custom dataset that has a similarly formatted csv or tsv file, you can use the class defined below. Create your object by passing in custom values for csv file name, delimiter, the label map, mapping function, etc.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CustomCsvTextClassificationData</span><span class="p">(</span><span class="n">TextClassificationData</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class used for loading and preprocessing text classification datasets from CSV files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">dataset_dir</span><span class="p">,</span> <span class="n">data_files</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">label_names</span><span class="p">,</span> <span class="n">sentence1_key</span><span class="p">,</span> <span class="n">sentence2_key</span><span class="p">,</span>
+                 <span class="n">label_key</span><span class="p">,</span> <span class="n">train_percent</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">eval_percent</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eval_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">map_function</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Intialize the CustomCsvTextClassificationData class for a text classification</span>
+<span class="sd">        dataset. The classes uses the Hugging Face datasets API to load the CSV file,</span>
+<span class="sd">        and split it into a train and eval datasets based on the specified percentages.</span>
+<span class="sd">        If train_size and eval_size are also defined, the datasets are reduced to the</span>
+<span class="sd">        specified number of examples.</span>
+
+<span class="sd">        :param tokenizer: Tokenizer to preprocess the dataset</span>
+<span class="sd">        :param dataset_name: Dataset name for identification purposes</span>
+<span class="sd">        :param dataset_dir: Directory where the csv file(s) are located</span>
+<span class="sd">        :param data_files: List of data file names</span>
+<span class="sd">        :param delimiter: Delimited for the csv files</span>
+<span class="sd">        :param label_names: List of label names</span>
+<span class="sd">        :param sentence1_key: Name of the sentence1 column</span>
+<span class="sd">        :param sentence2_key: Name of the sentence2 column or `None` if there&#39;s only one text column</span>
+<span class="sd">        :param label_key: Name of the label column</span>
+<span class="sd">        :param train_percent: Decimal value for the percentage of the dataset that should be used for training</span>
+<span class="sd">                              (e.g. 0.8 for 80%)</span>
+<span class="sd">        :param eval_percent: Decimal value for the percentage of the dataset that should used for validation</span>
+<span class="sd">                             (e.g. 0.2 for 20%)</span>
+<span class="sd">        :param train_size: Size of the training dataset. For quicker training or debug, use a subset of the data.</span>
+<span class="sd">                           Set to `None` to use all the data.</span>
+<span class="sd">        :param eval_size: Size of the eval dataset. Set to `None` to use all the data.</span>
+<span class="sd">        :param map_function: (Optional) Map function to apply to the dataset. For example, if the csv file has string</span>
+<span class="sd">                             labels instead of numerical values, map function can do the conversion.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Init base class</span>
+        <span class="n">TextClassificationData</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">sentence1_key</span><span class="p">,</span> <span class="n">sentence2_key</span><span class="p">,</span> <span class="n">label_key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">train_percent</span> <span class="o">+</span> <span class="n">eval_percent</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The combined value of the train percentage and eval percentage &quot;</span> \
+                             <span class="s2">&quot;cannot be greater than 1&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create a list of the column names</span>
+        <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">label_key</span><span class="p">,</span> <span class="n">sentence1_key</span><span class="p">,</span> <span class="n">sentence2_key</span><span class="p">]</span> <span class="k">if</span> <span class="n">sentence2_key</span> <span class="k">else</span> <span class="p">[</span><span class="n">label_key</span><span class="p">,</span> <span class="n">sentence1_key</span><span class="p">]</span>
+
+        <span class="c1"># Load the dataset using the Hugging Face API</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">data_files</span><span class="o">=</span><span class="n">data_files</span><span class="p">,</span> <span class="n">column_names</span><span class="o">=</span><span class="n">column_names</span><span class="p">)</span>
+
+        <span class="c1"># Optionally map the dataset labels using the map_function</span>
+        <span class="k">if</span> <span class="n">map_function</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">map_function</span><span class="p">)</span>
+
+        <span class="c1"># Setup the class labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_labels</span> <span class="o">=</span> <span class="n">ClassLabel</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">label_names</span><span class="p">),</span> <span class="n">names</span><span class="o">=</span><span class="n">label_names</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">Split</span><span class="o">.</span><span class="n">TRAIN</span><span class="p">]</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">label_key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_labels</span>
+
+        <span class="c1"># Split the dataset based on the percentages defined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">Split</span><span class="o">.</span><span class="n">TRAIN</span><span class="p">]</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">train_size</span><span class="o">=</span><span class="n">train_percent</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">eval_percent</span><span class="p">)</span>
+
+        <span class="c1"># Tokenize the dataset</span>
+        <span class="n">tokenized_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenize_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># Get the training and eval dataset based on the specified dataset sizes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_train_eval_splits</span><span class="p">(</span><span class="n">tokenized_dataset</span><span class="p">,</span> <span class="n">Split</span><span class="o">.</span><span class="n">TRAIN</span><span class="p">,</span> <span class="n">Split</span><span class="o">.</span><span class="n">TEST</span><span class="p">,</span> <span class="n">train_size</span><span class="p">,</span> <span class="n">eval_size</span><span class="p">)</span>
+
+
+<span class="c1"># Modify the variables below to use a different dataset or a csv file on your local system.</span>
+<span class="c1"># The csv_path variable should be pointing to a csv file with 2 columns (the label and the text)</span>
+<span class="n">dataset_url</span> <span class="o">=</span> <span class="s2">&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip&quot;</span>
+<span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s2">&quot;smsspamcollection&quot;</span><span class="p">)</span>
+<span class="n">csv_name</span> <span class="o">=</span> <span class="s2">&quot;SMSSpamCollection&quot;</span>
+<span class="n">delimiter</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span>
+<span class="n">label_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ham&quot;</span><span class="p">,</span> <span class="s2">&quot;spam&quot;</span><span class="p">]</span>
+
+<span class="c1"># Rename the file to include the csv extension so that the dataset API knows how to load the file</span>
+<span class="n">renamed_csv</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">csv_name</span><span class="p">)</span>
+
+<span class="c1"># If we don&#39;t already have the csv file, download and extract the zip file to get it.</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="n">csv_name</span><span class="p">))</span> <span class="ow">and</span> \
+                      <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="n">renamed_csv</span><span class="p">)):</span>
+    <span class="n">download_and_extract_zip_file</span><span class="p">(</span><span class="n">dataset_url</span><span class="p">,</span> <span class="n">dataset_dir</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="n">renamed_csv</span><span class="p">)):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="n">csv_name</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="n">renamed_csv</span><span class="p">))</span>
+
+<span class="c1"># Columns</span>
+<span class="n">sentence1_key</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span>
+<span class="n">sentence2_key</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">label_key</span> <span class="o">=</span> <span class="s2">&quot;label&quot;</span>
+
+<span class="c1"># Map function to translate labels in the csv file to numerical values when loading the dataset</span>
+<span class="k">def</span> <span class="nf">map_spam</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
+    <span class="n">example</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;spam&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">example</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomCsvTextClassificationData</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="s2">&quot;smsspamcollection&quot;</span><span class="p">,</span> <span class="n">dataset_dir</span><span class="p">,</span> <span class="p">[</span><span class="n">renamed_csv</span><span class="p">],</span> <span class="n">delimiter</span><span class="p">,</span>
+                                          <span class="n">label_names</span><span class="p">,</span> <span class="n">sentence1_key</span><span class="p">,</span> <span class="n">sentence2_key</span><span class="p">,</span> <span class="n">label_key</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                                          <span class="n">eval_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">map_function</span><span class="o">=</span><span class="n">map_spam</span><span class="p">)</span>
+
+<span class="c1"># Print a sample of the data</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">display_sample</span><span class="p">(</span><span class="n">Split</span><span class="o">.</span><span class="n">TRAIN</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="3.-Prepare-the-Model-for-Fine-Tuning-and-Evaluation">
+<h2>3. Prepare the Model for Fine Tuning and Evaluation<a class="headerlink" href="#3.-Prepare-the-Model-for-Fine-Tuning-and-Evaluation" title="Permalink to this heading"></a></h2>
+<p>The notebook has two options to train the model.</p>
+<ul class="simple">
+<li><p>Option A: Use the <code class="docutils literal notranslate"><span class="pre">`Trainer</span></code> &lt;<a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer">https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer</a>&gt;`__ API from Hugging Face.</p></li>
+<li><p>Option B: Use the native PyTorch API.</p></li>
+</ul>
+<p>In both cases, the model ends up being a transformers model and depending on the class constructor arguments, the appropriate API is selected.</p>
+<p>Execute the following cell to declare the base class used for the Text Classification Model setup.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TextClassificationModel</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class used for model loading, training and evaluation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">num_labels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">training_args</span><span class="p">:</span> <span class="n">TrainingArguments</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ipex_optimize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the TextClassificationModel class for a text classification model with</span>
+<span class="sd">        PyTorch. The class uses the model_name to load the pre-trained PyTorch model from</span>
+<span class="sd">        Hugging Face. If the training_args are given then the Trainer API is selected for</span>
+<span class="sd">        training and evaluation of the model otherwise native PyTorch API is selected for</span>
+<span class="sd">        model training and evaluation</span>
+
+<span class="sd">        :param model_name: Name of the pre-trained model to load from Hugging Face</span>
+<span class="sd">        :param num_labels: Number of class labels</span>
+<span class="sd">        :param training_args: A TrainingArguments object if using the Trainer API to train</span>
+<span class="sd">                              the model. If None, native PyTorch API is used for training.</span>
+<span class="sd">        :param ipex_optimize: If True, then the model is optimized to run on intel hardware.</span>
+<span class="sd">        :param device: Device to run on the PyTorch model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_labels</span> <span class="o">=</span> <span class="n">num_labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training_args</span> <span class="o">=</span> <span class="n">training_args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">train_ds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_ds</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">eval_ds</span>
+
+        <span class="c1"># Load the model using the pretrained weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="n">num_labels</span><span class="p">)</span>
+
+        <span class="c1"># Apply the ipex optimize function to the model</span>
+        <span class="k">if</span> <span class="n">ipex_optimize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">ipex</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+              <span class="n">dataset</span><span class="p">:</span> <span class="n">TextClassificationData</span><span class="p">,</span>
+              <span class="n">optimizers</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">LambdaLR</span><span class="p">],</span>
+              <span class="n">num_train_epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+              <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+              <span class="n">compute_metrics</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">shuffle_samples</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+             <span class="p">):</span>
+
+        <span class="c1"># If training_args are given, we use the `Trainer` API to train the model</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_args</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                                   <span class="n">args</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">training_args</span><span class="p">,</span>
+                                   <span class="n">train_dataset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span><span class="p">,</span>
+                                   <span class="n">eval_dataset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_ds</span><span class="p">,</span>
+                                   <span class="n">optimizers</span><span class="o">=</span><span class="n">optimizers</span><span class="p">,</span>
+                                   <span class="n">compute_metrics</span><span class="o">=</span><span class="n">compute_metrics</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+
+        <span class="c1"># If training_args are not given, we use native PyTorch API to train the model</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="c1"># Rename the `label` column to `labels` because the model expects the argument to be named `labels`</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span><span class="o">.</span><span class="n">rename_column</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;labels&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Set the format of the dataset to return PyTorch tensors instead of lists</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span><span class="o">.</span><span class="n">set_format</span><span class="p">(</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
+
+            <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">shuffle_samples</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+
+            <span class="c1"># Unpack the `optimizers` parameter to get optimizer and lr_scheduler</span>
+            <span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_scheduler</span> <span class="o">=</span> <span class="n">optimizers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">optimizers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># Define number of training steps for the training progress bar</span>
+            <span class="n">num_training_steps</span> <span class="o">=</span> <span class="n">num_train_epochs</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_dataloader</span><span class="p">)</span>
+            <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_training_steps</span><span class="p">))</span>
+
+            <span class="c1"># Training loop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_train_epochs</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">train_dataloader</span><span class="p">:</span>
+                    <span class="n">batch</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">batch</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                    <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">batch</span><span class="p">)</span>
+                    <span class="n">loss</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">loss</span>
+                    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+                    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                    <span class="n">lr_scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                    <span class="n">progress_bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="n">metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">metrics</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Rename the `label` column to `labels` because the model expects the argument to be named `labels`</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">eval_ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_ds</span><span class="o">.</span><span class="n">rename_column</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;labels&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Set the format of the dataset to return PyTorch tensors instead of lists</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">eval_ds</span><span class="o">.</span><span class="n">set_format</span><span class="p">(</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
+
+            <span class="n">eval_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_ds</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+            <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eval_dataloader</span><span class="p">)))</span>
+
+            <span class="n">metric</span> <span class="o">=</span> <span class="n">load_metric</span><span class="p">(</span><span class="s2">&quot;accuracy&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">eval_dataloader</span><span class="p">:</span>
+                <span class="n">batch</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">batch</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                    <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">batch</span><span class="p">)</span>
+
+                <span class="n">logits</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">logits</span>
+                <span class="n">predictions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">metric</span><span class="o">.</span><span class="n">add_batch</span><span class="p">(</span><span class="n">predictions</span><span class="o">=</span><span class="n">predictions</span><span class="p">,</span> <span class="n">references</span><span class="o">=</span><span class="n">batch</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">])</span>
+                <span class="n">progress_bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="n">metric</span><span class="o">.</span><span class="n">compute</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_input_text</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_input_text</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">raw_input_text</span> <span class="o">=</span> <span class="p">[</span><span class="n">raw_input_text</span><span class="p">]</span>
+
+        <span class="c1"># Encode the raw text using the tokenizer</span>
+        <span class="n">encoded_input</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">raw_input_text</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Input the encoded text(s) to the model and get the predicted results</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">encoded_input</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">predictions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Translate the predictions to class label strings</span>
+        <span class="n">prediction_labels</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">class_labels</span><span class="o">.</span><span class="n">int2str</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+
+        <span class="c1"># Create a dataframe to display the results</span>
+        <span class="n">result_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">raw_text_input</span><span class="p">,</span> <span class="n">prediction_labels</span><span class="p">)]</span>
+        <span class="n">result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">result_list</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Input Text&quot;</span><span class="p">,</span> <span class="s2">&quot;Predicted Label&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">result_df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">hide_index</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">get_label_names</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<p>Now that the <code class="docutils literal notranslate"><span class="pre">TextClassificationModel</span></code> class is defined, either use Option A to use the <code class="docutils literal notranslate"><span class="pre">`Trainer</span></code> &lt;<a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer">https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer</a>&gt;`__ API from Hugging Face or Option B to use the native PyTorch API.</p>
+<section id="Option-A:-Use-the-`Trainer-&lt;https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer&gt;`__-API-from-Hugging-Face">
+<h3>Option A: Use the <code class="docutils literal notranslate"><span class="pre">`Trainer</span></code> &lt;<a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer">https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer</a>&gt;`__ API from Hugging Face<a class="headerlink" href="#Option-A:-Use-the-`Trainer-<https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer>`__-API-from-Hugging-Face" title="Permalink to this heading"></a></h3>
+<p>This step gets the pretrained model from <a class="reference external" href="https://huggingface.co/models">Hugging Face</a> and sets up the <a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.TrainingArguments">TrainingArguments</a> and the <a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer">Trainer</a>. For simplicity, this example is using default values for most of the training args, but we are specifying our output directory and the number of
+training epochs. If your output directory already has checkpoints from a previous run, training will resume from the last checkpoint. The <code class="docutils literal notranslate"><span class="pre">overwrite_output_dir</span></code> training argument can be set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if you want to instead overwrite previously generated checkpoints.</p>
+<blockquote>
+<div><p>Note that it is expected to see a warning at this step about some weights not being used. This is because the pretraining head from the original model is being replaced with a classification head.</p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_train_epochs</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">num_labels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">get_label_names</span><span class="p">())</span>
+
+<span class="c1"># Define a TrainingArguments object for the Trainer API to use.</span>
+<span class="n">training_args</span> <span class="o">=</span> <span class="n">TrainingArguments</span><span class="p">(</span><span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">num_train_epochs</span><span class="o">=</span><span class="n">num_train_epochs</span><span class="p">)</span>
+
+<span class="c1"># Get the model from Hugging Face. Since we are specifying training_args, the model is trained and</span>
+<span class="c1"># evaluated with the Trainer API.</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">TextClassificationModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="n">num_labels</span><span class="p">,</span> <span class="n">training_args</span><span class="o">=</span><span class="n">training_args</span><span class="p">)</span>
+
+<span class="c1"># Define model training parameters</span>
+<span class="n">learning_rate</span>      <span class="o">=</span> <span class="mf">5e-5</span>
+<span class="n">optimizer</span>          <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+<span class="n">num_training_steps</span> <span class="o">=</span> <span class="n">num_train_epochs</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">train_ds</span><span class="p">)</span>
+<span class="n">metric</span>             <span class="o">=</span> <span class="n">load_metric</span><span class="p">(</span><span class="s2">&quot;accuracy&quot;</span><span class="p">)</span>
+<span class="n">lr_scheduler</span>       <span class="o">=</span> <span class="n">get_scheduler</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">num_warmup_steps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_training_steps</span><span class="o">=</span><span class="n">num_training_steps</span>
+                     <span class="p">)</span>
+
+<span class="c1"># Helper function for the Trainer API to compute metrics</span>
+<span class="k">def</span> <span class="nf">compute_metrics</span><span class="p">(</span><span class="n">eval_pred</span><span class="p">):</span>
+    <span class="n">logits</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">eval_pred</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">metric</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">predictions</span><span class="o">=</span><span class="n">predictions</span><span class="p">,</span> <span class="n">references</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Train and evaluate the model with the Trainer API</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">,</span>
+    <span class="n">optimizers</span><span class="o">=</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="p">),</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="n">num_train_epochs</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+    <span class="n">compute_metrics</span><span class="o">=</span><span class="n">compute_metrics</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Option-B:-Use-the-native-PyTorch-API">
+<h3>Option B: Use the native PyTorch API<a class="headerlink" href="#Option-B:-Use-the-native-PyTorch-API" title="Permalink to this heading"></a></h3>
+<p>This step gets the pretrained model from <a class="reference external" href="https://huggingface.co/models">Hugging Face</a> and uses native PyTorch API to train and evaluate the model.</p>
+<blockquote>
+<div><p>Note that it is expected to see a warning at this step about some weights not being used. This is because the pretraining head from the original model is being replaced with a classification head.</p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_train_epochs</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">num_labels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">get_label_names</span><span class="p">())</span>
+
+<span class="c1"># Get the model from Hugging Face. Since we are not specifying training_args, the model is trained and</span>
+<span class="c1"># evaluated with the native PyTorch API.</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">TextClassificationModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="n">num_labels</span><span class="p">)</span>
+
+<span class="c1"># Define model training parameters</span>
+<span class="n">learning_rate</span>      <span class="o">=</span> <span class="mf">5e-5</span>
+<span class="n">optimizer</span>          <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+<span class="n">num_training_steps</span> <span class="o">=</span> <span class="n">num_train_epochs</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">train_ds</span><span class="p">)</span>
+<span class="n">lr_scheduler</span>       <span class="o">=</span> <span class="n">get_scheduler</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">num_warmup_steps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_training_steps</span><span class="o">=</span><span class="n">num_training_steps</span>
+                     <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Train and evaluate the model with the native PyTorch API</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">,</span>
+    <span class="n">optimizers</span><span class="o">=</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="p">),</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="n">num_train_epochs</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="4.-Export-the-model">
+<h2>4. Export the model<a class="headerlink" href="#4.-Export-the-model" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save the model to our output directory</span>
+<span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="5.-Reload-the-model-and-make-predictions">
+<h2>5. Reload the model and make predictions<a class="headerlink" href="#5.-Reload-the-model-and-make-predictions" title="Permalink to this heading"></a></h2>
+<p>The output directory is used to reload the model. In the next cell, we evalute the reloaded model to verify that we are getting the same metrics that we saw after fine tuning.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reloaded_model</span> <span class="o">=</span> <span class="n">TextClassificationModel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+<span class="n">reloaded_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Next, we demonstrate how encode raw text input and get predictions from the reloaded model.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">reloaded_model</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup some raw text input</span>
+<span class="n">raw_text_input</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;It was okay. I finished it, but wouldn&#39;t watch it again.&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;So bad&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;Definitely not my favorite&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;Highly recommended&quot;</span><span class="p">]</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">raw_text_input</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="6.-Get-Explainations-with-Intel-Explainable-AI-Tools">
+<h2>6. Get Explainations with Intel Explainable AI Tools<a class="headerlink" href="#6.-Get-Explainations-with-Intel-Explainable-AI-Tools" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">explainer</span> <span class="kn">import</span> <span class="n">attributions</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">softmax</span>
+<span class="c1"># Define a prediction function</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">encoded_input</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;max_length&#39;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">encoded_input</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">softmax</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">logits</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">explainer</span> <span class="kn">import</span> <span class="n">attributions</span>
+<span class="c1"># Get shap values</span>
+<span class="n">text_for_shap</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">][:</span><span class="mi">10</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+<span class="n">partition_explainer</span> <span class="o">=</span> <span class="n">attributions</span><span class="o">.</span><span class="n">partition_text_explainer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">class_labels</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="n">text_for_shap</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\W+&quot;</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">partition_explainer</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Citations">
+<h2>Citations<a class="headerlink" href="#Citations" title="Permalink to this heading"></a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@InProceedings{maas-EtAl:2011:ACL-HLT2011,
+  author    = {Maas, Andrew L.  and  Daly, Raymond E.  and  Pham, Peter T.  and  Huang, Dan  and  Ng, Andrew Y.  and  Potts, Christopher},
+  title     = {Learning Word Vectors for Sentiment Analysis},
+  booktitle = {Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies},
+  month     = {June},
+  year      = {2011},
+  address   = {Portland, Oregon, USA},
+  publisher = {Association for Computational Linguistics},
+  pages     = {142--150},
+  url       = {http://www.aclweb.org/anthology/P11-1015}
+}
+
+@misc{misc_sms_spam_collection_228,
+  author       = {Almeida, Tiago},
+  title        = {{SMS Spam Collection}},
+  year         = {2012},
+  howpublished = {UCI Machine Learning Repository}
+}
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

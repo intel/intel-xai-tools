@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>model_card_gen.model_card_gen &mdash; Intel® Explainable AI Tools 0.5.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/design-tabs.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+              <div class="version">
+                0.5.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/IntelAI/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">model_card_gen.model_card_gen</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for model_card_gen.model_card_gen</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2022 Intel Corporation</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module allows users to classes for performing end to end workflows</span>
+<span class="sd">around model card generation.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">#Base</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pkgutil</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="c1"># External</span>
+<span class="kn">import</span> <span class="nn">jinja2</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">tensorflow_data_validation</span> <span class="k">as</span> <span class="nn">tfdv</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
+<span class="c1"># Internal</span>
+<span class="kn">from</span> <span class="nn">model_card_gen.analyze</span> <span class="kn">import</span> <span class="n">get_analysis</span>
+<span class="kn">from</span> <span class="nn">model_card_gen.model_card</span> <span class="kn">import</span> <span class="n">ModelCard</span>
+<span class="kn">from</span> <span class="nn">model_card_gen.graphics.add_graphics</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">add_dataset_feature_statistics_plots</span><span class="p">,</span>
+    <span class="n">add_overview_graphs</span><span class="p">,</span>
+    <span class="n">add_eval_result_plots</span><span class="p">,</span>
+    <span class="n">add_eval_result_slicing_metrics</span><span class="p">)</span>
+<span class="c1"># Typing</span>
+<span class="kn">import</span> <span class="nn">tensorflow_model_analysis</span> <span class="k">as</span> <span class="nn">tfma</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="n">DataFormat</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">Text</span><span class="p">]</span>
+
+<span class="n">_UI_TEMPLATES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;template/html/default_template.html.jinja&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;template/html/style/default_style.html.jinja&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;template/html/macros/default_macros.html.jinja&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;template/html/js/plotly_js_header.html.jinja&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">_DEFAULT_UI_TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;default_template.html.jinja&#39;</span><span class="p">)</span>
+<span class="n">_MC_JSON_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;model_card.json&#39;</span><span class="p">)</span>
+<span class="n">_TEMPLATE_DIR</span> <span class="o">=</span> <span class="s1">&#39;template&#39;</span>
+<span class="n">_MODEL_CARDS_DIR</span> <span class="o">=</span> <span class="s1">&#39;model_cards&#39;</span>
+<span class="n">_DEFAULT_MODEL_CARD_FILE_NAME</span> <span class="o">=</span> <span class="s1">&#39;model_card.html&#39;</span>
+
+<div class="viewcode-block" id="ModelCardGen"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen">[docs]</a><span class="k">class</span> <span class="nc">ModelCardGen</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate ModelCard from with TFMA</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_sets (dict): dictionary with keys of name of dataset and value to path</span>
+<span class="sd">        model_path (str): representing TF SavedModel path</span>
+<span class="sd">        eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path</span>
+<span class="sd">        model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema</span>
+<span class="sd">        eval_results (tfma.EvalResults): pre-generated tfma results for when you do not wish to run evaluator</span>
+<span class="sd">        output_dir (str): representing of where to output model card</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">data_sets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Text</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+                 <span class="n">model_path</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">eval_config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">tfma</span><span class="o">.</span><span class="n">EvalConfig</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">model_card</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ModelCard</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">eval_results</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">tfma</span><span class="o">.</span><span class="n">EvalResult</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_sets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_data_sets</span><span class="p">(</span><span class="n">data_sets</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_path</span> <span class="o">=</span> <span class="n">model_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_config</span> <span class="o">=</span> <span class="n">eval_config</span>
+        <span class="c1"># Local asset paths</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="ow">or</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mc_json_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">_MC_JSON_FILE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mc_template_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">_TEMPLATE_DIR</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model_cards_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">_MODEL_CARDS_DIR</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_card</span><span class="p">,</span> <span class="n">ModelCard</span><span class="p">):</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">model_card</span> <span class="o">=</span> <span class="n">model_card</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_card</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_card</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">model_card</span> <span class="o">=</span> <span class="n">ModelCardGen</span><span class="o">.</span><span class="n">_read_json</span><span class="p">(</span><span class="n">model_card</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">model_card</span> <span class="o">=</span> <span class="n">ModelCard</span><span class="p">()</span>
+        <span class="c1"># Generated Attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_stats</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_results</span> <span class="o">=</span> <span class="n">eval_results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_card_html</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+<div class="viewcode-block" id="ModelCardGen.generate"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen.generate">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
+                 <span class="n">data_sets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">DataFormat</span><span class="p">],</span>
+                 <span class="n">eval_config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">tfma</span><span class="o">.</span><span class="n">EvalConfig</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+                 <span class="n">model_path</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">model_card</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ModelCard</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Text</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Class Factory starting TFMA analysis and generating ModelCard</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data_sets (dict): dictionary with keys of name of dataset and value to path</span>
+<span class="sd">            model_path (str): representing TF SavedModel path</span>
+<span class="sd">            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path</span>
+<span class="sd">            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema </span>
+<span class="sd">            output_dir (str): representing of where to output model card</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ModelCardGen</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: when invalid value for data_sets argument is empty</span>
+<span class="sd">            TypeError: when data_sets argument is  not type dict</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; from model_card_gen.model_card_gen import ModelCardGen</span>
+<span class="sd">            &gt;&gt;&gt; model_path = &#39;compas/model&#39;</span>
+<span class="sd">            &gt;&gt;&gt; data_paths = {&#39;eval&#39;: &#39;compas/eval.tfrecord&#39;, &#39;train&#39;: &#39;compas/train.tfrecord&#39;}</span>
+<span class="sd">            &gt;&gt;&gt; eval_config = &#39;compas/eval_config.proto&#39;</span>
+<span class="sd">            &gt;&gt;&gt; mcg = ModelCardGen.generate(data_paths, model_path, eval_config) #doctest:+SKIP</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">data_sets</span><span class="p">,</span>
+            <span class="n">model_path</span><span class="p">,</span>
+            <span class="n">eval_config</span><span class="p">,</span>
+            <span class="n">model_card</span><span class="o">=</span><span class="n">model_card</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_results</span> <span class="o">=</span> <span class="n">get_analysis</span><span class="p">(</span><span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span>
+                                         <span class="n">eval_config</span><span class="o">=</span><span class="n">eval_config</span><span class="p">,</span>
+                                         <span class="n">datasets</span><span class="o">=</span><span class="n">data_sets</span><span class="p">,)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_card_html</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_model_card</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+    
+<div class="viewcode-block" id="ModelCardGen.tf_generate"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen.tf_generate">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">tf_generate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
+                 <span class="n">data_sets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">DataFormat</span><span class="p">],</span>
+                 <span class="n">eval_config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">tfma</span><span class="o">.</span><span class="n">EvalConfig</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+                 <span class="n">model_path</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">model_card</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ModelCard</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Text</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Class Factory starting TFMA analysis and generating ModelCard</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data_sets (dict): dictionary with keys of name of dataset and value to path</span>
+<span class="sd">            model_path (str): representing TF SavedModel path</span>
+<span class="sd">            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path</span>
+<span class="sd">            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema </span>
+<span class="sd">            output_dir (str): representing of where to output model card</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ModelCardGen</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: when invalid value for data_sets argument is empty</span>
+<span class="sd">            TypeError: when data_sets argument is  not type dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">model_card_gen.analyze</span> <span class="kn">import</span> <span class="n">TFAnalyzer</span>
+
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">data_sets</span><span class="p">,</span>
+            <span class="n">model_path</span><span class="p">,</span>
+            <span class="n">eval_config</span><span class="p">,</span>
+            <span class="n">model_card</span><span class="o">=</span><span class="n">model_card</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_results</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">TFAnalyzer</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span>
+                <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span>
+                <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+                <span class="n">eval_config</span><span class="o">=</span><span class="n">eval_config</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">data_sets</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_card_html</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_model_card</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ModelCardGen.pt_generate"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen.pt_generate">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">pt_generate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
+                 <span class="n">data_sets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">DataFormat</span><span class="p">],</span>
+                 <span class="n">eval_config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">tfma</span><span class="o">.</span><span class="n">EvalConfig</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+                 <span class="n">model_path</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">model_card</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ModelCard</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Text</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Class Factory starting TFMA analysis and generating ModelCard</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data_sets (dict): dictionary with keys of name of dataset and value to path</span>
+<span class="sd">            model_path (str): representing TF SavedModel path</span>
+<span class="sd">            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path</span>
+<span class="sd">            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema </span>
+<span class="sd">            output_dir (str): representing of where to output model card</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ModelCardGen</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: when invalid value for data_sets argument is empty</span>
+<span class="sd">            TypeError: when data_sets argument is  not type dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">model_card_gen.analyze</span> <span class="kn">import</span> <span class="n">PTAnalyzer</span>
+
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">data_sets</span><span class="p">,</span>
+            <span class="n">model_path</span><span class="p">,</span>
+            <span class="n">eval_config</span><span class="p">,</span>
+            <span class="n">model_card</span><span class="o">=</span><span class="n">model_card</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_results</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">PTAnalyzer</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span>
+                <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span>
+                <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+                <span class="n">eval_config</span><span class="o">=</span><span class="n">eval_config</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">data_sets</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_card_html</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_model_card</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+    
+<div class="viewcode-block" id="ModelCardGen.check_data_sets"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen.check_data_sets">[docs]</a>    <span class="k">def</span> <span class="nf">check_data_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_sets</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks whether data_set object is not empty or not of type dict&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data_sets</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ModelCardGen revieved invalid value for data_sets argument&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_sets</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;ModelCardGen requires data_sets argument to be of type dict&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data_sets</span></div>
+
+<div class="viewcode-block" id="ModelCardGen.get_stats"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen.get_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get statistics_pb2.DatasetFeatureStatisticsList object for each dataset.</span>
+<span class="sd">        Store each result in dictionary with corresponding name of dataset as key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sets</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">tfdv</span><span class="o">.</span><span class="n">generate_statistics_from_tfrecord</span><span class="p">(</span><span class="n">data_location</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sets</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sets</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">tfdv</span><span class="o">.</span><span class="n">generate_statistics_from_dataframe</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sets</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
+<div class="viewcode-block" id="ModelCardGen.build_model_card"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen.build_model_card">[docs]</a>    <span class="k">def</span> <span class="nf">build_model_card</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build graphics and add them to model card&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaffold_assets</span><span class="p">()</span>
+        <span class="c1"># Add Dataset Statistics</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_stats</span><span class="p">:</span>
+            <span class="n">add_dataset_feature_statistics_plots</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_card</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_stats</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_card</span><span class="o">.</span><span class="n">model_parameters</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="c1"># Make sure graphs are ordered the same</span>
+                <span class="n">dataset</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">collection</span><span class="p">,</span>
+                    <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># Add Evaluation Statistics</span>
+        <span class="k">for</span> <span class="n">eval_result</span><span class="p">,</span> <span class="n">dataset_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_results</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sets</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">add_overview_graphs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_card</span><span class="p">,</span> <span class="n">eval_result</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">)</span>
+            <span class="n">add_eval_result_plots</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_card</span><span class="p">,</span> <span class="n">eval_result</span><span class="p">)</span>
+            <span class="n">add_eval_result_slicing_metrics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_card</span><span class="p">,</span> <span class="n">eval_result</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_model_card</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_card</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">export_format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_card</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelCardGen.update_model_card"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen.update_model_card">[docs]</a>    <span class="k">def</span> <span class="nf">update_model_card</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_card</span><span class="p">:</span> <span class="n">ModelCard</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">      </span><span class="sd">&quot;&quot;&quot;Updates the JSON file in the MCT assets directory.</span>
+<span class="sd">  </span>
+<span class="sd">      Args:</span>
+<span class="sd">        model_card (ModelCard): The updated model card to write back.</span>
+<span class="sd">  </span>
+<span class="sd">      Raises:</span>
+<span class="sd">        Error: when the given model_card is invalid with reference to the schema.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_write_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mc_json_file</span><span class="p">,</span> <span class="n">model_card</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ModelCardGen.scaffold_assets"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen.scaffold_assets">[docs]</a>    <span class="k">def</span> <span class="nf">scaffold_assets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the Model Card Tookit assets.</span>
+
+<span class="sd">        Assets include the ModelCard JSON file, Model Card document, and jinja</span>
+<span class="sd">        template. These are written to the `output_dir` declared at</span>
+<span class="sd">        initialization.</span>
+
+<span class="sd">        An assets directory is created if one does not already exist.</span>
+
+<span class="sd">        If the MCT is initialized with a `mlmd_store`, it further auto-populates</span>
+<span class="sd">        the model cards properties as well as generating related plots such as model</span>
+<span class="sd">        performance and data distributions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A ModelCard representing the given model.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: on failure to copy the template files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Write JSON file for model card</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mc_json_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_card</span><span class="p">)</span>
+
+        <span class="c1"># Write UI template files.</span>
+        <span class="k">for</span> <span class="n">template_path</span> <span class="ow">in</span> <span class="n">_UI_TEMPLATES</span><span class="p">:</span>
+            <span class="n">template_content</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="s1">&#39;model_card_gen&#39;</span><span class="p">,</span> <span class="n">template_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">template_content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot find file: &#39;</span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">template_content</span> <span class="o">=</span> <span class="n">template_content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_file</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">template_path</span><span class="p">),</span> <span class="n">template_content</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_jinja_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_dir</span><span class="p">:</span> <span class="n">Text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">FileSystemLoader</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">template_dir</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Text</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">Text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write content to the path.&quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+  
+    <span class="k">def</span> <span class="nf">_write_json_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Text</span><span class="p">,</span> <span class="n">model_card</span><span class="p">:</span> <span class="n">ModelCard</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write serialized model card JSON to the path.&quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">model_card</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_read_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ModelCard</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read serialized model card JSON from the path.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">model_card</span> <span class="o">=</span> <span class="n">ModelCardGen</span><span class="o">.</span><span class="n">_read_json</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">model_card</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_read_json</span><span class="p">(</span><span class="n">model_card_json</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Text</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ModelCard</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read serialized model card proto from the path.&quot;&quot;&quot;</span>
+        <span class="n">model_card</span> <span class="o">=</span> <span class="n">ModelCard</span><span class="p">()</span>
+        <span class="n">model_card</span><span class="o">.</span><span class="n">merge_from_json</span><span class="p">(</span><span class="n">model_card_json</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model_card</span>
+
+<div class="viewcode-block" id="ModelCardGen.export_format"><a class="viewcode-back" href="../../model_card_gen/api.html#model_card_gen.model_card_gen.ModelCardGen.export_format">[docs]</a>    <span class="k">def</span> <span class="nf">export_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_card</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ModelCard</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">template_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Text</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">output_file</span><span class="o">=</span><span class="n">_DEFAULT_MODEL_CARD_FILE_NAME</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates a model card document based on the MC assets.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_card (ModelCard): The ModelCard object, generated from `scaffold_assets()`.</span>
+<span class="sd">                If not provided, it will be read from the ModelCard proto file in the</span>
+<span class="sd">                assets directory.</span>
+<span class="sd">            template_path (str): The file path of the Jinja template. If not provided, the</span>
+<span class="sd">                default template will be used.</span>
+<span class="sd">            output_file (str): The file name of the generated model card. If not provided,</span>
+<span class="sd">                the default &#39;model_card.html&#39; will be used. If the file already exists,</span>
+<span class="sd">                then it will be overwritten.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The model card file content.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">template_path</span><span class="p">:</span>
+            <span class="n">template_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mc_template_dir</span><span class="p">,</span>
+                                         <span class="n">_DEFAULT_UI_TEMPLATE_FILE</span><span class="p">)</span>
+        <span class="n">template_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">template_path</span><span class="p">)</span>
+        <span class="n">template_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">template_path</span><span class="p">)</span>
+  
+      <span class="c1"># If model_card is passed in, write to JSON file.</span>
+        <span class="k">if</span> <span class="n">model_card</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_model_card</span><span class="p">(</span><span class="n">model_card</span><span class="p">)</span>
+      <span class="c1"># If model_card is not passed in, read from JSON file.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_card</span> <span class="o">=</span> <span class="n">ModelCardGen</span><span class="o">.</span><span class="n">_read_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mc_json_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">model_card</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;model_card could not be found. &#39;</span>
+                <span class="s1">&#39;Call scaffold_assets() to generate model_card.&#39;</span><span class="p">)</span>
+  
+        <span class="c1"># Generate Model Card.</span>
+        <span class="n">jinja_env</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span>
+          <span class="n">loader</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_jinja_loader</span><span class="p">(</span><span class="n">template_dir</span><span class="p">),</span>
+          <span class="n">autoescape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+          <span class="n">auto_reload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+          <span class="n">cache_size</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">jinja_env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">template_file</span><span class="p">)</span>
+        <span class="n">model_card_file_content</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="n">model_details</span><span class="o">=</span><span class="n">model_card</span><span class="o">.</span><span class="n">model_details</span><span class="p">,</span>
+            <span class="n">model_parameters</span><span class="o">=</span><span class="n">model_card</span><span class="o">.</span><span class="n">model_parameters</span><span class="p">,</span>
+            <span class="n">quantitative_analysis</span><span class="o">=</span><span class="n">model_card</span><span class="o">.</span><span class="n">quantitative_analysis</span><span class="p">,</span>
+            <span class="n">considerations</span><span class="o">=</span><span class="n">model_card</span><span class="o">.</span><span class="n">considerations</span><span class="p">)</span>
+  
+        <span class="c1"># Write the model card document file and return its contents.</span>
+        <span class="n">mode_card_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_cards_dir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_file</span><span class="p">(</span><span class="n">mode_card_file_path</span><span class="p">,</span> <span class="n">model_card_file_content</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model_card_file_content</span></div>
+    
+    <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_card_html</span>
+
+    <span class="k">def</span> <span class="nf">display_model_card</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_repr_html_</span><span class="p">()))</span>
+    
+    <span class="k">def</span> <span class="nf">export_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_repr_html_</span><span class="p">())</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
