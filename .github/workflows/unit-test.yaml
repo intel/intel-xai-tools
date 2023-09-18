@@ -16,7 +16,7 @@ jobs:
     if: github.event.review.state == 'approved' ||
         github.event.pull_request.merged == true ||
         github.event_name == 'push'
-    runs-on: [ aia-devops ]
+    runs-on: [ xai-tlt ]
     container:
       image: ${{ vars.GHA_IMAGE }}
       env:
