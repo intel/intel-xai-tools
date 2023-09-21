@@ -16,7 +16,6 @@ This notebook demonstrates how to use the attributions explainer API to explain 
 
 To run `partitionexplainer.ipynb`, install the following dependencies:
 1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
-2. pip install jupyter-dash
 
 ## References
 

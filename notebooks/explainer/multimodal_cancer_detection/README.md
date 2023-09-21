@@ -37,11 +37,9 @@ The `dataset_utils.py` holds the supporting functions that prepare the image and
 
 To run `Multimodal_Cancer_Detection.ipynb`, install the following dependencies:
 1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
-2. [Intel® Transfer Learning Tool](https://github.com/IntelAI/transfer-learning)
+2. `pip install intel-transfer-learning-tool==0.5`
 3. `pip install intel-extension-for-transformers`
 4. `pip install scikit-image`
-5. `pip install jupyterlab`
-6. `pip install jupyter-dash`
 7. `pip install nltk`
 8. `pip install docx2txt`
 9. `pip install openpyxl`

@@ -54,7 +54,7 @@ def shap_waterwall_plot(expected_value: float,
     """
     if hasattr(feature_values, "values"):
         feature_values = feature_values.values
-    fig = go.Figure()
+    fig = go.Figure(layout=go.Layout(hovermode='y unified'))
     pred = expected_value + shap_values.sum()
     if sort:
         ind = abs(shap_values).argsort()
@@ -112,6 +112,7 @@ def shap_waterwall_plot(expected_value: float,
         textposition="bottom center",
         showlegend=False,
         line=dict(color="#c7c7c7", width=2, dash='dot'),
+        hoverinfo="skip",
     ))
 
     fig.add_trace(go.Scatter(
@@ -121,6 +122,7 @@ def shap_waterwall_plot(expected_value: float,
         textposition="bottom center",
         showlegend=False,
         line=dict(color="#c7c7c7", width=2, dash='dot'),
+        hoverinfo="skip",
     ))
 
     if y_pred:
@@ -131,6 +133,7 @@ def shap_waterwall_plot(expected_value: float,
             textposition="bottom center",
             showlegend=False,
             line=dict(color="#c7c7c7", width=2, dash='dot'),
+            hoverinfo="skip",
         ))
 
     if y_true is not None:

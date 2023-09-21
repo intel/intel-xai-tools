@@ -215,11 +215,11 @@ class KernelExplainer(FeatureAttributions):
         self.shap_values = self.explainer.shap_values(self.targets, nsamples=nsamples)
         self.info_panel = force_plot_info_panel
 
-    def visualize(self) -> None:
+    def visualize(self):
         '''
         Display the force plot of the of the target example(s)
         '''
-        self.force_plot(self.explainer.expected_value, self.shap_values[0], self.targets)
+        return self.force_plot(self.explainer.expected_value, self.shap_values[0], self.targets)
 
 
 class PartitionExplainer(FeatureAttributions):

@@ -27,14 +27,14 @@ from explainer import cam
 
 device = torch.device('cpu')
 
-def test_xgradcam(custom_pyt_CNN):
+def test_x_gradcam(custom_pyt_CNN):
     model, X_test, class_names, y_test = custom_pyt_CNN 
     image = torch.movedim(X_test[0], 0, 2).numpy()
     target_layer = model.conv_layers
     # use the highest-scoring category as the target class
     target_class = None
     image_dims = (28, 28)
-    gcam = cam.xgradcam(model, target_layer, target_class, image, image_dims, device)
+    gcam = cam.x_gradcam(model, target_layer, target_class, image, image_dims)
     assert isinstance(gcam, cam.XGradCAM)
     gcam.visualize()
 
@@ -55,7 +55,8 @@ def test_tf_gradcam_resnet50(tf_resnet50, dog_cat_image):
 def test_gradcam_tf_resnet50(tf_resnet50, dog_cat_image):
     target_class = 281
     target_layer = tf_resnet50.get_layer('conv5_block3_out')
-    gcam = cam.GradCAM(tf_resnet50, target_layer, target_class, dog_cat_image)
+    gcam = cam.GradCAM(tf_resnet50, target_layer)
+    gcam.run_explainer(dog_cat_image, target_class)
     assert isinstance(gcam, cam.TFGradCAM)
     gcam.visualize()
 
@@ -66,6 +67,7 @@ def test_gradcam_pytorch(custom_pyt_CNN):
     # use the highest-scoring category as the target class
     target_class = None
     image_dims = (28, 28)
-    gcam = cam.GradCAM(model, target_layer, target_class, image, image_dims, device)
+    gcam = cam.GradCAM(model, target_layer, image_dims)
+    gcam.run_explainer(image, target_class)
     assert isinstance(gcam, cam.XGradCAM)
     gcam.visualize()

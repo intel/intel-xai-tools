@@ -32,7 +32,7 @@ class TFAnalyzer(ModelAnalyzer):
         """Start TFMA analysis on TensorFlow model
         Args:
             model_path (str) : path to model
-            data (str): string ot tfrecord
+            data (str): tfrecord file glob path
             eval_config (tfma.EvalConfig pr str): representing proto file path
         """
         super().__init__(eval_config, dataset)

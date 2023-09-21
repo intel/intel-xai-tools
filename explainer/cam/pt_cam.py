@@ -28,8 +28,6 @@ class XGradCAM(GradCAM):
     Args:
       model (torch.nn.Module): the CNN used for classification 
       target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last) 
-      target_class (int): the index of the target class
-      image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
       dims (tuple of ints): dimension of image (h, w)
       device (torch.device): torch.device('cpu') or torch.device('gpu') for PyTorch optimizations
 
@@ -48,8 +46,7 @@ class XGradCAM(GradCAM):
     Reference:
        https://github.com/jacobgil/pytorch-grad-cam
     '''
-    def __init__(self, model, targetLayer, targetClass, image, dims, device):
-
+    def __init__(self, model, target_layer, dims, device='cpu'):
         # set any frozen layers to trainable
         # gradcam cannot be calculated without it
         for param in model.parameters():
@@ -57,24 +54,30 @@ class XGradCAM(GradCAM):
                 param.requires_grad = True
 
         self.model = model
-        self.targetLayer = targetLayer
-        self.targetClass = targetClass
-        self.image = image
+        self.target_layer = [target_layer]
         self.dims = dims
         self.device = device
 
-    def visualize(self):
+    def run_explainer(self, image, target_class):
+        '''
+        Execute the axiom-based gradient-based class activation mapping algorithm on the image.
+
+        Args: 
+            image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
+            target_class (int): the index of the target class
+
+        Returns:
+            None
+        '''
         from pytorch_grad_cam import XGradCAM, GuidedBackpropReLUModel
         from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
         from pytorch_grad_cam.utils.image import show_cam_on_image, deprocess_image, preprocess_image
-        import torch
         import cv2
         import numpy as np
-        import matplotlib.pyplot as plt
 
         self.model.eval().to(self.device)
 
-        image = cv2.resize(self.image, self.dims)
+        image = cv2.resize(image, self.dims)
         # convert to rgb if image is grayscale
         converted = False
         if len(image.shape) == 2:
@@ -87,14 +90,12 @@ class XGradCAM(GradCAM):
                                         std=[0.229, 0.224, 0.225])
         input_tensor = input_tensor.to(self.device)
         
-        self.targetLayer = [self.targetLayer]
-        
-        if self.targetClass is None:
+        if target_class is None:
             targets = None
         else:
-            targets = [ClassifierOutputTarget(self.targetClass)]
+            targets = [ClassifierOutputTarget(target_class)]
 
-        cam = XGradCAM(self.model, self.targetLayer)
+        cam = XGradCAM(self.model, self.target_layer)
 
         # convert back to grayscale if that is the initial dim
         if converted:
@@ -104,30 +105,39 @@ class XGradCAM(GradCAM):
                             eigen_smooth=False)
         grayscale_cam = grayscale_cam[0, :]
         cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
-        cam_image = cv2.cvtColor(cam_image, cv2.COLOR_RGB2BGR)
+        self.cam_image = cv2.cvtColor(cam_image, cv2.COLOR_RGB2BGR)
 
         gb_model = GuidedBackpropReLUModel(model=self.model, use_cuda=False)
         gb = gb_model(input_tensor, target_category=None)
         cam_mask = cv2.merge([grayscale_cam, grayscale_cam, grayscale_cam])
-        cam_gb = deprocess_image(cam_mask * gb)
-        gb = deprocess_image(gb)
+        self.cam_gb = deprocess_image(cam_mask * gb)
+        self.gb = deprocess_image(gb)
 
+    def visualize(self):
+        '''
+        Plot the axiom gradCAM, guided back propagation and guided axiom gradCAM from left
+        to right, all superimposed on the target image.  
+        '''
+
+        import matplotlib.pyplot as plt
+        import cv2
+        
         fig = plt.figure(figsize=(10, 7))
         rows = 1
         columns = 3
 
         fig.add_subplot(rows, columns, 1)
-        plt.imshow(cv2.cvtColor(cam_image, cv2.COLOR_BGR2RGB))
+        plt.imshow(cv2.cvtColor(self.cam_image, cv2.COLOR_BGR2RGB))
         plt.axis('off')
         plt.title("XGradCAM")
 
         fig.add_subplot(rows, columns, 2)
-        plt.imshow(cv2.cvtColor(gb, cv2.COLOR_BGR2RGB))
+        plt.imshow(cv2.cvtColor(self.gb, cv2.COLOR_BGR2RGB))
         plt.axis('off')
         plt.title("Guided backpropagation")
 
         fig.add_subplot(rows, columns, 3)
-        plt.imshow(cv2.cvtColor(cam_gb, cv2.COLOR_BGR2RGB))
+        plt.imshow(cv2.cvtColor(self.cam_gb, cv2.COLOR_BGR2RGB))
         plt.axis('off')
         plt.title("Guided XGradCAM")
 
@@ -234,8 +244,10 @@ class EigenCAM:
 
 
 
-def xgradcam(model, targetLayer, targetClass, image, dims, device):
-    return XGradCAM(model, targetLayer, targetClass, image, dims, device)
+def x_gradcam(model, target_layer, target_class, image, dims, device='cpu'):
+    gc = XGradCAM(model, target_layer, dims, device)
+    gc.run_explainer(image, target_class)
+    return gc
 
 def eigencam(model, targetLayer, boxes, classes, colors, reshape, image, device):
     return EigenCAM(model, targetLayer, boxes, classes, colors, reshape, image, device)
