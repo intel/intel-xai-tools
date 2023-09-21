@@ -20,13 +20,33 @@
 ### libraries to support tests ###
 import pytest
 import torch 
+import torchvision
 torch.manual_seed(0)
+import numpy as np
 ### library to be tested ###
 from explainer import cam
 ###################################
 
 device = torch.device('cpu')
 
+# Non-test, helper functions definitions
+def process_output_fasterrcnn(output, class_labels, color, detection_threshold):
+        boxes, classes, labels, colors = [], [], [], []
+        box = output['boxes'].tolist()
+        name = [class_labels[i] for i in output['labels'].detach().numpy()]
+        label = output['labels'].detach().numpy()
+
+        for i in range(len(name)):
+            score = output['scores'].detach().numpy()[i]
+            if score < detection_threshold:
+                continue
+            boxes.append([int(b) for b in box[i]])
+            classes.append(name[i])
+            colors.append(color[label[i]])
+
+        return boxes, classes, colors
+
+# Test function definitions
 def test_x_gradcam(custom_pyt_CNN):
     model, X_test, class_names, y_test = custom_pyt_CNN 
     image = torch.movedim(X_test[0], 0, 2).numpy()
@@ -71,3 +91,34 @@ def test_gradcam_pytorch(custom_pyt_CNN):
     gcam.run_explainer(image, target_class)
     assert isinstance(gcam, cam.XGradCAM)
     gcam.visualize()
+
+def test_eigencam(fasterRCNN, dog_cat_image):
+    model, class_labels, color, transform_function = fasterRCNN
+    target_layer = model.backbone
+
+    # transform image to fit format of fasterRCNN
+    rgb_img = np.float32(dog_cat_image) / 255
+    transform = torchvision.transforms.ToTensor()
+    input_tensor = transform(rgb_img)
+    input_tensor = input_tensor.unsqueeze(0)
+    output = model(input_tensor)[0]
+
+    # set the detection threshold
+    detection_threshold = 0.9
+
+    # get the box coordinates, classes and colors for the detections
+    boxes, classes, colors = process_output_fasterrcnn(output, 
+                                                       class_labels, 
+                                                       color,
+                                                       detection_threshold)
+ 
+    ec = cam.eigencam(model,
+                      target_layer,
+                      boxes,
+                      classes,
+                      colors,
+                      transform_function,
+                      dog_cat_image,
+                      'cpu')
+    assert isinstance(ec, cam.EigenCAM) 
+    ec.visualize()
