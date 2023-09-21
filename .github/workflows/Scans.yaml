@@ -1,0 +1,21 @@
+name: Security Scans
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+      - r0.4
+      - r0.5
+
+  workflow_call:
+
+jobs:
+  scan-bandit:
+    uses: intel-innersource/frameworks.ai.infrastructure.code-scan-tools/.github/workflows/Scanner_Bandit.yml@one-ci-cd
+    with:
+      repos: frameworks.ai.explainable-ai
+      refs: ${{ github.head_ref }}
+      config_file: bandit.yaml
+      runner_label: gasp
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}

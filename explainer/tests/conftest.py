@@ -191,3 +191,36 @@ def imagenet_class_names():
     with open(shap.datasets.cache(url)) as file:
         class_names = [v[1] for v in json.load(file).values()]
     return class_names
+
+@pytest.fixture(scope='session')
+def fasterRCNN():
+    '''
+    Loads the fasterRCNN, the class labels and their corresponding colors
+    '''
+
+    from torchvision.models.detection import fasterrcnn_resnet50_fpn
+    model = fasterrcnn_resnet50_fpn(pretrained=True).eval()
+    class_labels = ['__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane',
+              'bus', 'train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'N/A',
+              'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep',
+              'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'N/A', 'backpack', 'umbrella',
+              'N/A', 'N/A', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard',
+              'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard',
+              'surfboard', 'tennis racket', 'bottle', 'N/A', 'wine glass', 'cup', 'fork',
+              'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich', 'orange',
+              'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch',
+              'potted plant', 'bed', 'N/A', 'dining table', 'N/A', 'N/A', 'toilet',
+              'N/A', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave',
+              'oven', 'toaster', 'sink', 'refrigerator', 'N/A', 'book', 'clock', 'vase',
+              'scissors', 'teddy bear', 'hair drier', 'toothbrush']
+    color = np.random.uniform(0, 255, size=(len(class_labels), 3)) # Create a different color for each class
+
+    def fasterrcnn_reshape_transform(x):
+        target_size = x['pool'].size()[-2 : ]
+        activations = []
+        for key, value in x.items():
+            activations.append(torch.nn.functional.interpolate(torch.abs(value), target_size, mode='bilinear'))
+        activations = torch.cat(activations, axis=1)
+        return activations
+
+    return model, class_labels, color, fasterrcnn_reshape_transform

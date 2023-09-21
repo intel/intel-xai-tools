@@ -148,15 +148,13 @@ class XGradCAM(GradCAM):
 class EigenCAM:
 
     '''
-    Holds the calculations for the eigan-based gradient-weighted class activation mapping (EiganCAM) of a 
+    Holds the calculations for the eigen-based class activation mapping (EigenCAM) of a 
     given image and PyTorch CNN for object detection.
 
     Args:
       model (torch.nn.Module): the CNN used for classification 
       target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last) 
-      boxes (list): list of coordinates where the object is detected
-      classes (list): list of classes that are predicted from boxes
-      colors (list): list of colors corresponding to the classes
+      
       reshape (function): the reshape transformation function responsible for processing the output tensors. Can be None
         if not needed for particular model (such as YOLO)
       image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
@@ -173,73 +171,87 @@ class EigenCAM:
       image: the image being used
       device: device being used by PyTorch
 
-    Methods:
-      visualize: superimpose the EiganCAM  result on top of the original image
-
     Reference:
        https://github.com/jacobgil/pytorch-grad-cam 
     '''
 
-    def __init__(self, model, targetLayer, boxes, classes, colors, reshape, image, device):
+    def __init__(self, model, target_layer, reshape, device='cpu'):
         self.model = model
-        self.targetLayer = targetLayer
-        self.boxes = boxes
-        self.classes = classes
-        self.colors = colors
+        self.target_layer = [target_layer]
         self.reshape = reshape
-        self.image = image
         self.device = device
 
-    def visualize(self):
+    def run_explainer(self, boxes, classes, colors, image):
+        '''
+        Execute the eigen-based class activation mapping on the given image.
+
+        Args:
+            boxes (list): list of coordinates where the object is detected
+            classes (list): list of classes that are predicted from boxes
+            colors (list): list of colors corresponding to the classes
+
+        Returns:
+            None
+        '''
         from pytorch_grad_cam import EigenCAM
-        from pytorch_grad_cam.utils.image import show_cam_on_image, preprocess_image, scale_cam_image
+        from pytorch_grad_cam.utils.image import show_cam_on_image, scale_cam_image
         import torchvision
-        import torch
         import cv2
         import numpy as np
-        from PIL import Image
-        from IPython.display import display
 
         self.model.eval().to(self.device)
 
-        rgb_img = np.float32(self.image) / 255
+        rgb_img = np.float32(image) / 255
         transform = torchvision.transforms.ToTensor()
         input_tensor = transform(rgb_img)
         input_tensor = input_tensor.unsqueeze(0)
         input_tensor = input_tensor.to(self.device)
 
-        self.targetLayer = [self.targetLayer]
-
         if self.reshape is None:
-            cam = EigenCAM(self.model, self.targetLayer)
+            cam = EigenCAM(self.model, self.target_layer)
         else:
-            cam = EigenCAM(self.model, self.targetLayer,
+            cam = EigenCAM(self.model, self.target_layer,
                            reshape_transform=self.reshape)
         targets = []
         grayscale_cam = cam(input_tensor=input_tensor, targets=targets, aug_smooth=False,
                             eigen_smooth=False)
         grayscale_cam = grayscale_cam[0, :]
-        cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
+        self.cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
 
         renormalized_cam = np.zeros(grayscale_cam.shape, dtype=np.float32)
-        for x1, y1, x2, y2 in self.boxes:
+        for x1, y1, x2, y2 in boxes:
             renormalized_cam[y1:y2, x1:x2] = scale_cam_image(grayscale_cam[y1:y2, x1:x2].copy())
         renormalized_cam = scale_cam_image(renormalized_cam)
-        eigencam_image_renormalized = show_cam_on_image(rgb_img, renormalized_cam, use_rgb=True)
-        for i, box in enumerate(self.boxes):
-            color = self.colors[i]
+        self.eigencam_image_renormalized = show_cam_on_image(rgb_img, renormalized_cam, use_rgb=True)
+        for i, box in enumerate(boxes):
+            color = colors[i]
             cv2.rectangle(
-                eigencam_image_renormalized,
+                self.eigencam_image_renormalized,
                 (box[0], box[1]),
                 (box[2], box[3]),
                 color, 2
             )
-            cv2.putText(eigencam_image_renormalized, self.classes[i], (box[0], box[1] - 5),
+            cv2.putText(self.eigencam_image_renormalized, classes[i], (box[0], box[1] - 5),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2,
                         lineType=cv2.LINE_AA)
 
-        display(Image.fromarray(np.hstack((cam_image, eigencam_image_renormalized))))
 
+    def visualize(self):
+        '''
+        Display the eigen CAM heat map and the bounding box normalized heat map, superimposed on
+        the original image.
+    
+        Args:
+            None
+        
+        Returns:
+            None
+        '''
+        from PIL import Image
+        from IPython.display import display
+        import numpy as np
+
+        display(Image.fromarray(np.hstack((self.cam_image, self.eigencam_image_renormalized))))
         print("EigenCAM is generated. ")
 
 
@@ -249,5 +261,7 @@ def x_gradcam(model, target_layer, target_class, image, dims, device='cpu'):
     gc.run_explainer(image, target_class)
     return gc
 
-def eigencam(model, targetLayer, boxes, classes, colors, reshape, image, device):
-    return EigenCAM(model, targetLayer, boxes, classes, colors, reshape, image, device)
+def eigencam(model, target_layer, boxes, classes, colors, reshape, image, device='cpu'):
+    ec = EigenCAM(model, target_layer, reshape, device)
+    ec.run_explainer(boxes, classes, colors, image)
+    return ec
