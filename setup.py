@@ -29,70 +29,79 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 ATTRIBUTIONS_PKGS = [
-  'captum~=0.6.0',
-  'intel-tensorflow==2.12.0',
-  'ipywidgets~=7.7.5',
-  'numpy~=1.22.4',
-  'opencv-python~=4.7.0.72',
-  'plotly~=5.15.0',
-  'scikit-plot~=0.3.7',
-  'scipy~=1.10.1',
-  'shap~=0.41.0',
-  'torch==1.13.1',
-  'transformers~=4.30.0',
-]
+  'captum==0.6.0',
+  'intel-tensorflow==2.13.0',
+  'ipywidgets==7.8.1',
+  'numpy==1.22.4; python_version<"3.10"',
+  'numpy==1.24.3; python_version=="3.10"',
+  'opencv-python==4.8.0.76',
+  'plotly==5.17.0',
+  'scikit-plot==0.3.7',
+  'scipy==1.10.1; python_version=="3.8"',
+  'scipy==1.11.2; python_version>"3.8"',
+  'shap==0.42.1',
+  'torch==2.0.1',
+  'transformers==4.33.2',
+  ]
 
 CAM_PKGS = [
-  'grad-cam==1.4.6',
-  'matplotlib~=3.7.1',
-  'numpy~=1.22.4',
-  'opencv-python~=4.7.0.72',
-  'scipy~=1.10.1',
-  'torch==1.13.1',
-]
+  'grad-cam==1.4.8',
+  'matplotlib==3.7.3; python_version=="3.8"',
+  'matplotlib==3.8.0; python_version>"3.8"',
+  'numpy==1.22.4; python_version<"3.10"',
+  'numpy==1.24.3; python_version=="3.10"',
+  'opencv-python==4.8.0.76',
+  'scipy==1.10.1; python_version=="3.8"',
+  'scipy==1.11.2; python_version>"3.8"',
+  'torch==2.0.1',
+  ]
 
 METRICS_PKGS =  [
-  'matplotlib~=3.7.1',
-  'pandas~=1.5.3',
-  'plotly~=5.15.0',
-  'scikit-learn~=1.2.2',
-  'seaborn~=0.12.2',
+  'matplotlib==3.7.3; python_version=="3.8"',
+  'matplotlib==3.8.0; python_version>"3.8"',
+  'pandas==1.5.3',
+  'plotly==5.17.0',
+  'scikit-learn==1.3.1',
+  'seaborn==0.12.2',
 ]
 
 MCG_PKGS = [
-    'Jinja2~=3.1.2',
-    'absl-py~=1.4.0',
-    'attrs~=21.4.0',
-    'dataclasses~=2.10.1;python_version<"3.7"',
-    'grpcio-status~=1.48.2',
-    'intel-tensorflow==2.12.0',
-    'joblib~=1.2.0',
-    'jsonschema[format-nongpl]~=4.17.3',
-    'plotly~=5.15.0',
-    'protobuf~=3.20.3',
-    'semantic-version~=2.10.0',
-    'tensorflow-data-validation~=1.13.0',
-    'tensorflow-model-analysis~=0.44.0',
-]
+  'Jinja2==3.1.2',
+  'absl-py==1.4.0',
+  'attrs==21.4.0',
+  'dataclasses==0.6',
+  'grpcio-status==1.48.2',
+  'intel-tensorflow==2.13.0',
+  'joblib==1.3.2',
+  'jsonschema[format-nongpl]==4.17.3',
+  'plotly==5.17.0',
+  'protobuf==3.20.3',
+  'semantic-version==2.10.0',
+  'tensorflow-data-validation==1.13.0; python_version<"3.10"',
+  'tensorflow-data-validation==1.14.0; python_version=="3.10"',
+  'tensorflow-model-analysis==0.44.0; python_version<"3.10"',
+  'tensorflow-model-analysis==0.45.0; python_version=="3.10"',
+  ]
 
 PYTORCH_PKGS = [
-    'torch==1.13.1',
-    'torchvision==0.14.1',
-]
+  'torch==2.0.1',
+  'torchvision==0.15.2',
+  ]
 
 REQUIRED_PKGS =  (
   ATTRIBUTIONS_PKGS +
   CAM_PKGS +
   METRICS_PKGS +
   MCG_PKGS
-)
+  )
 
 TEST_PKGS = [
-    'datasets~=2.10.1',
-    'deepdiff~=6.3.0',
-    'pytest~=7.3.2',
-    'tensorflow-hub~=0.13.0',
-]
+  'datasets==2.10.1; python_version<"3.10"',
+  'datasets==2.14.4; python_version=="3.10"',
+  'deepdiff==6.5.0',
+  'pytest==7.4.2',
+  'tensorflow-hub==0.14.0',
+  ]
 
 PACKAGES = [
   'explainer',
@@ -108,13 +117,13 @@ PACKAGES = [
   'model_card_gen.docs.examples',
   'model_card_gen.graphics',
   'model_card_gen.utils',
-]
+  ]
 
 
 EXTRAS = {
-    'pytorch': PYTORCH_PKGS,
-    'test': TEST_PKGS + PYTORCH_PKGS,
-}
+  'pytorch': PYTORCH_PKGS,
+  'test': TEST_PKGS + PYTORCH_PKGS,
+  }
 
 # Get version from version module.
 with open('explainer/version.py') as fp:
@@ -161,6 +170,6 @@ setup(
         'Topic :: Scientific/Engineering :: Mathematics',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
-    python_requires='>=3.9,<3.10',
+    python_requires='>=3.8',
     keywords='XAI, explainer',
 )

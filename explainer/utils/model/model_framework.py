@@ -18,7 +18,9 @@ def is_tf_model(model):
     """Returns whether model is TF keras sequential or functional"""
     is_keras_sequential = str(type(model)).endswith("keras.engine.sequential.Sequential'>")
     is_keras_functional = str(type(model)).endswith("keras.engine.functional.Functional'>")
-    return is_keras_sequential | is_keras_functional
+    is_keras_src_functional = str(type(model)).endswith("keras.src.engine.functional.Functional'>")
+    is_keras_src_sequential = str(type(model)).endswith("keras.src.engine.sequential.Sequential'>")
+    return is_keras_sequential | is_keras_functional | is_keras_src_functional | is_keras_src_sequential
 
 
 def is_pt_model(model):

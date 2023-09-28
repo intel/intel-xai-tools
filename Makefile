@@ -31,7 +31,7 @@ venv-test:
 	@test -d test_env || virtualenv -p python test_env
 
 	@echo "Building the XAI API in test_env env..."
-	@. $(ACTIVATE_TEST) && pip install --editable .[test]
+	@. $(ACTIVATE_TEST) && pip install --extra-index-url https://download.pytorch.org/whl/cpu --editable .[test]
 
 # TODO: running all tests in one pytest session randomly causes torch test to hang at last epoch
 test-torch: venv-test
@@ -43,7 +43,7 @@ test-mcg: test-torch
 	@. $(ACTIVATE_TEST) && PYTHONPATH="$(CURDIR)/model_card_gen/tests" pytest -s -k "not torch"
 
 install:
-	@pip install --editable .
+	@pip install --extra-index-url https://download.pytorch.org/whl/cpu --editable .
 
 xai-whl:
 	@python setup.py bdist_wheel
