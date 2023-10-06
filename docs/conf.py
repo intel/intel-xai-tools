@@ -37,12 +37,14 @@ extensions = [
   'nbsphinx',
   'nbsphinx_link',
   'sphinx_design',
+  'sphinx_external_toc',
   'sphinx.ext.intersphinx',
   'sphinx.ext.autodoc',
   'sphinx.ext.napoleon',
   'sphinx.ext.viewcode',
   'sphinx.ext.doctest',
 ]
+external_toc_path = "toc.yml"
 external_toc_exclude_missing = False
 html_theme = 'sphinx_rtd_theme'
 nbsphinx_execute = 'never'

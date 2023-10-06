@@ -19,7 +19,7 @@ There are two Python* components in the repository:
 
 ### Requirements
 * Linux system or WSL2 on Windows (validated on Ubuntu* 20.04/22.04 LTS)
-* Python 3.9
+* Python 3.8, 3.9, 3.10
 * Install required OS packages with `apt-get install build-essential python3-dev`
 * git (only required for the "Developer Installation")
 
