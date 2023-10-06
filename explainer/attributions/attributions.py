@@ -383,7 +383,7 @@ def explainer():
       >>> explainer = attributions.explainer()
       <IPython.core.display.HTML object>
       >>> explainer.shap.__version__
-      '0.41.0' 
+      '0.42.1'
     """
     return FeatureAttributions()
 
