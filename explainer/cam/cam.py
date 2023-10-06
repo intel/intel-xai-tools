@@ -33,4 +33,4 @@ class GradCAM:
         elif is_pt_model(model):
             return super().__new__(XGradCAM)
         else:
-            raise_unknown_model_error()
+            raise_unknown_model_error(model)
