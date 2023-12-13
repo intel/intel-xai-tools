@@ -222,6 +222,8 @@ mc = {
   "schema_version": "0.0.1"
 }
 ```
+A more comprehensive JSON example, that includes formatting for Ethical Considerations, can be found here: 
+[`/model_card_gen/docs/examples/json/model_card_example.json`](/model_card_gen/docs/examples/json/model_card_example.json).
 
 **Create Model Card**
 ```python

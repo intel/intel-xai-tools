@@ -8,28 +8,25 @@
             "diff": "sit pariatur ex Lorem dolore",
             "date": "2011-03-31"
         },
-        "graphics": {},
+        "graphics": {
+            "description": "Collection of Images",
+            "collection": [ 
+                {
+                    "name": "Image Name",
+                    "html": "<img src=\"https://1000logos.net/wp-content/uploads/2021/05/Intel-logo.png\">"
+                }
+            ]   
+        },
         "licenses": [
             {
-                "custom_text": "ut in anim eu cillum"
-            },
-            {
-                "custom_text": "proident irure"
+                "identifier": "ut in anim eu cillum"
             },
             {
                 "custom_text": "ipsum"
-            },
-            {
-                "custom_text": "eu labore est"
-            },
-            {
-                "custom_text": "culpa deserunt consequat"
             }
         ],
         "citations": [
-            {},
             {
-                "style": "deserunt irure minim sed",
                 "citation": "ipsum"
             },
             {
@@ -38,10 +35,8 @@
             }
         ],
         "owners": [
-            {},
             {
-                "name": "sunt quis cupidatat magna",
-                "contact": "pariatur exercitation laborum"
+                "name": "sunt quis cupidatat magna"
             },
             {
                 "name": "irure culpa magna in ut",
@@ -52,15 +47,6 @@
             }
         ],
         "references": [
-            {
-                "reference": "http://iSBXJGAsbJHeCBdssh.jwzRpPaEie0Dj4UQriouRcbtfyHNG5a0FZ9,6R225phVfAt14"
-            },
-            {
-                "reference": "http://eyyFAitFSbPnEZBKpAdQcGEpezg.duCFSt0lWCI7C"
-            },
-            {
-                "reference": "http://bxjozryWRuFMVWwGTNbdufTTdzadJhzK.uhppGXIgHN+pwxvG6-9Azg"
-            },
             {
                 "reference": "https://WsFZssxtZMggJNeAjGOm.onlpfCu8iISB2UWf1WqX."
             }
@@ -110,13 +96,21 @@
                 "type": "ad culpa fugiat enim",
                 "slice": "cillum velit in veniam cupidatat"
             }
-        ]
+        ],
+    "graphics": {
+            "description": "Collection of Images",
+            "collection": [ 
+                {
+                    "name": "Quant Image Name",
+                    "html": "<img src=\"https://1000logos.net/wp-content/uploads/2021/05/Intel-logo.png\">"
+                }
+            ]   
+        }
     },
     "model_parameters": {
         "input_format": "qui irure ut",
+        "model_architecture": "dolor incididunt",
         "data": [
-            {},
-            {},
             {
                 "description": "fugiat sit dolor exercitation",
                 "name": "in minim Excepteur",
@@ -135,30 +129,35 @@
     "considerations": {
         "tradeoffs": [
             {
-                "description": "culpa consectetur incididunt ut occaecat"
-            },
-            {
-                "description": "dolor incididunt ullamco adipisicing Ut"
-            },
-            {
-                "description": "quis"
-            },
-            {
                 "description": "sunt dolor id"
             }
         ],
         "use_cases": [
             {
-                "description": "ullamco proident sit Duis id"
-            },
-            {
-                "description": "non deserunt culpa"
-            },
-            {
                 "description": "eiusmod dolor nulla cillum"
+            }
+        ],
+        "limitations": [
+            {
+                "description": "Excepteur est occaecat"
+            }
+        ],
+        "users": [
+            {
+                "description": "labore"
+            }
+        ],
+        "ethical_considerations": [
+            {
+                "name": "quis non amet"
             },
-            {},
-            {}
+            {
+                "name": "quis non amet",
+                "mitigation_strategy": "dolore eu Excepteur tempor aliquip (aute tempor pariatur amet et, labore)"
+            },
+            {
+                "mitigation_strategy": "dolore eu Excepteur tempor aliquip (aute tempor pariatur amet et, labore)"
+            }
         ]
     }
 }
