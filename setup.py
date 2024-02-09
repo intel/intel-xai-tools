@@ -29,7 +29,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 ATTRIBUTIONS_PKGS = [
-  'captum==0.6.0',
+  'captum==0.7.0',
   'intel-tensorflow==2.13.0',
   'ipywidgets==7.8.1',
   'numpy==1.22.4; python_version<"3.10"',
