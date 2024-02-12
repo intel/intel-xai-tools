@@ -1,0 +1,42 @@
+ARG IMAGE_NAME=intel/intel-optimized-pytorch
+ARG IMAGE_TAG=2.2.0-idp-base
+
+FROM ${IMAGE_NAME}:${IMAGE_TAG}
+
+WORKDIR /app
+EXPOSE 8000
+
+ARG PYTHON_VER=3.8
+ARG HELM_VER=0.4.0
+ARG HELM_VER_NAME=v${HELM_VER}
+ARG BASE_ENV=idp
+ARG HELM_ENV=${BASE_ENV}
+ARG APP_DIR=/app
+ARG HELM_DIR=${APP_DIR}/helm
+ARG HELM_MODEL="Intel\/neural-chat-7b-v3-2"
+ARG HELM_SPEC_SRC=${HELM_DIR}/src/helm/benchmark/presentation/run_specs_dec2023.conf
+
+WORKDIR ${APP_DIR}
+EXPOSE 8000
+
+# Performance ENVs
+ENV KMP_BLOCKTIME=1
+ENV KMP_SETTINGS=1
+ENV KMP_AFFINITY=granularity=fine,compact,1,0
+ENV OMP_NUM_THREADS=32
+
+# HELM ENVs
+ENV LEADERBOARD_VERSION=${HELM_VER_NAME}
+
+RUN apt-get update && apt-get install git -y
+
+# Install HELM
+RUN git clone --depth 1 --branch ${HELM_VER_NAME} https://github.com/stanford-crfm/helm.git ${HELM_DIR}
+COPY model_deployments_intel.yaml /tmp
+COPY model_metadata_intel.yaml /tmp
+RUN cat /tmp/model_deployments_intel.yaml >> ${HELM_DIR}/src/helm/config/model_deployments.yaml
+RUN cat /tmp/model_metadata_intel.yaml >> ${HELM_DIR}/src/helm/config/model_metadata.yaml
+RUN conda run -n ${HELM_ENV} pip install --no-cache-dir --editable ${HELM_DIR}/.
+
+# Create Run Spec Config File
+RUN sed -E "s/model=text(_code)?/model=$HELM_MODEL/g" ${HELM_SPEC_SRC} > run_specs.conf
