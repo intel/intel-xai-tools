@@ -28,8 +28,8 @@ import transformers
 torch.manual_seed(0)
 ### library to be tested ###
 from explainer import attributions
-from attributions.plots import shap_waterwall_plot
-from attributions.widgets import ShapUI
+from explainer.attributions.plots import shap_waterwall_plot
+from explainer.attributions.widgets import ShapUI
 ###################################
 
 @pytest.mark.parametrize("custom_CNN", ['custom_pyt_CNN', 'custom_tf_CNN'])
