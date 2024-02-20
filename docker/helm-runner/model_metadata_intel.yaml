@@ -1,3 +1,4 @@
+
   - name: Intel/neural-chat-7b-v3-2
     display_name: NeuralChat
     description: This model is a fine-tuned 7B parameter LLM on the Intel Gaudi 2 processor from the Intel/neural-chat-7b-v3-1 on the meta-math/MetaMathQA dataset. The model was aligned using the Direct Performance Optimization (DPO) method with Intel/orca_dpo_pairs.

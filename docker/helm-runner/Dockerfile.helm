@@ -6,7 +6,6 @@ FROM ${IMAGE_NAME}:${IMAGE_TAG}
 WORKDIR /app
 EXPOSE 8000
 
-ARG PYTHON_VER=3.8
 ARG HELM_VER=0.4.0
 ARG HELM_VER_NAME=v${HELM_VER}
 ARG BASE_ENV=idp
@@ -15,6 +14,7 @@ ARG APP_DIR=/app
 ARG HELM_DIR=${APP_DIR}/helm
 ARG HELM_MODEL="Intel\/neural-chat-7b-v3-2"
 ARG HELM_SPEC_SRC=${HELM_DIR}/src/helm/benchmark/presentation/run_specs_dec2023.conf
+ARG HELM_LOCAL_ENV=${HELM_DIR}/prod_env
 
 WORKDIR ${APP_DIR}
 EXPOSE 8000
@@ -28,15 +28,23 @@ ENV OMP_NUM_THREADS=32
 # HELM ENVs
 ENV LEADERBOARD_VERSION=${HELM_VER_NAME}
 
-RUN apt-get update && apt-get install git -y
+RUN apt-get update && apt-get install git unzip -y
 
 # Install HELM
 RUN git clone --depth 1 --branch ${HELM_VER_NAME} https://github.com/stanford-crfm/helm.git ${HELM_DIR}
+COPY ./prod_env/credentials.conf ${HELM_LOCAL_ENV}/credentials.conf
 COPY model_deployments_intel.yaml /tmp
 COPY model_metadata_intel.yaml /tmp
+COPY tokenizer_configs_intel.yaml /tmp
+COPY third_party/huggingface_client_intel.py ${HELM_DIR}/src/helm/proxy/clients/huggingface_client_intel.py
 RUN cat /tmp/model_deployments_intel.yaml >> ${HELM_DIR}/src/helm/config/model_deployments.yaml
 RUN cat /tmp/model_metadata_intel.yaml >> ${HELM_DIR}/src/helm/config/model_metadata.yaml
+RUN cat /tmp/tokenizer_configs_intel.yaml >> ${HELM_DIR}/src/helm/config/tokenizer_configs.yaml
 RUN conda run -n ${HELM_ENV} pip install --no-cache-dir --editable ${HELM_DIR}/.
+RUN conda run -n ${HELM_ENV} pip install --no-cache-dir -U transformers
 
 # Create Run Spec Config File
 RUN sed -E "s/model=text(_code)?/model=$HELM_MODEL/g" ${HELM_SPEC_SRC} > run_specs.conf
+
+# Create Simple Run Spec Config File
+RUN echo 'entries: [{description: "mmlu:subject=philosophy,model=Intel/neural-chat-7b-v3-2", priority: 1}]' > run_spec_simple.conf

@@ -1,0 +1,6 @@
+
+  - name: Intel/neural-chat-7b-v3-2
+    tokenizer_spec:
+      class_name: "helm.proxy.tokenizers.huggingface_tokenizer.HuggingFaceTokenizer"
+    end_of_text_token: "</s>"
+    prefix_token: "<s>"
