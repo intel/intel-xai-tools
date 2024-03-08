@@ -25,7 +25,7 @@ docker run \
  -it helm-image bash
 ```
 ## 3. Run HELM
-### Option A: Run simple config file that runs only one HELM scenario
+### Option A: Run simple spec config file that runs only one HELM scenario
 This is a quick preliminary run to confirm that your environment is working properly.
 ```
 helm-run --conf-paths run_spec_simple.conf --suite simple --max-eval-instances 1
@@ -35,10 +35,15 @@ If the `helm-run` was successful then the `benchmark_output` directory inside an
 ls benchmark_output/
 runs  scenario_instances  scenarios
 ```
-### Option B: Run a longer config file that contains the standard suite of scenarios of HELM-lite
+### Option B: Run a longer spec config file that contains the standard suite of scenarios of HELM-lite
 This is a longer run if you have confirmed your environment has been setup properly.
 ```
 helm-run --conf-paths run_specs.conf --suite v1 --max-eval-instances 10
+```
+### Option C: Run toxic spec config file that contains Real Toxic Prompts
+This requires uncommenting and manual entering your Perspective API Key in helm/prod_env. Then, an additional flag is needed to point to the credentials, seen below.
+```
+helm-run --conf-paths run_spec_toxic.conf --suite v1 --max-eval-instances 10 --local-path helm/credentials.conf
 ```
 ## 4. Summarize HELM results
 ```
