@@ -28,7 +28,7 @@ ENV OMP_NUM_THREADS=32
 # HELM ENVs
 ENV LEADERBOARD_VERSION=${HELM_VER_NAME}
 
-RUN apt-get update && apt-get install git unzip -y
+RUN apt-get update && apt-get install git unzip build-essential -y
 
 # Install HELM
 RUN git clone --depth 1 --branch ${HELM_VER_NAME} https://github.com/stanford-crfm/helm.git ${HELM_DIR}
@@ -48,8 +48,9 @@ RUN cat /tmp/model_deployments_intel.yaml >> ${HELM_DIR}/src/helm/config/model_d
 RUN cat /tmp/model_metadata_intel.yaml >> ${HELM_DIR}/src/helm/config/model_metadata.yaml
 RUN cat /tmp/tokenizer_configs_intel.yaml >> ${HELM_DIR}/src/helm/config/tokenizer_configs.yaml
 # Create HELM Conda Environment
-RUN conda run -n ${HELM_ENV} pip install --no-cache-dir --editable ${HELM_DIR}/.
+RUN conda run -n ${HELM_ENV} pip install --no-cache-dir --editable "${HELM_DIR}[all]"
 RUN conda run -n ${HELM_ENV} pip install --no-cache-dir -U transformers
+RUN conda run -n ${HELM_ENV} pip install --no-cache-dir -U datasets
 
 # Create Run Spec Config Files
 RUN sed -E "s/model=text(_code)?/model=$HELM_MODEL/g" ${HELM_SPEC_SRC} > run_specs.conf
