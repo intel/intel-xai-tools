@@ -16,7 +16,7 @@ kernelspec:
 # [Explaining Text Classification](https://coderzcolumn.com/tutorials/artificial-intelligence/explain-text-classification-models-using-shap-values-keras)
 
 ```{code-cell} ipython3
-from explainer.explainers import feature_attributions_explainer, metrics_explainer
+from intel_ai_safety.explainer import attributions, metrics
 ```
 
 ```{code-cell} ipython3

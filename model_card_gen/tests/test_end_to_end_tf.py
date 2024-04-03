@@ -25,7 +25,7 @@ import pytest
 import tensorflow_model_analysis as tfma
 from google.protobuf import text_format
 
-from model_card_gen.model_card_gen import ModelCardGen
+from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
 
 
 @pytest.mark.tensorflow
@@ -34,8 +34,8 @@ class TestMCGForTensorFlow:
     @classmethod
     def setup_class(cls):
         # Do TensorFlow specific imports within the marked class so that we don't get errors when TF isn't installed
-        from model_card_gen.datasets import TensorflowDataset
-        from model_card_gen.tests.tf_model import build_and_train_model, train_tf_file, validate_tf_file
+        from intel_ai_safety.model_card_gen.datasets import TensorflowDataset
+        from .tf_model import build_and_train_model, train_tf_file, validate_tf_file
 
         cls._model_path = build_and_train_model()
         cls._data_sets = {'eval': TensorflowDataset(dataset_path=validate_tf_file),

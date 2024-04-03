@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "intel-ai-safety-explainer-attributions-hugging-face"
+version = "0.1.0"
+description = ""
+authors = ["IntelAI <IntelAI@intel.com>"]
+readme = "README.md"
+packages = [
+    {include = "intel_ai_safety", from="."},
+]
+
+
+[tool.poetry.dependencies]
+intel-ai-safety-explainer = {path = "../../../explainer"}
+python = ">=3.9, <3.11"
+shap = '0.44.1'
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = '8.1.1'
+transformers = '4.39.0'
+sentencepiece = '0.2.0'
+torch = {version = "2.2.0", source = "pytorch-cpu"}
+matplotlib = '3.8.0'
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry"]
+build-backend = "poetry.core.masonry.api"

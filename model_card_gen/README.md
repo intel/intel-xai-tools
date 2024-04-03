@@ -251,7 +251,7 @@ pip install ".[test]"
 Step 2: Run tests
 
 ```shell
-python -m pytest model_card_gen/tests/
+python -m pytest intel_ai_tools/model_card_gen/tests/
 ```
 
 ### Markers
@@ -270,11 +270,11 @@ Note that running PyTorch tests still requires TensorFlow libararies for model a
 
 Run only the TensorFlow tests:
 ```shell
-python -m pytest model_card_gen/tests/ -m tensorflow
+python -m pytest intel_ai_tools/model_card_gen/tests/ -m tensorflow
 ```
 
 Run the PyTorch and common tests:
 ```shell
-python -m pytest model_card_gen/tests/ -m "pytorch or common"
+python -m pytest intel_ai_tools/model_card_gen/tests/ -m "pytorch or common"
 ```
 

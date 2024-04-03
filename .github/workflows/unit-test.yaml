@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - develop
+      - develop-ng
       - main
     tags:
       - '**'
@@ -30,8 +31,8 @@ jobs:
         - /tf_dataset/dataset/transfer_learning:/tmp/data
     steps:
       - uses: actions/checkout@v3
-      - name: Install virtualenv
-        run: pip install virtualenv
+      - name: Install poetry
+        run: pip install poetry
       - name: Run Unit Test
         shell: bash
         working-directory: .

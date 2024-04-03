@@ -39,7 +39,7 @@ To run `Multimodal_Cancer_Detection.ipynb`, install the following dependencies:
 1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
 2. 
 ``` 
-pip install docx2txt intel-transfer-learning-tool==0.5 \
+pip install docx2txt intel-transfer-learning-tool==0.6 \
      intel-extension-for-transformers==1.1.0 nltk openpyxl scikit-image
 ```
 

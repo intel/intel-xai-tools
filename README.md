@@ -7,13 +7,13 @@ This repository provides tools for data scientists and MLOps engineers that have
 The Intel Explainable AI Tools are designed to help users detect and mitigate against issues of fairness and interpretability, while running best on Intel hardware.
 There are two Python* components in the repository:
 
-* [Model Card Generator](model_card_gen)
+* [Model Card Generator](intel_ai_safety/model_card_gen)
   * Creates interactive HTML reports containing model performance and fairness metrics
 * [Explainer](explainer)
   * Runs post-hoc model distillation and visualization methods to examine predictive behavior for both TensorFlow* and PyTorch* models via a simple Python API including the following modules:
-    * [Attributions](explainer/attributions/): Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions
-    * [CAM (Class Activation Mapping)](explainer/cam/): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
-    * [Metrics](explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
+    * [Attributions](explainer/intel_ai_safety/explainer/attributions/): Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions
+    * [CAM (Class Activation Mapping)](explainer/intel_ai_safety/explainer/cam/): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
+    * [Metrics](explainer/intel_ai_safety/explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
 
 ## Get Started
 
@@ -66,7 +66,7 @@ Notebooks may require additional dependencies listed in their associated documen
 
 Verify that your installation was successful by using the following commands, which display the Explainer and Model Card Generator versions:
 ```
-python -c "from explainer import version; print(version.__version__)"
+python -c "from intel_ai_safety.explainer import version; print(version.__version__)"
 python -c "from model_card_gen import version; print(version.__version__)"
 ```
 
