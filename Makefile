@@ -25,8 +25,7 @@ LISTEN_IP ?= 127.0.0.1
 LISTEN_PORT ?= 9090
 DOCS_DIR ?= docs
 
-
-venv-test:
+venv-test: poetry-lock
 	@echo "Creating a virtualenv $(VENV_DIR)..."
 	@poetry install --with test --extras all
 
@@ -34,7 +33,7 @@ test-mcg: venv-test
 	@echo "Testing the Model Card Gen API..."
 	@. $(ACTIVATE_TEST) && pytest model_card_gen/tests
 
-install:
+install: poetry-lock
 	@poetry install --extras all
 
 build-whl:
@@ -89,3 +88,25 @@ bump: venv-test
 	@poetry version patch
 	@(cd model_card_gen ; poetry version patch)
 	@(cd explainer; poetry version patch)
+
+poetry-lock:
+	@echo "Lock all project dependency versions"
+	@poetry update --lock
+	@cd model_card_gen && poetry lock && cd -
+	@cd plugins/explainers/attributions-hugging-face && poetry lock && cd -
+	@cd plugins/explainers/attributions && poetry lock && cd -
+	@cd plugins/explainers/cam-pytorch && poetry lock && cd -
+	@cd plugins/explainers/cam-tensorflow && poetry lock && cd -
+	@cd plugins/explainers/captum && poetry lock && cd -
+	@cd plugins/explainers/metrics && poetry lock && cd -
+
+poetry-lock-update:
+	@echo "Update and Lock all project dependency versions"
+	@poetry update --lock
+	@cd model_card_gen && poetry update --lock && cd -
+	@cd plugins/explainers/attributions-hugging-face && poetry update --lock && cd -
+	@cd plugins/explainers/attributions && poetry update --lock && cd -
+	@cd plugins/explainers/cam-pytorch && poetry update --lock && cd -
+	@cd plugins/explainers/cam-tensorflow && poetry update --lock && cd -
+	@cd plugins/explainers/captum && poetry update --lock && cd -
+	@cd plugins/explainers/metrics && poetry update --lock && cd -
