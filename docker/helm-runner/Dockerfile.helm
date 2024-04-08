@@ -48,7 +48,7 @@ RUN cat /tmp/model_deployments_intel.yaml >> ${HELM_DIR}/src/helm/config/model_d
 RUN cat /tmp/model_metadata_intel.yaml >> ${HELM_DIR}/src/helm/config/model_metadata.yaml
 RUN cat /tmp/tokenizer_configs_intel.yaml >> ${HELM_DIR}/src/helm/config/tokenizer_configs.yaml
 # Create HELM Conda Environment
-RUN conda run -n ${HELM_ENV} pip install --no-cache-dir --editable "${HELM_DIR}[all]"
+RUN conda run -n ${HELM_ENV} pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu --editable "${HELM_DIR}[all]" 
 RUN conda run -n ${HELM_ENV} pip install --no-cache-dir -U transformers
 RUN conda run -n ${HELM_ENV} pip install --no-cache-dir -U datasets
 
