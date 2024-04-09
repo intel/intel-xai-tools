@@ -66,7 +66,6 @@ WORKDIR ${APP_DIR}
 RUN /usr/local/bin/poetry config virtualenvs.create false && \
     poetry install --extras explainer --extras explainer-all && \
     ${APP_DIR}/.venv/bin/pip install --no-cache-dir -r notebooks/explainer/requirements.txt && \
-    rm -rf notebooks/explainer/requirements.txt && \
     rm -rf ${HOME}/.cache/pypoetry ${HOME}/.cache/pip
 
 # Production Explainer image
