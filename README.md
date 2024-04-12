@@ -23,40 +23,85 @@ There are two Python* components in the repository:
 * Install required OS packages with `apt-get install build-essential python3-dev`
 * git (only required for the "Developer Installation")
 
-### Create and activate a Python3 virtual environment
-We encourage you to use a python virtual environment (virtualenv or conda) for consistent package management.
-There are two ways to do this:
+### Developer Installation with Poetry
 
-a. Using `virtualenv`:
-   ```
-   python3.9 -m virtualenv xai_env
-   source xai_env/bin/activate
-   ```
-
-b. Or `conda`:
-   ```
-   conda create --name xai_env python=3.9
-   conda activate xai_env
-   ```
-
-### Basic Installation
-```
-pip install intel-xai
-```
-### Developer Installation
-Use these instructions to install the Intel Explainable AI Tools with a clone of the
+Use these instructions to install the Intel AI Safety python library with a clone of the
 GitHub repository. This can be done instead of the basic pip install, if you plan
 on making code changes.
 
-1. Clone this repo and navigate to the repo directory:
-   ```
-   git clone https://github.com/IntelAI/intel-xai-tools.git
+1. Clone this repo and navigate to the repo directory.
 
-   cd intel-xai-tools
+2. Allow poetry to create virtual envionment contained in `.venv` directory of current directory. 
+
    ```
-2. Install the Intel Explainable AI Tools using the following command:
+   poetry lock
    ```
-   make install
+   In addtion, you can explicitly tell poetry which python instance to use
+   
+   ```
+   poetry env use /full/path/to/python
+   ```
+
+3. Choose the `intel_ai_safety` subpackages and plugins that you wish to install.
+   
+   a. Install `intel_ai_safety` with all of its subpackages (e.g. `explainer` and `model_card_gen`) and plugins
+   ```
+   poetry install --extras all
+   ```
+
+   b. Install `intel_ai_safety` with just `explainer`
+   ```
+   poetry install --extras explainer
+   ```
+   
+   c. Install `intel_ai_safety` with just `model_card_gen`
+   ```
+   poetry install --extras model-card
+   ```
+   
+   d. Install `intel_ai_safety` with `explainer` and all of its plugins
+   ```
+   poetry install --extras explainer-all
+   ```
+
+   e. Install `intel_ai_safety` with `explainer` and just its pytorch implementations
+   
+   ```
+   poetry install --extras explainer-pytorch
+   ```
+   
+   f. Install `intel_ai_safety` with `explainer` and just its pytorch implementations
+   
+   ```
+   poetry install --extras explainer-tensorflow
+   ``` 
+
+4. Activate the enviornment:
+
+   ```
+   source .venv/bin/activate
+   ```
+
+### Install to existing enviornment with Poetry
+
+#### Create and activate a Python3 virtual environment
+We encourage you to use a python virtual environment (virtualenv or conda) for consistent package management.
+There are two ways to do this:
+1. Choose a virtual enviornment to use:
+   a. Using `virtualenv`:
+      ```
+      python3.9 -m virtualenv xai_env
+      source xai_env/bin/activate
+      ```
+
+   b. Or `conda`:
+      ```
+      conda create --name xai_env python=3.9
+      conda activate xai_env
+      ```
+2. Install to current enviornment
+   ```
+   poetry config virtualenvs.create false && poetry install --extras all
    ```
 
 ### Additional Feature-Specific Steps
