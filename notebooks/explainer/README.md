@@ -1,6 +1,11 @@
 # Explainer Tutorial Notebooks
 This directory has Jupyter notebooks that demonstrate explainability with the Intel® Explainable AI Tools.
 
+## Running the Explainer Tutorial notebooks
+Before running the notebooks, install the dependencies:
+1. `pip install --no-cache-dir -r requirements.txt`
+
+   
 | Notebook | Domain: Use Case | Framework| Description |
 | ---------| ---------|----------|-------------|
 | [Explaining Image Classification and Object Detection Using the CAM Explainer](imagenet_with_cam) | CV: Image Classification & Object Detection | PyTorch*, TensorFlow* and Intel® Explainable AI API | Two separate notebooks that demonstrate how to use the CAM explainer API to explain ImageNet classification and detection examples using a ResNet50 CNN from the TorchVision & Torch model hub and TF's keras.applications model hub. |
@@ -11,6 +16,3 @@ This directory has Jupyter notebooks that demonstrate explainability with the In
 | [Explaining Fine Tuned Text Classifier with PyTorch using the Intel® Explainable AI API](transfer_learning_text_classification) | NLP: Text Classification| PyTorch, HuggingFace, Intel® Explainable AI API & Intel® Transfer Learning Tool API | Demonstrates how to use the attributions explainer API's to explain the classification of a text using  HuggingFace Transformer. |
 | [Explaining a Custom Neural Network Heart Disease Classification Using the Attributions Explainer ](heart_disease_with_attributions) | Numerical/Categorical: Tabular Classification | TensorFlow & Intel® Explainable AI API | Demonstrates how to use the attributions explainer API's to explain the classification of a Tabular data using a TensorFlow custom NN. |
 
-## Running the Explainer Tutorial notebooks
-Before running the notebooks, install the dependencies:
-1. `pip install --no-cache-dir -r requirements.txt`
