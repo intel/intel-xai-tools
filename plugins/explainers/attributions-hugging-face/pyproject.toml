@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "intel-ai-safety-explainer-attributions-hugging-face"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["IntelAI <IntelAI@intel.com>"]
 readme = "README.md"
@@ -10,9 +10,13 @@ packages = [
 
 
 [tool.poetry.dependencies]
-intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety-explainer = {version = "*"}
 python = ">=3.9, <3.11"
 shap = '0.44.1'
+
+[tool.poetry.group.local.dependencies]
+intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety = {path = "../../.."}
 
 [tool.poetry.group.test]
 optional = true

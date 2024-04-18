@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "intel-ai-safety-explainer-attributions"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["IntelAI <IntelAI@intel.com>"]
 readme = "README.md"
@@ -10,7 +10,7 @@ packages = [
 
 
 [tool.poetry.dependencies]
-intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety-explainer = {version = "*"}
 python = ">=3.9, <3.11"
 ipywidgets = '7.8.1'
 matplotlib = '3.8.3'
@@ -19,6 +19,10 @@ opencv-python = '4.9.0.80'
 plotly = '5.20.0'
 shap = '0.44.1'
 transformers = '4.39.0'
+
+[tool.poetry.group.local.dependencies]
+intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety = {path = "../../.."}
 
 [tool.poetry.group.test]
 optional = true

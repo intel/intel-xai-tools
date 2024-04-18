@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "intel-ai-safety-explainer-cam-tensorflow"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["IntelAI <IntelAI@intel.com>"]
 readme = "README.md"
@@ -10,10 +10,14 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
-intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety-explainer = {version = "*"}
 intel-tensorflow = '2.14.0'
 numpy = '1.24.4'
 opencv-python = '4.9.0.80'
+
+[tool.poetry.group.local.dependencies]
+intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety = {path = "../../.."}
 
 [tool.poetry.group.test]
 optional = true

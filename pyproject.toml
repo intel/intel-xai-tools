@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "intel-ai-safety"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["IntelAI <IntelAI@intel.com>"]
 readme = "README.md"
@@ -8,16 +8,6 @@ packages = []
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
-"intel-ai-safety-model-card-gen" = {version = "*", optional = true}
-"intel-ai-safety-explainer" = {version = "*", optional = true}
-"intel-ai-safety-explainer-attributions" = {version = "*", optional = true}
-"intel-ai-safety-explainer-attributions-hugging-face" = {version = "*", optional = true}
-"intel-ai-safety-explainer-captum" = {version = "*", optional = true}
-"intel-ai-safety-explainer-cam-tensorflow" = {version = "*", optional = true}
-"intel-ai-safety-explainer-cam-pytorch" = {version = "*", optional = true}
-"intel-ai-safety-explainer-metrics" = {version = "*", optional = true}
-
-[tool.poetry.group.plugins.dependencies]
 "intel-ai-safety-model-card-gen" = {path = "model_card_gen", develop = true, optional=true}
 "intel-ai-safety-explainer" = {path = "explainer", develop = true, optional=true}
 "intel-ai-safety-explainer-attributions" = {path = "plugins/explainers/attributions", develop = true, optional=true}
@@ -85,10 +75,21 @@ url = "https://download.pytorch.org/whl/cpu"
 priority = "explicit"
 
 [[tool.poetry_bumpversion.replacements]]
-files = ["model_card_gen/pyproject.toml", "explainer/pyproject.toml"]
+files = [
+         "model_card_gen/pyproject.toml",
+         "explainer/pyproject.toml",
+         "plugins/explainers/attributions/pyproject.toml",
+         "plugins/explainers/attributions-hugging-face/pyproject.toml",
+         "plugins/explainers/captum/pyproject.toml",
+         "plugins/explainers/cam-tensorflow/pyproject.toml",
+         "plugins/explainers/cam-pytorch/pyproject.toml",
+         "plugins/explainers/metrics/pyproject.toml",
+         ]
 
 [[tool.poetry_bumpversion.replacements]]
-files = ["intel_ai_safety/version.py"]
+files = ["intel_ai_safety/version.py",
+       "explainer/intel_ai_safety/explainer/version.py",
+       "model_card_gen/intel_ai_safety/model_card_gen/version.py"]
 search = '__version__ = "{current_version}"'
 replace = '__version__ = "{new_version}"'
 

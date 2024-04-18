@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "intel-ai-safety-explainer-cam-pytorch"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["IntelAI <IntelAI@intel.com>"]
 readme = "README.md"
@@ -11,11 +11,15 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
-intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety-explainer = {version = "*"}
 torch = {version = "2.2.0", source = "pytorch-cpu"}
 numpy = '1.24.4'
 opencv-python = '4.9.0.80'
 grad-cam = '1.5.0'
+
+[tool.poetry.group.local.dependencies]
+intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety = {path = "../../.."}
 
 [tool.poetry.group.test]
 optional = true

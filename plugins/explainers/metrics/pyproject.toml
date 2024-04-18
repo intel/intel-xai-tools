@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "intel-ai-safety-explainer-metrics"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["IntelAI <IntelAI@intel.com>"]
 readme = "README.md"
@@ -10,7 +10,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
-intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety-explainer = {version = "*"}
 matplotlib = '3.8.3'
 numpy = '1.24.4'
 pandas = '1.5.3'
@@ -19,6 +19,10 @@ scikit-learn = '1.4.0'
 scikit-plot = '0.3.7'
 scipy = '1.12.0'
 seaborn = '0.13.2'
+
+[tool.poetry.group.local.dependencies]
+intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety = {path = "../../.."}
 
 [tool.poetry.group.test]
 optional = true

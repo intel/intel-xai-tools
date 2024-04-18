@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "intel-ai-safety-explainer"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["IntelAI <IntelAI@intel.com>"]
 readme = "README.md"
@@ -10,8 +10,11 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
-intel-ai-safety = {path = ".."}
+intel-ai-safety = {version = "*"}
 ipywidgets = '7.8.1'
+
+[tool.poetry.group.local.dependencies]
+intel-ai-safety = {path=".."}
 
 [tool.poetry.group.test]
 optional = true

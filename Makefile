@@ -92,6 +92,7 @@ bump: venv-test
 poetry-lock:
 	@echo "Lock all project dependency versions"
 	@poetry update --lock
+	@cd explainer && poetry lock && cd -
 	@cd model_card_gen && poetry lock && cd -
 	@cd plugins/explainers/attributions-hugging-face && poetry lock && cd -
 	@cd plugins/explainers/attributions && poetry lock && cd -
