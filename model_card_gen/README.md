@@ -142,11 +142,11 @@ The `ModelCardGen.generate` classmethod requires three inputs and returns a `Mod
 
 * `model_path` (str) : this field represents the path to the TensorFlow SavedModel and it is only required for TensorFlow models.
 
-* `eval_config` (tfma.EvalConfig or str) : this is either the path to the proto config file used by the tfma evaluator or the proto string to be parsed. For example, let us review the following file entitled "eval_config.proto" defined for the COMPAS proxy model found in [`/notebooks/model_card_gen/compas-model-card-tfx.ipynb`](/notebooks/model_card_gen/compas-model-card-tfx.ipynb).
+* `eval_config` (tfma.EvalConfig or str) : this is either the path to the proto config file used by the tfma evaluator or the proto string to be parsed. For example, let us review the following file entitled "eval_config.proto" defined for the COMPAS proxy model found in [`/notebooks/model_card_gen/compas_with_model_card_gen/compas-model-card-tfx.ipynb`](/notebooks/model_card_gen/compas_with_model_card_gen/compas-model-card-tfx.ipynb).
 
 **TFMA EvalConfig**
 
-For example `eval_config` parameter, let us review the following file entitled "eval_config.proto" defined for the COMPAS proxy model found in [`/notebooks/model_card_gen/compas-model-card-tfx.ipynb`](/notebooks/model_card_gen/compas-model-card-tfx.ipynb).
+For example `eval_config` parameter, let us review the following file entitled "eval_config.proto" defined for the COMPAS proxy model found in [`/notebooks/model_card_gen/compas_with_model_card_gen/compas-model-card-tfx.ipynb`](/notebooks/model_card_gen/compas_with_model_card_gen/compas-model-card-tfx.ipynb).
 
 In the `model_specs` section it tells the evaluator "label_key" is the ground truth label. In the `metric_specs` section it defines the following metrics to be computed: "BinaryAccuracy", "AUC", "ConfusionMatrixPlot", and "FairnessIndicators". In the `slicing_specs` section it tells the evaluator to compute these metrics accross all datapoints and aggregate these metrics grouped by the "race" feature.
 
@@ -223,7 +223,7 @@ mc = {
 }
 ```
 A more comprehensive JSON example, that includes formatting for Ethical Considerations, can be found here: 
-[`/model_card_gen/docs/examples/json/model_card_example.json`](/model_card_gen/docs/examples/json/model_card_example.json).
+[`/model_card_gen/intel_ai_safety/model_card_gen/docs/examples/json/model_card_example.json`](/model_card_gen/intel_ai_safety/model_card_gen/docs/examples/json/model_card_example.json).
 
 **Create Model Card**
 ```python
@@ -251,7 +251,7 @@ pip install ".[test]"
 Step 2: Run tests
 
 ```shell
-python -m pytest intel_ai_tools/model_card_gen/tests/
+python -m pytest tests/
 ```
 
 ### Markers
@@ -270,11 +270,11 @@ Note that running PyTorch tests still requires TensorFlow libararies for model a
 
 Run only the TensorFlow tests:
 ```shell
-python -m pytest intel_ai_tools/model_card_gen/tests/ -m tensorflow
+python -m pytest tests/ -m tensorflow
 ```
 
 Run the PyTorch and common tests:
 ```shell
-python -m pytest intel_ai_tools/model_card_gen/tests/ -m "pytorch or common"
+python -m pytest tests/ -m "pytorch or common"
 ```
 
