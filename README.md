@@ -111,8 +111,8 @@ Notebooks may require additional dependencies listed in their associated documen
 
 Verify that your installation was successful by using the following commands, which display the Explainer and Model Card Generator versions:
 ```
-python -c "from explainer.intel_ai_safety.explainer import version; print(version.__version__)"
-python -c "from model_card_gen.intel_ai_safety.model_card_gen import version; print(version.__version__)"
+python -c "from intel_ai_safety.explainer import version; print(version.__version__)"
+python -c "from intel_ai_safety.model_card_gen import version; print(version.__version__)"
 ```
 
 ## Running Notebooks
