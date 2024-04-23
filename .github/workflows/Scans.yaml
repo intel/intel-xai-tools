@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - develop
+      - develop-ng
       - main
       - r0.4
       - r0.5

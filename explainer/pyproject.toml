@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "intel-ai-safety-explainer"
+version = "1.0.0"
+description = ""
+authors = ["IntelAI <IntelAI@intel.com>"]
+readme = "README.md"
+packages = [
+    {include = "intel_ai_safety", from="."},
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.11"
+intel-ai-safety = {version = "*"}
+ipywidgets = '7.8.1'
+
+[tool.poetry.group.local.dependencies]
+intel-ai-safety = {path=".."}
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+datasets = '2.14.4'
+deepdiff = '6.7.1'
+intel-tensorflow = '2.14.0'
+pytest = '8.1.1'
+scikit-learn = '1.4.0'
+tensorflow-hub = '0.15.0'
+torch = {version = "2.2.0", source = "pytorch-cpu"}
+torchvision = {version = "0.17.0", source = "pytorch-cpu"}
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry_bumpversion.replacements]]
+files = ["intel_ai_safety/explainer/version.py"]
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'

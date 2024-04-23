@@ -16,9 +16,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-ACTIVATE_TF = "intel_tf/bin/activate"
-ACTIVATE_PYT = "intel_pyt/bin/activate"
-ACTIVATE_TEST = "test_env/bin/activate"
+VENV_DIR = ".venv"
+ACTIVATE_TEST = "$(VENV_DIR)/bin/activate"
 ACTIVATE_DOCS = $(ACTIVATE_TEST)
 ACTIVATE_NOTEBOOK = $(ACTIVATE_TEST)
 
@@ -26,36 +25,33 @@ LISTEN_IP ?= 127.0.0.1
 LISTEN_PORT ?= 9090
 DOCS_DIR ?= docs
 
-venv-test:
-	@echo "Creating a virtualenv test_env..."
-	@test -d test_env || virtualenv -p python test_env
+venv-test: poetry-lock
+	@echo "Creating a virtualenv $(VENV_DIR)..."
+	@poetry install --with test --extras all
 
-	@echo "Building the XAI API in test_env env..."
-	@. $(ACTIVATE_TEST) && pip install --extra-index-url https://download.pytorch.org/whl/cpu --editable .[test]
+test-mcg: venv-test
+	@echo "Testing the Model Card Gen API..."
+	@. $(ACTIVATE_TEST) && pytest model_card_gen/tests
 
-# TODO: running all tests in one pytest session randomly causes torch test to hang at last epoch
-test-torch: venv-test
-	@echo "Testing the API..."
-	@. $(ACTIVATE_TEST) && PYTHONPATH="$(CURDIR)/model_card_gen/tests" pytest -s model_card_gen/tests/test_end_to_end_torch.py
+install: poetry-lock
+	@poetry install --extras all
 
-test-mcg: test-torch
-	@echo "Testing the API..."
-	@. $(ACTIVATE_TEST) && PYTHONPATH="$(CURDIR)/model_card_gen/tests" pytest -s -k "not torch"
-
-install:
-	@pip install --extra-index-url https://download.pytorch.org/whl/cpu --editable .
-
-xai-whl:
-	@python setup.py bdist_wheel
+build-whl:
+	@poetry build
 
 clean:
-	@rm -rf build dist intel_xai_tools.egg-info
-	@rm -rf test_env
+	@rm -rf build dist intel_ai_safety.egg-info
+	@rm -rf $(VENV_DIR)
 
-test-explainer: venv-test 
-	@. $(ACTIVATE_TEST) && pytest explainer/tests
+test-explainer: venv-test
+	@echo "Testing the Explainer API..."
+	@. $(ACTIVATE_TEST) && pytest plugins/explainers/attributions/tests
+	@. $(ACTIVATE_TEST) && pytest plugins/explainers/attributions-hugging-face/tests
+	@. $(ACTIVATE_TEST) && pytest plugins/explainers/cam-tensorflow/tests
+	@. $(ACTIVATE_TEST) && pytest plugins/explainers/cam-pytorch/tests
+	@. $(ACTIVATE_TEST) && pytest plugins/explainers/metrics/tests
 
-test: clean test-mcg test-explainer
+test: test-mcg test-explainer
 
 venv-docs: venv-test ${DOCS_DIR}/requirements-docs.txt
 	@echo "Installing docs dependencies..."
@@ -74,13 +70,44 @@ test-notebook: venv-test
 	@. $(ACTIVATE_NOTEBOOK) && \
 	bash run_notebooks.sh $(CURDIR)/notebooks/explainer/imagenet_with_cam/ExplainingImageClassification.ipynb
 
-dist: venv-test
+dist: build-whl
 	@echo "Create binary wheel..."
-	@. $(ACTIVATE_DOCS) && python setup.py bdist_wheel
 
 check-dist: dist
 	@echo "Testing the wheel..."
 	@. $(ACTIVATE_DOCS) && \
 	pip install twine && \
-	python setup.py bdist_wheel && \
 	twine check dist/*
+
+bump: venv-test
+	@poetry self add poetry-bumpversion
+	@poetry version patch --dry-run
+	@(cd model_card_gen ; poetry version patch --dry-run)
+	@(cd explainer; poetry version patch --dry-run)
+	@echo -n "Are you sure you want to make above changes? [y/N] " && read ans && [ $${ans:-N} = y ]
+	@poetry version patch
+	@(cd model_card_gen ; poetry version patch)
+	@(cd explainer; poetry version patch)
+
+poetry-lock:
+	@echo "Lock all project dependency versions"
+	@poetry update --lock
+	@cd explainer && poetry lock && cd -
+	@cd model_card_gen && poetry lock && cd -
+	@cd plugins/explainers/attributions-hugging-face && poetry lock && cd -
+	@cd plugins/explainers/attributions && poetry lock && cd -
+	@cd plugins/explainers/cam-pytorch && poetry lock && cd -
+	@cd plugins/explainers/cam-tensorflow && poetry lock && cd -
+	@cd plugins/explainers/captum && poetry lock && cd -
+	@cd plugins/explainers/metrics && poetry lock && cd -
+
+poetry-lock-update:
+	@echo "Update and Lock all project dependency versions"
+	@poetry update --lock
+	@cd model_card_gen && poetry update --lock && cd -
+	@cd plugins/explainers/attributions-hugging-face && poetry update --lock && cd -
+	@cd plugins/explainers/attributions && poetry update --lock && cd -
+	@cd plugins/explainers/cam-pytorch && poetry update --lock && cd -
+	@cd plugins/explainers/cam-tensorflow && poetry update --lock && cd -
+	@cd plugins/explainers/captum && poetry update --lock && cd -
+	@cd plugins/explainers/metrics && poetry update --lock && cd -

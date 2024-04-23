@@ -24,7 +24,7 @@ import pytest
 import tensorflow_model_analysis as tfma
 from google.protobuf import text_format
 
-from model_card_gen.model_card_gen import ModelCardGen
+from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
 
 
 @pytest.mark.pytorch
@@ -33,8 +33,8 @@ class TestMCGForPyTorch:
     @classmethod
     def setup_class(cls):
         # Do PyTorch specific imports within the marked class so that we don't get errors when torch isn't installed
-        from model_card_gen.datasets import PytorchDataset
-        from model_card_gen.tests.torch_model import get_data, get_trained_model
+        from intel_ai_safety.model_card_gen.datasets import PytorchDataset
+        from .torch_model import get_data, get_trained_model
 
         adult_dataset, feature_names = get_data()
         cls._model_path = get_trained_model(adult_dataset, feature_names)

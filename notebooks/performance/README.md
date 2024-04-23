@@ -31,7 +31,7 @@ In order to compare AI Kit and stock environments, two isolated Conda environmen
 conda create -n stock python=3.9
 conda activate stock
 pip install intel-xai --no-deps
-pip install tensorflow==2.13.0 shap torch=2.0.1 opencv-python notebook ipywidgets
+pip install tensorflow==2.14.0 torch=2.2.0 ipywidgets notebook opencv-python shap
 ```
 
 ### __Intel® AI Kit Conda environment__
@@ -41,5 +41,5 @@ conda activate intel
 conda install -c intel --deps-only shap
 conda install --no-deps shap
 pip install --no-deps intel-xai
-conda install -c intel opencv pytorch=2.0.1 ipywidgets matplotlib tensorflow=2.13.0 notebook
+conda install -c intel pytorch=2.2.0 tensorflow=2.14.0 ipywidgets matplotlib notebook opencv
 ```

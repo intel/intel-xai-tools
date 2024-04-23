@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - develop
+      - develop-ng
       - main
     tags:
       - '**'
@@ -31,11 +32,11 @@ jobs:
     steps:
       - id: repo
         name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
 
       - id: env 
-        name: Install virtualenv
-        run: pip install virtualenv
+        name: Install poetry
+        run: pip install poetry
 
       - id: test
         name: Test Notebooks

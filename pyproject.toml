@@ -1,0 +1,98 @@
+[tool.poetry]
+name = "intel-ai-safety"
+version = "1.0.0"
+description = ""
+authors = ["IntelAI <IntelAI@intel.com>"]
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.11"
+"intel-ai-safety-model-card-gen" = {path = "model_card_gen", develop = true, optional=true}
+"intel-ai-safety-explainer" = {path = "explainer", develop = true, optional=true}
+"intel-ai-safety-explainer-attributions" = {path = "plugins/explainers/attributions", develop = true, optional=true}
+"intel-ai-safety-explainer-attributions-hugging-face" = {path = "plugins/explainers/attributions-hugging-face", develop = true, optional=true}
+"intel-ai-safety-explainer-captum" = {path = "plugins/explainers/captum", develop = true, optional=true}
+"intel-ai-safety-explainer-cam-tensorflow" = {path = "plugins/explainers/cam-tensorflow", develop = true, optional=true}
+"intel-ai-safety-explainer-cam-pytorch" = {path = "plugins/explainers/cam-pytorch", develop = true, optional=true}
+"intel-ai-safety-explainer-metrics" = {path = "plugins/explainers/metrics", develop = true, optional=true}
+
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+datasets = '2.14.4'
+deepdiff = '6.7.1'
+intel-tensorflow = '2.14.0'
+pytest = '8.1.1'
+scikit-learn = '1.4.0'
+tensorflow-hub = '0.15.0'
+torch = {version = "2.2.0", source = "pytorch-cpu"}
+torchvision = {version = "0.17.0", source = "pytorch-cpu"}
+pillow = '10.2.0'
+sentencepiece = '0.2.0'
+
+
+[tool.poetry.extras]
+model-card = ["intel-ai-safety-model-card-gen"]
+explainer = ["intel-ai-safety-explainer"]
+explainer-tensorflow = ["intel-ai-safety-explainer",
+                        "intel-ai-safety-explainer-attributions",
+                        "intel-ai-safety-explainer-cam-tensorflow",
+                        "intel-ai-safety-explainer-metrics",
+]
+explainer-pytorch = ["intel-ai-safety-explainer",
+                 "intel-ai-safety-explainer-captum",
+                 "intel-ai-safety-explainer-cam-pytorch",
+                 "intel-ai-safety-explainer-metrics"
+]
+explainer-all = ["intel-ai-safety-explainer",
+                 "intel-ai-safety-explainer-attributions",
+                 "intel-ai-safety-explainer-attributions-hugging-face",
+                 "intel-ai-safety-explainer-captum",
+                 "intel-ai-safety-explainer-cam-tensorflow",
+                 "intel-ai-safety-explainer-cam-pytorch",
+                 "intel-ai-safety-explainer-metrics",
+]
+all = ["intel-ai-safety-model-card-gen",
+       "intel-ai-safety-explainer",
+       "intel-ai-safety-explainer-attributions",
+       "intel-ai-safety-explainer-attributions-hugging-face",
+       "intel-ai-safety-explainer-captum",
+       "intel-ai-safety-explainer-cam-tensorflow",
+       "intel-ai-safety-explainer-cam-pytorch",
+       "intel-ai-safety-explainer-metrics"
+]
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[[tool.poetry_bumpversion.replacements]]
+files = [
+         "model_card_gen/pyproject.toml",
+         "explainer/pyproject.toml",
+         "plugins/explainers/attributions/pyproject.toml",
+         "plugins/explainers/attributions-hugging-face/pyproject.toml",
+         "plugins/explainers/captum/pyproject.toml",
+         "plugins/explainers/cam-tensorflow/pyproject.toml",
+         "plugins/explainers/cam-pytorch/pyproject.toml",
+         "plugins/explainers/metrics/pyproject.toml",
+         ]
+
+[[tool.poetry_bumpversion.replacements]]
+files = ["intel_ai_safety/version.py",
+       "explainer/intel_ai_safety/explainer/version.py",
+       "model_card_gen/intel_ai_safety/model_card_gen/version.py"]
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
+
+[build-system]
+requires = ["poetry"]
+build-backend = "poetry.core.masonry.api"

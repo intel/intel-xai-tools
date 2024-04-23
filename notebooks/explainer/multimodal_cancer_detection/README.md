@@ -25,11 +25,7 @@ This notebook demonstrate how to use the Explainable AI API for PyTorch CNN and 
     1. Configure and quantize the current BERT model
     2. Evaluate
     3. Error Analysis
-6.  Ensemble
-    1. Map images to text examples
-    2. Execute ensemble algorithm
-    3. Error analysis
-    4. Explanation
+
 
 The `dataset_utils.py` holds the supporting functions that prepare the image and text datasets.
 
@@ -37,11 +33,7 @@ The `dataset_utils.py` holds the supporting functions that prepare the image and
 
 To run `Multimodal_Cancer_Detection.ipynb`, install the following dependencies:
 1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
-2. 
-``` 
-pip install docx2txt intel-transfer-learning-tool==0.5 \
-     intel-extension-for-transformers==1.1.0 nltk openpyxl scikit-image
-```
+2. Further dependencies to be installed in the notebook
 
 ## References
 

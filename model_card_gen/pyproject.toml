@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "intel-ai-safety-model-card-gen"
+version = "1.0.0"
+description = ""
+authors = ["IntelAI <IntelAI@intel.com>"]
+readme = "README.md"
+packages = [{include = "intel_ai_safety", from="."}]
+
+[tool.setuptools.package-data]
+intel_ai_safety.model_card_gen = [
+    "model_card_gen/**/*.json",
+    "model_card_gen/**/*.jinja",
+    "model_card_gen/**/*.html",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.11"
+absl-py = '1.4.0'
+attrs = '21.4.0'
+dataclasses = '0.6'
+grpcio-status = '1.48.2'
+intel-tensorflow = '2.14.0'
+Jinja2 = '3.1.3'
+joblib = '1.3.2'
+jsonschema = {version='4.17.3', extras = ['format-nongpl']}
+plotly = '5.20.0'
+protobuf = '3.20.3'
+semantic-version = '2.10.0'
+tensorflow-data-validation = '1.14.0'
+tensorflow-model-analysis = '0.45.0'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry_bumpversion.replacements]]
+files = ["intel_ai_safety/model_card_gen/version.py"]
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
