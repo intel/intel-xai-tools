@@ -1,0 +1,163 @@
+{
+    "schema_version": "0.0.1",
+    "model_details": {
+        "name": "dolore",
+        "path": "elit do incididunt",
+        "version": {
+            "name": "adipisicing",
+            "diff": "sit pariatur ex Lorem dolore",
+            "date": "2011-03-31"
+        },
+        "graphics": {
+            "description": "Collection of Images",
+            "collection": [ 
+                {
+                    "name": "Image Name",
+                    "html": "<img src=\"https://1000logos.net/wp-content/uploads/2021/05/Intel-logo.png\">"
+                }
+            ]   
+        },
+        "licenses": [
+            {
+                "identifier": "ut in anim eu cillum"
+            },
+            {
+                "custom_text": "ipsum"
+            }
+        ],
+        "citations": [
+            {
+                "citation": "ipsum"
+            },
+            {
+                "style": "dolor eu cillum cupidatat",
+                "citation": "sed adipisicing"
+            }
+        ],
+        "owners": [
+            {
+                "name": "sunt quis cupidatat magna"
+            },
+            {
+                "name": "irure culpa magna in ut",
+                "contact": "sint do adipisicing"
+            },
+            {
+                "contact": "consequat exercitation laboris"
+            }
+        ],
+        "references": [
+            {
+                "reference": "https://WsFZssxtZMggJNeAjGOm.onlpfCu8iISB2UWf1WqX."
+            }
+        ],
+        "overview": "amet qui non dolor",
+        "documentation": "ut"
+    },
+    "quantitative_analysis": {
+        "performance_metrics": [
+            {
+                "value": "voluptate",
+                "type": "Lorem",
+                "confidence_interval": {
+                    "upper_bound": "aliquip exercitation anim ut in",
+                    "lower_bound": "cupidatat aliqua nostrud"
+                }
+            },
+            {
+                "value": "reprehenderit ut do",
+                "type": "Excepteur est occaecat",
+                "slice": "sint est dolor",
+                "confidence_interval": {
+                    "lower_bound": "voluptate Excepteur ea enim ad"
+                }
+            },
+            {
+                "type": "nostrud labore veniam amet",
+                "slice": "sit est ex eu nostrud",
+                "value": "elit",
+                "confidence_interval": {
+                    "lower_bound": "Ut ad",
+                    "upper_bound": "mollit dolore in officia qui"
+                }
+            },
+            {
+                "value": "dolore eu Excepteur tempor aliquip",
+                "type": "eiusmod dolore est",
+                "confidence_interval": {
+                    "upper_bound": "labore",
+                    "lower_bound": "aute tempor pariatur amet et"
+                },
+                "slice": "sint mollit"
+            },
+            {
+                "confidence_interval": {},
+                "value": "quis non amet ad laboris",
+                "type": "ad culpa fugiat enim",
+                "slice": "cillum velit in veniam cupidatat"
+            }
+        ],
+    "graphics": {
+            "description": "Collection of Images",
+            "collection": [ 
+                {
+                    "name": "Quant Image Name",
+                    "html": "<img src=\"https://1000logos.net/wp-content/uploads/2021/05/Intel-logo.png\">"
+                }
+            ]   
+        }
+    },
+    "model_parameters": {
+        "input_format": "qui irure ut",
+        "model_architecture": "dolor incididunt",
+        "data": [
+            {
+                "description": "fugiat sit dolor exercitation",
+                "name": "in minim Excepteur",
+                "link": "https://fCklQ.scYlFaE50Bfxx5LgtIgNoCfeBE8z442FjLfAQzy4GMVefwsofvIfh0Ak8"
+            },
+            {
+                "description": "commodo sit irure consequat",
+                "sensitive": {
+                    "sensitive_data": [
+                        "Excepteur reprehenderit voluptate"
+                    ]
+                }
+            }
+        ]
+    },
+    "considerations": {
+        "tradeoffs": [
+            {
+                "description": "sunt dolor id"
+            }
+        ],
+        "use_cases": [
+            {
+                "description": "eiusmod dolor nulla cillum"
+            }
+        ],
+        "limitations": [
+            {
+                "description": "Excepteur est occaecat"
+            }
+        ],
+        "users": [
+            {
+                "description": "labore"
+            }
+        ],
+        "ethical_considerations": [
+            {
+                "name": "quis non amet"
+            },
+            {
+                "name": "quis non amet",
+                "mitigation_strategy": "dolore eu Excepteur tempor aliquip (aute tempor pariatur amet et, labore)"
+            },
+            {
+                "mitigation_strategy": "dolore eu Excepteur tempor aliquip (aute tempor pariatur amet et, labore)"
+            }
+        ]
+    }
+}

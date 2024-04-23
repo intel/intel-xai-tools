@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "intel-ai-safety-explainer-cam-pytorch"
+version = "1.0.0"
+description = ""
+authors = ["IntelAI <IntelAI@intel.com>"]
+readme = "README.md"
+packages = [
+    {include = "intel_ai_safety", from="."},
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.11"
+intel-ai-safety-explainer = {version = "*"}
+torch = {version = "2.2.0", source = "pytorch-cpu"}
+numpy = '1.24.4'
+opencv-python = '4.9.0.80'
+grad-cam = '1.5.0'
+
+[tool.poetry.group.local.dependencies]
+intel-ai-safety-explainer = {path = "../../../explainer"}
+intel-ai-safety = {path = "../../.."}
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = '8.1.1'
+torch = {version = "2.2.0", source = "pytorch-cpu"}
+torchvision = {version = "0.17.0", source = "pytorch-cpu"}
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry"]
+build-backend = "poetry.core.masonry.api"
+

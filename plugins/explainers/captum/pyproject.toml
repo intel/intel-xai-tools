@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "intel-ai-safety-explainer-captum"
+version = "1.0.0"
+description = ""
+authors = ["IntelAI <IntelAI@intel.com>"]
+readme = "README.md"
+packages = [
+    {include = "intel_ai_safety", from="."},
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.11"
+captum = '0.7.0'
+torch = {version = "2.2.0", source = "pytorch-cpu"}
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+
+[build-system]
+requires = ["poetry"]
+build-backend = "poetry.core.masonry.api"
