@@ -83,3 +83,6 @@ EXPOSE 8888
 RUN echo "source activate ${VIRTUAL_ENV}" >> ~/.bashrc
 
 CMD ["bash", "-c", "source activate ${VIRTUAL_ENV} && jupyter notebook --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+
+HEALTHCHECK --interval=1m --timeout=5s --retries=5 \
+  CMD jupyter server list || exit 1

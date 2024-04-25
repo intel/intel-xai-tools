@@ -2,3 +2,5 @@
 .git**
 docker
 poetry.lock
+notebooks/explainer/README.md
+notebooks/model_card_gen/README.md
