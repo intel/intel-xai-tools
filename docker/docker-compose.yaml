@@ -21,12 +21,16 @@ services:
     image: intel/ai-tools:intel-ai-safety-1.0.0-explainers
     pull_policy: always
     build:
-      context: ../
       dockerfile: docker/Dockerfile.explainers
+      context: ../
+      target: runtime
       args:
         IMAGE_NAME: ubuntu
         IMAGE_TAG: "22.04"
         PY_VER: "3.10"
+        UID: "1000"
+        GID: "1000"
+        NON_ROOT_USER: "intelai"
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ${no_proxy}
@@ -45,11 +49,15 @@ services:
     image: intel/ai-tools:intel-ai-safety-1.0.0-mcg
     pull_policy: always
     build:
-      context: ../
       dockerfile: docker/Dockerfile.mcg
+      context: ../
+      target: runtime
       args:
         IMAGE_NAME: ubuntu
         IMAGE_TAG: "22.04"
+        UID: "1000"
+        GID: "1000"
+        NON_ROOT_USER: "intelai"
         PY_VER: "3.10"
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}

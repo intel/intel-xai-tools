@@ -17,7 +17,7 @@ docker pull ubuntu:22.04
 docker compose build explainers
 ```
 
-### Check existing images:
+### Check existing image:
 ```bash
 docker images | grep -i explainers
 intel/ai-tools                                      intel-ai-safety-1.0.0-explainers           d8219a0cf128   About an hour ago    3.24GB
@@ -30,7 +30,7 @@ intel/ai-tools                                      intel-ai-safety-1.0.0-explai
 docker compose build model_card_gen
 ```
 
-### Check existing images:
+### Check existing image
 ```bash
 docker images | grep -i mcg
 intel/ai-tools                                      intel-ai-safety-1.0.0-mcg                  82bdf7b239cc   About a minute ago   3.02GB
@@ -79,7 +79,7 @@ or
 docker logs -f explainers
 ```
 
-## Final note
+## Final notes
 To run the containers, you can also use `docker compose` this way for example:
 ```bash
 docker compose run model_card_gen
@@ -87,4 +87,11 @@ docker compose run model_card_gen
 or to run in the container in daemon mode:
 ```bash
 docker compose run -d model_card_gen
+```
+
+These containers are built with `intelai` as default non-root container user.
+If you prefer to run these containers with a different user, you can build them with custom `build-arg`'s.
+For example this command builds the containers with current system user along with user's id and group:
+```bash
+docker compose build --build-arg NON_ROOT_USER=$(id -un) --build-arg UID=(id -u) --build-arg GID=$(id -g)
 ```

@@ -68,10 +68,20 @@ RUN /usr/local/bin/poetry config virtualenvs.create false && \
 FROM base as runtime
 
 ARG APP_DIR=/intel-xai
+ARG UID=1000
+ARG GID=1000
+ARG NON_ROOT_USER=intelai
 
 SHELL ["/bin/bash", "-c"]
 
-COPY --from=builder ${APP_DIR} ${APP_DIR}
+# Create a non-root user 'intelai'
+RUN addgroup --gid ${GID} ${NON_ROOT_USER} && \
+    adduser --uid ${UID} --gid ${GID} --disabled-password --gecos "" ${NON_ROOT_USER}
+
+# Set the non-root user as the default user
+USER ${NON_ROOT_USER}
+
+COPY --from=builder --chown=${NON_ROOT_USER}:${NON_ROOT_USER} ${APP_DIR} ${APP_DIR}
 
 ENV VIRTUAL_ENV="${APP_DIR}/.venv" \
     PATH="${APP_DIR}/.venv/bin:${PATH}"
