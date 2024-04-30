@@ -30,7 +30,7 @@ scikit-learn = '1.4.0'
 tensorflow-hub = '0.15.0'
 torch = {version = "2.2.0", source = "pytorch-cpu"}
 torchvision = {version = "0.17.0", source = "pytorch-cpu"}
-pillow = '10.2.0'
+pillow = '10.3.0'
 sentencepiece = '0.2.0'
 
 

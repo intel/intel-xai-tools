@@ -29,7 +29,7 @@ optional = true
 
 [tool.poetry.group.test.dependencies]
 intel-tensorflow = '2.14.0'
-pillow = '10.2.0'
+pillow = '10.3.0'
 pytest = '8.1.1'
 transformers = '4.39.0'
 torch = {version = "2.2.0", source = "pytorch-cpu"}
