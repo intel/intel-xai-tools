@@ -70,7 +70,7 @@ on making code changes.
    poetry install --extras explainer-pytorch
    ```
    
-   f. Install `intel_ai_safety` with `explainer` and just its pytorch implementations
+   f. Install `intel_ai_safety` with `explainer` and just its tensroflow implementations
    
    ```
    poetry install --extras explainer-tensorflow
