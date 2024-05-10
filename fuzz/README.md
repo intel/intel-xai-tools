@@ -29,7 +29,7 @@ ERROR: atheris detected an error in fuzz_test.py.
 CRASH: Test input caused an unhandled IndexError exception.
 ~~~
 
-In this example, the fuzzer has discovered an input that causes an IndexError in fuzz_test.py. This indicates that the code does not properly handle cases where list or array access is out of bounds. The developer should examine the stack trace provided by Atheris, identify the problematic code, and implement proper bounds checking or error handling to resolve the issue.
+In this example, the fuzzer has discovered an input that causes an IndexError in fuzz_test.py. This indicates that the code may not properly handle cases where list or array access is out of bounds. The developer should examine the stack trace provided by Atheris, identify whether there is problematic code, and implement proper bounds checking or error handling. If throwing the exception is the correct and expected behavior, the crash can be silently handled in fuzz_test.py using a try/except block.
 
 ### Coverage Metrics
 Atheris provides information about code coverage, which helps in understanding which parts of your code were exercised by the fuzz tests. Low coverage might indicate that additional fuzzing targets or more diverse inputs are needed. 
@@ -50,6 +50,9 @@ The output will be:
 | intel_ai_safety/model_card_gen/validation.py                | 26    | 12   | 54%   |
 |-------------------------------------------------------------|-------|------|-------|
 | TOTAL                                                       | 835   | 416  | 50%   |
+
+Remember that the test may not be designed to exercise all the instrumented code, only a certain 
+part or parts of it. It can be more helpful to look at the individual file coverage than the total. 
 
 ### Leak Detection
 

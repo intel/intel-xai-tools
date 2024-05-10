@@ -1,6 +1,9 @@
 import atheris
 import json
+import jsonschema
 import sys
+
+STR_BYTE_COUNT = 10000  # Desired byte count for fuzzed strings
 
 default_path = "../model_card_gen"
 sys.path.append(default_path)
@@ -8,13 +11,21 @@ sys.path.append(default_path)
 with atheris.instrument_imports(include=["intel_ai_safety.*"]):
     from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
 
+def mutate_schema(fdp, json_data):
+    """Recurses through a json object leaving keys and structures intact and
+    randomly generating new data values of the proper type."""
+    # TODO: Implement float, int, bool, and other types as needed
+    if isinstance(json_data, str):
+        return fdp.ConsumeUnicode(STR_BYTE_COUNT)
+    elif isinstance(json_data, list):
+        return [mutate_schema(fdp, json_data[i]) for i in range(len(json_data))]
+    elif isinstance(json_data, dict):
+        return {k: mutate_schema(fdp, v) for k, v in json_data.items()}
+    else:
+        return None
+    
 def TestOneInput(data):
     """The entry point for the fuzzer."""
-    # Consume as unicode if the input is raw bytes
-    if type(data) == bytes:
-        fdp = atheris.FuzzedDataProvider(data)
-        data = fdp.ConsumeUnicode(sys.maxsize)
-
     try:
         json_data = json.loads(data)
     except json.decoder.JSONDecodeError:
@@ -23,12 +34,15 @@ def TestOneInput(data):
     except UnicodeDecodeError:
         print("Not valid unicode")
         return
-    except ValueError:
+
+    fdp = atheris.FuzzedDataProvider(data)
+    model_card_data = mutate_schema(fdp, json_data)
+    try:
+        mcg = ModelCardGen(data_sets={'test': ''}, model_card=model_card_data)
+        assert mcg.model_card
+    except (ValueError, jsonschema.ValidationError):
         print("Doesn't match MC schema")
         return
-
-    mcg = ModelCardGen(data_sets={'test': ''}, model_card=json_data)
-    print("Got a model card, its type is {}".format(type(mcg.model_card)))
 
 
 if __name__ == '__main__':
