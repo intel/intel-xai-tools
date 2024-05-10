@@ -22,6 +22,7 @@ There are two Python* components in the repository:
 * Python 3.8, 3.9, 3.10
 * Install required OS packages with `apt-get install build-essential python3-dev`
 * git (only required for the "Developer Installation")
+* Poetry
 
 ### Developer Installation with Poetry
 
@@ -76,7 +77,7 @@ on making code changes.
    poetry install --extras explainer-tensorflow
    ``` 
 
-4. Activate the enviornment:
+4. Activate the environment:
 
    ```
    source .venv/bin/activate
