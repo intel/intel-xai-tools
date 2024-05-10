@@ -158,3 +158,6 @@ dmypy.json
 poetry.lock
 **/poetry.lock
 **/**/poetry.lock
+
+# Fuzzing crash reports
+**/**crash-**

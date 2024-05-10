@@ -1,9 +1,9 @@
 atheris==2.3.0
 coverage==7.5.1
-ipython==7.34.0
+ipython
 Jinja2==3.1.4
 pandas==1.5.3
-plotly==5.22.0
+plotly==5.20.0
 semantic-version==2.10.0
-tensorflow-data-validation==1.15.1
-tensorflow_model_analysis==0.46.0
+tensorflow-data-validation==1.14.0
+tensorflow-model-analysis==0.45.0
