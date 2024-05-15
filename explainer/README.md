@@ -1,4 +1,4 @@
-### [Attributions](attributions)
+### Attributions
 
 | Method              | Decription                                                                                  |
 |---------------------|---------------------------------------------------------------------------------------------|
@@ -15,7 +15,7 @@
 | zero_shot           | ...                                                                                         |
 | sentiment_analyis   | Explain HuggingFace pipeline predictions the SHAP explainer methods                         |
 
-### [CAM](cam)
+### CAM
 
 | Method   | Decription                                                                                                 |
 |------------|------------------------------------------------------------------------------------------------------------|
@@ -23,7 +23,7 @@
 | eigancam   | Explain predictions with eigan-based class activation maps using pytorch-grad-cam methods                  |
 | tf_gradcam | Explain predictions with gradient-based class activation maps with the  TensorFlow|
 
-### [Metrics](metrics)
+### Metrics
 
 | Method | Decription                                                                                  |
 |--------|---------------------------------------------------------------------------------------------|

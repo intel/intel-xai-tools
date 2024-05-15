@@ -3,7 +3,7 @@ Fuzz testing is an automated software testing technique that involves providing 
 Inside this fuzz folder holds all fuzz testing programs.
 
 ### Requirements
-* Python: Version 3.8 or newer
+* Python: Version 3.9 or newer
 * Atheris: Google's fuzzing engine for Python
 * Coverage: Code coverage measurement for Python
 

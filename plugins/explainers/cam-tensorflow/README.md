@@ -5,15 +5,6 @@
 | tf_gradcam | Explain predictions with gradient-based class activation maps with the  TensorFlow|
 
 
-```python3
-from intel_ai_safety.explainer.cam import tf_cam
-
-target_class = 281
-target_layer = tf_resnet50.get_layer('conv5_block3_out')
-gcam = tf_cam.tf_gradcam(tf_resnet50, target_layer, target_class, dog_cat_image)
-
-```
-
 CAM is an approach which localizes regions in the image responsible for a class prediction. 
 Here, for object classification model, we support visualization of GradCAM, which is the state-of-the art CAM method. 
 

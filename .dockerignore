@@ -5,3 +5,4 @@
 docker
 notebooks/explainer/README.md
 notebooks/model_card_gen/README.md
+fuzz
