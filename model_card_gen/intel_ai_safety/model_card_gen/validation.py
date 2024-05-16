@@ -31,15 +31,14 @@ from typing import Any, Dict, Optional, Text
 import jsonschema
 import semantic_version
 
-_SCHEMA_FILE_NAME = 'model_card.schema.json'
-_SCHEMA_VERSIONS = frozenset(('0.0.1',))
+_SCHEMA_FILE_NAME = "model_card.schema.json"
+_SCHEMA_VERSIONS = frozenset(("0.0.1",))
 _LATEST_SCHEMA_VERSION = max(_SCHEMA_VERSIONS, key=semantic_version.Version)
 
-SCHEMA_VERSION_STRING = 'schema_version'
+SCHEMA_VERSION_STRING = "schema_version"
 
-def validate_json_schema(
-        json_dict: Dict[Text, Any],
-        schema_version: Optional[Text] = None) -> Dict[Text, Any]:
+
+def validate_json_schema(json_dict: Dict[Text, Any], schema_version: Optional[Text] = None) -> Dict[Text, Any]:
     """Validates the json schema of a model card field.
 
     If schema_version is not provided, it will use the latest schema version.
@@ -59,9 +58,7 @@ def validate_json_schema(
             version.
         ValidationError: If `model_card_json` does not follow the model card schema.
     """
-    schema = _find_json_schema(
-            schema_version or json_dict.get('schema_version') or
-            _LATEST_SCHEMA_VERSION)
+    schema = _find_json_schema(schema_version or json_dict.get("schema_version") or _LATEST_SCHEMA_VERSION)
     jsonschema.validate(json_dict, schema)
     return schema
 
@@ -84,12 +81,12 @@ def _find_json_schema(schema_version: Optional[Text] = None) -> Dict[Text, Any]:
         schema_version = _LATEST_SCHEMA_VERSION
     if schema_version not in _SCHEMA_VERSIONS:
         raise ValueError(
-                'Cannot find schema version that matches the version of the given '
-                'model card. Found Versions: {}. Given Version: {}'.format(
-                        ', '.join(_SCHEMA_VERSIONS), schema_version))
+            "Cannot find schema version that matches the version of the given "
+            "model card. Found Versions: {}. Given Version: {}".format(", ".join(_SCHEMA_VERSIONS), schema_version)
+        )
 
-    schema_file = os.path.join('schema', 'v' + schema_version, _SCHEMA_FILE_NAME)
-    json_file = pkgutil.get_data('intel_ai_safety.model_card_gen', schema_file)
+    schema_file = os.path.join("schema", "v" + schema_version, _SCHEMA_FILE_NAME)
+    json_file = pkgutil.get_data("intel_ai_safety.model_card_gen", schema_file)
     schema = json.loads(json_file)
     return schema
 

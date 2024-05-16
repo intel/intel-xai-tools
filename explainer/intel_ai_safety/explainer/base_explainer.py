@@ -23,5 +23,6 @@ class BaseExplainer(ABC):
     """Base Explainer class to get explainations for a model
     in a context.
     """
+
     def __init__(self, *args, **kwargs):
         super(BaseExplainer, self).__init__(*args, **kwargs)

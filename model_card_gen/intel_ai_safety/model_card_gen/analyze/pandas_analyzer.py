@@ -24,10 +24,9 @@ from typing import Text, Union
 from intel_ai_safety.model_card_gen.utils.types import DatasetType
 from intel_ai_safety.model_card_gen.analyze.analyzer import ModelAnalyzer
 
+
 class DFAnalyzer(ModelAnalyzer):
-    def __init__(self,
-                 eval_config: Union[tfma.EvalConfig, Text] = None,
-                 dataset: pd.DataFrame = None):
+    def __init__(self, eval_config: Union[tfma.EvalConfig, Text] = None, dataset: pd.DataFrame = None):
         """Start TFMA analysis on Pandas DataFrame
 
         Args:
@@ -35,11 +34,9 @@ class DFAnalyzer(ModelAnalyzer):
             eval_config (tfma.EvalConfig or str): representing proto file path
         """
         super().__init__(eval_config, dataset)
-    
+
     @classmethod
-    def analyze(cls,
-                eval_config: Union[tfma.EvalConfig, Text] = None,
-                dataset:  DatasetType = None,):
+    def analyze(cls, eval_config: Union[tfma.EvalConfig, Text] = None, dataset: DatasetType = None):
         """Class Factory to start TFMA analysis
         Args:
             model_path (str) : path to model
@@ -66,6 +63,5 @@ class DFAnalyzer(ModelAnalyzer):
         return self.get_analysis()
 
     def run_analysis(self):
-        self.eval_result = tfma.analyze_raw_data(data=self.dataset,
-                                                 eval_config=self.eval_config)
+        self.eval_result = tfma.analyze_raw_data(data=self.dataset, eval_config=self.eval_config)
         return self.eval_result

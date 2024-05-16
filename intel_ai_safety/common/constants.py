@@ -24,8 +24,8 @@ from enum import Enum, auto
 class ModelFramework(str, Enum):
     """Provide DNN framework constants."""
 
-    TENSORFLOW = 'tensorflow'
-    PYTORCH = 'pytorch'
+    TENSORFLOW = "tensorflow"
+    PYTORCH = "pytorch"
 
     def __str__(self):
         return self.value
@@ -36,8 +36,10 @@ class ModelFramework(str, Enum):
         if framework_str in enum_dict:
             return enum_dict[framework_str]
         else:
-            raise ValueError("Unsupported model task: {} (Select from: {})"
-                             .format(framework_str, list(enum_dict.keys())))
+            raise ValueError(
+                "Unsupported model task: {} (Select from: {})".format(framework_str, list(enum_dict.keys()))
+            )
+
 
 class ModelTask(str, Enum):
 
@@ -58,7 +60,7 @@ class ModelTask(str, Enum):
     MULTILABEL_IMAGE_CLASSIFICATION = auto()
     OBJECT_DETECTION = auto()
     SEMANTIC_SEGMENTATION = auto()
-    OTHER = auto()    
+    OTHER = auto()
 
     def __str__(self):
         return self.value
@@ -87,24 +89,31 @@ class ModelTask(str, Enum):
         if model_task_str in enum_dict:
             return enum_dict[model_task_str]
         else:
-            raise ValueError("Unsupported model task: {} (Select from: {})"
-                             .format(model_task_str, list(enum_dict.keys())))
+            raise ValueError(
+                "Unsupported model task: {} (Select from: {})".format(model_task_str, list(enum_dict.keys()))
+            )
 
 
-text_model_tasks = {ModelTask.TEXT_CLASSIFICATION,
-                    ModelTask.MULTILABEL_TEXT_CLASSIFICATION,
-                    ModelTask.SENTIMENT_ANALYSIS,
-                    ModelTask.QUESTION_ANSWERING,
-                    ModelTask.ENTAILMENT,
-                    ModelTask.SUMMARIZATIONS}
+text_model_tasks = {
+    ModelTask.TEXT_CLASSIFICATION,
+    ModelTask.MULTILABEL_TEXT_CLASSIFICATION,
+    ModelTask.SENTIMENT_ANALYSIS,
+    ModelTask.QUESTION_ANSWERING,
+    ModelTask.ENTAILMENT,
+    ModelTask.SUMMARIZATIONS,
+}
 
-image_model_tasks = {ModelTask.IMAGE_CLASSIFICATION,
-                     ModelTask.MULTILABEL_IMAGE_CLASSIFICATION,
-                     ModelTask.OBJECT_DETECTION}
+image_model_tasks = {
+    ModelTask.IMAGE_CLASSIFICATION,
+    ModelTask.MULTILABEL_IMAGE_CLASSIFICATION,
+    ModelTask.OBJECT_DETECTION,
+}
 
-classification_model = {ModelTask.CLASSIFICATION,
-                        ModelTask.MULTICLASSIFICATION,
-                        ModelTask.TEXT_CLASSIFICATION,
-                        ModelTask.MULTILABEL_TEXT_CLASSIFICATION,
-                        ModelTask.IMAGE_CLASSIFICATION,
-                        ModelTask.MULTILABEL_IMAGE_CLASSIFICATION}
+classification_model = {
+    ModelTask.CLASSIFICATION,
+    ModelTask.MULTICLASSIFICATION,
+    ModelTask.TEXT_CLASSIFICATION,
+    ModelTask.MULTILABEL_TEXT_CLASSIFICATION,
+    ModelTask.IMAGE_CLASSIFICATION,
+    ModelTask.MULTILABEL_IMAGE_CLASSIFICATION,
+}

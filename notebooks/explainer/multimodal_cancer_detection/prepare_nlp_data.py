@@ -6,17 +6,11 @@ import zipfile
 import shutil
 
 
-
-
 def read_right_and_left(tx):
     tx_right, tx_left = "", ""
     if "Right Breast:" in tx and "Left Breast:" in tx:
         tx = tx.split("Left Breast:")
-        tx_right = [
-            i
-            for i in tx[0].split("Right Breast:")[1].splitlines()
-            if ("ACR C:" not in i and i != "")
-        ]
+        tx_right = [i for i in tx[0].split("Right Breast:")[1].splitlines() if ("ACR C:" not in i and i != "")]
         tx_left = [i for i in tx[1].splitlines() if ("ACR C:" not in i and i != "")]
 
     elif "Right Breast:" in tx and "Left Breast:" not in tx:
@@ -32,7 +26,7 @@ def read_right_and_left(tx):
 
 def read_content(file_content):
 
-    annotation = file_content.split("OPINION:")  
+    annotation = file_content.split("OPINION:")
     mm_revealed = annotation[0].split("REVEALED:")[1]
     mm_revealed_right, mm_revealed_left = read_right_and_left(mm_revealed)
 
@@ -70,14 +64,7 @@ def add_df_log(df, dict_text, manual_annotations, f_id):
                 label = df_temp["Pathology Classification/ Follow up"].unique().tolist()
 
             if len(label) == 1:
-                df.loc[len(df)] = [
-                    f_id,
-                    image_name,
-                    side,
-                    mm_type,
-                    label[0],
-                    " ".join(text_list),
-                ]
+                df.loc[len(df)] = [f_id, image_name, side, mm_type, label[0], " ".join(text_list)]
 
     return df
 
@@ -91,9 +78,7 @@ def label_correction(df):
     for i in df[patient_id].unique():
         annotation = " ".join(df[df[patient_id].isin([i])][data_column].to_list())
         temp_labels = [
-            label_indx
-            for label_indx in df[df[patient_id] == i][label_column].unique()
-            if label_indx is not None
+            label_indx for label_indx in df[df[patient_id] == i][label_column].unique() if label_indx is not None
         ]
 
         if len(temp_labels) == 1:
@@ -134,23 +119,18 @@ def save_annotation_file(df, output_folder, file_name):
     print("----- file is saved here :", file_name)
 
 
-def prepare_data(
-    medical_reports_zip_file,
-    manual_annotations_file,
-    output_annotations_folder,
-    output_annotations_file,
-):
+def prepare_data(medical_reports_zip_file, manual_annotations_file, output_annotations_folder, output_annotations_file):
     print("----- Starting the data preprocessing -----")
     manual_annotations = pd.read_excel(manual_annotations_file, sheet_name="all")
 
     medical_reports_folder = unzip_file(medical_reports_zip_file)
 
     df = pd.DataFrame(columns=["ID", "Image", "Side", "Type", "label", "symptoms"])
-    
+
     for f in os.listdir(medical_reports_folder):
         # pass over corrupt files
-        if f[0] == '~':
-            print(f'skipping {f}')
+        if f[0] == "~":
+            print(f"skipping {f}")
             continue
         DM_R, DM_L, OP_R, OP_L, CESM_R, CESM_L = "", "", "", "", "", ""
         f_id = f.split(".docx")[0].split("P")[1]
@@ -159,23 +139,14 @@ def prepare_data(
             file_content = docx2txt.process(os.path.join(medical_reports_folder, f))
         except Exception as e:
             Warning(e)
-        
+
         DM_R, DM_L, OP_R, OP_L, CESM_R, CESM_L = read_content(file_content)
-        dict_text = {
-            "DM_R": DM_R,
-            "DM_L": DM_L,
-            "OP_R": OP_R,
-            "OP_L": OP_L,
-            "CESM_R": CESM_R,
-            "CESM_L": CESM_L,
-        }
+        dict_text = {"DM_R": DM_R, "DM_L": DM_L, "OP_R": OP_R, "OP_L": OP_L, "CESM_R": CESM_R, "CESM_L": CESM_L}
 
         df = add_df_log(df, dict_text, manual_annotations, f_id)
 
-    df["Patient_ID"] = [
-        "".join([str(df.loc[i, "ID"]), df.loc[i, "Side"]]) for i in df.index
-    ]
-    
+    df["Patient_ID"] = ["".join([str(df.loc[i, "ID"]), df.loc[i, "Side"]]) for i in df.index]
+
     df = label_correction(df)
     save_annotation_file(df, output_annotations_folder, output_annotations_file)
 
@@ -184,25 +155,19 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="This function performs preprocessing steps for Breast Cancer annotation."
     )
-    parser.add_argument(
-        "--data_root",
-        help="Location of dataset root directory",
-        default=os.path.dirname(__file__),
-    )
+    parser.add_argument("--data_root", help="Location of dataset root directory", default=os.path.dirname(__file__))
     parser.add_argument(
         "--medical_reports_folder",
         help="Location of medical reports for cases",
         default="Medical reports for cases .zip",
-    )  
+    )
     parser.add_argument(
         "--manual_annotations_file",
         help="Location of manual annotations file",
         default="Radiology manual annotations.xlsx",
     )
     parser.add_argument(
-        "--output_annotations_folder",
-        help="Location of output annotation folder",
-        default="annotation",
+        "--output_annotations_folder", help="Location of output annotation folder", default="annotation"
     )
     parser.add_argument(
         "--output_annotations_file",

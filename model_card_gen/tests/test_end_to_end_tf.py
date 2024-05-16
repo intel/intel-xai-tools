@@ -38,10 +38,13 @@ class TestMCGForTensorFlow:
         from .tf_model import build_and_train_model, train_tf_file, validate_tf_file
 
         cls._model_path = build_and_train_model()
-        cls._data_sets = {'eval': TensorflowDataset(dataset_path=validate_tf_file),
-                          'train': TensorflowDataset(dataset_path=train_tf_file)}
+        cls._data_sets = {
+            "eval": TensorflowDataset(dataset_path=validate_tf_file),
+            "train": TensorflowDataset(dataset_path=train_tf_file),
+        }
 
-        cls._eval_config = text_format.Parse("""
+        cls._eval_config = text_format.Parse(
+            """
             model_specs {
                 signature_name: "eval"
             }
@@ -58,7 +61,9 @@ class TestMCGForTensorFlow:
             slicing_specs {
                 feature_keys: ["gender"]
             }
-            """, tfma.EvalConfig())
+            """,
+            tfma.EvalConfig(),
+        )
 
     @classmethod
     def teardown_class(cls):
@@ -66,10 +71,10 @@ class TestMCGForTensorFlow:
             shutil.rmtree(cls._model_path)
 
     def test_end_to_end(self):
-        """ Build a model card from a trained model
-        """
+        """Build a model card from a trained model"""
 
-        mcg = ModelCardGen.generate(data_sets=self._data_sets, model_path=self._model_path,
-                                    eval_config=self._eval_config)
+        mcg = ModelCardGen.generate(
+            data_sets=self._data_sets, model_path=self._model_path, eval_config=self._eval_config
+        )
 
         assert mcg

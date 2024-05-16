@@ -24,10 +24,9 @@ from google.protobuf import text_format
 from typing import Text, Union, get_args
 from intel_ai_safety.model_card_gen.utils.types import DatasetType
 
+
 class ModelAnalyzer:
-    def __init__(self,
-                 eval_config: Union[tfma.EvalConfig, Text] = None,
-                 dataset: DatasetType = None):
+    def __init__(self, eval_config: Union[tfma.EvalConfig, Text] = None, dataset: DatasetType = None):
         """Start TFMA analysis
         Args:
             eval_config (tfma.EvalConfig or str): representing proto file path
@@ -44,14 +43,14 @@ class ModelAnalyzer:
         elif isinstance(eval_config, str):
             return self.parse_eval_config(eval_config)
         else:
-            raise TypeError(
-                "ModelAnalyzer requres eval_config argument of type tfma.EvalConfig or str.")
+            raise TypeError("ModelAnalyzer requres eval_config argument of type tfma.EvalConfig or str.")
 
     def check_data(self, dataset):
         """Check that data argument is of type pd.DataFrame or DatasetType"""
         if not (isinstance(dataset, get_args(DatasetType)) or isinstance(dataset, pd.DataFrame)):
             raise TypeError(
-                "ModelAnalyzer.analyze requires data argument to be of type pd.DataFrame, TensorflowDataset or PytorchDataset")
+                "ModelAnalyzer.analyze requires data argument to be of type pd.DataFrame, TensorflowDataset or PytorchDataset"
+            )
         return dataset
 
     def parse_eval_config(self, eval_config_path):
@@ -63,12 +62,11 @@ class ModelAnalyzer:
         Returns:
             tfma.EvalConfig()
         """
-        with open(eval_config_path, 'r') as f:
+        with open(eval_config_path, "r") as f:
             eval_config_str = f.read()
         eval_config = text_format.Parse(eval_config_str, tfma.EvalConfig())
         return eval_config
 
     def get_analysis(self):
-        """Retrieve eval_results attribute
-        """
+        """Retrieve eval_results attribute"""
         return self.eval_result

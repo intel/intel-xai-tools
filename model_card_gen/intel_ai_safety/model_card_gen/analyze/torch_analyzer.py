@@ -23,15 +23,15 @@ import tensorflow_model_analysis as tfma
 from typing import Text, Union, Optional
 from intel_ai_safety.model_card_gen.utils.types import DatasetType
 from intel_ai_safety.model_card_gen.analyze.analyzer import ModelAnalyzer
+
 try:
     import torch
-except: ImportError
+except:
+    ImportError
+
 
 class PTAnalyzer(ModelAnalyzer):
-    def __init__(self,
-                 model_path: Text,
-                 dataset: DatasetType,
-                 eval_config: Union[tfma.EvalConfig, Text] = None):
+    def __init__(self, model_path: Text, dataset: DatasetType, eval_config: Union[tfma.EvalConfig, Text] = None):
         """Start TFMA analysis on TensorFlow model
         Args:
             model_path (str) : path to model
@@ -43,12 +43,14 @@ class PTAnalyzer(ModelAnalyzer):
         self.model_path = model_path
         self._model = self.load_model()
         self.eval_data = self.make_eval_dataframe()
-    
+
     @classmethod
-    def analyze(cls,
-                model_path: Optional[Text] = '',
-                eval_config: Union[tfma.EvalConfig, Text] = None,
-                dataset:  DatasetType = None):
+    def analyze(
+        cls,
+        model_path: Optional[Text] = "",
+        eval_config: Union[tfma.EvalConfig, Text] = None,
+        dataset: DatasetType = None,
+    ):
         """Class Factory to start TFMA analysis
         Args:
             model_path (str) : path to model
@@ -99,15 +101,14 @@ class PTAnalyzer(ModelAnalyzer):
 
     def make_eval_dataframe(self):
         """
-        Make pandas DataFrame for TFMA evaluation 
+        Make pandas DataFrame for TFMA evaluation
         """
         instances, true_values, predicted_values = self.get_inference_data()
         df = pd.DataFrame(instances, columns=self.dataset.feature_names)
-        df['label'] = true_values
-        df['prediction'] = predicted_values
+        df["label"] = true_values
+        df["prediction"] = predicted_values
         return df
-    
+
     def run_analysis(self):
-        self.eval_result = tfma.analyze_raw_data(data=self.eval_data,
-                                                 eval_config=self.eval_config)
+        self.eval_result = tfma.analyze_raw_data(data=self.eval_data, eval_config=self.eval_config)
         return self.eval_result

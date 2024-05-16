@@ -5,13 +5,9 @@ module_logger = logging.getLogger(__name__)
 try:
     import torch.nn as nn
 except ImportError:
-    module_logger.debug('Could not import torch, required if using a PyTorch model')
+    module_logger.debug("Could not import torch, required if using a PyTorch model")
 
-MODEL_TYPE_NAMES = [
-    "torch.nn.Module",
-    "keras.engine.sequential.Sequential",
-    "keras.engine.functional.Functional",
-    ]
+MODEL_TYPE_NAMES = ["torch.nn.Module", "keras.engine.sequential.Sequential", "keras.engine.functional.Functional"]
 
 
 def is_tf_model(model):

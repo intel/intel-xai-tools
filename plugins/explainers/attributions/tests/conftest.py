@@ -1,22 +1,23 @@
-
 import pytest
 import numpy as np
 import torch
 from torchvision import datasets, transforms
 from torch import nn, optim
 from torch.nn import functional as F
+
 torch.manual_seed(0)
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def custom_pyt_CNN():
-    '''
+    """
     Creates and trains a simple PyTorch CNN on the mnist dataset.
     Returns the model, the test dataset loader and the class names.
 
-    '''
+    """
     batch_size = 128
     num_epochs = 1
-    device = torch.device('cpu')
+    device = torch.device("cpu")
 
     class Net(nn.Module):
         def __init__(self):
@@ -32,11 +33,7 @@ def custom_pyt_CNN():
                 nn.ReLU(),
             )
             self.fc_layers = nn.Sequential(
-                nn.Linear(320, 50),
-                nn.ReLU(),
-                nn.Dropout(),
-                nn.Linear(50, 10),
-                nn.Softmax(dim=1)
+                nn.Linear(320, 50), nn.ReLU(), nn.Dropout(), nn.Linear(50, 10), nn.Softmax(dim=1)
             )
 
         def forward(self, x):
@@ -55,23 +52,27 @@ def custom_pyt_CNN():
             loss.backward()
             optimizer.step()
             if batch_idx % 100 == 0:
-                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, batch_idx * len(data), len(train_loader.dataset),
-                    100. * batch_idx / len(train_loader), loss.item()))
-
+                print(
+                    "Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}".format(
+                        epoch,
+                        batch_idx * len(data),
+                        len(train_loader.dataset),
+                        100.0 * batch_idx / len(train_loader),
+                        loss.item(),
+                    )
+                )
 
     train_loader = torch.utils.data.DataLoader(
-        datasets.MNIST('mnist_data', train=True, download=True,
-                       transform=transforms.Compose([
-                           transforms.ToTensor()
-                       ])),
-        batch_size=batch_size, shuffle=True)
+        datasets.MNIST("mnist_data", train=True, download=True, transform=transforms.Compose([transforms.ToTensor()])),
+        batch_size=batch_size,
+        shuffle=True,
+    )
 
     test_loader = torch.utils.data.DataLoader(
-        datasets.MNIST('mnist_data', train=False, transform=transforms.Compose([
-                           transforms.ToTensor()
-                       ])),
-        batch_size=batch_size, shuffle=True)
+        datasets.MNIST("mnist_data", train=False, transform=transforms.Compose([transforms.ToTensor()])),
+        batch_size=batch_size,
+        shuffle=True,
+    )
 
     model = Net().to(device)
     optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
@@ -79,33 +80,30 @@ def custom_pyt_CNN():
     for epoch in range(1, num_epochs + 1):
         train(model, device, train_loader, optimizer, epoch)
 
-    class_names = np.array(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+    class_names = np.array(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
     y_true = next(iter(test_loader))[1].to(device)
     X_test = next(iter(test_loader))[0].to(device)
 
     return model, X_test, class_names, y_true
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def custom_tf_CNN():
-    '''
+    """
     Creates and trains a simple TF CNN on the mnist dataset.
     Returns the model, a subset of the test dataset and the class names.
 
     Taken from https://shap-lrjball.readthedocs.io/en/latest/example_notebooks/deep_explainer/Front%20Page%20DeepExplainer%20MNIST%20Example.html
-    '''
+    """
     import tensorflow as tf
     from tensorflow.keras.datasets import mnist
     from tensorflow.keras.models import Sequential
-    from tensorflow.keras.layers import (Dense, 
-                                        Dropout,
-                                        Flatten,
-                                        Conv2D,
-                                        MaxPooling2D)
+    from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
     from tensorflow.keras import backend as K
 
     batch_size = 128
     num_classes = 10
-    epochs = 3 
+    epochs = 3
 
     # input image dimensions
     img_rows, img_cols = 28, 28
@@ -113,7 +111,7 @@ def custom_tf_CNN():
     # the data, split between train and test sets
     (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
-    if K.image_data_format() == 'channels_first':
+    if K.image_data_format() == "channels_first":
         X_train = X_train.reshape(X_train.shape[0], 1, img_rows, img_cols)
         X_test = X_test.reshape(X_test.shape[0], 1, img_rows, img_cols)
         input_shape = (1, img_rows, img_cols)
@@ -122,105 +120,187 @@ def custom_tf_CNN():
         X_test = X_test.reshape(X_test.shape[0], img_rows, img_cols, 1)
         input_shape = (img_rows, img_cols, 1)
 
-    X_train = X_train.astype('float32')[:500]
-    X_test = X_test.astype('float32')[:100]
+    X_train = X_train.astype("float32")[:500]
+    X_test = X_test.astype("float32")[:100]
     X_train /= 255
     X_test /= 255
     y_train = y_train[:500]
     y_test = y_test[:100]
-    print('x_train shape:', X_train.shape)
-    print(X_train.shape[0], 'train samples')
-    print(X_test.shape[0], 'test samples')
+    print("x_train shape:", X_train.shape)
+    print(X_train.shape[0], "train samples")
+    print(X_test.shape[0], "test samples")
 
     # convert class vectors to binary class matrices
     y_train = tf.keras.utils.to_categorical(y_train, num_classes)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes)
 
     model = Sequential()
-    model.add(Conv2D(32, kernel_size=(3, 3),
-                    activation='relu',
-                    input_shape=input_shape))
-    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(Conv2D(32, kernel_size=(3, 3), activation="relu", input_shape=input_shape))
+    model.add(Conv2D(64, (3, 3), activation="relu"))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
     model.add(Flatten())
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, activation="relu"))
     model.add(Dropout(0.5))
-    model.add(Dense(num_classes, activation='softmax'))
+    model.add(Dense(num_classes, activation="softmax"))
 
-    model.compile(loss=tf.keras.losses.categorical_crossentropy,
-                optimizer=tf.keras.optimizers.Adadelta(),
-                metrics=['accuracy'])
+    model.compile(
+        loss=tf.keras.losses.categorical_crossentropy, optimizer=tf.keras.optimizers.Adadelta(), metrics=["accuracy"]
+    )
 
-    model.fit(X_train, y_train,
-            batch_size=batch_size,
-            epochs=epochs,
-            verbose=1,
-            validation_data=(X_test, y_test))
+    model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, validation_data=(X_test, y_test))
 
     return model, X_test[:10], [str(i) for i in range(10)], y_test[:10]
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def dog_cat_image():
-    '''Loads the cat-dog image exampe from imagenet.'''
+    """Loads the cat-dog image exampe from imagenet."""
     from PIL import Image
     import requests
     from io import BytesIO
+
     response = requests.get("https://raw.githubusercontent.com/jacobgil/pytorch-grad-cam/master/examples/both.png")
     return np.array(Image.open(BytesIO(response.content)))
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def tf_VGG():
-    '''Loads the keras.applications VGG16 pretrained on imagenet'''
+    """Loads the keras.applications VGG16 pretrained on imagenet"""
     from tensorflow.keras.applications import VGG16
 
-    return VGG16(weights='imagenet')
+    return VGG16(weights="imagenet")
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def tf_resnet50():
-    '''Loads the keras.applications ResNet50 pretrained on imagenet'''
+    """Loads the keras.applications ResNet50 pretrained on imagenet"""
     from tensorflow.keras.applications.resnet50 import ResNet50
 
-    return ResNet50(weights='imagenet') 
+    return ResNet50(weights="imagenet")
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def imagenet_class_names():
     # load the ImageNet class names as a vectorized mapping function from ids to names
     import shap
     import json
+
     url = "https://s3.amazonaws.com/deep-learning-models/image-models/imagenet_class_index.json"
     with open(shap.datasets.cache(url)) as file:
         class_names = [v[1] for v in json.load(file).values()]
     return class_names
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def fasterRCNN():
-    '''
+    """
     Loads the fasterRCNN, the class labels and their corresponding colors
-    '''
+    """
 
     from torchvision.models.detection import fasterrcnn_resnet50_fpn
+
     model = fasterrcnn_resnet50_fpn(pretrained=True).eval()
-    class_labels = ['__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane',
-              'bus', 'train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'N/A',
-              'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep',
-              'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'N/A', 'backpack', 'umbrella',
-              'N/A', 'N/A', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard',
-              'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard',
-              'surfboard', 'tennis racket', 'bottle', 'N/A', 'wine glass', 'cup', 'fork',
-              'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich', 'orange',
-              'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch',
-              'potted plant', 'bed', 'N/A', 'dining table', 'N/A', 'N/A', 'toilet',
-              'N/A', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave',
-              'oven', 'toaster', 'sink', 'refrigerator', 'N/A', 'book', 'clock', 'vase',
-              'scissors', 'teddy bear', 'hair drier', 'toothbrush']
-    color = np.random.uniform(0, 255, size=(len(class_labels), 3)) # Create a different color for each class
+    class_labels = [
+        "__background__",
+        "person",
+        "bicycle",
+        "car",
+        "motorcycle",
+        "airplane",
+        "bus",
+        "train",
+        "truck",
+        "boat",
+        "traffic light",
+        "fire hydrant",
+        "N/A",
+        "stop sign",
+        "parking meter",
+        "bench",
+        "bird",
+        "cat",
+        "dog",
+        "horse",
+        "sheep",
+        "cow",
+        "elephant",
+        "bear",
+        "zebra",
+        "giraffe",
+        "N/A",
+        "backpack",
+        "umbrella",
+        "N/A",
+        "N/A",
+        "handbag",
+        "tie",
+        "suitcase",
+        "frisbee",
+        "skis",
+        "snowboard",
+        "sports ball",
+        "kite",
+        "baseball bat",
+        "baseball glove",
+        "skateboard",
+        "surfboard",
+        "tennis racket",
+        "bottle",
+        "N/A",
+        "wine glass",
+        "cup",
+        "fork",
+        "knife",
+        "spoon",
+        "bowl",
+        "banana",
+        "apple",
+        "sandwich",
+        "orange",
+        "broccoli",
+        "carrot",
+        "hot dog",
+        "pizza",
+        "donut",
+        "cake",
+        "chair",
+        "couch",
+        "potted plant",
+        "bed",
+        "N/A",
+        "dining table",
+        "N/A",
+        "N/A",
+        "toilet",
+        "N/A",
+        "tv",
+        "laptop",
+        "mouse",
+        "remote",
+        "keyboard",
+        "cell phone",
+        "microwave",
+        "oven",
+        "toaster",
+        "sink",
+        "refrigerator",
+        "N/A",
+        "book",
+        "clock",
+        "vase",
+        "scissors",
+        "teddy bear",
+        "hair drier",
+        "toothbrush",
+    ]
+    color = np.random.uniform(0, 255, size=(len(class_labels), 3))  # Create a different color for each class
 
     def fasterrcnn_reshape_transform(x):
-        target_size = x['pool'].size()[-2 : ]
+        target_size = x["pool"].size()[-2:]
         activations = []
         for key, value in x.items():
-            activations.append(torch.nn.functional.interpolate(torch.abs(value), target_size, mode='bilinear'))
+            activations.append(torch.nn.functional.interpolate(torch.abs(value), target_size, mode="bilinear"))
         activations = torch.cat(activations, axis=1)
         return activations
 

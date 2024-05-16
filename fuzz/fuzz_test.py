@@ -11,6 +11,7 @@ sys.path.append(default_path)
 with atheris.instrument_imports(include=["intel_ai_safety.*"]):
     from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
 
+
 def mutate_schema(fdp, json_data):
     """Recurses through a json object leaving keys and structures intact and
     randomly generating new data values of the proper type."""
@@ -23,7 +24,8 @@ def mutate_schema(fdp, json_data):
         return {k: mutate_schema(fdp, v) for k, v in json_data.items()}
     else:
         return None
-    
+
+
 def TestOneInput(data):
     """The entry point for the fuzzer."""
     try:
@@ -38,13 +40,13 @@ def TestOneInput(data):
     fdp = atheris.FuzzedDataProvider(data)
     model_card_data = mutate_schema(fdp, json_data)
     try:
-        mcg = ModelCardGen(data_sets={'test': ''}, model_card=model_card_data)
+        mcg = ModelCardGen(data_sets={"test": ""}, model_card=model_card_data)
         assert mcg.model_card
     except (ValueError, jsonschema.ValidationError):
         print("Doesn't match MC schema")
         return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     atheris.Setup(sys.argv, TestOneInput)
     atheris.Fuzz()

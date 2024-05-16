@@ -96,3 +96,13 @@ replace = '__version__ = "{new_version}"'
 [build-system]
 requires = ["poetry"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+exclude = '''
+       /(\.git|\.venv|__pycache__|\.cache|\.tox|\.pytest_cache|\.mypy_cache|)/
+       \.pyc$
+       '''
+force-exclude = '''docker/helm-runner/third_party|model_card_gen/intel_ai_safety/model_card_gen/model_card.py'''
+preview = true
+target-version = ["py39", "py310"]

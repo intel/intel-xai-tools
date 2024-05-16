@@ -24,13 +24,15 @@ import plotly.graph_objects as go
 from typing import Union
 
 
-def shap_waterwall_plot(expected_value: float,
-                        shap_values: np.ndarray,
-                        feature_values: Union[pd.Series, np.ndarray],
-                        columns: Union[pd.Index, np.array],
-                        y_true=None,
-                        y_pred=None,
-                        sort=True,):
+def shap_waterwall_plot(
+    expected_value: float,
+    shap_values: np.ndarray,
+    feature_values: Union[pd.Series, np.ndarray],
+    columns: Union[pd.Index, np.array],
+    y_true=None,
+    y_pred=None,
+    sort=True,
+):
     """Builds plotly figure dipicting SHAP waterfall plot.
 
     Args:
@@ -54,7 +56,7 @@ def shap_waterwall_plot(expected_value: float,
     """
     if hasattr(feature_values, "values"):
         feature_values = feature_values.values
-    fig = go.Figure(layout=go.Layout(hovermode='y unified'))
+    fig = go.Figure(layout=go.Layout(hovermode="y unified"))
     pred = expected_value + shap_values.sum()
     if sort:
         ind = abs(shap_values).argsort()
@@ -64,94 +66,89 @@ def shap_waterwall_plot(expected_value: float,
     impact_ranks = np.array(-abs(shap_values)).argsort().argsort() + 1
     xs = list(shap_values)
     ys = ["{}={}".format(c, v) for v, c in zip(feature_values, columns)]
-    text = ['{:.3f}'.format(v) for v in shap_values]
+    text = ["{:.3f}".format(v) for v in shap_values]
     total = "Total SHAP Value"
 
-    hovertemplate = "<br>".join([
-        "<b>SHAP value</b>: %{x}",
-        "<b>Feature value</b>: %{y}",
-        "<b>Impact Rank<b>: %{customdata}"
-        "<extra></extra>",
-    ])
+    hovertemplate = "<br>".join(
+        ["<b>SHAP value</b>: %{x}", "<b>Feature value</b>: %{y}", "<b>Impact Rank<b>: %{customdata}" "<extra></extra>"]
+    )
 
-    fig.add_trace(go.Waterfall(
-        x=xs,
-        y=ys,
-        text=text,
-        measure=["relative"] * len(shap_values),
-        base=expected_value,
-        orientation="h",
-        customdata=impact_ranks,
-        decreasing={"marker": {"color": "#6d7da8"}},
-        increasing={"marker": {"color": "#e88080 "}},
-        hovertemplate=hovertemplate,
-        showlegend=False,
-    ))
+    fig.add_trace(
+        go.Waterfall(
+            x=xs,
+            y=ys,
+            text=text,
+            measure=["relative"] * len(shap_values),
+            base=expected_value,
+            orientation="h",
+            customdata=impact_ranks,
+            decreasing={"marker": {"color": "#6d7da8"}},
+            increasing={"marker": {"color": "#e88080 "}},
+            hovertemplate=hovertemplate,
+            showlegend=False,
+        )
+    )
 
-    fig.add_trace(go.Waterfall(
-        base=expected_value,
-        orientation="h",
-        text=['{:.3f}'.format(shap_values.sum())],
-        measure=["absolute"],
-        x=[shap_values.sum()],
-        y=[total],
-        showlegend=False,
-        hovertemplate="Total SHAP value = <br>"
-        "Base value + sum of all SHAP values<extra></extra>",
-        totals={"marker": {"color": "rgba(115, 147, 179, 0)", "line": {
-            "color": "#c7c7c7", "width": 2}}},
-    ))
+    fig.add_trace(
+        go.Waterfall(
+            base=expected_value,
+            orientation="h",
+            text=["{:.3f}".format(shap_values.sum())],
+            measure=["absolute"],
+            x=[shap_values.sum()],
+            y=[total],
+            showlegend=False,
+            hovertemplate="Total SHAP value = <br>" "Base value + sum of all SHAP values<extra></extra>",
+            totals={"marker": {"color": "rgba(115, 147, 179, 0)", "line": {"color": "#c7c7c7", "width": 2}}},
+        )
+    )
 
     fig.update_layout(title="SHAP Values")
 
     ys = [total, ys[0]]
-    fig.add_trace(go.Scatter(
-        x=[expected_value, expected_value],
-        y=ys,
-        mode="lines+text",
-        textposition="bottom center",
-        showlegend=False,
-        line=dict(color="#c7c7c7", width=2, dash='dot'),
-        hoverinfo="skip",
-    ))
-
-    fig.add_trace(go.Scatter(
-        x=[pred, pred],
-        y=ys,
-        mode="lines+text",
-        textposition="bottom center",
-        showlegend=False,
-        line=dict(color="#c7c7c7", width=2, dash='dot'),
-        hoverinfo="skip",
-    ))
-
-    if y_pred:
-        fig.add_trace(go.Scatter(
-            x=[y_pred, y_pred],
+    fig.add_trace(
+        go.Scatter(
+            x=[expected_value, expected_value],
             y=ys,
             mode="lines+text",
             textposition="bottom center",
             showlegend=False,
-            line=dict(color="#c7c7c7", width=2, dash='dot'),
+            line=dict(color="#c7c7c7", width=2, dash="dot"),
             hoverinfo="skip",
-        ))
+        )
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=[pred, pred],
+            y=ys,
+            mode="lines+text",
+            textposition="bottom center",
+            showlegend=False,
+            line=dict(color="#c7c7c7", width=2, dash="dot"),
+            hoverinfo="skip",
+        )
+    )
+
+    if y_pred:
+        fig.add_trace(
+            go.Scatter(
+                x=[y_pred, y_pred],
+                y=ys,
+                mode="lines+text",
+                textposition="bottom center",
+                showlegend=False,
+                line=dict(color="#c7c7c7", width=2, dash="dot"),
+                hoverinfo="skip",
+            )
+        )
 
     if y_true is not None:
         fig.add_annotation(
-            text=r"Ground truth y={}".format(y_true),
-            y=1.17,
-            xref='paper',
-            yref='paper',
-            showarrow=False,
-            align='left'
+            text=r"Ground truth y={}".format(y_true), y=1.17, xref="paper", yref="paper", showarrow=False, align="left"
         )
     fig.add_annotation(
-        x=pred,
-        y=total,
-        text="Predicted Value={:.3f}".format(pred),
-        showarrow=False,
-        align="center",
-        yshift=25,
+        x=pred, y=total, text="Predicted Value={:.3f}".format(pred), showarrow=False, align="center", yshift=25
     )
 
     fig.add_annotation(
