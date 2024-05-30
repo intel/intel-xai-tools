@@ -125,7 +125,7 @@ The following links have Jupyter* notebooks showing how to use the Explainer and
 ## Support
 
 The Intel Explainable AI Tools team tracks bugs and enhancement requests using
-[GitHub issues](https://github.com/intelai/intel-xai-tools/issues). Before submitting a
+[GitHub issues](https://github.com/intel/intel-xai-tools/issues). Before submitting a
 suggestion or bug report, search the existing GitHub issues to see if your issue has already been reported.
 
 *Other names and brands may be claimed as the property of others. [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)

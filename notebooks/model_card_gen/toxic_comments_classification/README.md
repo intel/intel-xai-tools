@@ -19,7 +19,7 @@ This notebook demonstrates how to generate Model Card for a [Tensorflow model](h
 ## Running the notebook
 
 To run the `toxicity-tfma-model-card.ipynb`, install the following dependencies:
-1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
+1. [Intel® Explainable AI](https://github.com/Intel/intel-xai-tools)
 2. `! pip install tensorflow_hub`
 
 ## References
