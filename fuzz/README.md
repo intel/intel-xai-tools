@@ -15,8 +15,14 @@ To prepare your environment for fuzz testing with Atheris, follow these steps:
 pip install -r requirements.txt
 ```
 ## Running Fuzz Tests
+Example 1 (runs with a starting corpus and stops when interrupted by user):
 ```
 python3 -m coverage run fuzz_test.py -atheris_runs=0 ../model_card_gen/intel_ai_safety/model_card_gen/docs/examples/json/
+```
+
+Example 2 (runs for 10000 iterations and adds to coverage report instead of overwriting):
+```
+python3 -m coverage run -a fuzz_dataset.py -atheris_runs=10000
 ```
 # Interpreting Results
 When running fuzz tests with Atheris it is important to understand the output to idenfity potential issues effectively. 

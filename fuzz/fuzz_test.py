@@ -41,7 +41,9 @@ def TestOneInput(data):
     model_card_data = mutate_schema(fdp, json_data)
     try:
         mcg = ModelCardGen(data_sets={"test": ""}, model_card=model_card_data)
-        assert mcg.model_card
+        if mcg.model_card:
+            # TODO: Produces https://jira.devtools.intel.com/browse/AIZOO-3111
+            mcg.build_model_card()  # Includes scaffold_assets() and export_format()
     except (ValueError, jsonschema.ValidationError):
         print("Doesn't match MC schema")
         return
