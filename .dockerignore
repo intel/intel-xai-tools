@@ -1,4 +1,8 @@
-.venv**
-.git**
+**/*.venv
+**/.git**
+**/__pycache__
+**/poetry.lock
 docker
-poetry.lock
+notebooks/explainer/README.md
+notebooks/model_card_gen/README.md
+fuzz

@@ -20,21 +20,22 @@
 
 from intel_ai_safety.explainer.context.image.gradcam_explainer import GradCAM
 
+
 class XGradCAM(GradCAM):
-    '''
-    Holds the calculations for the axiom-based gradient-weighted class activation mapping (XgradCAM) of a 
+    """
+    Holds the calculations for the axiom-based gradient-weighted class activation mapping (XgradCAM) of a
     given image and PyTorch CNN.
 
     Args:
-      model (torch.nn.Module): the CNN used for classification 
-      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last) 
+      model (torch.nn.Module): the CNN used for classification
+      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last)
       dims (tuple of ints): dimension of image (h, w)
       device (torch.device): torch.device('cpu') or torch.device('gpu') for PyTorch optimizations
 
-        
+
     Attributes:
       model: the CNN being used
-      target_layer: the target convolution being used 
+      target_layer: the target convolution being used
       target_class: the target class being used
       image: the image being used
       dims: the dimensions of the image being used
@@ -45,8 +46,9 @@ class XGradCAM(GradCAM):
 
     Reference:
        https://github.com/jacobgil/pytorch-grad-cam
-    '''
-    def __init__(self, model, target_layer, dims, device='cpu'):
+    """
+
+    def __init__(self, model, target_layer, dims, device="cpu"):
         # set any frozen layers to trainable
         # gradcam cannot be calculated without it
         for param in model.parameters():
@@ -59,16 +61,16 @@ class XGradCAM(GradCAM):
         self.device = device
 
     def run_explainer(self, image, target_class):
-        '''
+        """
         Execute the axiom-based gradient-based class activation mapping algorithm on the image.
 
-        Args: 
+        Args:
             image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
             target_class (int): the index of the target class
 
         Returns:
             None
-        '''
+        """
         from pytorch_grad_cam import XGradCAM, GuidedBackpropReLUModel
         from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
         from pytorch_grad_cam.utils.image import show_cam_on_image, deprocess_image, preprocess_image
@@ -81,15 +83,13 @@ class XGradCAM(GradCAM):
         # convert to rgb if image is grayscale
         converted = False
         if len(image.shape) == 2:
-            converted = True 
+            converted = True
             image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
-        
+
         rgb_img = np.float32(image) / 255
-        input_tensor = preprocess_image(rgb_img,
-                                        mean=[0.485, 0.456, 0.406],
-                                        std=[0.229, 0.224, 0.225])
+        input_tensor = preprocess_image(rgb_img, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         input_tensor = input_tensor.to(self.device)
-        
+
         if target_class is None:
             targets = None
         else:
@@ -101,8 +101,7 @@ class XGradCAM(GradCAM):
         if converted:
             input_tensor = input_tensor[:, 0:1, :, :]
 
-        grayscale_cam = cam(input_tensor=input_tensor, targets=targets, aug_smooth=False,
-                            eigen_smooth=False)
+        grayscale_cam = cam(input_tensor=input_tensor, targets=targets, aug_smooth=False, eigen_smooth=False)
         grayscale_cam = grayscale_cam[0, :]
         cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
         self.cam_image = cv2.cvtColor(cam_image, cv2.COLOR_RGB2BGR)
@@ -114,56 +113,54 @@ class XGradCAM(GradCAM):
         self.gb = deprocess_image(gb)
 
     def visualize(self):
-        '''
+        """
         Plot the axiom gradCAM, guided back propagation and guided axiom gradCAM from left
-        to right, all superimposed on the target image.  
-        '''
+        to right, all superimposed on the target image.
+        """
 
         import matplotlib.pyplot as plt
         import cv2
-        
+
         fig = plt.figure(figsize=(10, 7))
         rows = 1
         columns = 3
 
         fig.add_subplot(rows, columns, 1)
         plt.imshow(cv2.cvtColor(self.cam_image, cv2.COLOR_BGR2RGB))
-        plt.axis('off')
+        plt.axis("off")
         plt.title("XGradCAM")
 
         fig.add_subplot(rows, columns, 2)
         plt.imshow(cv2.cvtColor(self.gb, cv2.COLOR_BGR2RGB))
-        plt.axis('off')
+        plt.axis("off")
         plt.title("Guided backpropagation")
 
         fig.add_subplot(rows, columns, 3)
         plt.imshow(cv2.cvtColor(self.cam_gb, cv2.COLOR_BGR2RGB))
-        plt.axis('off')
+        plt.axis("off")
         plt.title("Guided XGradCAM")
 
         print("XGradCAM, Guided backpropagation, and Guided XGradCAM are generated. ")
 
 
-
 class EigenCAM:
-
-    '''
-    Holds the calculations for the eigen-based class activation mapping (EigenCAM) of a 
+    """
+    Holds the calculations for the eigen-based class activation mapping (EigenCAM) of a
     given image and PyTorch CNN for object detection.
 
     Args:
-      model (torch.nn.Module): the CNN used for classification 
-      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last) 
-      
+      model (torch.nn.Module): the CNN used for classification
+      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last)
+
       reshape (function): the reshape transformation function responsible for processing the output tensors. Can be None
         if not needed for particular model (such as YOLO)
       image (numpy.ndarray): image to be analyzed with a shape (h,w,c)
       device (torch.device): torch.device('cpu') or torch.device('gpu') for PyTorch optimizations
 
-        
+
     Attributes:
       model: the CNN being used
-      target_layer: the target convolution being used 
+      target_layer: the target convolution being used
       boxes: the list of coordinates being used
       classes: the list of classes being used
       colors: the list of colors being used for the classes
@@ -172,17 +169,17 @@ class EigenCAM:
       device: device being used by PyTorch
 
     Reference:
-       https://github.com/jacobgil/pytorch-grad-cam 
-    '''
+       https://github.com/jacobgil/pytorch-grad-cam
+    """
 
-    def __init__(self, model, target_layer, reshape, device='cpu'):
+    def __init__(self, model, target_layer, reshape, device="cpu"):
         self.model = model
         self.target_layer = [target_layer]
         self.reshape = reshape
         self.device = device
 
     def run_explainer(self, boxes, classes, colors, image):
-        '''
+        """
         Execute the eigen-based class activation mapping on the given image.
 
         Args:
@@ -192,7 +189,7 @@ class EigenCAM:
 
         Returns:
             None
-        '''
+        """
         from pytorch_grad_cam import EigenCAM
         from pytorch_grad_cam.utils.image import show_cam_on_image, scale_cam_image
         import torchvision
@@ -210,11 +207,9 @@ class EigenCAM:
         if self.reshape is None:
             cam = EigenCAM(self.model, self.target_layer)
         else:
-            cam = EigenCAM(self.model, self.target_layer,
-                           reshape_transform=self.reshape)
+            cam = EigenCAM(self.model, self.target_layer, reshape_transform=self.reshape)
         targets = []
-        grayscale_cam = cam(input_tensor=input_tensor, targets=targets, aug_smooth=False,
-                            eigen_smooth=False)
+        grayscale_cam = cam(input_tensor=input_tensor, targets=targets, aug_smooth=False, eigen_smooth=False)
         grayscale_cam = grayscale_cam[0, :]
         self.cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
 
@@ -225,28 +220,29 @@ class EigenCAM:
         self.eigencam_image_renormalized = show_cam_on_image(rgb_img, renormalized_cam, use_rgb=True)
         for i, box in enumerate(boxes):
             color = colors[i]
-            cv2.rectangle(
+            cv2.rectangle(self.eigencam_image_renormalized, (box[0], box[1]), (box[2], box[3]), color, 2)
+            cv2.putText(
                 self.eigencam_image_renormalized,
-                (box[0], box[1]),
-                (box[2], box[3]),
-                color, 2
+                classes[i],
+                (box[0], box[1] - 5),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                color,
+                2,
+                lineType=cv2.LINE_AA,
             )
-            cv2.putText(self.eigencam_image_renormalized, classes[i], (box[0], box[1] - 5),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2,
-                        lineType=cv2.LINE_AA)
-
 
     def visualize(self):
-        '''
+        """
         Display the eigen CAM heat map and the bounding box normalized heat map, superimposed on
         the original image.
-    
+
         Args:
             None
-        
+
         Returns:
             None
-        '''
+        """
         from PIL import Image
         from IPython.display import display
         import numpy as np
@@ -255,13 +251,13 @@ class EigenCAM:
         print("EigenCAM is generated. ")
 
 
-
-def x_gradcam(model, target_layer, target_class, image, dims, device='cpu'):
+def x_gradcam(model, target_layer, target_class, image, dims, device="cpu"):
     gc = XGradCAM(model, target_layer, dims, device)
     gc.run_explainer(image, target_class)
     return gc
 
-def eigencam(model, target_layer, boxes, classes, colors, reshape, image, device='cpu'):
+
+def eigencam(model, target_layer, boxes, classes, colors, reshape, image, device="cpu"):
     ec = EigenCAM(model, target_layer, reshape, device)
     ec.run_explainer(boxes, classes, colors, image)
     return ec

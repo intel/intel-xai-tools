@@ -8,13 +8,9 @@ module_logger = logging.getLogger(__name__)
 try:
     import torch.nn as nn
 except ImportError:
-    module_logger.debug('Could not import torch, required if using a PyTorch model')
+    module_logger.debug("Could not import torch, required if using a PyTorch model")
 
-MODEL_TYPE_NAMES = [
-    "torch.nn.Module",
-    "keras.engine.sequential.Sequential",
-    "keras.engine.functional.Functional",
-    ]
+MODEL_TYPE_NAMES = ["torch.nn.Module", "keras.engine.sequential.Sequential", "keras.engine.functional.Functional"]
 
 
 def is_tf_model(model):
@@ -36,12 +32,12 @@ def raise_unknown_model_error(model):
 
 
 def get_model_framework(model):
-    """ Returns ModelFramework enum value corresponding to model.
+    """Returns ModelFramework enum value corresponding to model.
     ModelFramework.TENSORFLOW
 
     Returns:
       ModelFramework: ModelFramework.TENSORFLOW or ModelFramework.PYTORCH
-    
+
     Raises:
       ValueError: when model is not identified as TENSORFLOW or PYTORCH
     """
@@ -54,13 +50,13 @@ def get_model_framework(model):
 
 
 def is_torch_tensor(obj):
-    """ Returns True when torch is installed and obj is a PyTorch tensor
+    """Returns True when torch is installed and obj is a PyTorch tensor
     and False otherwise
 
     Returns:
       bool: True when obj is torch.Tensor False otherwise
     """
-    TorchTensor = locate('torch.Tensor')
+    TorchTensor = locate("torch.Tensor")
     if TorchTensor is not None:
         # Torch is installed and object is torch Tensor
         return isinstance(obj, TorchTensor)

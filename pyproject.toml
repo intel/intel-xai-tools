@@ -30,7 +30,7 @@ scikit-learn = '1.4.0'
 tensorflow-hub = '0.15.0'
 torch = {version = "2.2.0", source = "pytorch-cpu"}
 torchvision = {version = "0.17.0", source = "pytorch-cpu"}
-pillow = '10.2.0'
+pillow = '10.3.0'
 sentencepiece = '0.2.0'
 
 
@@ -96,3 +96,13 @@ replace = '__version__ = "{new_version}"'
 [build-system]
 requires = ["poetry"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+exclude = '''
+       /(\.git|\.venv|__pycache__|\.cache|\.tox|\.pytest_cache|\.mypy_cache|)/
+       \.pyc$
+       '''
+force-exclude = '''docker/helm-runner/third_party|model_card_gen/intel_ai_safety/model_card_gen/model_card.py'''
+preview = true
+target-version = ["py39", "py310"]

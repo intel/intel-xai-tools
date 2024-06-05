@@ -29,6 +29,7 @@ optional = true
 
 [tool.poetry.group.test.dependencies]
 pytest = '8.1.1'
+pytest-cov = '5.0.0'
 torch = {version = "2.2.0", source = "pytorch-cpu"}
 torchvision = {version = "0.17.0", source = "pytorch-cpu"}
 deepdiff = '6.7.1'

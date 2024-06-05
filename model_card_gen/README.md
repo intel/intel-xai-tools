@@ -113,7 +113,7 @@ Model Card Generator allows users to create interactive HTML reports of containi
 **Step 1**: Clone the GitHub repository.
 
 ```shell
-git clone https://github.com/IntelAI/intel-xai-tools.git
+git clone https://github.com/Intel/intel-xai-tools.git
 ```
 
 **Step 2**: Navigate to `intel-xai-tools` directory.
@@ -151,7 +151,7 @@ For example `eval_config` parameter, let us review the following file entitled "
 In the `model_specs` section it tells the evaluator "label_key" is the ground truth label. In the `metric_specs` section it defines the following metrics to be computed: "BinaryAccuracy", "AUC", "ConfusionMatrixPlot", and "FairnessIndicators". In the `slicing_specs` section it tells the evaluator to compute these metrics accross all datapoints and aggregate these metrics grouped by the "race" feature.
 
 
-```
+```python
 model_specs {
     label_key: 'is_recid'
   }
@@ -176,7 +176,7 @@ options {
 
 If we are computing metrics on a raw dataframe we must add the "prediction_key" to  `model_specs` as follows
 
-```
+```python
 model_specs {
     label_key: 'y_true'
     prediction_key: 'y_pred'
@@ -228,7 +228,7 @@ A more comprehensive JSON example, that includes formatting for Ethical Consider
 **Create Model Card**
 ```python
 
-from model_card_gen.model_card_gen import ModelCardGen
+from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
 
 model_path = 'compas/model'
 data_paths = {
@@ -277,4 +277,3 @@ Run the PyTorch and common tests:
 ```shell
 python -m pytest tests/ -m "pytorch or common"
 ```
-

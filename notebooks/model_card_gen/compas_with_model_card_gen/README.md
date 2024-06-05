@@ -24,7 +24,7 @@ This notebook demonstrates how to create a TFX pipeline (originally published by
 ## Running the notebook
 
 To run the `toxicity-tfma-model-card.ipynb`, install the following dependencies:
-1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
+1. [Intel® Explainable AI](https://github.com/Intel/intel-xai-tools)
 
 ## References      
 ### _Dataset citations_

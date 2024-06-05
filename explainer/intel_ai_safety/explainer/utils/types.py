@@ -21,4 +21,4 @@
 from pydoc import locate
 from typing import Any
 
-TorchTensor = locate('torch.Tensor') or Any
+TorchTensor = locate("torch.Tensor") or Any

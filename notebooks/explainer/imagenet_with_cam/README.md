@@ -15,7 +15,7 @@ This notebook demonstrates how to use the CAM explainer API to explain an ImageN
 ### Running the notebook
 
 To run `ExplainingImageClassification.ipynb`, install the following dependencies:
-1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
+1. [Intel® Explainable AI](https://github.com/Intel/intel-xai-tools)
 
 
 ### References
@@ -39,7 +39,7 @@ This notebook demonstrates how to use the CAM explainer API to explain two Image
 ### Running the notebook
 
 To run `ExplainingObjectDetection.ipynb`, install the following dependencies:
-1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
+1. [Intel® Explainable AI](https://github.com/Intel/intel-xai-tools)
 2. `pip install scikit-image ultralytics`
 
 

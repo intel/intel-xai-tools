@@ -19,5 +19,5 @@ entries:
   entries:
   - file: noteooks/ExplainingImageClassification.nblink
 - file: legal.rst
-- url: https://github.com/IntelAI/intel-xai-tools
+- url: https://github.com/Intel/intel-xai-tools
   title: GitHub Repository

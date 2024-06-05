@@ -23,11 +23,12 @@ from intel_ai_safety.explainer.base_explainer import BaseExplainer
 
 
 class AttributionsExplainer(BaseExplainer):
-    '''
-    Attributions base class to help identify the contribution 
+    """
+    Attributions base class to help identify the contribution
     of feature values towards a prediction through different
     explaination methods.
-    '''
+    """
+
     def __init__(self, *args):
         self.info_panel = {}
 

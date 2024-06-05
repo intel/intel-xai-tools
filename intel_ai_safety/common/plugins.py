@@ -20,11 +20,10 @@
 from pydoc import locate
 
 
-def get_plugin_extended_cls(pkg_path, namespace='intel_ai_safety'):
-    """" Retrieve class from plugin otherwise raise error if pluign not found.
-    """
-    pkg_path = f'{namespace}.{pkg_path}'
+def get_plugin_extended_cls(pkg_path, namespace="intel_ai_safety"):
+    """Retrieve class from plugin otherwise raise error if pluign not found."""
+    pkg_path = f"{namespace}.{pkg_path}"
     plugin_extended_cls = locate(pkg_path)
     if plugin_extended_cls is None:
-        raise ModuleNotFoundError(f'Please install {pkg_path} plugin.')
+        raise ModuleNotFoundError(f"Please install {pkg_path} plugin.")
     return plugin_extended_cls

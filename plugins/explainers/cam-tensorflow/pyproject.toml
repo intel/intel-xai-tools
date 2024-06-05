@@ -24,7 +24,10 @@ optional = true
 
 [tool.poetry.group.test.dependencies]
 intel-tensorflow = '2.14.0'
+pytest-cov = '5.0.0'
 pytest = '7.4.2'
+pillow = '10.3.0'
+matplotlib = '3.8.3'
 
 [[tool.poetry.source]]
 name = "pytorch-cpu"

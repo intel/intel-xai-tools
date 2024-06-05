@@ -22,29 +22,26 @@ import sys, os
 from intel_ai_safety.explainer.version import __version__
 from intel_ai_safety import explainer
 
-project = 'Intel® Explainable AI Tools'
-author = 'IntelAI'
-copyright = '2023, Intel'
-exclude_patterns = [
-    '_build',
-    'conf.py',
-]
+project = "Intel® Explainable AI Tools"
+author = "IntelAI"
+copyright = "2023, Intel"
+exclude_patterns = ["_build", "conf.py"]
 
 release = __version__
 version = __version__
 extensions = [
-  'myst_parser',
-  'nbsphinx',
-  'nbsphinx_link',
-  'sphinx_design',
-  'sphinx_external_toc',
-  'sphinx.ext.intersphinx',
-  'sphinx.ext.autodoc',
-  'sphinx.ext.napoleon',
-  'sphinx.ext.viewcode',
-  'sphinx.ext.doctest',
+    "myst_parser",
+    "nbsphinx",
+    "nbsphinx_link",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
+    "sphinx_design",
+    "sphinx_external_toc",
 ]
 external_toc_path = "toc.yml"
 external_toc_exclude_missing = False
-html_theme = 'sphinx_rtd_theme'
-nbsphinx_execute = 'never'
+html_theme = "sphinx_rtd_theme"
+nbsphinx_execute = "never"
