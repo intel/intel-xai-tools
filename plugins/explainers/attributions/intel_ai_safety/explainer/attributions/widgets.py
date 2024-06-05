@@ -46,9 +46,10 @@ class _FilterWidget:
         view (widgets.VBox) : widget class to display in Jupyter enviornment
         max_values (int) : max number of values supported by interface
     """
+
     def __init__(self, df, max_values=2000):
         self.max_values = max_values
-        self._df = df[:self.max_values].copy()
+        self._df = df[: self.max_values].copy()
         self._controller_obj = None
         self.view = widgets.VBox([])
         self.df = self._df.copy()
@@ -60,28 +61,20 @@ class _FilterWidget:
 
     def _build_data_selector(self, df):
         index = df.index
-        style = {'description_width': '20px'}
-        data_select = widgets.SelectMultiple(
-            options=list(index.values),
-            description='ID:',
-            disabled=False,
-            style=style
-        )
+        style = {"description_width": "20px"}
+        data_select = widgets.SelectMultiple(options=list(index.values), description="ID:", disabled=False, style=style)
         self._controller_obj = data_select
         self.view.children = list(self.view.children) + [data_select]
 
     @staticmethod
     def _get_selector_layout(values):
         if len(values) > 3:
-            return widgets.Layout(height='80px')
+            return widgets.Layout(height="80px")
         else:
-            return widgets.Layout(height='{}px'.format(len(values) * 20))
+            return widgets.Layout(height="{}px".format(len(values) * 20))
 
     @staticmethod
-    def _filter_df(df: pd.DataFrame,
-                   field: str,
-                   value: List,
-                   allow_nan: bool = True):
+    def _filter_df(df: pd.DataFrame, field: str, value: List, allow_nan: bool = True):
         """Utility function the filters pandas.DataFrame to only
         include range of values for field when field is float,
         othewise filter pandas.DataFrame to only include
@@ -112,7 +105,7 @@ class _FilterWidget:
                     df = self._filter_df(df, f.description, f.value)
             self.df = df
             data_selector = self._controller_obj
-            index = df.index[:self.max_values]
+            index = df.index[: self.max_values]
             list_index = list(index.values)
             result_length.value = "{} Result ID(s)".format(len(df))
             data_selector.options = list_index
@@ -124,7 +117,7 @@ class _FilterWidget:
                 else:
                     f.value = list(f.options)
             data_selector = self._controller_obj
-            index = self._df.index[:self.max_values]
+            index = self._df.index[: self.max_values]
             list_index = list(index.values)
             result_length.value = "{} Result ID(s)".format(len(df))
             data_selector.options = list_index
@@ -142,12 +135,12 @@ class _FilterWidget:
                     description=field,
                     disabled=False,
                     continuous_update=False,
-                    orientation='horizontal',
+                    orientation="horizontal",
                     readout=True,
-                    readout_format='.1f',
+                    readout_format=".1f",
                 )
             else:
-                style = {'description_width': '100px'}
+                style = {"description_width": "100px"}
                 field_filter = widgets.SelectMultiple(
                     options=values,
                     value=values.tolist(),
@@ -158,17 +151,14 @@ class _FilterWidget:
                 )
             field_filters.append(field_filter)
         # Buttons to apply and reset filters
-        apply_button = widgets.Button(description="Apply filters",
-                                      layout=widgets.Layout(width='auto'))
-        reset_button = widgets.Button(description="Reset filters",
-                                      layout=widgets.Layout(width='auto'))
+        apply_button = widgets.Button(description="Apply filters", layout=widgets.Layout(width="auto"))
+        reset_button = widgets.Button(description="Reset filters", layout=widgets.Layout(width="auto"))
         apply_button.on_click(apply_button_cntrl)
         reset_button.on_click(reset_button_cntrl)
         buttons = [widgets.HBox([apply_button, reset_button])]
-        divider = widgets.HTML('<hr>')
+        divider = widgets.HTML("<hr>")
         result_length = widgets.HTML()
-        self.view.children = (field_filters + buttons +
-                              [divider] + [result_length])
+        self.view.children = field_filters + buttons + [divider] + [result_length]
 
     @property
     def controller_obj(self):
@@ -191,6 +181,7 @@ class ErrorFilterWidget(_FilterWidget):
         view (widgets.VBox) : widget class to display in Jupyter enviornment
         max_values (int) : max number of values supported by interface
     """
+
     def __init__(self, y_true, y_pred, index, max_values=2000):
         self.title = "Error Analysis"
         df = pd.DataFrame({"Actual Value": y_true, "Predicted Value": y_pred}, index=index)
@@ -213,6 +204,7 @@ class ShapFilterWidget(_FilterWidget):
         view (widgets.VBox) : widget class to display in Jupyter enviornment
         max_values (int) : max number of values supported by interface
     """
+
     def __init__(self, shap_values, columns, index, max_values=2000):
         self.title = "Impact Analysis"
         df = pd.DataFrame(shap_values, columns=columns, index=index)
@@ -236,6 +228,7 @@ class FeatureFilterWidget(_FilterWidget):
         view (widgets.VBox) : widget class to display in Jupyter enviornment
         max_values (int) : max number of values supported by interface
     """
+
     def __init__(self, df, columns, max_values=2000):
         self.title = "Feature Analysis"
         df = df[columns]
@@ -263,14 +256,8 @@ class ShapUI:
         max_values (int) : max values supported by interface (defualt is 2000)
         max_features (int) : numer of top features to consider (defualt is 10)
     """
-    def __init__(self,
-                 df,
-                 shap_values,
-                 expected_value,
-                 y_true,
-                 y_pred,
-                 max_values=2000,
-                 max_features=10):
+
+    def __init__(self, df, shap_values, expected_value, y_true, y_pred, max_values=2000, max_features=10):
 
         self.max_values = max_values
         self.max_features = max_features
@@ -293,54 +280,39 @@ class ShapUI:
         self._add_controllers(self.df)
 
     def _get_top_features(self):
-        df = pd.DataFrame(self.shap_values,
-                          columns=self.features,
-                          index=self.df.index)
-        top_features = (df
-                        .abs()
-                        .mean()
-                        .argsort()
-                        .argsort()
-                        .sort_values(ascending=False)[:self.max_features])
+        df = pd.DataFrame(self.shap_values, columns=self.features, index=self.df.index)
+        top_features = df.abs().mean().argsort().argsort().sort_values(ascending=False)[: self.max_features]
         self.features = top_features.index
         self.shap_values = self.shap_values[:, top_features.values]
         self.df = self.df[self.features]
 
     def _build_view(self):
         # Filter widget Views
-        uis = [FeatureFilterWidget(self.df,
-                                   self.features,
-                                   max_values=self.max_values),
-               ErrorFilterWidget(self.y_true,
-                                 self.y_pred,
-                                 self.df.index,
-                                 max_values=self.max_values),
-               ShapFilterWidget(self.shap_values,
-                                self.features,
-                                self.df.index,
-                                max_values=self.max_values)]
+        uis = [
+            FeatureFilterWidget(self.df, self.features, max_values=self.max_values),
+            ErrorFilterWidget(self.y_true, self.y_pred, self.df.index, max_values=self.max_values),
+            ShapFilterWidget(self.shap_values, self.features, self.df.index, max_values=self.max_values),
+        ]
 
         self.controller_objs = [ui.controller_obj for ui in uis]
-        self.left_view = widgets.Tab([ui.view for ui in uis],
-                                     layout=widgets.Layout(width='40%'))
+        self.left_view = widgets.Tab([ui.view for ui in uis], layout=widgets.Layout(width="40%"))
         for i, ui in enumerate(uis):
             self.left_view.set_title(i, ui.title)
-        self.right_view = widgets.Tab(layout=widgets.Layout(width='60%'))
+        self.right_view = widgets.Tab(layout=widgets.Layout(width="60%"))
         self.view = widgets.HBox([self.left_view, self.right_view])
 
     def _transform_df(self):
         # Filter to max allowed values
-        self.df = self.df[:self.max_values].copy()
-        self.shap_values = self.shap_values[:self.max_values]
-        self.y_true = self.y_true[:self.max_values]
-        self.y_pred = self.y_pred[:self.max_values]
+        self.df = self.df[: self.max_values].copy()
+        self.shap_values = self.shap_values[: self.max_values]
+        self.y_true = self.y_true[: self.max_values]
+        self.y_pred = self.y_pred[: self.max_values]
         # Add Shap values and groud truth for ease of indexing
-        self.df['_shap_values'] = list(self.shap_values)
-        self.df['y_true'] = self.y_true
+        self.df["_shap_values"] = list(self.shap_values)
+        self.df["y_true"] = self.y_true
 
     def show(self):
-        """Displays SHAP UI in Jupyter enviornment.
-        """
+        """Displays SHAP UI in Jupyter enviornment."""
         self._build()
         display(self.view)
 
@@ -351,11 +323,7 @@ class ShapUI:
     def _build_figs(self, df):
         figs = []
         for pid, row in df.iterrows():
-            fig = shap_waterwall_plot(self.expected_value,
-                                      row._shap_values,
-                                      row.values,
-                                      row.index,
-                                      y_true=row.y_true)
+            fig = shap_waterwall_plot(self.expected_value, row._shap_values, row.values, row.index, y_true=row.y_true)
             fig.update_layout(title="SHAP Values for {}".format(pid))
             figs.append(go.FigureWidget(fig))
         return figs
@@ -366,5 +334,6 @@ class ShapUI:
             self.right_view.children = self._build_figs(df.loc[pids])
             for i, pid in enumerate(pids):
                 self.right_view.set_title(i, str(pid))
+
         for obj in self.controller_objs:
-            obj.observe(select_plot_controller, names=['value'], type='change')
+            obj.observe(select_plot_controller, names=["value"], type="change")

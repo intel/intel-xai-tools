@@ -28,6 +28,13 @@ DOCS_DIR ?= docs
 venv-test: poetry-lock
 	@echo "Creating a virtualenv $(VENV_DIR)..."
 	@poetry install --with test --extras all
+	@poetry run python -m pip install --no-cache-dir --no-deps \
+		asttokens==2.4.1 \
+		executing==2.0.1 \
+		ipython==8.10 \
+		jupyter-server==2.11.2 \
+		pure-eval==0.2.2 \
+		stack-data==0.6.3
 
 test-mcg: venv-test
 	@echo "Testing the Model Card Gen API..."

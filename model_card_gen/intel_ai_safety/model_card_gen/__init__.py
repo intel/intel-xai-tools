@@ -15,3 +15,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+
+# TODO: Remove this line after upgrading PyArrow to 14.0.1
+import pyarrow_hotfix

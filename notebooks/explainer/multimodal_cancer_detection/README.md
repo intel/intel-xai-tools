@@ -32,7 +32,7 @@ The `dataset_utils.py` holds the supporting functions that prepare the image and
 ## Running the notebook
 
 To run `Multimodal_Cancer_Detection.ipynb`, install the following dependencies:
-1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
+1. [Intel® Explainable AI](https://github.com/Intel/intel-xai-tools)
 2. Further dependencies to be installed in the notebook
 
 ## References

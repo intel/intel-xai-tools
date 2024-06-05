@@ -1,0 +1,74 @@
+#
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+services:
+  explainers:
+    image: intel/ai-tools:intel-ai-safety-1.0.0-explainers
+    pull_policy: always
+    build:
+      dockerfile: docker/Dockerfile.explainers
+      context: ../
+      target: runtime
+      args:
+        IMAGE_NAME: ubuntu
+        IMAGE_TAG: "22.04"
+        PY_VER: "3.10"
+        UID: "1000"
+        GID: "1000"
+        NON_ROOT_USER: "intelai"
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+    ports:
+      - "8887:8888"
+    environment:
+      - VIRTUAL_ENV=/intel-xai/.venv
+    command: bash -c "source activate ${VIRTUAL_ENV} && jupyter notebook --port 8888 --ip 0.0.0.0 --no-browser --allow-root"
+    healthcheck:
+      test: ["CMD-SHELL", "jupyter server list"]
+      interval: 1m
+      timeout: 5s
+      retries: 5
+
+  model_card_gen:
+    image: intel/ai-tools:intel-ai-safety-1.0.0-mcg
+    pull_policy: always
+    build:
+      dockerfile: docker/Dockerfile.mcg
+      context: ../
+      target: runtime
+      args:
+        IMAGE_NAME: ubuntu
+        IMAGE_TAG: "22.04"
+        UID: "1000"
+        GID: "1000"
+        NON_ROOT_USER: "intelai"
+        PY_VER: "3.10"
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+    ports:
+      - "8889:8888"
+    environment:
+      - VIRTUAL_ENV=/intel-xai/.venv
+    command: bash -c "source activate ${VIRTUAL_ENV} && jupyter notebook --port 8888 --ip 0.0.0.0 --no-browser --allow-root"
+    healthcheck:
+      test: ["CMD-SHELL", "jupyter server list"]
+      interval: 1m
+      timeout: 5s
+      retries: 5

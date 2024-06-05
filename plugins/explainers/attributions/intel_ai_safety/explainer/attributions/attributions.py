@@ -26,12 +26,15 @@ from intel_ai_safety.common.types import TorchTensor
 from intel_ai_safety.common.frameworks.model_framework import is_torch_tensor
 from intel_ai_safety.explainer.context.agnostic.attributions_explainer import AttributionsExplainer
 
+
 class FeatureAttributions(AttributionsExplainer):
-    '''
+    """
     Attributions base class. Holds the shap API.
-    '''
+    """
+
     def __init__(self):
         import shap
+
         shap.initjs()
         self.shap = shap
         self.datasets = shap.datasets
@@ -45,7 +48,7 @@ class FeatureAttributions(AttributionsExplainer):
 
 
 class DeepExplainer(FeatureAttributions):
-    '''
+    """
     Approximate conditional expectations of shap values for deep learning models using a variation of the DeepLIFT algorithm
      (Shrikumar, Greenside, and Kundaje, arXiv 2017)
 
@@ -60,17 +63,19 @@ class DeepExplainer(FeatureAttributions):
       target_images: images used to explain predictions
       explainer: the shap DeepExplainer object
       shap_values: the resulting shap value estimations on the target images
-      labels: the class labels of the given classification problem 
-    
+      labels: the class labels of the given classification problem
+
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html
-    '''    
-    def __init__(self, 
-              model, 
-              background_images: Union[np.ndarray,  pd.DataFrame, TorchTensor], 
-              target_images: Union[np.ndarray,  pd.DataFrame, TorchTensor], 
-              labels: Union[List[str], np.ndarray]
-              ) -> None:
+    """
+
+    def __init__(
+        self,
+        model,
+        background_images: Union[np.ndarray, pd.DataFrame, TorchTensor],
+        target_images: Union[np.ndarray, pd.DataFrame, TorchTensor],
+        labels: Union[List[str], np.ndarray],
+    ) -> None:
         super().__init__()
         self.target_images = target_images
         self.explainer = self.shap.DeepExplainer(model, background_images)
@@ -80,26 +85,25 @@ class DeepExplainer(FeatureAttributions):
         if is_torch_tensor(self.target_images):
             self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
             self.target_images = -np.swapaxes(np.swapaxes(self.target_images.numpy(), 1, -1), 1, 2)
-    
+
     def visualize(self) -> None:
-        '''
+        """
         plot superposition of shap estimations on original image(s) across all labels predictions
-        '''
+        """
 
         self.shap.image_plot(
-            self.shap_values,
-            self.target_images,
-            np.array([list(self.labels)]*len(self.target_images)),
+            self.shap_values, self.target_images, np.array([list(self.labels)] * len(self.target_images))
         )
 
+
 class GradientExplainer(FeatureAttributions):
-    '''
+    """
     Approximate expected gradients of differentiable models using a variation of the integrated gradients algorithm
      (Sundararajan et al. 2017)
 
     Args:
       model (tf.keras.functional or pytorch.nn.Module): CNN model to be interpreted
-      background_images (numpy.ndarray, pandas.DataFrame or torch.tensor): the selection of background images 
+      background_images (numpy.ndarray, pandas.DataFrame or torch.tensor): the selection of background images
         used to integrate output features across each target image
       target_images (numpy.ndarray, pandas.DataFrame or torch.tensor): the images to be interpreted
       labels (list of strings): list of label names for the given classification problem
@@ -111,19 +115,20 @@ class GradientExplainer(FeatureAttributions):
       explainer: the shap GradientExplainer object
       shap_values: the resulting shap value estimations on the target images
       indexes: indexes where for the corresponding rankings of the each target image ranking
-      labels: the class labels of the given classification problem 
+      labels: the class labels of the given classification problem
 
     Reference:
       https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html
-    '''
-    
-    def __init__(self, 
-                model, 
-                background_images: Union[np.ndarray, pd.DataFrame, TorchTensor], 
-                target_images: Union[np.ndarray, pd.DataFrame, TorchTensor], 
-                labels: Union[List[str], np.ndarray],
-                ranked_outputs: Optional[int] = 1,
-                ) -> None:
+    """
+
+    def __init__(
+        self,
+        model,
+        background_images: Union[np.ndarray, pd.DataFrame, TorchTensor],
+        target_images: Union[np.ndarray, pd.DataFrame, TorchTensor],
+        labels: Union[List[str], np.ndarray],
+        ranked_outputs: Optional[int] = 1,
+    ) -> None:
         super().__init__()
         self.target_images = target_images
         self.ranked_outputs = ranked_outputs
@@ -135,23 +140,20 @@ class GradientExplainer(FeatureAttributions):
             self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
             self.target_images = -np.swapaxes(np.swapaxes(self.target_images.numpy(), 1, -1), 1, 2)
 
-        if self.indexes.shape == (1,1):
+        if self.indexes.shape == (1, 1):
             self.idxs_to_plot = [self.labels[self.indexes[0][0]]]
         else:
             self.idxs_to_plot = np.array(self.labels)[self.indexes]
 
     def visualize(self) -> None:
-        '''
-        plot superposition of shap estimations on original image(s) across top ranked_outputs 
-        '''
-        self.shap.image_plot(
-            self.shap_values, 
-            self.target_images, 
-            self.idxs_to_plot
-        )
-    
+        """
+        plot superposition of shap estimations on original image(s) across top ranked_outputs
+        """
+        self.shap.image_plot(self.shap_values, self.target_images, self.idxs_to_plot)
+
+
 class KernelExplainer(FeatureAttributions):
-    '''
+    """
     Approximate shap values via a combination of local interpretable model-agnostic explanations (LIME) and
     a weighted linear regression.
 
@@ -167,17 +169,19 @@ class KernelExplainer(FeatureAttributions):
       bg: background examples
       targets: target examples
       explainer: shap KernelExplainer object
-      shap_values: the resulting shap value estimations on the target examples 
+      shap_values: the resulting shap value estimations on the target examples
 
     Reference:
     https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html
-    '''
-    def __init__(self, 
-                 model: Callable[[np.ndarray], np.ndarray], 
-                 background: Union[np.ndarray, pd.DataFrame],
-                 targets: Union[np.ndarray, pd.DataFrame], 
-                 nsamples: int = 64
-                 ) -> None:
+    """
+
+    def __init__(
+        self,
+        model: Callable[[np.ndarray], np.ndarray],
+        background: Union[np.ndarray, pd.DataFrame],
+        targets: Union[np.ndarray, pd.DataFrame],
+        nsamples: int = 64,
+    ) -> None:
         super().__init__()
         self.bg = background
         self.targets = targets
@@ -186,35 +190,38 @@ class KernelExplainer(FeatureAttributions):
         self.info_panel = force_plot_info_panel
 
     def visualize(self):
-        '''
+        """
         Display the force plot of the of the target example(s)
-        '''
+        """
         return self.force_plot(self.explainer.expected_value, self.shap_values[0], self.targets)
 
+
 class PartitionExplainer(FeatureAttributions):
-    '''
-    Approximate an extension of shap values, known as Owen values, by recursively computing shap values 
+    """
+    Approximate an extension of shap values, known as Owen values, by recursively computing shap values
     through a hierarchy of features that define feature coalitions. This is the base partition explainer class
     that generates partition explainer children objects for text or image classification.
 
     Args:
       task_type (string): 'text' or 'image' to choose which classification domain to be explained
       *args: the remaining arguments required for child class instantiation
-    '''
+    """
+
     def __new__(cls, task_type: str, *args) -> None:
-        if task_type == 'text':
+        if task_type == "text":
             return super().__new__(PartitionTextExplainer)
-        elif task_type == 'image':
+        elif task_type == "image":
             return super().__new__(PartitionImageExplainer)
         else:
             raise ValueError(f"Task type {type(task_type)} is unsupported: please use 'text' or 'image'")
-    
+
+
 class PartitionImageExplainer(PartitionExplainer, FeatureAttributions):
-    '''
-    Image classification-based partition explanation. 
-    
+    """
+    Image classification-based partition explanation.
+
     Args:
-      task_type (string): 'text' or 'image' used in PartitionExplainer generator class. It is not used in this 
+      task_type (string): 'text' or 'image' used in PartitionExplainer generator class. It is not used in this
       child class.
       model (function): "black box" prediction function that takes an input array of shape (n samples, m features)
       and outputs an array of n predictions.
@@ -223,50 +230,49 @@ class PartitionImageExplainer(PartitionExplainer, FeatureAttributions):
 
     Attributes:
       explainer: shap PartitionExplainer object
-      shap_values: the resulting shap value estimations on the target images 
-    '''
-    def __init__(self, 
-                 task_type: str, 
-                 model: Callable[[np.ndarray], np.ndarray], 
-                 labels: List[str], 
-                 shape: tuple[int, int] 
-                 ) -> None:
+      shap_values: the resulting shap value estimations on the target images
+    """
+
+    def __init__(
+        self, task_type: str, model: Callable[[np.ndarray], np.ndarray], labels: List[str], shape: tuple[int, int]
+    ) -> None:
         FeatureAttributions.__init__(self)
         PartitionExplainer.__init__(self)
         self.shap_values = None
-        self.explainer = self.shap.Explainer(model, self.shap.maskers.Image('inpaint_telea', shape), output_names=labels)      
+        self.explainer = self.shap.Explainer(
+            model, self.shap.maskers.Image("inpaint_telea", shape), output_names=labels
+        )
 
-    def run_explainer(self, 
-                      target_images: np.ndarray, 
-                      top_n: int = 1, 
-                      max_evals: int = 64
-                      ) -> None:
-        '''
+    def run_explainer(self, target_images: np.ndarray, top_n: int = 1, max_evals: int = 64) -> None:
+        """
         Execute the partition explanation on the target_images.
 
         Args:
           target_images (numpy.ndarray): n images in the shape (n, height, width, channels)
-          in a better the estimation. Defaults to 64. 
+          in a better the estimation. Defaults to 64.
           top_n (int): gather shap values for the top n most probable classes per image. Defaults to 1.
-          max_evals (int): number of evaluations used in the shap estimation. The higher the number result 
+          max_evals (int): number of evaluations used in the shap estimation. The higher the number result
 
         Returns:
           None
-        '''
-        self.shap_values = self.explainer(target_images, max_evals=max_evals, outputs=self.shap.Explanation.argsort.flip[:top_n])
-    
+        """
+        self.shap_values = self.explainer(
+            target_images, max_evals=max_evals, outputs=self.shap.Explanation.argsort.flip[:top_n]
+        )
+
     def visualize(self) -> None:
-        '''
-        Plot superposition of shap estimations on original image(s) across top ranked_outputs 
-        '''
+        """
+        Plot superposition of shap estimations on original image(s) across top ranked_outputs
+        """
         self.image_plot(self.shap_values)
 
+
 class PartitionTextExplainer(PartitionExplainer, FeatureAttributions):
-    '''
-    Text classification-based partition explanation (using HuggingFace Transformers API). 
+    """
+    Text classification-based partition explanation (using HuggingFace Transformers API).
 
     Args:
-      task_type (string): 'text' or 'image' used in PartitionExplainer generator class. It is not used in this 
+      task_type (string): 'text' or 'image' used in PartitionExplainer generator class. It is not used in this
       child class.
       model (function): "black box" prediction function that takes an input array of shape (n samples, m features)
       and outputs an array of n predictions.
@@ -275,42 +281,45 @@ class PartitionTextExplainer(PartitionExplainer, FeatureAttributions):
 
     Attributes:
       explainer: shap PartitionExplainer object
-      shap_values: the resulting shap value estimations on the target examples 
+      shap_values: the resulting shap value estimations on the target examples
 
     Reference:
-    https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html 
-    '''
-    def __init__(self, 
-                 task_type: str, 
-                 model: Callable[[np.ndarray], np.ndarray], 
-                 labels: List[str], 
-                 tokenizer: Union[Callable[[str], str], str]) -> None:
+    https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html
+    """
+
+    def __init__(
+        self,
+        task_type: str,
+        model: Callable[[np.ndarray], np.ndarray],
+        labels: List[str],
+        tokenizer: Union[Callable[[str], str], str],
+    ) -> None:
 
         FeatureAttributions.__init__(self)
         PartitionExplainer.__init__(self)
         self.shap_values = None
-        self.explainer = self.shap.Explainer(model, masker=self.shap.maskers.Text(tokenizer=tokenizer), output_names=labels)
+        self.explainer = self.shap.Explainer(
+            model, masker=self.shap.maskers.Text(tokenizer=tokenizer), output_names=labels
+        )
 
-    def run_explainer(self, 
-                      target_text: str, 
-                      max_evals: int = 64) -> None:
-        '''
+    def run_explainer(self, target_text: str, max_evals: int = 64) -> None:
+        """
         Execute the partition explanation on the target_text.
 
         Args:
           target_text (numpy.ndarray): 1-d numpy array of strings holding the text examples
-          max_evals (int): number of evaluations used in the shap estimation. The higher the number result 
-          in a better the estimation. Defaults to 64. 
+          max_evals (int): number of evaluations used in the shap estimation. The higher the number result
+          in a better the estimation. Defaults to 64.
 
         Returns:
           None
-        '''
+        """
         self.shap_values = self.explainer(target_text, max_evals=max_evals)
 
     def visualize(self):
-        '''
+        """
         Display the force plot of the of the target example(s)
-        '''
+        """
         self.text_plot(self.shap_values)
 
 
@@ -321,7 +330,7 @@ def explainer():
 
     Returns:
       FeatureAttributions
-    
+
     Example:
       >>> from intel_ai_safety.explainer import attributions
       >>> explainer = attributions.explainer()
@@ -369,12 +378,13 @@ def deep_explainer(model, backgroundImages, targetImages, labels) -> DeepExplain
     return DeepExplainer(model, backgroundImages, targetImages, labels)
 
 
-def gradient_explainer(model, 
-                       background_images: Union[np.ndarray,  pd.DataFrame, TorchTensor],
-                       target_images: Union[np.ndarray,  pd.DataFrame, TorchTensor], 
-                       labels: Union[List[str], np.ndarray],
-                       ranked_outputs: Optional[int] = 1,
-                 ) -> GradientExplainer:
+def gradient_explainer(
+    model,
+    background_images: Union[np.ndarray, pd.DataFrame, TorchTensor],
+    target_images: Union[np.ndarray, pd.DataFrame, TorchTensor],
+    labels: Union[List[str], np.ndarray],
+    ranked_outputs: Optional[int] = 1,
+) -> GradientExplainer:
     """
     Sets up a SHAP GradientExplainer, explains a model using expected gradients.
 
@@ -409,7 +419,7 @@ def partition_text_explainer(model, labels, target_text, tokenizer, max_evals=64
     Returns:
       PartitionExplainer
     """
-    pe = PartitionExplainer('text', model, labels, tokenizer)
+    pe = PartitionExplainer("text", model, labels, tokenizer)
     pe.run_explainer(target_text, max_evals=max_evals)
     return pe
 
@@ -429,6 +439,6 @@ def partition_image_explainer(model, labels, target_images, top_n=1, max_evals=6
     Returns:
       PartitionImageExplainer
     """
-    pe = PartitionExplainer('image', model, labels, target_images[0].shape)
+    pe = PartitionExplainer("image", model, labels, target_images[0].shape)
     pe.run_explainer(target_images, top_n=top_n, max_evals=max_evals)
     return pe

@@ -9,7 +9,7 @@
 | pstat  | Report the execution summary of a given snippet of code using the cProfile run method       |
 
 
-```python3
+```python
 from intel_ai_safety.explainer import metrics
 ```
 

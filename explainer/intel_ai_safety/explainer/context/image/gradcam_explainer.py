@@ -23,16 +23,18 @@ from intel_ai_safety.explainer.base_explainer import BaseExplainer
 
 from intel_ai_safety.common.constants import ModelFramework
 
+
 class GradCAM(BaseExplainer):
     """GradCAM generator class. Depending on the model framework, GradCAM is a
     superclass to TFGradCAM or XGradCAM. Note that EigenCAM (only supports
     PyTorch) is not included yet.
     """
+
     def __new__(cls, model, *args):
         modle_framework = get_model_framework(model)
         if modle_framework is ModelFramework.TENSORFLOW:
-            TFGradCAM = get_plugin_extended_cls('explainer.cam.tf_cam.TFGradCAM')
+            TFGradCAM = get_plugin_extended_cls("explainer.cam.tf_cam.TFGradCAM")
             return super().__new__(TFGradCAM)
         elif modle_framework is ModelFramework.PYTORCH:
-            XGradCAM = get_plugin_extended_cls('explainer.cam.pt_cam.XGradCAM')
+            XGradCAM = get_plugin_extended_cls("explainer.cam.pt_cam.XGradCAM")
             return super().__new__(XGradCAM)

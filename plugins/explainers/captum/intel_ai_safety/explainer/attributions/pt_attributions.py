@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
@@ -23,8 +22,9 @@ import torch
 import numpy as np
 import pandas as pd
 
+
 class Captum_Saliency:
-    '''
+    """
     Calculate the gradients of the output with respect to the inputs.
 
     Args:
@@ -35,19 +35,16 @@ class Captum_Saliency:
       grads: the gradients calculated from the saliency algorithm (created only after visualize() is called)
 
     Reference:
-    https://captum.ai/docs/attribution_algorithms    
-    '''
+    https://captum.ai/docs/attribution_algorithms
+    """
+
     def __init__(self, model) -> None:
         from captum.attr import Saliency
 
         self.saliency = Saliency(model)
 
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
+    def visualize(self, input: torch.Tensor, labels: torch.Tensor, original_image: np.ndarray, imageTitle: str) -> None:
+        """
         Visualize the saliency result with a blended heatmap
 
         Args:
@@ -55,13 +52,11 @@ class Captum_Saliency:
           labels (pytorch.Tensor): list of the label names
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
-        '''
+        """
         from captum.attr import visualization as viz
 
         self.grads = self.saliency.attribute(input, target=labels.item())
-        self.grads = np.transpose(
-            self.grads.squeeze().cpu().detach().numpy(), (1, 2, 0)
-        )
+        self.grads = np.transpose(self.grads.squeeze().cpu().detach().numpy(), (1, 2, 0))
         viz.visualize_image_attr(
             self.grads,
             original_image,
@@ -73,8 +68,8 @@ class Captum_Saliency:
 
 
 class Captum_IntegratedGradients:
-    '''
-    Approximate the integration of gradients with respect to inputs along the path from 
+    """
+    Approximate the integration of gradients with respect to inputs along the path from
     a given input.
 
     Args:
@@ -84,18 +79,16 @@ class Captum_IntegratedGradients:
       ig: the captum integrated gradients object
       attr_ig: the integrated gradients resulting from from ig.attribute() (created only after visualize() is called)
     Reference:
-    https://captum.ai/docs/attribution_algorithms 
-    '''
+    https://captum.ai/docs/attribution_algorithms
+    """
+
     def __init__(self, model) -> None:
         from captum.attr import IntegratedGradients
 
         self.ig = IntegratedGradients(model)
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
+
+    def visualize(self, input: torch.Tensor, labels: torch.Tensor, original_image: np.ndarray, imageTitle: str) -> None:
+        """
         Visualize the integrated gradients result with a blended heatmap
 
         Args:
@@ -103,25 +96,18 @@ class Captum_IntegratedGradients:
           labels (pytorch.Tensor): list of the label names
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
-        '''
+        """
         from captum.attr import visualization as viz
 
         self.attr_ig = self.ig.attribute(input, target=labels, baselines=input * 0)
-        self.attr_ig = np.transpose(
-            self.attr_ig.squeeze().cpu().detach().numpy(), (1, 2, 0)
-        )
+        self.attr_ig = np.transpose(self.attr_ig.squeeze().cpu().detach().numpy(), (1, 2, 0))
         viz.visualize_image_attr(
-            self.attr_ig,
-            original_image,
-            method="blended_heat_map",
-            sign="all",
-            show_colorbar=True,
-            title=imageTitle,
+            self.attr_ig, original_image, method="blended_heat_map", sign="all", show_colorbar=True, title=imageTitle
         )
 
 
 class Captum_DeepLift:
-    '''
+    """
     Approximate attributions using DeepLIFT's back-propagation based algorithm.
 
     Args:
@@ -132,19 +118,16 @@ class Captum_DeepLift:
       attr_dl: captum's DeepLIFT attributions resulting from dl.attribute() (created only after visualize() is called)
 
     Reference:
-    https://captum.ai/docs/attribution_algorithms 
-    '''
+    https://captum.ai/docs/attribution_algorithms
+    """
+
     def __init__(self, model) -> None:
         from captum.attr import DeepLift
 
         self.dl = DeepLift(model)
 
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
+    def visualize(self, input: torch.Tensor, labels: torch.Tensor, original_image: np.ndarray, imageTitle: str) -> None:
+        """
         Visualize the DeepLIFT attributions with a blended heatmap
 
         Args:
@@ -152,25 +135,18 @@ class Captum_DeepLift:
           labels (pytorch.Tensor): list of the label names
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
-        '''
+        """
         from captum.attr import visualization as viz
 
         self.attr_dl = self.dl.attribute(input, target=labels, baselines=input * 0)
-        self.attr_dl = np.transpose(
-            self.attr_dl.squeeze(0).cpu().detach().numpy(), (1, 2, 0)
-        )
+        self.attr_dl = np.transpose(self.attr_dl.squeeze(0).cpu().detach().numpy(), (1, 2, 0))
         viz.visualize_image_attr(
-            self.attr_dl,
-            original_image,
-            method="blended_heat_map",
-            sign="all",
-            show_colorbar=True,
-            title=imageTitle,
+            self.attr_dl, original_image, method="blended_heat_map", sign="all", show_colorbar=True, title=imageTitle
         )
 
 
 class Captum_SmoothGrad:
-    '''
+    """
     Use the Gaussian kernel to average the integrated gradients attributions via noise tunneling.
 
     Args:
@@ -182,21 +158,18 @@ class Captum_SmoothGrad:
       attr_ig_nt: resulting attributions from nt.attribute() (created only after visualize() is called)
 
     Reference:
-    https://captum.ai/docs/attribution_algorithms 
-    '''
+    https://captum.ai/docs/attribution_algorithms
+    """
+
     def __init__(self, model) -> None:
         from captum.attr import IntegratedGradients
         from captum.attr import NoiseTunnel
 
         self.ig = IntegratedGradients(model)
         self.nt = NoiseTunnel(self.ig)
-            
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
+
+    def visualize(self, input: torch.Tensor, labels: torch.Tensor, original_image: np.ndarray, imageTitle: str) -> None:
+        """
         Visualize the smooth grad attributions with a blended heatmap
 
         Args:
@@ -204,20 +177,13 @@ class Captum_SmoothGrad:
           labels (pytorch.Tensor): list of the label names
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
-        '''
+        """
         from captum.attr import visualization as viz
 
         self.attr_ig_nt = self.nt.attribute(
-            input,
-            target=labels,
-            baselines=input * 0,
-            nt_type="smoothgrad_sq",
-            nt_samples=100,
-            stdevs=0.2,
+            input, target=labels, baselines=input * 0, nt_type="smoothgrad_sq", nt_samples=100, stdevs=0.2
         )
-        self.attr_ig_nt = np.transpose(
-            self.attr_ig_nt.squeeze(0).cpu().detach().numpy(), (1, 2, 0)
-        )
+        self.attr_ig_nt = np.transpose(self.attr_ig_nt.squeeze(0).cpu().detach().numpy(), (1, 2, 0))
         viz.visualize_image_attr(
             self.attr_ig_nt,
             original_image,
@@ -230,9 +196,9 @@ class Captum_SmoothGrad:
 
 
 class Captum_FeatureAblation:
-    '''
+    """
     Approximate attributions using perturbation by replacing each input feature with a reference
-    value and computing the difference 
+    value and computing the difference
 
     Args:
       model (pytorch.nn.Module): a differentiable model to be interpreted
@@ -240,20 +206,18 @@ class Captum_FeatureAblation:
     Attributes:
       ablator: the captum feature ablation object
       fa_attr: attributes resulting from ablator.attribute() (created only after visualize() is called)
-    
+
     Reference:
-    https://captum.ai/docs/attribution_algorithms 
-    '''
+    https://captum.ai/docs/attribution_algorithms
+    """
+
     def __init__(self, model) -> None:
         from captum.attr import FeatureAblation
 
         self.ablator = FeatureAblation(model)
-    def visualize(self, 
-                  input: torch.Tensor, 
-                  labels: torch.Tensor, 
-                  original_image: np.ndarray, 
-                  imageTitle: str) -> None:
-        '''
+
+    def visualize(self, input: torch.Tensor, labels: torch.Tensor, original_image: np.ndarray, imageTitle: str) -> None:
+        """
         Visualize the feature ablation attributions with a blended heatmap
 
         Args:
@@ -261,22 +225,13 @@ class Captum_FeatureAblation:
           labels (pytorch.Tensor): list of the label names
           original_image (numpy.ndarray): the original image to be interpreted
           imageTitle (string): title of the visualization
-        '''
+        """
         from captum.attr import visualization as viz
 
-        self.fa_attr = self.ablator.attribute(
-            input, target=labels, baselines=input * 0
-        )
-        self.fa_attr = np.transpose(
-            self.fa_attr.squeeze(0).cpu().detach().numpy(), (1, 2, 0)
-        )
+        self.fa_attr = self.ablator.attribute(input, target=labels, baselines=input * 0)
+        self.fa_attr = np.transpose(self.fa_attr.squeeze(0).cpu().detach().numpy(), (1, 2, 0))
         viz.visualize_image_attr(
-            self.fa_attr,
-            original_image,
-            method="blended_heat_map",
-            sign="all",
-            show_colorbar=True,
-            title=imageTitle,
+            self.fa_attr, original_image, method="blended_heat_map", sign="all", show_colorbar=True, title=imageTitle
         )
 
 

@@ -38,9 +38,10 @@ class TestMCGForPyTorch:
 
         adult_dataset, feature_names = get_data()
         cls._model_path = get_trained_model(adult_dataset, feature_names)
-        cls._data_sets = {'train': PytorchDataset(adult_dataset, feature_names=feature_names)}
+        cls._data_sets = {"train": PytorchDataset(adult_dataset, feature_names=feature_names)}
 
-        cls._eval_config = text_format.Parse("""
+        cls._eval_config = text_format.Parse(
+            """
                 model_specs {
                 label_key: 'label'
                 prediction_key: 'prediction'
@@ -60,7 +61,9 @@ class TestMCGForPyTorch:
                 options {
                     include_default_metrics { value: false }
                 }
-                """, tfma.EvalConfig())
+                """,
+            tfma.EvalConfig(),
+        )
 
     @classmethod
     def teardown_class(cls):
@@ -68,9 +71,9 @@ class TestMCGForPyTorch:
             os.remove(cls._model_path)
 
     def test_end_to_end(self):
-        """ Build a pytorch model card from a trained model
-        """
-        mcg = ModelCardGen.generate(data_sets=self._data_sets, model_path=self._model_path,
-                                    eval_config=self._eval_config)
+        """Build a pytorch model card from a trained model"""
+        mcg = ModelCardGen.generate(
+            data_sets=self._data_sets, model_path=self._model_path, eval_config=self._eval_config
+        )
 
         assert mcg

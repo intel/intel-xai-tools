@@ -24,47 +24,46 @@ from deepdiff import DeepDiff
 import numpy as np
 import pandas as pd
 import torch
+
 ### library to be tested ###
 from intel_ai_safety.explainer import metrics
+
 ###################################
 
 # Namedtuple that holds necessary input and outputs to the cm and curve plots.
-Data = namedtuple('Data', ['y_true', 'oh_y_true', 'y_pred', 'label_names', 'recall', 'cm'])
+Data = namedtuple("Data", ["y_true", "oh_y_true", "y_pred", "label_names", "recall", "cm"])
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def simple_data():
-    '''
+    """
     A simple 3-class use case with only 5 examples.
 
-    '''
+    """
     y_true = [2, 0, 1, 0, 1]
     oh_y_true = [[0, 0, 1], [1, 0, 0], [0, 1, 0], [1, 0, 0], [0, 1, 0]]
-    y_pred = [
-        [.002, .09, .89],
-        [.01, .7, .29],
-        [.3, .67, .03],
-        [.55, .4, .05],
-        [.03, .86, .11]]
-    label_names = ['cat', 'dog', 'horse']
+    y_pred = [[0.002, 0.09, 0.89], [0.01, 0.7, 0.29], [0.3, 0.67, 0.03], [0.55, 0.4, 0.05], [0.03, 0.86, 0.11]]
+    label_names = ["cat", "dog", "horse"]
     ### correct solutions ###
     recall = {
-        0: np.array([1., 1., 0.5, 0.5, 0.5, 0.]),
-        1: np.array([1., 1., 1., 0.5, 0.5, 0.]),
-        2: np.array([1., 1., 1., 1., 1., 0.])
-        }
+        0: np.array([1.0, 1.0, 0.5, 0.5, 0.5, 0.0]),
+        1: np.array([1.0, 1.0, 1.0, 0.5, 0.5, 0.0]),
+        2: np.array([1.0, 1.0, 1.0, 1.0, 1.0, 0.0]),
+    }
     cm = pd.DataFrame(
-        {label_names[0]: [0.5, 0.0, 0.0],
-         label_names[1]: [0.5, 1.0, 0.0],
-         label_names[2]: [0.0, 0.0, 1.0]},
-         index=label_names)
+        {label_names[0]: [0.5, 0.0, 0.0], label_names[1]: [0.5, 1.0, 0.0], label_names[2]: [0.0, 0.0, 1.0]},
+        index=label_names,
+    )
 
     return Data(y_true, oh_y_true, y_pred, label_names, recall, cm)
+
 
 @pytest.mark.simple
 def test_plot(simple_data):
     data = simple_data
     plotter = metrics.plot(data.y_true, data.y_pred, data.label_names)
     assert DeepDiff(plotter.recall, data.recall) == {}
+
 
 @pytest.mark.simple
 def test_confusion_matrix(simple_data):
@@ -76,8 +75,9 @@ def test_confusion_matrix(simple_data):
     cm = metrics.confusion_matrix(data.oh_y_true, data.y_pred, data.label_names)
     assert cm.df.equals(data.cm)
 
+
 def test_confusion_matrix_pyt(custom_pyt_CNN):
-    model, X_test, class_names, y_true = custom_pyt_CNN 
+    model, X_test, class_names, y_true = custom_pyt_CNN
 
     # test the model
     model.eval()

@@ -7,21 +7,22 @@ This repository provides tools for data scientists and MLOps engineers that have
 The Intel Explainable AI Tools are designed to help users detect and mitigate against issues of fairness and interpretability, while running best on Intel hardware.
 There are two Python* components in the repository:
 
-* [Model Card Generator](intel_ai_safety/model_card_gen)
+* [Model Card Generator](model_card_gen)
   * Creates interactive HTML reports containing model performance and fairness metrics
 * [Explainer](explainer)
   * Runs post-hoc model distillation and visualization methods to examine predictive behavior for both TensorFlow* and PyTorch* models via a simple Python API including the following modules:
-    * [Attributions](explainer/intel_ai_safety/explainer/attributions/): Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions
-    * [CAM (Class Activation Mapping)](explainer/intel_ai_safety/explainer/cam/): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
-    * [Metrics](explainer/intel_ai_safety/explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
+    * [Attributions](plugins/explainers/attributions): Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions
+    * [CAM (Class Activation Mapping)](plugins/explainers/cam-pytorch): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
+    * [Metrics](plugins/explainers/metrics): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
 
 ## Get Started
 
 ### Requirements
 * Linux system or WSL2 on Windows (validated on Ubuntu* 20.04/22.04 LTS)
-* Python 3.8, 3.9, 3.10
+* Python 3.9, 3.10
 * Install required OS packages with `apt-get install build-essential python3-dev`
 * git (only required for the "Developer Installation")
+* Poetry
 
 ### Developer Installation with Poetry
 
@@ -33,52 +34,52 @@ on making code changes.
 
 2. Allow poetry to create virtual envionment contained in `.venv` directory of current directory. 
 
-   ```
+   ```bash
    poetry lock
    ```
    In addtion, you can explicitly tell poetry which python instance to use
    
-   ```
+   ```bash
    poetry env use /full/path/to/python
    ```
 
 3. Choose the `intel_ai_safety` subpackages and plugins that you wish to install.
    
    a. Install `intel_ai_safety` with all of its subpackages (e.g. `explainer` and `model_card_gen`) and plugins
-   ```
+   ```bash
    poetry install --extras all
    ```
 
    b. Install `intel_ai_safety` with just `explainer`
-   ```
+   ```bash
    poetry install --extras explainer
    ```
    
    c. Install `intel_ai_safety` with just `model_card_gen`
-   ```
+   ```bash
    poetry install --extras model-card
    ```
    
    d. Install `intel_ai_safety` with `explainer` and all of its plugins
-   ```
+   ```bash
    poetry install --extras explainer-all
    ```
 
    e. Install `intel_ai_safety` with `explainer` and just its pytorch implementations
    
-   ```
+   ```bash
    poetry install --extras explainer-pytorch
    ```
    
-   f. Install `intel_ai_safety` with `explainer` and just its pytorch implementations
+   f. Install `intel_ai_safety` with `explainer` and just its tensroflow implementations
    
-   ```
+   ```bash
    poetry install --extras explainer-tensorflow
    ``` 
 
-4. Activate the enviornment:
+4. Activate the environment:
 
-   ```
+   ```bash
    source .venv/bin/activate
    ```
 
@@ -89,18 +90,18 @@ We encourage you to use a python virtual environment (virtualenv or conda) for c
 There are two ways to do this:
 1. Choose a virtual enviornment to use:
    a. Using `virtualenv`:
-      ```
-      python3.9 -m virtualenv xai_env
+      ```bash
+      python3 -m virtualenv xai_env
       source xai_env/bin/activate
       ```
 
    b. Or `conda`:
-      ```
+      ```bash
       conda create --name xai_env python=3.9
       conda activate xai_env
       ```
 2. Install to current enviornment
-   ```
+   ```bash
    poetry config virtualenvs.create false && poetry install --extras all
    ```
 
@@ -110,7 +111,7 @@ Notebooks may require additional dependencies listed in their associated documen
 ### Verify Installation
 
 Verify that your installation was successful by using the following commands, which display the Explainer and Model Card Generator versions:
-```
+```bash
 python -c "from intel_ai_safety.explainer import version; print(version.__version__)"
 python -c "from intel_ai_safety.model_card_gen import version; print(version.__version__)"
 ```
@@ -124,7 +125,7 @@ The following links have Jupyter* notebooks showing how to use the Explainer and
 ## Support
 
 The Intel Explainable AI Tools team tracks bugs and enhancement requests using
-[GitHub issues](https://github.com/intelai/intel-xai-tools/issues). Before submitting a
+[GitHub issues](https://github.com/intel/intel-xai-tools/issues). Before submitting a
 suggestion or bug report, search the existing GitHub issues to see if your issue has already been reported.
 
 *Other names and brands may be claimed as the property of others. [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)

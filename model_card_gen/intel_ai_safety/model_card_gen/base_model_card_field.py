@@ -29,29 +29,29 @@ from typing import Any, Dict, Text
 import dataclasses
 from intel_ai_safety.model_card_gen import validation
 
+
 class BaseModelCardField(abc.ABC):
     """Model card field base class.
 
     This is an abstract class. All the model card fields should inherit this class.
     """
-    def _from_json(self, json_dict: Dict[str, Any],
-                                 field: "BaseModelCardField") -> "BaseModelCardField":
+
+    def _from_json(self, json_dict: Dict[str, Any], field: "BaseModelCardField") -> "BaseModelCardField":
         """Parses a JSON dictionary into the current object."""
         for subfield_key, subfield_json_value in json_dict.items():
             if subfield_key.startswith(validation.SCHEMA_VERSION_STRING):
                 continue
             elif not hasattr(field, subfield_key):
-                raise ValueError(
-                        "BaseModelCardField %s has no such field named '%s.'" %
-                        (field, subfield_key))
+                raise ValueError("BaseModelCardField %s has no such field named '%s.'" % (field, subfield_key))
             elif isinstance(subfield_json_value, dict):
-                subfield_value = self._from_json(
-                        subfield_json_value, getattr(field, subfield_key))
+                subfield_value = self._from_json(subfield_json_value, getattr(field, subfield_key))
             elif isinstance(subfield_json_value, list):
                 subfield_value = []
                 for item in subfield_json_value:
                     if isinstance(item, dict):
-                        new_object = field.__annotations__[subfield_key].__args__[0]()  # pytype: disable=attribute-error
+                        new_object = field.__annotations__[subfield_key].__args__[
+                            0
+                        ]()  # pytype: disable=attribute-error
                         subfield_value.append(self._from_json(item, new_object))
                     else:  # if primitive
                         subfield_value.append(item)

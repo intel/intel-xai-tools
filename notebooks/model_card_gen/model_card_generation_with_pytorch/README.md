@@ -17,7 +17,7 @@ This notebook demonstrates how to generate a model card for a PyTorch model usin
 ## Running the notebook
 
 To run `adult-pytorch-model-card.ipynb`, install the following dependencies:
-1. [Intel® Explainable AI](https://github.com/IntelAI/intel-xai-tools)
+1. [Intel® Explainable AI](https://github.com/Intel/intel-xai-tools)
 
 
 ## References

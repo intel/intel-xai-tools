@@ -20,25 +20,28 @@
 
 ### libraries to support tests ###
 import pytest
+
 ### library to be tested ###
 from intel_ai_safety.explainer.attributions import hf_attributions as attributions
 
-@pytest.mark.parametrize("auto_model", ['causal_lm', 'seq2seq_lm'])
+
+@pytest.mark.parametrize("auto_model", ["causal_lm", "seq2seq_lm"])
 def test_llm_explainer_auto_model(auto_model, request):
-    '''
+    """
     Test LLMExplainer works with AutoModelForCausalLM and AutoModelForSeq2SeqLM
-    '''
+    """
     model, tokenizer, text = request.getfixturevalue(auto_model)
     llme = attributions.LLMExplainer(model, tokenizer)
     llme.run_explainer(text)
     assert isinstance(llme, attributions.LLMExplainer)
     llme.visualize()
 
+
 def test_llm_explainer_pipeline(classification_pipeline):
-    '''
-    Test LLMExplainer works with classification pipeline 
-    '''
-    classifier_pl, text = classification_pipeline 
+    """
+    Test LLMExplainer works with classification pipeline
+    """
+    classifier_pl, text = classification_pipeline
     llme = attributions.LLMExplainer(classifier_pl)
     llme.run_explainer(text)
     assert isinstance(llme, attributions.LLMExplainer)

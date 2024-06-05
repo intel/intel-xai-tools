@@ -29,14 +29,15 @@ class InfoField:
     name: str
     description: str
 
+
 @dataclass(init=False)
 class InfoPanel:
-    """Dataclass to build plot information pannel in Jupyter enviornment
-    """
+    """Dataclass to build plot information pannel in Jupyter enviornment"""
+
     fields: List[InfoField]
     title = "Metric Info"
-        
-    def __init__(self, *args: Tuple[str], **kwargs : str):
+
+    def __init__(self, *args: Tuple[str], **kwargs: str):
         """
         Args:
             *args: Variable length argument list of tuples such that the first
@@ -49,25 +50,22 @@ class InfoPanel:
             self.fields = [InfoField(*arg) for arg in args]
         elif kwargs:
             self.fields = [InfoField(k, v) for k, v in kwargs.items()]
-            
+
     def show(self):
-        """Display widget object to Jupyter environment
-        """
+        """Display widget object to Jupyter environment"""
         output = self._build_widget()
         display(output)
-    
+
     def _build_widget(self):
-        """Build ipywidgets Accordion object with list from data fields 
-        """
+        """Build ipywidgets Accordion object with list from data fields"""
         output = widgets.Accordion(children=[])
-        output.children  = [widgets.HTML((self._build_html(self.fields)))]
+        output.children = [widgets.HTML((self._build_html(self.fields)))]
         output.set_title(0, self.title)
         return output
 
     def _build_html(self, elms):
-        """Build HTML list content for Jupyter widget
-        """
-        html_inner=''
+        """Build HTML list content for Jupyter widget"""
+        html_inner = ""
         for elm in elms:
             html_inner += "<li><b>{}: </b>{}</li>".format(elm.name, elm.description)
         html_outer = "<ul>{}</ul>".format(html_inner)

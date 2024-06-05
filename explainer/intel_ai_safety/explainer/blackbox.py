@@ -20,7 +20,7 @@ from .base_explainer import BaseExplainer
 
 
 class BlackBoxExplainer(BaseExplainer):
-    """Explainer class to get explainations from blackbox models.
-    """
+    """Explainer class to get explainations from blackbox models."""
+
     def __init__(self, *args, **kwargs):
         super(BaseExplainer, self).__init__(*args, **kwargs)

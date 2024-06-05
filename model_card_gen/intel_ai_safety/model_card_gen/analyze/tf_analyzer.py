@@ -24,11 +24,9 @@ from typing import Text, Optional, Union
 from intel_ai_safety.model_card_gen.utils.types import DatasetType
 from intel_ai_safety.model_card_gen.analyze.analyzer import ModelAnalyzer
 
+
 class TFAnalyzer(ModelAnalyzer):
-    def __init__(self,
-                 model_path: Text,
-                 dataset: DatasetType,
-                 eval_config: Union[tfma.EvalConfig, Text] = None):
+    def __init__(self, model_path: Text, dataset: DatasetType, eval_config: Union[tfma.EvalConfig, Text] = None):
         """Start TFMA analysis on TensorFlow model
         Args:
             model_path (str) : path to model
@@ -38,12 +36,14 @@ class TFAnalyzer(ModelAnalyzer):
         super().__init__(eval_config, dataset)
         self.model_path = model_path
         self.dataset = dataset
-    
+
     @classmethod
-    def analyze(cls,
-                model_path: Optional[Text] = '',
-                eval_config: Union[tfma.EvalConfig, Text] = None,
-                dataset:  DatasetType = None):
+    def analyze(
+        cls,
+        model_path: Optional[Text] = "",
+        eval_config: Union[tfma.EvalConfig, Text] = None,
+        dataset: DatasetType = None,
+    ):
         """Class Factory to start TFMA analysis
         Args:
             model_path (str) : path to model
@@ -68,15 +68,14 @@ class TFAnalyzer(ModelAnalyzer):
         self = cls(model_path, dataset, eval_config)
         self.run_analysis()
         return self.get_analysis()
-    
+
     def run_analysis(self):
         # TODO if not eval_shared
         eval_shared_model = tfma.default_eval_shared_model(
-            eval_saved_model_path=self.model_path,
-            eval_config=self.eval_config)
+            eval_saved_model_path=self.model_path, eval_config=self.eval_config
+        )
 
         self.eval_result = tfma.run_model_analysis(
-            eval_shared_model=eval_shared_model,
-            eval_config=self.eval_config,
-            data_location=self.dataset.dataset_path)
+            eval_shared_model=eval_shared_model, eval_config=self.eval_config, data_location=self.dataset.dataset_path
+        )
         return self.eval_result

@@ -23,6 +23,7 @@ class BaseDataset:
     """
     Base class for all datasets supported by ModelCardGen
     """
+
     def __init__(self, dataset_path=None, name=None):
         self._dataset_path = dataset_path
         self._dataset_name = name
@@ -40,7 +41,7 @@ class BaseDataset:
         Returns the name of the dataset
         """
         return self._name
-    
+
     @property
     def description(self):
         """
