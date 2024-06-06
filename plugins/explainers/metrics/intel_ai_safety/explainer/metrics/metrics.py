@@ -292,7 +292,7 @@ def plot(groundtruth, predictions, labels):
       >>> from intel_ai_safety.explainer import metrics
       >>> plotter = metrics.plot(y_true, y_pred, label_names)
       >>> plotter.recall
-      {0: array([1. , 1. , 0.5, 0.5, 0.5, 0. ]), 1: array([1. , 1. , 1. , 0.5, 0.5, 0. ]), 2: array([1., 1., 1., 1., 1., 0.])}
+      {0: array([1. , 1. , 0.5, 0.5, 0.5, 0. ]), 1: array([1. , 1. , 1. , 0.5, 0.5, 0. ]), 2: array([1., 1., 1., 1., 1., 0.])} # noqa
 
     """
     plotter = Plotter(groundtruth, predictions, labels)

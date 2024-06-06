@@ -99,7 +99,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 120
-exclude = '''
+extend-exclude = '''
        /(\.git|\.venv|__pycache__|\.cache|\.tox|\.pytest_cache|\.mypy_cache|)/
        \.pyc$
        '''

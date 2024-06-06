@@ -23,8 +23,7 @@ def TestOneInput(data):
     input_array = numpy.array(fdp.ConsumeRegularFloatList(dataset_length))
     target_array = numpy.array(fdp.ConsumeIntListInRange(dataset_length, 0, 10))
 
-    dataset = PytorchNumpyDataset(input_array=input_array,
-                                    target_array=target_array)
+    dataset = PytorchNumpyDataset(input_array=input_array, target_array=target_array)
     assert len(dataset.dataset) == dataset_length
 
 

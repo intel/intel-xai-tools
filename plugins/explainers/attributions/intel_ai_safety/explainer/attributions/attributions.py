@@ -49,13 +49,13 @@ class FeatureAttributions(AttributionsExplainer):
 
 class DeepExplainer(FeatureAttributions):
     """
-    Approximate conditional expectations of shap values for deep learning models using a variation of the DeepLIFT algorithm
-     (Shrikumar, Greenside, and Kundaje, arXiv 2017)
+    Approximate conditional expectations of shap values for deep learning models using a variation
+      of the DeepLIFT algorithm (Shrikumar, Greenside, and Kundaje, arXiv 2017)
 
     Args:
       model (tf.keras.functional or pytorch.nn.Module): CNN model to be interpreted
-      background_images (numpy.ndarray, pandas.DataFrame or torch.tensor): the selection of background images used to integrate output features
-        across each target image
+      background_images (numpy.ndarray, pandas.DataFrame or torch.tensor): the selection of background images
+        used to integrate output features across each target image
       targetImages (numpy.ndarray, pandas.DataFrame or torch.tensor): the images to be interpreted
       labels (list of strings): list of label names for the given classification problem
 
@@ -160,8 +160,8 @@ class KernelExplainer(FeatureAttributions):
     Args:
       model (function): "black box" prediction function that takes an input array of shape (n samples, m features)
       and outputs an array of n predictions.
-      background (numpy.ndarray or pandas.DataFrame): the selection of background examples used to integrate output features
-        across each target example
+      background (numpy.ndarray or pandas.DataFrame): the selection of background examples used to integrate
+        output features across each target example
       targets (numpy.ndarray or pandas.DataFrame): the target examples to be interpreted
       nsamples (int): the number of times to re-evaluate the model per prediction. Defaults to 64.
 

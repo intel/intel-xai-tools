@@ -71,7 +71,8 @@ class ModelCardGen:
         data_sets (dict): dictionary with keys of name of dataset and value to path
         model_path (str): representing TF SavedModel path
         eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
-        model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
+        model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary
+          following model card schema
         eval_results (tfma.EvalResults): pre-generated tfma results for when you do not wish to run evaluator
         output_dir (str): representing of where to output model card
     """
@@ -120,7 +121,8 @@ class ModelCardGen:
             data_sets (dict): dictionary with keys of name of dataset and value to path
             model_path (str): representing TF SavedModel path
             eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
-            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary
+              following model card schema
             output_dir (str): representing of where to output model card
 
         Returns:
@@ -158,7 +160,8 @@ class ModelCardGen:
             data_sets (dict): dictionary with keys of name of dataset and value to path
             model_path (str): representing TF SavedModel path
             eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
-            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary
+              following model card schema
             output_dir (str): representing of where to output model card
 
         Returns:
@@ -194,7 +197,8 @@ class ModelCardGen:
             data_sets (dict): dictionary with keys of name of dataset and value to path
             model_path (str): representing TF SavedModel path
             eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
-            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary
+              following model card schema
             output_dir (str): representing of where to output model card
 
         Returns:
