@@ -23,9 +23,8 @@ from intel_ai_safety.model_card_gen.model_card import ModelCard, Graphic, Datase
 from .plotly_graphics import *
 
 # Typing
-from typing import Sequence, Text, Tuple, Union, Optional
-import tensorflow_model_analysis as tfma
-from tensorflow_metadata.proto.v0.statistics_pb2 import DatasetFeatureStatisticsList
+import pandas as pd
+from typing import Sequence, Text, Tuple, Union, Optional, List
 
 OVERVIEW_GRAPHS = [OverallPerformanceAtThreshold]
 PLOTS_GRAPHS = [ConfusionMatrixAtThresholdsGraphs]
@@ -33,44 +32,27 @@ SLICING_METRIC_GRAPHS = [SlicingMetricGraphs]
 DATASTAT_GRAPHS = [DataStatsGraphs]
 
 
-def add_overview_graphs(model_card: ModelCard, eval_result: tfma.EvalResult, dataset_name: Text) -> None:
-    """Adds plots for every graph in OVERVIEW_GRAPHS.
-
-    Args:
-        model_card: The model card object.
-        eval_result: A `tfma.EvalResult`.
-    """
-    # Get all metric and slice names
-    plots = set()
-    for slicing_metric in eval_result.plots:
-        if slicing_metric[1]:
-            for output_name in slicing_metric[1]:
-                for sub_key in slicing_metric[1][output_name]:
-                    plots.update(slicing_metric[1][output_name][sub_key].keys())
-
-    if plots:
-        # Generate graphs for plots
-        graphs = [
-            graph.generate_figure(eval_result.plots)
-            for graph in OVERVIEW_GRAPHS
-            # Check metric name is in plots
-            if graph.eval_result_keys[0] in plots
-        ]
-        # Add graphs to modle card
-        model_card.model_details.graphics.collection.extend(
-            [Graphic(name=dataset_name, html=graph.html_content) for graph in graphs]
-        )
+def add_overview_graphs(model_card: ModelCard, df: pd.DataFrame, dataset_name: Text) -> None:
+    
+    graphs = [
+        graph.generate_figure(df)
+        for graph in OVERVIEW_GRAPHS
+    ]
+    # Add graphs to modle card
+    model_card.model_details.graphics.collection.extend(
+        [Graphic(name=dataset_name, html=graph.html_content) for graph in graphs]
+    )
 
 
 def add_dataset_feature_statistics_plots(
-    model_card: ModelCard, data_stats: Dict[Text, DatasetFeatureStatisticsList]
+    model_card: ModelCard, data_set_names: List[Text], dfs: List[pd.DataFrame]
 ) -> None:
     """Adds Dataset objects to model card with all graphs in
     DATASTAT_GRAPHS
     """
-
-    for i, (name, stats) in enumerate(data_stats.items()):
-        graphs = [graph.generate_figure(name, stats, color_index=i) for graph in DATASTAT_GRAPHS]
+    named_datasets = zip(data_set_names, dfs)
+    for i, (name, df) in enumerate(named_datasets):
+        graphs = [graph.generate_figure(name, df, color_index=i) for graph in DATASTAT_GRAPHS]
         model_card.model_parameters.data.append(
             Dataset(
                 name=name.title(),
@@ -81,7 +63,7 @@ def add_dataset_feature_statistics_plots(
         )
 
 
-def add_eval_result_slicing_metrics(model_card: ModelCard, eval_result: tfma.EvalResult) -> None:
+def add_eval_result_slicing_metrics(model_card: ModelCard, df: pd.DataFrame) -> None:
     """Adds plots for every graph in SLICING_METRIC_GRAPHS
     and every metric in eval_result.slicing_metrics.
 
@@ -89,14 +71,13 @@ def add_eval_result_slicing_metrics(model_card: ModelCard, eval_result: tfma.Eva
         model_card: The model card object.
         eval_result: A `tfma.EvalResult`.
     """
-    if eval_result.get_metric_names():
-        graphs = [graph.generate_figure(eval_result.slicing_metrics) for graph in SLICING_METRIC_GRAPHS]
-        model_card.quantitative_analysis.graphics.collection.extend(
-            [Graphic(name=graph.name, html=graph.html_content) for graph in graphs]
-        )
+    graphs = [graph.generate_figure(df) for graph in SLICING_METRIC_GRAPHS]
+    model_card.quantitative_analysis.graphics.collection.extend(
+        [Graphic(name=graph.name, html=graph.html_content) for graph in graphs]
+    )
 
 
-def add_eval_result_plots(model_card: ModelCard, eval_result: tfma.EvalResult) -> None:
+def add_eval_result_plots(model_card: ModelCard, df: pd.DataFrame) -> None:
     """Add visualizations for every plot in eval_result.plots.
 
     This function generates plots encoded as html text
@@ -107,26 +88,15 @@ def add_eval_result_plots(model_card: ModelCard, eval_result: tfma.EvalResult) -
         model_card: The model card object.
         eval_result: A `tfma.EvalResult`.
     """
-
-    # get all metric and slice names
-    plots = set()
-    for slicing_metric in eval_result.plots:
-        if slicing_metric[1]:
-            for output_name in slicing_metric[1]:
-                for sub_key in slicing_metric[1][output_name]:
-                    plots.update(slicing_metric[1][output_name][sub_key].keys())
-
-    # generate graphs for plots
-    if plots:
-        graphs = [
-            graph.generate_figure(eval_result.plots)
-            for graph in PLOTS_GRAPHS
-            # Check metric name is in plots
-            if graph.eval_result_keys[0] in plots
-        ]
-        model_card.quantitative_analysis.graphics.collection.extend(
-            [Graphic(name=None, html=graph.html_content) for graph in graphs]
-        )
+    graphs = [
+        graph.generate_figure(df)
+        for graph in PLOTS_GRAPHS
+        # Check metric name is in plots
+        # if graph.eval_result_keys[0] in plots
+    ]
+    model_card.quantitative_analysis.graphics.collection.extend(
+        [Graphic(name=None, html=graph.html_content) for graph in graphs]
+    )
 
 
 def get_slice_key(slice_key: Union[Tuple[()], Tuple[Tuple[Text, Union[Text, int, float]], ...]]) -> Tuple[Text, Text]:

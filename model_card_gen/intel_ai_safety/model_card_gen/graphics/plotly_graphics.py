@@ -20,7 +20,6 @@
 
 import plotly.express as px
 from plotly import graph_objs as go
-from plotly.subplots import make_subplots
 from plotly.io import to_html, templates
 import pandas as pd
 from typing import Optional, Union, Text, Sequence, Dict
@@ -28,6 +27,10 @@ from .plotly_utils import *
 
 _COLORS = templates["plotly"].layout.colorway
 
+def visualize_bool_values(trace_per_graph, graph_count):
+    enum_range = range(0, trace_per_graph * graph_count, trace_per_graph)
+    for left_fill, right_fill in zip(enum_range, enum_range[::-1]):
+        yield (([False] * left_fill) + ([True] * trace_per_graph) + ([False] * right_fill))
 
 class _PlotlyGraph:
     """Model Card Plotly graph"""
@@ -51,19 +54,15 @@ class _PlotlyGraph:
     html_content: Optional[Text] = None
 
     @classmethod
-    def generate_figure(cls, *args, **kwargs):
+    def generate_figure(cls, data):
         self = cls()
-        self.kwargs = kwargs
-        self.metrics = self.create_metrics(*args)
-        self.data = self.create_df(*args)
+        # self.kwargs = kwargs
+        self.data = self.validate_df(data)
         self.figure = self.create_fig(self.data)
         self.html_content = to_html(self.figure, include_plotlyjs="require", full_html=False)
         return self
 
-    def create_metrics(self, *args):
-        pass
-
-    def create_df(self, *args):
+    def validate_df(self, *args):
         pass
 
     def create_fig(self, data):
@@ -71,30 +70,32 @@ class _PlotlyGraph:
 
 
 class OverallPerformanceAtThreshold(_PlotlyGraph):
-    eval_result_keys: Optional[Sequence[Text]] = ["confusionMatrixAtThresholds", "matrices"]
     x_name: Optional[Text] = "threshold"
     y_name: Optional[Text] = "Overall"
     title: Optional[Text] = "Overall Accuracy/Precision/Recall/F1"
     labels = {"_value": "Accuracy/Precision/Recall/F1", "variable": ""}
+    metric_names = ["accuracy", "precision", "recall", "f1"]
 
-    def create_df(self, plots):
-        df = plots_to_df(plots, self.eval_result_keys)
-        num = df.get("truePositives", 0) + df.get("trueNegatives", 0)
-        dom = (
-            df.get("truePositives", 0)
-            + df.get("falsePositives", 0)
-            + df.get("falseNegatives", 0)
-            + df.get("trueNegatives", 0)
-        )
-        df["accuracy"] = num / dom
-        df["f1"] = 2 * (df.precision * df.recall) / (df.precision + df.recall)
+    def validate_df(self, df):
+        assert (df.values.any()), "No values in DataFrame"
+        assert (df.get('threshold') is not None), "No column named 'threshold'"
+        assert (df['threshold'].values.any()), "Column named 'threshold' contains no values"
+        assert (df['threshold'].dtype == 'float'), "Column named 'threshold' is not dtype float"
+        for metric in self.metric_names:
+            assert (df.get(metric) is not None), f"No column named '{metric}'"
+            assert (df[metric].values.any()), f"Column named '{metric}' contains no values"
+        if 'group' not in df:
+            df['group'] = ['Overall'] * len(df)
+        assert ('Overall' in df['group'].unique()), "Column named 'group' does not contain 'Overall' value"
         return df
 
     def create_fig(self, df):
+        df = df[df["group"] == self.y_name]
+        df = df[[self.x_name] + self.metric_names]
         fig = px.line(
-            self.data[self.data["group"] == self.y_name],
+            df.astype('float64'),
             x=self.x_name,
-            y=["accuracy", "precision", "recall", "f1"],
+            y=self.metric_names,
             labels=self.labels,
             title=self.title,
         )
@@ -105,32 +106,9 @@ class OverallPerformanceAtThreshold(_PlotlyGraph):
 
 class DataStatsGraphs(_PlotlyGraph):
 
-    def create_df(self, name, stats):
-        data = pd.DataFrame()
-        for dataset in stats.datasets:
-            for feature in dataset.features:
-                df = pd.DataFrame()
-                if feature.HasField("num_stats") and feature.num_stats.histograms:
-                    histogram = feature.num_stats.histograms[0]
-                    # x-axis
-                    df["counts"] = [int(bucket.sample_count) for bucket in histogram.buckets]
-                    # y-axis
-                    df["bins"] = [f"{bucket.low_value:.2f}-{bucket.high_value:.2f}" for bucket in histogram.buckets]
-                    # button filter
-                    df["feature"] = feature.name or feature.path.step[0]
-                    # groupby feature
-                    df["dataset"] = "Dataset {name}".format(name=name)
-                    data = pd.concat([data, df])
-                if feature.HasField("string_stats"):
-                    rank_histogram = feature.string_stats.rank_histogram
-                    df["counts"] = [int(bucket.sample_count) for bucket in rank_histogram.buckets]
-                    df["bins"] = [bucket.label for bucket in rank_histogram.buckets]
-                    # button filter
-                    df["feature"] = feature.name or feature.path.step[0]
-                    # groupby feature
-                    df["dataset"] = "Dataset {name}".format(name=str(name).title())
-                    data = pd.concat([data, df])
-        return data
+    def validate_df(self, df):
+        assert (df.values.any()), "No values in DataFrame"
+        return df
 
     def create_fig(self, df):
         # Allows graph cycle through colorway
@@ -181,27 +159,26 @@ class DataStatsGraphs(_PlotlyGraph):
 
 
 class ConfusionMatrixAtThresholdsGraphs(_PlotlyGraph):
-    eval_result_keys: Optional[Sequence[Text]] = ["confusionMatrixAtThresholds", "matrices"]
     x_name: Optional[Text] = "threshold"
     y_name: Optional[Text] = "value"
-
     figure: Optional[go.Figure] = None
 
-    def create_df(self, plots):
-        df = plots_to_df(plots, self.eval_result_keys)
-        num = df.get("truePositives", 0) + df.get("trueNegatives", 0)
-        dom = (
-            df.get("truePositives", 0)
-            + df.get("falsePositives", 0)
-            + df.get("falseNegatives", 0)
-            + df.get("trueNegatives", 0)
-        )
-        df["accuracy"] = num / dom
-        df["f1"] = 2 * (df.precision * df.recall) / (df.precision + df.recall)
+    def validate_df(self, df):
+        assert (df.values.any()), "No values in DataFrame"
+        assert (df.get('threshold') is not None), "No column named 'threshold'"
+        assert (df['threshold'].values.any()), "Column named 'threshold' contains no values"
+        assert (df['threshold'].dtype == 'float'), "Column named 'threshold' is not dtype float"
+        if 'group' not in df:
+            df['group'] = ['Overall'] * len(df)
+        assert ('Overall' in df['group'].unique()), "Column named 'group' does not contain 'Overall' value"
+        if 'feature' not in df:
+            df['feature'] = ['Overall'] * len(df)
+        assert ('Overall' in df['feature'].unique()), "Column named 'feature' does not contain 'Overall' value"
+        assert (df.columns.drop(['feature', 'group', 'threshold']).any()), "No columns for metric names"
         return df
 
     def create_fig(self, df):
-        metrics = ["accuracy", "precision", "recall", "f1"]
+        metrics = df.columns.drop(['feature', 'group', 'threshold'])
         dfs = df.groupby("group")
         fig = go.Figure()
         for metric in metrics:
@@ -246,25 +223,25 @@ class SlicingMetricGraphs(_PlotlyGraph):
     x_name: Optional[Text] = "threshold"
     variables: Optional[Text] = "group"
 
-    def create_metrics(self, slicing_metrics):
-        metrics = set()
-        for slicing_metric in slicing_metrics:
-            for output_name in slicing_metric[1]:
-                for sub_key in slicing_metric[1][output_name]:
-                    metrics.update(slicing_metric[1][output_name][sub_key].keys())
-        return sorted(metrics)
-
-    def create_df(self, slicing_metrics):
-        return slicing_metric_to_df(slicing_metrics)
+    def validate_df(self, df):
+        assert (df.values.any()), "No values in DataFrame"
+        assert (df.get('feature') is not None), "No column named 'feature'"
+        assert (df.get('group') is not None), "No column named 'group'"
+        assert (df['feature'].values.any()), "Column named 'feature' contains no values"
+        assert (df['group'].values.any()), "Column named 'group' contains no values"
+        assert (df.columns.drop(['feature', 'group']).any()), "No columns for metric names"
+        assert all(not df_group.empty for _, df_group in df.groupby('group')), "Not able to groupby 'group' column"
+        return df
 
     def create_fig(self, df):
         dfs = df.groupby("group")
         fig = go.Figure()
-        for metric in self.metrics:
+        metrics = sorted(df.columns.drop(['feature', 'group']))
+        for metric in metrics:
             for group, df in dfs:
-                vis = True if metric == self.metrics[0] else False
+                vis = True if metric == metrics[0] else False
                 feature = df.feature.iloc[0]
-                if feature == "Overall":
+                if feature == group:
                     title = feature
                 else:
                     title = f"{df.feature.iloc[0]}={group}".replace("_", " ").title()
@@ -281,13 +258,13 @@ class SlicingMetricGraphs(_PlotlyGraph):
         def create_layout_button(metric, viz_arg):
             return dict(label=metric.title(), method="update", args=[{"visible": viz_arg}])
 
-        metric_bools = visualize_bool_values(len(dfs), len(self.metrics))
+        metric_bools = visualize_bool_values(len(dfs), len(metrics))
         fig.update_layout(
             updatemenus=[
                 go.layout.Updatemenu(
                     active=0,
                     buttons=[
-                        create_layout_button(metric, viz_arg) for metric, viz_arg in zip(self.metrics, metric_bools)
+                        create_layout_button(metric, viz_arg) for metric, viz_arg in zip(metrics, metric_bools)
                     ],
                     x=0,
                     xanchor="left",

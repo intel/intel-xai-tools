@@ -43,6 +43,11 @@ from intel_ai_safety.model_card_gen.graphics.add_graphics import (
     add_overview_graphs,
     add_eval_result_plots,
     add_eval_result_slicing_metrics,
+
+)
+from intel_ai_safety.model_card_gen.graphics.graphics_data_transform import (
+    plots_to_df,
+    slicing_metric_to_df
 )
 
 # Typing
@@ -244,15 +249,19 @@ class ModelCardGen:
         self.scaffold_assets()
         # Add Dataset Statistics
         if self.data_stats:
-            add_dataset_feature_statistics_plots(self.model_card, self.data_stats)
+            dfs = [tfdv_to_df(name, stats) for stats in self.data_sets]
+            add_dataset_feature_statistics_plots(self.model_card, self.data_sets.keys(), dfs)
             for dataset in self.model_card.model_parameters.data:
                 # Make sure graphs are ordered the same
                 dataset.graphics.collection = sorted(dataset.graphics.collection, key=lambda x: x.name)
         # Add Evaluation Statistics
-        for eval_result, dataset_name in zip(self.eval_results, self.data_sets.keys()):
-            add_overview_graphs(self.model_card, eval_result, dataset_name)
-            add_eval_result_plots(self.model_card, eval_result)
-            add_eval_result_slicing_metrics(self.model_card, eval_result)
+        named_eval_results = zip(self.eval_results, self.data_sets.keys()) if self.eval_results else []
+        for eval_result, dataset_name in named_eval_results:
+            df = plots_to_df(eval_result.plots, ["confusionMatrixAtThresholds", "matrices"])
+            add_overview_graphs(self.model_card, df, dataset_name)
+            add_eval_result_plots(self.model_card, df)
+            df = slicing_metric_to_df(eval_result.slicing_metrics)
+            add_eval_result_slicing_metrics(self.model_card, df)
         self.update_model_card(self.model_card)
         return self.export_format(self.model_card)
 
