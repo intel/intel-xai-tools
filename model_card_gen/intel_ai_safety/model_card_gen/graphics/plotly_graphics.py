@@ -105,6 +105,7 @@ class OverallPerformanceAtThreshold(_PlotlyGraph):
 
 
 class DataStatsGraphs(_PlotlyGraph):
+    title: Optional[Text] = "Dataset Statistics"
 
     def validate_df(self, df):
         assert (df.values.any()), "No values in DataFrame"
@@ -158,10 +159,11 @@ class DataStatsGraphs(_PlotlyGraph):
         return fig
 
 
-class ConfusionMatrixAtThresholdsGraphs(_PlotlyGraph):
+class MetricsAtThresholdsGraphs(_PlotlyGraph):
     x_name: Optional[Text] = "threshold"
     y_name: Optional[Text] = "value"
     figure: Optional[go.Figure] = None
+    title: Optional[Text] = "Metrics at Threshold" 
 
     def validate_df(self, df):
         assert (df.values.any()), "No values in DataFrame"
@@ -222,6 +224,8 @@ class ConfusionMatrixAtThresholdsGraphs(_PlotlyGraph):
 class SlicingMetricGraphs(_PlotlyGraph):
     x_name: Optional[Text] = "threshold"
     variables: Optional[Text] = "group"
+    title: Optional[Text] = "Metrics by Group"
+
 
     def validate_df(self, df):
         assert (df.values.any()), "No values in DataFrame"

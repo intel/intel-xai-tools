@@ -27,21 +27,32 @@ import pandas as pd
 from typing import Sequence, Text, Tuple, Union, Optional, List
 
 OVERVIEW_GRAPHS = [OverallPerformanceAtThreshold]
-PLOTS_GRAPHS = [ConfusionMatrixAtThresholdsGraphs]
+THRESHOLD_GRAPHS = [MetricsAtThresholdsGraphs]
 SLICING_METRIC_GRAPHS = [SlicingMetricGraphs]
 DATASTAT_GRAPHS = [DataStatsGraphs]
 
 
-def add_overview_graphs(model_card: ModelCard, df: pd.DataFrame, dataset_name: Text) -> None:
-    
-    graphs = [
-        graph.generate_figure(df)
-        for graph in OVERVIEW_GRAPHS
-    ]
-    # Add graphs to modle card
-    model_card.model_details.graphics.collection.extend(
-        [Graphic(name=dataset_name, html=graph.html_content) for graph in graphs]
-    )
+def add_overview_graphs(model_card: ModelCard, df: pd.DataFrame) -> None:
+    if "dataset" in df:
+        dfs = df.groupby("dataset")
+        for dataset_name, df in dfs:
+            graphs = [
+                graph.generate_figure(df)
+                for graph in OVERVIEW_GRAPHS 
+            ]
+            # Add graphs to modle card
+            model_card.model_details.graphics.collection.extend(
+                [Graphic(name=graph.title + f" ({dataset_name})", html=graph.html_content) for graph in graphs]
+            )
+    else:
+        graphs = [
+            graph.generate_figure(df)
+            for graph in OVERVIEW_GRAPHS 
+            ]
+        # Add graphs to modle card
+        model_card.model_details.graphics.collection.extend(
+            [Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
+        )
 
 
 def add_dataset_feature_statistics_plots(
@@ -57,7 +68,7 @@ def add_dataset_feature_statistics_plots(
             Dataset(
                 name=name.title(),
                 graphics=GraphicsCollection(
-                    collection=[Graphic(name=graph.name, html=graph.html_content) for graph in graphs]
+                    collection=[Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
                 ),
             )
         )
@@ -71,10 +82,18 @@ def add_eval_result_slicing_metrics(model_card: ModelCard, df: pd.DataFrame) -> 
         model_card: The model card object.
         eval_result: A `tfma.EvalResult`.
     """
-    graphs = [graph.generate_figure(df) for graph in SLICING_METRIC_GRAPHS]
-    model_card.quantitative_analysis.graphics.collection.extend(
-        [Graphic(name=graph.name, html=graph.html_content) for graph in graphs]
-    )
+    if "dataset" in df:
+        dfs = df.groupby("dataset")
+        for dataset_name, df in dfs:
+            graphs = [graph.generate_figure(df) for graph in SLICING_METRIC_GRAPHS]
+            model_card.quantitative_analysis.graphics.collection.extend(
+                [Graphic(name=graph.title + f" ({dataset_name})", html=graph.html_content) for graph in graphs]
+            )
+    else:
+        graphs = [graph.generate_figure(df) for graph in SLICING_METRIC_GRAPHS]
+        model_card.quantitative_analysis.graphics.collection.extend(
+            [Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
+        )
 
 
 def add_eval_result_plots(model_card: ModelCard, df: pd.DataFrame) -> None:
@@ -88,15 +107,24 @@ def add_eval_result_plots(model_card: ModelCard, df: pd.DataFrame) -> None:
         model_card: The model card object.
         eval_result: A `tfma.EvalResult`.
     """
-    graphs = [
-        graph.generate_figure(df)
-        for graph in PLOTS_GRAPHS
-        # Check metric name is in plots
-        # if graph.eval_result_keys[0] in plots
-    ]
-    model_card.quantitative_analysis.graphics.collection.extend(
-        [Graphic(name=None, html=graph.html_content) for graph in graphs]
-    )
+    if "dataset" in df:
+        dfs = df.groupby("dataset")
+        for dataset_name, df in dfs:
+            graphs = [
+                graph.generate_figure(df)
+                for graph in THRESHOLD_GRAPHS
+            ]
+            model_card.quantitative_analysis.graphics.collection.extend(
+                [Graphic(name=graph.title + f" ({dataset_name})", html=graph.html_content) for graph in graphs]
+            )
+    else:
+        graphs = [
+                graph.generate_figure(df)
+                for graph in THRESHOLD_GRAPHS
+            ]
+        model_card.quantitative_analysis.graphics.collection.extend(
+            [Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
+        )
 
 
 def get_slice_key(slice_key: Union[Tuple[()], Tuple[Tuple[Text, Union[Text, int, float]], ...]]) -> Tuple[Text, Text]:
