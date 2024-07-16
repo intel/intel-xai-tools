@@ -15,7 +15,6 @@ with atheris.instrument_imports(include=["intel_ai_safety.*"]):
 def mutate_schema(fdp, json_data):
     """Recurses through a json object leaving keys and structures intact and
     randomly generating new data values of the proper type."""
-    # TODO: Implement float, int, bool, and other types as needed
     if isinstance(json_data, str):
         return fdp.ConsumeUnicode(STR_BYTE_COUNT)
     elif isinstance(json_data, list):
@@ -42,7 +41,6 @@ def TestOneInput(data):
     try:
         mcg = ModelCardGen(data_sets={"test": ""}, model_card=model_card_data)
         if mcg.model_card:
-            # TODO: Produces https://jira.devtools.intel.com/browse/AIZOO-3111
             mcg.build_model_card()  # Includes scaffold_assets() and export_format()
     except (ValueError, jsonschema.ValidationError):
         print("Doesn't match MC schema")

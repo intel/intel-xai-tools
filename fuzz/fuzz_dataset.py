@@ -6,7 +6,7 @@ import sys
 MIN_DATA_LENGTH = 1  # Minimum length of dataset
 MAX_DATA_LENGTH = 1000  # Maximum length of dataset
 
-default_path = "../model_card_gen"
+default_path = "../plugins/model_card_gen/generators/tfma/"
 sys.path.append(default_path)
 
 with atheris.instrument_imports(include=["intel_ai_safety.*"]):
