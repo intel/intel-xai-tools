@@ -74,9 +74,11 @@ class ModelCardGen:
         model_card: Union[ModelCard, Dict[Text, Any]] = None,
         metrics_by_threshold: Union[pd.DataFrame, Text]= None,
         metrics_by_group: Union[pd.DataFrame, Text] = None,
+        data_sets: Dict[Text, DataFormat] = {},
         data_stats: Dict[Text, pd.DataFrame] = {},
         output_dir: Text = "",
     ):
+        self.data_sets = data_sets
         self.data_stats = data_stats
         
         if isinstance(metrics_by_threshold, pd.DataFrame):

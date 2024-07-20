@@ -22,7 +22,7 @@ import pytest
 import os
 import pkgutil
 import json
-from intel_ai_safety.model_card_gen.generators.generator import ModelCardGen
+from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
 from intel_ai_safety.model_card_gen.validation import (
     _LATEST_SCHEMA_VERSION,
     _SCHEMA_FILE_NAME,
