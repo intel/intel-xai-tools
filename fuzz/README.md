@@ -60,6 +60,12 @@ The output will be:
 Remember that the test may not be designed to exercise all the instrumented code, only a certain 
 part or parts of it. It can be more helpful to look at the individual file coverage than the total. 
 
+The coverage report can also be viewed interactively, to inspect files or functions executed, using html:
+
+`cd ../fuzz/htmlcov && python3 -m http.server`
+
+Open http://localhost:8000/index.html in a web browser.
+
 ### Leak Detection
 
 If you're using a Python extension module that interfaces with C code, you might encounter memory leaks due to improper memory management in the C layer. Here's an example of how a memory leak might be reported:
