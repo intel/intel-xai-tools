@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "modelgauge-neuralchat-plugin"
+description = "ModelGauge SUT for running NeuralChat on standard tests."
+version = "0.0.1"
+authors = ["IntelAI <IntelAI@intel.com>"]
+readme = "README.md"
+packages = [{include = "modelgauge"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.11"
+torch = "^2.1.2"
+transformers = "^4.38.1"
+pydantic = "^2.6.0"
+pandas-stubs = "^2.2.1.240316"
+modelgauge_huggingface = {git = "https://github.com/mlcommons/modelgauge.git", subdirectory = "plugins/huggingface", develop = true}
+modelgauge = {git = "https://github.com/mlcommons/modelgauge.git", develop = true}
+modelgauge_standard_tests = {git = "https://github.com/mlcommons/modelgauge.git", subdirectory = "plugins/standard_tests", develop = true}
+modelgauge_together= {git = "https://github.com/mlcommons/modelgauge.git", subdirectory = "plugins/together", develop = true}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+# Using namespace packages to do plugins requires us not to have __init__.py files.
+# However, by default mypy uses those to map file paths to modules. This override fixes that.
+# https://mypy.readthedocs.io/en/stable/config_file.html#confval-explicit_package_bases
+explicit_package_bases = true
+mypy_path = "."

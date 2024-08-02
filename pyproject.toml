@@ -22,16 +22,18 @@ python = ">=3.9, <3.11"
 optional = true
 
 [tool.poetry.group.test.dependencies]
+backcall = '0.2.0'
 datasets = '2.14.4'
 deepdiff = '6.7.1'
 intel-tensorflow = '2.14.0'
+pickleshare = '0.7.5'
+pillow = '10.3.0'
 pytest = '8.1.1'
-scikit-learn = '1.4.0'
+scikit-learn = '1.5.0'
+sentencepiece = '0.2.0'
 tensorflow-hub = '0.15.0'
 torch = {version = "2.2.0", source = "pytorch-cpu"}
 torchvision = {version = "0.17.0", source = "pytorch-cpu"}
-pillow = '10.3.0'
-sentencepiece = '0.2.0'
 
 
 [tool.poetry.extras]
@@ -99,7 +101,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 120
-exclude = '''
+extend-exclude = '''
        /(\.git|\.venv|__pycache__|\.cache|\.tox|\.pytest_cache|\.mypy_cache|)/
        \.pyc$
        '''
