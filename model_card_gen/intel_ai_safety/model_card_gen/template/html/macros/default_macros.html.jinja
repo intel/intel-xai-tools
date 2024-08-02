@@ -45,14 +45,16 @@
 {% macro render_graphics(graphics) %}
   {% if graphics.description %}<p>{{ graphics.description }}</p>{% endif %}
   {% for graph in graphics %}
-      {% if graph.name %}<h3>{{ graph.name }}</h3>{% endif %}
-      {% if graph.html %}
-        <div class="interactive-graph">{{ graph.html|safe }}</div>
-      {% elif graph.image %}
-        <div class="img-item">
-          <img src='data:image/jpeg;base64,{{ graph.image }}' alt='{{ graph.name }}' />
-        </div>
-      {% endif %}
+  <details>
+  <summary>{% if graph.name %}<h3 style="display:inline-block">{{ graph.name }}</h3>{% endif %}</summary>
+    {% if graph.html %}
+      <div class="interactive-graph">{{ graph.html|safe }}</div>
+    {% elif graph.image %}
+      <div class="img-item">
+        <img src='data:image/jpeg;base64,{{ graph.image }}' alt='{{ graph.name }}' />
+      </div>
+    {% endif %}
+  </details>
   {% endfor %}
 {% endmacro %}
 

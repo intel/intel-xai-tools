@@ -17,7 +17,9 @@
 #
 
 VENV_DIR = ".venv"
+VENV_LINT = ".venv/lint"
 ACTIVATE_TEST = "$(VENV_DIR)/bin/activate"
+ACTIVATE_LINT = "$(VENV_LINT)/bin/activate"
 ACTIVATE_DOCS = $(ACTIVATE_TEST)
 ACTIVATE_NOTEBOOK = $(ACTIVATE_TEST)
 
@@ -35,6 +37,14 @@ venv-test: poetry-lock
 		jupyter-server==2.11.2 \
 		pure-eval==0.2.2 \
 		stack-data==0.6.3
+
+venv-lint: 
+	@echo "Creating a virtual environment for linting $(VENV_LINT)..."
+	@test -d $(VENV_LINT) || python -m virtualenv $(VENV_LINT) || python3 -m virtualenv $(VENV_LINT)
+	@echo "Installing lint dependencies..."
+	@. $(ACTIVATE_LINT) && pip install --no-cache-dir --no-deps \
+		flake8==7.0.0 \
+		black==24.4.2
 
 test-mcg: venv-test
 	@echo "Testing the Model Card Gen API..."
@@ -76,6 +86,14 @@ test-notebook: venv-test
 	@echo "Testing Jupyter notebooks..."
 	@. $(ACTIVATE_NOTEBOOK) && \
 	bash run_notebooks.sh $(CURDIR)/notebooks/explainer/imagenet_with_cam/ExplainingImageClassification.ipynb
+
+stylecheck: venv-lint
+	@echo "Checking code style..."
+	@. $(ACTIVATE_LINT) flake8 . --config=tox.ini && echo "Code style is compatible with PEP 8 guidelines" || echo "Code style check failed. Please fix the above code style errors."
+
+fix-codestyle: venv-lint
+	@echo "Fixing code style..."
+	@. $(ACTIVATE_LINT) black . --check --config=pyproject.toml
 
 dist: build-whl
 	@echo "Create binary wheel..."

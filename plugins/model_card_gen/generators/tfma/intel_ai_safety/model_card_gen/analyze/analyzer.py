@@ -49,7 +49,8 @@ class ModelAnalyzer:
         """Check that data argument is of type pd.DataFrame or DatasetType"""
         if not (isinstance(dataset, get_args(DatasetType)) or isinstance(dataset, pd.DataFrame)):
             raise TypeError(
-                "ModelAnalyzer.analyze requires data argument to be of type pd.DataFrame, TensorflowDataset or PytorchDataset"
+                "ModelAnalyzer.analyze requires data argument to be of type pd.DataFrame,"
+                "TensorflowDataset or PytorchDataset."
             )
         return dataset
 

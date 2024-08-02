@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2024 Intel Corporation
+# Copyright (c) 2022 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,25 +25,33 @@ around model card generation.
 
 # Base
 import os
+import sys
 import pkgutil
 import tempfile
 
 # External
 import jinja2
 import pandas as pd
+import tensorflow_data_validation as tfdv
 from IPython.display import display, HTML
 
 # Internal
+from intel_ai_safety.model_card_gen.analyze import get_analysis
 from intel_ai_safety.model_card_gen.model_card import ModelCard
 from intel_ai_safety.model_card_gen.graphics.add_graphics import (
     add_dataset_feature_statistics_plots,
     add_overview_graphs,
     add_eval_result_plots,
-    add_eval_result_slicing_metrics
+    add_eval_result_slicing_metrics,
 
+)
+from intel_ai_safety.model_card_gen.graphics.graphics_data_transform import (
+    plots_to_df,
+    slicing_metric_to_df
 )
 
 # Typing
+import tensorflow_model_analysis as tfma
 from typing import Optional, Sequence, Text, Union, Dict, Any
 
 DataFormat = Union[pd.DataFrame, Text]
@@ -65,42 +73,33 @@ class ModelCardGen:
     """Generate ModelCard from with TFMA
 
     Args:
-        model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
+        data_sets (dict): dictionary with keys of name of dataset and value to path
+        model_path (str): representing TF SavedModel path
+        eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
+        model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary
+          following model card schema
+        eval_results (tfma.EvalResults): pre-generated tfma results for when you do not wish to run evaluator
         output_dir (str): representing of where to output model card
     """
 
     def __init__(
         self,
+        data_sets: Dict[Text, Text] = {},
+        model_path: Text = "",
+        eval_config: Union[tfma.EvalConfig, str] = None,
         model_card: Union[ModelCard, Dict[Text, Any]] = None,
-        metrics_by_threshold: Union[pd.DataFrame, Text]= None,
-        metrics_by_group: Union[pd.DataFrame, Text] = None,
-        data_sets: Dict[Text, DataFormat] = {},
-        data_stats: Dict[Text, pd.DataFrame] = {},
+        eval_results: Sequence[tfma.EvalResult] = None,
         output_dir: Text = "",
     ):
-        self.data_sets = data_sets
-        self.data_stats = data_stats
-        
-        if isinstance(metrics_by_threshold, pd.DataFrame):
-            self.metrics_by_threshold = metrics_by_threshold
-        elif isinstance(metrics_by_threshold, str) and os.path.exists(metrics_by_threshold):
-            self.metrics_by_threshold = pd.read_csv(metrics_by_threshold)
-        else:
-            self.metrics_by_threshold = None
 
-        if isinstance(metrics_by_group, pd.DataFrame):
-            self.metrics_by_group = metrics_by_group
-        elif isinstance(metrics_by_group, str) and os.path.exists(metrics_by_group):
-            self.metrics_by_group = pd.read_csv(metrics_by_group)
-        else:
-            self.metrics_by_group = None
-        
+        self.data_sets = self.check_data_sets(data_sets)
+        self.model_path = model_path
+        self.eval_config = eval_config
         # Local asset paths
         self.output_dir = output_dir or tempfile.mkdtemp()
         self._mc_json_file = os.path.join(self.output_dir, _MC_JSON_FILE)
         self._mc_template_dir = os.path.join(self.output_dir, _TEMPLATE_DIR)
         self._model_cards_dir = os.path.join(self.output_dir, _MODEL_CARDS_DIR)
-        # Construct ModelCard object 
         if isinstance(model_card, ModelCard):
             self.model_card = model_card
         elif isinstance(model_card, dict) or isinstance(model_card, str):
@@ -108,24 +107,35 @@ class ModelCardGen:
         else:
             self.model_card = ModelCard()
         # Generated Attributes
+        self.data_stats = None
+        self.eval_results = eval_results
         self.model_card_html = ""
 
     @classmethod
     def generate(
         cls,
+        data_sets: Dict[Text, DataFormat],
+        eval_config: Union[tfma.EvalConfig, str],
+        model_path: Text = "",
         model_card: Union[ModelCard, Dict[Text, Any], Text] = None,
-        metrics_by_threshold: pd.DataFrame= None,
-        metrics_by_group: pd.DataFrame = None,
         output_dir: Text = "",
     ):
         """Class Factory starting TFMA analysis and generating ModelCard
 
         Args:
-            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
+            data_sets (dict): dictionary with keys of name of dataset and value to path
+            model_path (str): representing TF SavedModel path
+            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary
+              following model card schema
             output_dir (str): representing of where to output model card
 
         Returns:
             ModelCardGen
+
+        Raises:
+            ValueError: when invalid value for data_sets argument is empty
+            TypeError: when data_sets argument is  not type dict
 
         Example:
             >>> from model_card_gen.model_card_gen import ModelCardGen
@@ -134,31 +144,124 @@ class ModelCardGen:
             >>> eval_config = 'compas/eval_config.proto'
             >>> mcg = ModelCardGen.generate(data_paths, model_path, eval_config) #doctest:+SKIP
         """
-        self = cls(model_card=model_card,
-                   output_dir=output_dir,
-                   metrics_by_threshold=metrics_by_threshold,
-                   metrics_by_group=metrics_by_group
-        )
+        self = cls(data_sets, model_path, eval_config, model_card=model_card, output_dir=output_dir)
+        self.data_stats = self.get_stats()
+        self.eval_results = get_analysis(model_path=model_path, eval_config=eval_config, datasets=data_sets)
         self.model_card_html = self.build_model_card()
         return self
 
-    def build_model_card(self ):
+    @classmethod
+    def tf_generate(
+        cls,
+        data_sets: Dict[Text, DataFormat],
+        eval_config: Union[tfma.EvalConfig, str],
+        model_path: Text = "",
+        model_card: Union[ModelCard, Dict[Text, Any], Text] = None,
+        output_dir: Text = "",
+    ):
+        """Class Factory starting TFMA analysis and generating ModelCard
+
+        Args:
+            data_sets (dict): dictionary with keys of name of dataset and value to path
+            model_path (str): representing TF SavedModel path
+            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary
+              following model card schema
+            output_dir (str): representing of where to output model card
+
+        Returns:
+            ModelCardGen
+
+        Raises:
+            ValueError: when invalid value for data_sets argument is empty
+            TypeError: when data_sets argument is  not type dict
+        """
+        from model_card_gen.analyze import TFAnalyzer
+
+        self = cls(data_sets, model_path, eval_config, model_card=model_card, output_dir=output_dir)
+        self.data_stats = self.get_stats()
+        self.eval_results = [
+            TFAnalyzer.analyze(model_path=model_path, dataset=dataset, eval_config=eval_config)
+            for dataset in data_sets.values()
+        ]
+        self.model_card_html = self.build_model_card()
+        return self
+
+    @classmethod
+    def pt_generate(
+        cls,
+        data_sets: Dict[Text, DataFormat],
+        eval_config: Union[tfma.EvalConfig, str],
+        model_path: Text = "",
+        model_card: Union[ModelCard, Dict[Text, Any], Text] = None,
+        output_dir: Text = "",
+    ):
+        """Class Factory starting TFMA analysis and generating ModelCard
+
+        Args:
+            data_sets (dict): dictionary with keys of name of dataset and value to path
+            model_path (str): representing TF SavedModel path
+            eval_config (tfma.EvalConfig or str) : tfma config object or string to config file path
+            model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary
+              following model card schema
+            output_dir (str): representing of where to output model card
+
+        Returns:
+            ModelCardGen
+
+        Raises:
+            ValueError: when invalid value for data_sets argument is empty
+            TypeError: when data_sets argument is  not type dict
+        """
+        from model_card_gen.analyze import PTAnalyzer
+
+        self = cls(data_sets, model_path, eval_config, model_card=model_card, output_dir=output_dir)
+        self.data_stats = self.get_stats()
+        self.eval_results = [
+            PTAnalyzer.analyze(model_path=model_path, dataset=dataset, eval_config=eval_config)
+            for dataset in data_sets.values()
+        ]
+        self.model_card_html = self.build_model_card()
+        return self
+
+    def check_data_sets(self, data_sets):
+        """Checks whether data_set object is not empty or not of type dict"""
+        if not data_sets:
+            raise ValueError("ModelCardGen revieved invalid value for data_sets argument")
+        if not isinstance(data_sets, dict):
+            raise TypeError("ModelCardGen requires data_sets argument to be of type dict")
+        return data_sets
+
+    def get_stats(self):
+        """Get statistics_pb2.DatasetFeatureStatisticsList object for each dataset.
+        Store each result in dictionary with corresponding name of dataset as key.
+        """
+        if all(isinstance(elem, str) for elem in self.data_sets.values()):
+            return {
+                name: tfdv.generate_statistics_from_tfrecord(data_location=path)
+                for name, path in self.data_sets.items()
+            }
+        elif all(isinstance(elem, pd.DataFrame) for elem in self.data_sets.values()):
+            return {name: tfdv.generate_statistics_from_dataframe(path) for name, path in self.data_sets.items()}
+
+    def build_model_card(self):
         """Build graphics and add them to model card"""
         self.scaffold_assets()
         # Add Dataset Statistics
         if self.data_stats:
-            add_dataset_feature_statistics_plots(self.model_card, self.data_stats.keys(), self.data_stats.values())
+            dfs = [tfdv_to_df(name, stats) for stats in self.data_sets]
+            add_dataset_feature_statistics_plots(self.model_card, self.data_sets.keys(), dfs)
             for dataset in self.model_card.model_parameters.data:
                 # Make sure graphs are ordered the same
                 dataset.graphics.collection = sorted(dataset.graphics.collection, key=lambda x: x.name)
         # Add Evaluation Statistics
-        if isinstance(self.metrics_by_threshold, pd.DataFrame):
-            add_overview_graphs(self.model_card,
-                                self.metrics_by_threshold)
-            add_eval_result_plots(self.model_card,
-                                    self.metrics_by_threshold)
-        if isinstance(self.metrics_by_group, pd.DataFrame):
-            add_eval_result_slicing_metrics(self.model_card, self.metrics_by_group)
+        named_eval_results = zip(self.eval_results, self.data_sets.keys()) if self.eval_results else []
+        for eval_result, dataset_name in named_eval_results:
+            df = plots_to_df(eval_result.plots, ["confusionMatrixAtThresholds", "matrices"])
+            add_overview_graphs(self.model_card, df, dataset_name)
+            add_eval_result_plots(self.model_card, df)
+            df = slicing_metric_to_df(eval_result.slicing_metrics)
+            add_eval_result_slicing_metrics(self.model_card, df)
         self.update_model_card(self.model_card)
         return self.export_format(self.model_card)
 
@@ -169,7 +272,7 @@ class ModelCardGen:
           model_card (ModelCard): The updated model card to write back.
 
         Raises:
-          ValidationError: when the given model_card is invalid with reference to the schema.
+          Error: when the given model_card is invalid with reference to the schema.
         """
         self._write_json_file(self._mc_json_file, model_card)
 

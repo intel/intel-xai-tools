@@ -28,7 +28,8 @@ class XGradCAM(GradCAM):
 
     Args:
       model (torch.nn.Module): the CNN used for classification
-      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last)
+      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to
+        analyze (usually the last)
       dims (tuple of ints): dimension of image (h, w)
       device (torch.device): torch.device('cpu') or torch.device('gpu') for PyTorch optimizations
 
@@ -150,7 +151,8 @@ class EigenCAM:
 
     Args:
       model (torch.nn.Module): the CNN used for classification
-      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to analyze (usually the last)
+      target_layer (torch.nn.modules.container.Sequential): the convolution layer that you want to
+        analyze (usually the last)
 
       reshape (function): the reshape transformation function responsible for processing the output tensors. Can be None
         if not needed for particular model (such as YOLO)
