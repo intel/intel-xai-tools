@@ -111,9 +111,11 @@ def segment_images(segmentation_path, cesm_only=True):
                     bottom = max(x["all_points_y"])
                     """
                     if (right - left) < new_width:
-                        left, right = max(0, (right+left)//2 - new_width//2), min(width,  (right+left)//2 + new_width//2)
+                        left = max(0, (right+left)//2 - new_width//2)
+                        right = min(width,  (right+left)//2 + new_width//2)
                     if (bottom - top) < new_height:
-                        top, bottom = max(0, (top+bottom)//2 - new_height//2), min(height,  (top+bottom)//2 + new_height//2)
+                        top = max(0, (top+bottom)//2 - new_height//2)
+                        bottom = min(height,  (top+bottom)//2 + new_height//2)
                     """
                     # print((left, top, right, bottom))
                     im = im.crop((left, top, right, bottom))
@@ -166,9 +168,11 @@ def segment_images(segmentation_path, cesm_only=True):
                     bottom = max(x["all_points_y"])
                     """
                     if (right - left) < new_width:
-                        left, right = max(0, (right+left)//2 - new_width//2), min(width,  (right+left)//2 + new_width//2)
+                        left = max(0, (right+left)//2 - new_width//2)
+                        right = min(width,  (right+left)//2 + new_width//2)
                     if (bottom - top) < new_height:
-                        top, bottom = max(0, (top+bottom)//2 - new_height//2), min(height,  (top+bottom)//2 + new_height//2)
+                        top = max(0, (top+bottom)//2 - new_height//2)
+                        bottom = min(height,  (top+bottom)//2 + new_height//2)
                     """
                     # print((left, top, right, bottom))
                     im = im.crop((left, top, right, bottom))

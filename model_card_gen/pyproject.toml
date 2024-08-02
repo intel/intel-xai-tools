@@ -11,6 +11,7 @@ intel_ai_safety.model_card_gen = [
     "model_card_gen/**/*.json",
     "model_card_gen/**/*.jinja",
     "model_card_gen/**/*.html",
+    "model_card_gen/**/*.csv",
 ]
 
 [tool.poetry.group.test]
@@ -19,35 +20,20 @@ optional = true
 [tool.poetry.group.test.dependencies]
 pytest = '8.1.1'
 pytest-cov = '5.0.0'
-tensorflow-hub = '0.15.0'
-torch = {version = "2.2.0", source = "pytorch-cpu"}
-scikit-learn = '1.4.0'
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
-absl-py = '1.4.0'
-attrs = '21.4.0'
+pandas = "1.5.3"
+ipython = "*"
 dataclasses = '0.6'
-grpcio-status = '1.48.2'
-intel-tensorflow = '2.14.0'
 Jinja2 = '3.1.4'
-joblib = '1.3.2'
 jsonschema = {version='4.17.3', extras = ['format-nongpl']}
 plotly = '5.20.0'
-protobuf = '3.20.3'
-pyarrow_hotfix = '0.6.0'
 semantic-version = '2.10.0'
-tensorflow-data-validation = '1.14.0'
-tensorflow-model-analysis = '0.45.0'
 
 [[tool.poetry.source]]
 name = "PyPI"
 priority = "primary"
-
-[[tool.poetry.source]]
-name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/cpu"
-priority = "explicit"
 
 [build-system]
 requires = ["poetry-core"]

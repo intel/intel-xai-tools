@@ -25,7 +25,8 @@ from intel_ai_safety.explainer.context.agnostic.attributions_explainer import At
 
 class LLMExplainer(AttributionsExplainer):
     """
-    Approximate an extension of shap values, known as Owen values, for generative and classification LLMs from Hugging Face.
+    Approximate an extension of shap values, known as Owen values, for generative and classification LLMs from
+      Hugging Face.
 
     Args:
       model (HF Automodel or pipeline): model to be interpreted. If no tokenizer is supplied than model is assumed to be

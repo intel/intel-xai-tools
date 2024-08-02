@@ -32,15 +32,17 @@ from intel_ai_safety.model_card_gen.validation import (
 
 PACKAGE = "intel_ai_safety.model_card_gen"
 JSON_FILES = ["docs/examples/json/model_card_example.json", "docs/examples/json/model_card_compas.json"]
+CSV_FILES = [("docs/examples/csv/metrics_by_group.csv",  "docs/examples/csv/metrics_by_threshold.csv")]
 MODEL_CARD_STRS = [pkgutil.get_data(PACKAGE, json_file) for json_file in JSON_FILES]
 MODEL_CARD_JSONS = [json.loads(json_str) for json_str in MODEL_CARD_STRS]
+MODEL_CARD_CSVS = [(pkgutil.get_data(PACKAGE, csv_file1), pkgutil.get_data(PACKAGE, csv_file2)) for csv_file1, csv_file2 in CSV_FILES]
 
 
 @pytest.mark.common
 @pytest.mark.parametrize("test_json", MODEL_CARD_JSONS)
 def test_init(test_json):
     """Test ModelCardGen initialization"""
-    mcg = ModelCardGen(data_sets={"test": ""}, model_card=test_json)
+    mcg = ModelCardGen(model_card=test_json)
     assert mcg.model_card
 
 
@@ -48,7 +50,7 @@ def test_init(test_json):
 @pytest.mark.parametrize("test_json", MODEL_CARD_JSONS)
 def test_read_json(test_json):
     """Test ModelCardGen._read_json method"""
-    mcg = ModelCardGen(data_sets={"test": ""}, model_card=test_json)
+    mcg = ModelCardGen(model_card=test_json)
     assert mcg.model_card == ModelCardGen._read_json(test_json)
 
 
@@ -67,3 +69,10 @@ def test_schemas(test_json):
     json_file = pkgutil.get_data(PACKAGE, schema_file)
     schema = json.loads(json_file)
     assert schema == _find_json_schema(_LATEST_SCHEMA_VERSION)
+
+@pytest.mark.common
+@pytest.mark.parametrize(("metrics_by_group", "metrics_by_threshold"), MODEL_CARD_CSVS)
+def test_load_from_csv(metrics_by_group, metrics_by_threshold):
+    """Test JSON schema loads"""
+    mcg = ModelCardGen.generate(metrics_by_threshold=metrics_by_threshold, metrics_by_group=metrics_by_group)
+    assert mcg.model_card

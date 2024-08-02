@@ -73,7 +73,7 @@ class PytorchDataset(BaseDataset):
         """
         return self._framework
 
-    def _make_subsets(lengths, names=["train", "test"]):
+    def _make_subsets(self, lengths, names=["train", "test"]):
         """
         Split PytorchDataset into multiple PytorchDataset objects
         """
