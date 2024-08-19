@@ -14,9 +14,10 @@ jobs:
   scan-bandit:
     uses: intel-innersource/frameworks.ai.infrastructure.code-scan-tools/.github/workflows/Scanner_Bandit.yml@one-ci-cd
     with:
-      repos: frameworks.ai.explainable-ai
+      org: intel-innersource
+      repo: frameworks.ai.explainable-ai
       refs: ${{ github.head_ref }}
       config_file: bandit.yaml
-      runner_label: gasp
+      runners: "['gasp']"
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
