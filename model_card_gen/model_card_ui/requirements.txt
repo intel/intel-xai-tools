@@ -1,6 +1,6 @@
 streamlit==1.35.0
 pandas==1.5.3
-lxml==4.8.0
+lxml==4.9.1
 altair==5.3.0
 plotly==5.20.0
 requests==2.31.0
