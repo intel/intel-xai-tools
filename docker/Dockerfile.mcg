@@ -66,7 +66,7 @@ RUN /usr/local/bin/poetry config virtualenvs.create false && \
 		asttokens==2.4.1 \
 		executing==2.0.1 \
 		ipython==8.10 \
-		jupyter-server==2.11.2 \
+		jupyter-server==2.14.1 \
 		pure-eval==0.2.2 \
 		stack-data==0.6.3 && \
     rm -rf ${HOME}/.cache/pypoetry ${HOME}/.cache/pip

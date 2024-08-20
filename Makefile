@@ -34,7 +34,7 @@ venv-test: poetry-lock
 		asttokens==2.4.1 \
 		executing==2.0.1 \
 		ipython==8.10 \
-		jupyter-server==2.11.2 \
+		jupyter-server==2.14.1 \
 		pure-eval==0.2.2 \
 		stack-data==0.6.3
 
