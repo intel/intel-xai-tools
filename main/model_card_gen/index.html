@@ -64,7 +64,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/IntelAI/intel-xai-tools">GitHub Repository</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Intel/intel-xai-tools">GitHub Repository</a></li>
 </ul>
 
         </div>
@@ -201,7 +201,7 @@
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
 <p><strong>Step 1</strong>: Clone the GitHub repository.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/IntelAI/intel-xai-tools.git
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Intel/intel-xai-tools.git
 </pre></div>
 </div>
 <p><strong>Step 2</strong>: Navigate to <code class="docutils literal notranslate"><span class="pre">intel-xai-tools</span></code> directory.</p>
@@ -232,7 +232,7 @@
 <p><strong>TFMA EvalConfig</strong></p>
 <p>For example <code class="docutils literal notranslate"><span class="pre">eval_config</span></code> parameter, let us review the following file entitled “eval_config.proto” defined for the COMPAS proxy model found in <a class="reference internal" href="#/notebooks/model_card_gen/compas_with_model_card_gen/compas-model-card-tfx.ipynb"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">/notebooks/model_card_gen/compas_with_model_card_gen/compas-model-card-tfx.ipynb</span></code></span></a>.</p>
 <p>In the <code class="docutils literal notranslate"><span class="pre">model_specs</span></code> section it tells the evaluator “label_key” is the ground truth label. In the <code class="docutils literal notranslate"><span class="pre">metric_specs</span></code> section it defines the following metrics to be computed: “BinaryAccuracy”, “AUC”, “ConfusionMatrixPlot”, and “FairnessIndicators”. In the <code class="docutils literal notranslate"><span class="pre">slicing_specs</span></code> section it tells the evaluator to compute these metrics accross all datapoints and aggregate these metrics grouped by the “race” feature.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_specs</span> <span class="p">{</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_specs</span> <span class="p">{</span>
     <span class="n">label_key</span><span class="p">:</span> <span class="s1">&#39;is_recid&#39;</span>
   <span class="p">}</span>
 <span class="n">metrics_specs</span> <span class="p">{</span>
@@ -255,7 +255,7 @@
 </pre></div>
 </div>
 <p>If we are computing metrics on a raw dataframe we must add the “prediction_key” to  <code class="docutils literal notranslate"><span class="pre">model_specs</span></code> as follows</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_specs</span> <span class="p">{</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_specs</span> <span class="p">{</span>
     <span class="n">label_key</span><span class="p">:</span> <span class="s1">&#39;y_true&#39;</span>
     <span class="n">prediction_key</span><span class="p">:</span> <span class="s1">&#39;y_pred&#39;</span>
   <span class="p">}</span>
@@ -302,7 +302,7 @@
 <a class="reference internal" href="#/model_card_gen/intel_ai_safety/model_card_gen/docs/examples/json/model_card_example.json"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">/model_card_gen/intel_ai_safety/model_card_gen/docs/examples/json/model_card_example.json</span></code></span></a>.</p>
 <p><strong>Create Model Card</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="kn">from</span> <span class="nn">model_card_gen.model_card_gen</span> <span class="kn">import</span> <span class="n">ModelCardGen</span>
+<span class="kn">from</span> <span class="nn">intel_ai_safety.model_card_gen.model_card_gen</span> <span class="kn">import</span> <span class="n">ModelCardGen</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;compas/model&#39;</span>
 <span class="n">data_paths</span> <span class="o">=</span> <span class="p">{</span>

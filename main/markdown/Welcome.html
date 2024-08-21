@@ -58,7 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/IntelAI/intel-xai-tools">GitHub Repository</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Intel/intel-xai-tools">GitHub Repository</a></li>
 </ul>
 
         </div>
@@ -93,7 +93,7 @@
 <p>The Intel Explainable AI Tools are designed to help users detect and mitigate against issues of fairness and interpretability, while running best on Intel hardware.
 There are two Python* components in the repository:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#intel_ai_safety/model_card_gen"><span class="xref myst">Model Card Generator</span></a></p>
+<li><p><a class="reference internal" href="#model_card_gen"><span class="xref myst">Model Card Generator</span></a></p>
 <ul>
 <li><p>Creates interactive HTML reports containing model performance and fairness metrics</p></li>
 </ul>
@@ -102,9 +102,9 @@ There are two Python* components in the repository:</p>
 <ul>
 <li><p>Runs post-hoc model distillation and visualization methods to examine predictive behavior for both TensorFlow* and PyTorch* models via a simple Python API including the following modules:</p>
 <ul>
-<li><p><a class="reference internal" href="#explainer/intel_ai_safety/explainer/attributions/"><span class="xref myst">Attributions</span></a>: Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions</p></li>
-<li><p><a class="reference internal" href="#explainer/intel_ai_safety/explainer/cam/"><span class="xref myst">CAM (Class Activation Mapping)</span></a>: Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping</p></li>
-<li><p><a class="reference internal" href="#explainer/intel_ai_safety/explainer/metrics/"><span class="xref myst">Metrics</span></a>: Gain insight into models with the measurements and visualizations needed during the machine learning workflow</p></li>
+<li><p><a class="reference internal" href="#plugins/explainers/attributions"><span class="xref myst">Attributions</span></a>: Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions</p></li>
+<li><p><a class="reference internal" href="#plugins/explainers/cam-pytorch"><span class="xref myst">CAM (Class Activation Mapping)</span></a>: Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping</p></li>
+<li><p><a class="reference internal" href="#plugins/explainers/metrics"><span class="xref myst">Metrics</span></a>: Gain insight into models with the measurements and visualizations needed during the machine learning workflow</p></li>
 </ul>
 </li>
 </ul>
@@ -117,9 +117,10 @@ There are two Python* components in the repository:</p>
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Linux system or WSL2 on Windows (validated on Ubuntu* 20.04/22.04 LTS)</p></li>
-<li><p>Python 3.8, 3.9, 3.10</p></li>
+<li><p>Python 3.9, 3.10</p></li>
 <li><p>Install required OS packages with <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">build-essential</span> <span class="pre">python3-dev</span></code></p></li>
 <li><p>git (only required for the “Developer Installation”)</p></li>
+<li><p>Poetry</p></li>
 </ul>
 </section>
 <section id="developer-installation-with-poetry">
@@ -130,42 +131,42 @@ on making code changes.</p>
 <ol class="arabic">
 <li><p>Clone this repo and navigate to the repo directory.</p></li>
 <li><p>Allow poetry to create virtual envionment contained in <code class="docutils literal notranslate"><span class="pre">.venv</span></code> directory of current directory.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">lock</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>lock
 </pre></div>
 </div>
 <p>In addtion, you can explicitly tell poetry which python instance to use</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">env</span> <span class="n">use</span> <span class="o">/</span><span class="n">full</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">python</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>env<span class="w"> </span>use<span class="w"> </span>/full/path/to/python
 </pre></div>
 </div>
 </li>
 <li><p>Choose the <code class="docutils literal notranslate"><span class="pre">intel_ai_safety</span></code> subpackages and plugins that you wish to install.</p>
 <p>a. Install <code class="docutils literal notranslate"><span class="pre">intel_ai_safety</span></code> with all of its subpackages (e.g. <code class="docutils literal notranslate"><span class="pre">explainer</span></code> and <code class="docutils literal notranslate"><span class="pre">model_card_gen</span></code>) and plugins</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span> <span class="o">--</span><span class="n">extras</span> <span class="nb">all</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install<span class="w"> </span>--extras<span class="w"> </span>all
 </pre></div>
 </div>
 <p>b. Install <code class="docutils literal notranslate"><span class="pre">intel_ai_safety</span></code> with just <code class="docutils literal notranslate"><span class="pre">explainer</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span> <span class="o">--</span><span class="n">extras</span> <span class="n">explainer</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install<span class="w"> </span>--extras<span class="w"> </span>explainer
 </pre></div>
 </div>
 <p>c. Install <code class="docutils literal notranslate"><span class="pre">intel_ai_safety</span></code> with just <code class="docutils literal notranslate"><span class="pre">model_card_gen</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span> <span class="o">--</span><span class="n">extras</span> <span class="n">model</span><span class="o">-</span><span class="n">card</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install<span class="w"> </span>--extras<span class="w"> </span>model-card
 </pre></div>
 </div>
 <p>d. Install <code class="docutils literal notranslate"><span class="pre">intel_ai_safety</span></code> with <code class="docutils literal notranslate"><span class="pre">explainer</span></code> and all of its plugins</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span> <span class="o">--</span><span class="n">extras</span> <span class="n">explainer</span><span class="o">-</span><span class="nb">all</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install<span class="w"> </span>--extras<span class="w"> </span>explainer-all
 </pre></div>
 </div>
 <p>e. Install <code class="docutils literal notranslate"><span class="pre">intel_ai_safety</span></code> with <code class="docutils literal notranslate"><span class="pre">explainer</span></code> and just its pytorch implementations</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span> <span class="o">--</span><span class="n">extras</span> <span class="n">explainer</span><span class="o">-</span><span class="n">pytorch</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install<span class="w"> </span>--extras<span class="w"> </span>explainer-pytorch
 </pre></div>
 </div>
-<p>f. Install <code class="docutils literal notranslate"><span class="pre">intel_ai_safety</span></code> with <code class="docutils literal notranslate"><span class="pre">explainer</span></code> and just its pytorch implementations</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span> <span class="o">--</span><span class="n">extras</span> <span class="n">explainer</span><span class="o">-</span><span class="n">tensorflow</span>
+<p>f. Install <code class="docutils literal notranslate"><span class="pre">intel_ai_safety</span></code> with <code class="docutils literal notranslate"><span class="pre">explainer</span></code> and just its tensroflow implementations</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install<span class="w"> </span>--extras<span class="w"> </span>explainer-tensorflow
 </pre></div>
 </div>
 </li>
-<li><p>Activate the enviornment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+<li><p>Activate the environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
 </pre></div>
 </div>
 </li>
@@ -180,18 +181,18 @@ There are two ways to do this:</p>
 <ol class="arabic">
 <li><p>Choose a virtual enviornment to use:
 a. Using <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="mf">.9</span> <span class="o">-</span><span class="n">m</span> <span class="n">virtualenv</span> <span class="n">xai_env</span>
-<span class="n">source</span> <span class="n">xai_env</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>virtualenv<span class="w"> </span>xai_env
+<span class="nb">source</span><span class="w"> </span>xai_env/bin/activate
 </pre></div>
 </div>
 <p>b. Or <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">--</span><span class="n">name</span> <span class="n">xai_env</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
-<span class="n">conda</span> <span class="n">activate</span> <span class="n">xai_env</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>xai_env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+conda<span class="w"> </span>activate<span class="w"> </span>xai_env
 </pre></div>
 </div>
 </li>
 <li><p>Install to current enviornment</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">config</span> <span class="n">virtualenvs</span><span class="o">.</span><span class="n">create</span> <span class="n">false</span> <span class="o">&amp;&amp;</span> <span class="n">poetry</span> <span class="n">install</span> <span class="o">--</span><span class="n">extras</span> <span class="nb">all</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>config<span class="w"> </span>virtualenvs.create<span class="w"> </span><span class="nb">false</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>poetry<span class="w"> </span>install<span class="w"> </span>--extras<span class="w"> </span>all
 </pre></div>
 </div>
 </li>
@@ -205,8 +206,8 @@ a. Using <code class="docutils literal notranslate"><span class="pre">virtualenv
 <section id="verify-installation">
 <h3>Verify Installation<a class="headerlink" href="#verify-installation" title="Permalink to this heading"></a></h3>
 <p>Verify that your installation was successful by using the following commands, which display the Explainer and Model Card Generator versions:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;from intel_ai_safety.explainer import version; print(version.__version__)&quot;</span>
-<span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;from intel_ai_safety.model_card_gen import version; print(version.__version__)&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from intel_ai_safety.explainer import version; print(version.__version__)&quot;</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from intel_ai_safety.model_card_gen import version; print(version.__version__)&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -222,7 +223,7 @@ a. Using <code class="docutils literal notranslate"><span class="pre">virtualenv
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p>The Intel Explainable AI Tools team tracks bugs and enhancement requests using
-<a class="reference external" href="https://github.com/intelai/intel-xai-tools/issues">GitHub issues</a>. Before submitting a
+<a class="reference external" href="https://github.com/intel/intel-xai-tools/issues">GitHub issues</a>. Before submitting a
 suggestion or bug report, search the existing GitHub issues to see if your issue has already been reported.</p>
 <p>*Other names and brands may be claimed as the property of others. <a class="reference external" href="http://www.intel.com/content/www/us/en/legal/trademarks.html">Trademarks</a></p>
 <section id="disclaimer">

@@ -3,12 +3,12 @@
 The Intel® Explainable AI Tools are designed to help users detect and mitigate against issues of fairness and interpretability, while running best on Intel hardware.
 There are two Python* components in the repository:
 
-* [Model Card Generator](intel_ai_safety/model_card_gen)
+* [Model Card Generator](model_card_gen)
   * Creates interactive HTML reports containing model performance and fairness metrics
 * [Explainer](explainer)
   * Runs post-hoc model distillation and visualization methods to examine predictive behavior for both TensorFlow* and PyTorch* models via a simple Python API including the following modules:
-    * [Attributions](explainer/intel_ai_safety/explainer/attributions/): Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions
-    * [CAM (Class Activation Mapping)](explainer/intel_ai_safety/explainer/cam/): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
-    * [Metrics](explainer/intel_ai_safety/explainer/metrics/): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
+    * [Attributions](plugins/explainers/attributions): Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions
+    * [CAM (Class Activation Mapping)](plugins/explainers/cam-pytorch): Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping
+    * [Metrics](plugins/explainers/metrics): Gain insight into models with the measurements and visualizations needed during the machine learning workflow
 
 *Other names and brands may be claimed as the property of others. [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)
