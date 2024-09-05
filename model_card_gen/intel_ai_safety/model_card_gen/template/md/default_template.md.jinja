@@ -1,0 +1,151 @@
+{% import 'md/macros/default_macros.md.jinja' as macro %}
+{% include 'html/style/default_style.html.jinja' %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<div class="banner">
+  
+  # **{{ model_details.name }}**
+
+  Model Card generated with <a href="https://github.com/Intel/intel-xai-tools" style="color: #fff; text-decoration: underline;">Intel® Explainable AI Tools</a><br>{{ macro.render_if_exist('name', model_details.version.name) }}{{ macro.render_if_exist('date', model_details.version.date) }}{{ macro.render_if_exist('diff', model_details.version.diff) }}
+
+</div>
+
+<div class="row">
+<div class="col card">
+        <h2 class="icon details">Model Details</h2>
+        
+{% if model_details.overview %}
+### Overview
+{{ model_details.overview }}
+{% endif %}
+{% if model_details.graphics %}
+<h3> Model Performance</h3>
+{{ macro.render_metrics_graphics(model_details.graphics) }}
+
+{% endif %}
+{% if model_details.version and model_details.version.name %}
+### Version
+{{ macro.render_if_exist('name', model_details.version.name) }}{{ macro.render_if_exist('date', model_details.version.date) }}{{ macro.render_if_exist('diff', model_details.version.diff) }}
+{% endif %}
+
+{% if model_details.documentation %}
+### Documentation
+{{ model_details.documentation }}
+{% endif %}
+
+{% if model_details.owners %}
+### Owners
+{% if model_details.owners|length > 1 %}
+{% for owner in model_details.owners %}
+- {{ owner.name }}, {{ owner.contact }}
+{% endfor %}
+{% else %}
+{{ model_details.owners[0].name }}, {{ model_details.owners[0].contact }}
+{% endif %}
+{% endif %}
+
+{% if model_details.licenses %}
+### Licenses
+{% for license in model_details.licenses %}
+{{ macro.render_license(license) }}
+{% endfor %}
+{% endif %}
+
+{% if model_details.references %}
+### References
+{% for reference in model_details.references %}
+- [{{ reference.reference }}]({{ reference.reference }})
+{% endfor %}
+{% endif %}
+
+{% if model_details.citations %}
+### Citations
+{% for citation in model_details.citations %}
+- {{ citation.citation }}
+{% endfor %}
+{% endif %}
+
+
+  </div>
+
+</div>
+
+{% if model_parameters.model_architecture or model_parameters.input_format or model_parameters.input_format_map or model_parameters.output_format or model_parameters.output_format_map %}
+<div class="col card">
+
+## Model Parameters
+{% if model_parameters.model_architecture %}
+### Model Architecture
+<div style="white-space:pre-wrap;">
+{{ model_parameters.model_architecture }}
+</div>
+
+{% endif %}
+{% if model_parameters.input_format %} 
+### Input Format
+<div style="white-space:pre-wrap;">
+{{ model_parameters.input_format }}
+</div>
+
+{% endif %}
+{% if model_parameters.input_format_map %}
+### Input Format Map
+| Key | Value |
+| --- | --- |
+{% for kv in model_parameters.input_format_map %}| {{ kv.key }} | {{ kv.value }} |
+{% endfor %}{% endif %}
+{% if model_parameters.output_format %}
+### Output Format
+<div style="white-space:pre-wrap;">
+{{ model_parameters.output_format }}
+</div>
+
+{% endif %}
+{% if model_parameters.output_format_map %}
+### Output Format
+| Key | Value |
+| --- | --- |
+{% for kv in model_parameters.output_format_map %}| {{ kv.key }} | {{ kv.value }} |
+{% endfor %}{% endif %}
+{% endif %}
+</div>
+
+{% if considerations and (considerations.users or considerations.use_cases or considerations.limitations or considerations.tradeoffs or considerations.ethical_considerations) %}
+<div class="col card">
+
+## Considerations
+{% if considerations.users %}
+### Intended Users
+{{ macro.render_considerations(considerations.users) }}
+{% endif %}
+
+{% if considerations.use_cases %}
+### Use Cases
+{{ macro.render_considerations(considerations.use_cases) }}
+{% endif %}
+
+{% if considerations.limitations %}
+### Limitations
+{{ macro.render_considerations(considerations.limitations) }}
+{% endif %}
+
+{% if considerations.tradeoffs %}
+### Tradeoffs
+{{ macro.render_considerations(considerations.tradeoffs) }}
+{% endif %}
+
+{% if considerations.ethical_considerations %}
+### Ethical Considerations
+{% for risk in considerations.ethical_considerations %}
+- Risk: {{ risk.name }}  
+Mitigation Strategy: {{ risk.mitigation_strategy }}
+{% endfor %}
+{% endif %}
+</div>
+
+{% endif %}
+{% if model_parameters.data %}
+{{ macro.render_all_datasets(model_parameters.data) }}
+{% endif %}
+{% if quantitative_analysis.performance_metrics or quantitative_analysis.graphics.collection %}{{ macro.render_quantitative_analysis(quantitative_analysis) }}
+{% endif %}

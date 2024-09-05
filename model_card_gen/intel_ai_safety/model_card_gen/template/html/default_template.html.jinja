@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-{% import 'macros/default_macros.html.jinja' as macro %}
+{% import 'html/macros/default_macros.html.jinja' as macro %}
 <html lang="en">
 <head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-{% include 'style/default_style.html.jinja' %}
+{% include 'html/style/default_style.html.jinja' %}
 <title>
   Model Card for {{ model_details.name }}
 </title>
-{% include 'js/plotly_js_header.html.jinja' %}
+{% include 'html/js/plotly_js_header.html.jinja' %}
 </head>
 <body>
   <div class="banner">
@@ -89,6 +89,7 @@
               {% for kv in model_parameters.output_format_map %}
               <tr><td>{{ kv.key }}</td><td>{{ kv.value }}</td></tr>{% endfor %}</table>{% endif %}
       {% endif %}
+      </div>
       {% if considerations and (considerations.users or considerations.use_cases or considerations.limitations or considerations.tradeoffs or considerations.ethical_considerations) %}
       <div class="col card">
         <h2>Considerations</h2>
@@ -117,7 +118,6 @@
                 </li>{% endfor %} </ul>{% endif %}
       </div>
       {% endif %}
-    </div>
     {% if model_parameters.data %}
       {{ macro.render_all_datasets(model_parameters.data) }}
     {% endif %}

@@ -76,3 +76,10 @@ def test_load_from_csv(metrics_by_group, metrics_by_threshold):
     """Test JSON schema loads"""
     mcg = ModelCardGen.generate(metrics_by_threshold=metrics_by_threshold, metrics_by_group=metrics_by_group)
     assert mcg.model_card
+
+@pytest.mark.common
+@pytest.mark.parametrize("template_type", ("md","html"))
+def test_load_template(template_type):
+    """Test ModelCardGen generates a model card using the specified template type."""
+    mcg = ModelCardGen.generate(template_type=template_type)
+    assert mcg.model_card
