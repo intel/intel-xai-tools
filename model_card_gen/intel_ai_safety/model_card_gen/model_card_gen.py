@@ -31,7 +31,7 @@ import tempfile
 # External
 import jinja2
 import pandas as pd
-from IPython.display import display, HTML
+from IPython.display import display, HTML, Markdown
 
 # Internal
 from intel_ai_safety.model_card_gen.model_card import ModelCard
@@ -48,18 +48,25 @@ from typing import Optional, Sequence, Text, Union, Dict, Any
 
 DataFormat = Union[pd.DataFrame, Text]
 
-_UI_TEMPLATES = (
+_UI_TEMPLATES = {
+    "md":(
+    "template/md/default_template.md.jinja",
+    "template/html/style/default_style.html.jinja",
+    "template/md/macros/default_macros.md.jinja"),
+    "html":(
     "template/html/default_template.html.jinja",
     "template/html/style/default_style.html.jinja",
     "template/html/macros/default_macros.html.jinja",
-    "template/html/js/plotly_js_header.html.jinja",
-)
-_DEFAULT_UI_TEMPLATE_FILE = os.path.join("html", "default_template.html.jinja")
+    "template/html/js/plotly_js_header.html.jinja",)
+    }
+
 _MC_JSON_FILE = os.path.join("data", "model_card.json")
 _TEMPLATE_DIR = "template"
 _MODEL_CARDS_DIR = "model_cards"
-_DEFAULT_MODEL_CARD_FILE_NAME = "model_card.html"
-
+_DEFAULT_UI_TEMPLATE_FILE = {
+    "md":os.path.join("md", "default_template.md.jinja"),
+    "html":os.path.join("html", "default_template.html.jinja")
+}
 
 class ModelCardGen:
     """Generate ModelCard from with TFMA
@@ -77,9 +84,11 @@ class ModelCardGen:
         data_sets: Dict[Text, DataFormat] = {},
         data_stats: Dict[Text, pd.DataFrame] = {},
         output_dir: Text = "",
+        template_type: Text = "html"
     ):
         self.data_sets = data_sets
         self.data_stats = data_stats
+        self.template_type = template_type
         
         if isinstance(metrics_by_threshold, pd.DataFrame):
             self.metrics_by_threshold = metrics_by_threshold
@@ -109,6 +118,7 @@ class ModelCardGen:
             self.model_card = ModelCard()
         # Generated Attributes
         self.model_card_html = ""
+        self.model_card_md = ""
 
     @classmethod
     def generate(
@@ -117,12 +127,14 @@ class ModelCardGen:
         metrics_by_threshold: pd.DataFrame= None,
         metrics_by_group: pd.DataFrame = None,
         output_dir: Text = "",
+        template_type: Text = "html" 
     ):
         """Class Factory starting TFMA analysis and generating ModelCard
 
         Args:
             model_card (ModelCard or dict): pre-generated ModelCard Python object or dictionary following model card schema
             output_dir (str): representing of where to output model card
+            template_type (str): type of template (html for html templates and md for markdown templates) to use for rendering the model card. Defaults to "html".
 
         Returns:
             ModelCardGen
@@ -132,18 +144,26 @@ class ModelCardGen:
             >>> model_path = 'compas/model'
             >>> data_paths = {'eval': 'compas/eval.tfrecord', 'train': 'compas/train.tfrecord'}
             >>> eval_config = 'compas/eval_config.proto'
-            >>> mcg = ModelCardGen.generate(data_paths, model_path, eval_config) #doctest:+SKIP
+            >>> mcg = ModelCardGen.generate(data_paths, model_path, eval_config, template_type='html') #doctest:+SKIP
         """
-        self = cls(model_card=model_card,
-                   output_dir=output_dir,
-                   metrics_by_threshold=metrics_by_threshold,
-                   metrics_by_group=metrics_by_group
+        self = cls(
+            model_card=model_card,
+            output_dir=output_dir,
+            metrics_by_threshold=metrics_by_threshold,
+            metrics_by_group=metrics_by_group,
+            template_type=template_type  
         )
-        self.model_card_html = self.build_model_card()
+        if template_type == "md":
+            self.model_card_md = self.build_model_card(template_type=template_type)
+        else:
+            self.model_card_html = self.build_model_card(template_type=template_type)
         return self
 
-    def build_model_card(self ):
+    def build_model_card(self, template_type):
         """Build graphics and add them to model card"""
+        static = False
+        if template_type == "md":
+            static = True
         self.scaffold_assets()
         # Add Dataset Statistics
         if self.data_stats:
@@ -154,11 +174,13 @@ class ModelCardGen:
         # Add Evaluation Statistics
         if isinstance(self.metrics_by_threshold, pd.DataFrame):
             add_overview_graphs(self.model_card,
-                                self.metrics_by_threshold)
+                                self.metrics_by_threshold,
+                                static)
             add_eval_result_plots(self.model_card,
-                                    self.metrics_by_threshold)
+                                    self.metrics_by_threshold,
+                                    static)
         if isinstance(self.metrics_by_group, pd.DataFrame):
-            add_eval_result_slicing_metrics(self.model_card, self.metrics_by_group)
+            add_eval_result_slicing_metrics(self.model_card, self.metrics_by_group, static)
         self.update_model_card(self.model_card)
         return self.export_format(self.model_card)
 
@@ -197,7 +219,7 @@ class ModelCardGen:
         self._write_json_file(self._mc_json_file, self.model_card)
 
         # Write UI template files.
-        for template_path in _UI_TEMPLATES:
+        for template_path in _UI_TEMPLATES[self.template_type]:
             template_content = pkgutil.get_data("intel_ai_safety.model_card_gen", template_path)
             if template_content is None:
                 raise FileNotFoundError(f"Cannot find file: '{template_path}'")
@@ -239,7 +261,7 @@ class ModelCardGen:
         self,
         model_card: Optional[ModelCard] = None,
         template_path: Optional[Text] = None,
-        output_file=_DEFAULT_MODEL_CARD_FILE_NAME,
+        output_file=None,
     ) -> Text:
         """Generates a model card document based on the MC assets.
 
@@ -257,10 +279,12 @@ class ModelCardGen:
             The model card file content.
         """
 
-        if not template_path:
-            template_path = os.path.join(self._mc_template_dir, _DEFAULT_UI_TEMPLATE_FILE)
+        if template_path is None:
+            template_path = os.path.join(self._mc_template_dir,_TEMPLATE_DIR)
+        if output_file is None:
+            output_file = f"model_card.{self.template_type}"
         template_dir = os.path.dirname(template_path)
-        template_file = os.path.basename(template_path)
+        template_file = _DEFAULT_UI_TEMPLATE_FILE[self.template_type]
 
         # If model_card is passed in, write to JSON file.
         if model_card:
@@ -290,10 +314,23 @@ class ModelCardGen:
 
     def _repr_html_(self):
         return self.model_card_html
+    
+    def _repr_md_(self):
+        return self.model_card_md
 
     def display_model_card(self):
-        display(HTML(self._repr_html_()))
+        if self.template_type == "md":
+            display(Markdown(self._repr_md_()))
+        else:
+            display(HTML(self._repr_html_()))
 
     def export_html(self, filename):
         with open(filename, "w") as f:
             f.write(self._repr_html_())
+
+    def export_model_card(self, filename):
+        with open(filename, "w") as f:
+            if self.template_type == "md":
+                f.write(self._repr_md_())
+            else:
+                f.write(self._repr_html_())
