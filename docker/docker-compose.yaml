@@ -72,3 +72,31 @@ services:
       interval: 1m
       timeout: 5s
       retries: 5
+
+  model_card_gen_ui:
+    image: intel/ai-tools:intel-ai-safety-1.0.0-mcg-ui
+    pull_policy: always
+    build:
+      dockerfile: docker/Dockerfile.mcg
+      context: ../
+      target: runtime
+      args:
+        IMAGE_NAME: ubuntu
+        IMAGE_TAG: "22.04"
+        UID: "1000"
+        GID: "1000"
+        NON_ROOT_USER: "intelai"
+        PY_VER: "3.10"
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+    ports:
+      - "8501:8501"
+    environment:
+      - VIRTUAL_ENV=/intel-xai/.venv
+    command: streamlit run home.py --server.port=8501 --server.address=0.0.0.0
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8501 || exit 1"]
+      interval: 1m
+      timeout: 5s
+      retries: 5

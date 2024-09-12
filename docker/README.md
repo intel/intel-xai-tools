@@ -7,6 +7,7 @@ docker pull ubuntu:22.04
 
 * [Explainers](#explainers)
 * [Model Card Generator](#model-card-generator)
+* [Model Card Generator UI](#model-card-generator-ui)
 * [Interactive](#interactive)
 * [Jupyter](#jupyter)
 
@@ -35,6 +36,25 @@ docker compose build model_card_gen
 docker images | grep -i mcg
 intel/ai-tools                                      intel-ai-safety-1.0.0-mcg                  82bdf7b239cc   About a minute ago   3.02GB
 ```
+## Model Card Generator UI
+
+### Build the image
+```bash
+docker compose build model_card_gen_ui
+```
+
+### Check existing image
+```bash
+docker images | grep -i mcg-ui
+intel/ai-tools                                      intel-ai-safety-1.0.0-mcg-ui        e9bd59328e37   About a minute ago    2.75GB
+```
+
+### Running the UI
+To run the Model Card Generator UI, you can use the docker run command. 
+```bash
+docker run --rm -p 8051:8051 --name mcg-ui intel/ai-tools:intel-ai-safety-1.0.0-mcg-ui
+```
+Once the container is running, you can access the Model Card Generator UI by navigating to `<HOST_NAME>:8051` in your web browser, where HOST_NAME is the name or IP address of the server that the container is running on.
 
 Docker containers can run in either Interactive or Jupyter mode.
 
