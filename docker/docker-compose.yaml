@@ -18,7 +18,7 @@
 
 services:
   explainers:
-    image: intel/ai-tools:intel-ai-safety-1.0.0-explainers
+    image: intel/ai-tools:intel-ai-safety-1.1.0-explainers
     pull_policy: always
     build:
       dockerfile: docker/Dockerfile.explainers
@@ -46,7 +46,7 @@ services:
       retries: 5
 
   model_card_gen:
-    image: intel/ai-tools:intel-ai-safety-1.0.0-mcg
+    image: intel/ai-tools:intel-ai-safety-1.1.0-mcg
     pull_policy: always
     build:
       dockerfile: docker/Dockerfile.mcg
@@ -74,7 +74,7 @@ services:
       retries: 5
 
   model_card_gen_ui:
-    image: intel/ai-tools:intel-ai-safety-1.0.0-mcg-ui
+    image: intel/ai-tools:intel-ai-safety-1.1.0-mcg-ui
     pull_policy: always
     build:
       dockerfile: docker/Dockerfile.mcg
