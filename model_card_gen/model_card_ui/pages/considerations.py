@@ -54,7 +54,10 @@ def main():
         value=st.session_state.get("limitations_text"),
         placeholder="Technical Limitations of the model.",
         help="What are the known limitations of the model? This may include technical limitations,"
-        "or conditions that may degrade model performance.",
+        "or conditions that may degrade model performance. "
+        "For instance, the model exhibits poor performance on images with low lighting due "
+        "to a lack of diverse lighting scenarios in the training dataset. Additionally, the model's accuracy diminishes when "
+        "predicting outcomes for demographic groups that are underrepresented in the training data.",
         key=persist("limitations_text"),
     )
     st.write("\n")
@@ -62,7 +65,12 @@ def main():
         r"$\textsf{\LARGE  Tradeoffs}$",
         value=st.session_state.get("tradeoffs_text"),
         placeholder="Tradeoffs of the model.",
-        help="What are the known accuracy/performance tradeoffs for the model?",
+        help="What are the known accuracy/performance tradeoffs for the model? This may include description of the following questions. "
+        "Were there any competing objectives or metrics, and how did you prioritize them? "
+        "What potential benefits and drawbacks did you consider when making these decisions? "
+        "How do these tradeoffs impact the model's intended use cases or target audience? "
+        "For instance, To improve the model's inference speed, we reduced its depth, which resulted in a slight decrease in accuracy. "
+        "We prioritized precision over recall to minimize false positives in a fraud detection model, accepting that some fraudulent transactions might not be identified.",
         key=persist("tradeoffs_text"),
     )
     st.write("\n")
