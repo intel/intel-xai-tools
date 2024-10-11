@@ -35,7 +35,7 @@ pio.templates.default = "plotly"
 def upload_model_card():
     st.markdown("## Upload Model Card")
     st.write(
-        "If you are interested in viewing an example, please [click here](https://github.com/intel/intel-xai-tools/tree/bb7b1fa008580606eac19a58020e5937a275dbf7/model_card_gen/intel_ai_safety/model_card_gen/docs/examples/json)."
+        "If you are interested in viewing an example, please [click here](https://github.com/intel/intel-xai-tools/tree/main/model_card_gen/intel_ai_safety/model_card_gen/docs/examples/json)."
     )
     uploaded_file = st.file_uploader("", type=["json"], help="Please choose a JSON (.json) file type to upload")
     if uploaded_file is not None:

@@ -55,31 +55,32 @@ def view_model_card():
         else:
             metric_grp_csv = None
         model_card_html = generate_model_card_html(model_card, metric_threshold_csv, metric_grp_csv)
-        html_content = model_card_html.replace("<head>", "<head><style>body { background-color: white; }</style>")
-        if st.session_state.get("model_card_json") != {}:
-            left, mid_left, mid_right, right = st.columns([2, 5, 5, 2])
-            model_card_json_str = json.dumps(st.session_state.get("model_card_json"), indent=2)
-            with mid_left:
-                mc_html_download_button = st.download_button(
-                    label="Download Model Card (HTML)",
-                    data=html_content,
-                    file_name="Model_Card.html",
-                    help="The current Model Card will be downloaded as a HTML (.html) file",
-                )
+        if model_card_html:
+            html_content = model_card_html.replace("<head>", "<head><style>body { background-color: white; }</style>")
+            if st.session_state.get("model_card_json") != {}:
+                left, mid_left, mid_right, right = st.columns([2, 5, 5, 2])
+                model_card_json_str = json.dumps(st.session_state.get("model_card_json"), indent=2)
+                with mid_left:
+                    mc_html_download_button = st.download_button(
+                        label="Download Model Card (HTML)",
+                        data=html_content,
+                        file_name="Model_Card.html",
+                        help="The current Model Card will be downloaded as a HTML (.html) file",
+                    )
 
-            with mid_right:
-                mc_json_download_button = st.download_button(
-                    label="Download Model Card (JSON)",
-                    data=model_card_json_str,
-                    file_name="Model_Card.json",
-                    help="The current Model Card will be downloaded as a JSON (.json) file",
-                )
-            if mc_html_download_button:
-                st.success("Your current Model Card (HTML) has been successfully downloaded!🎉")
-            if mc_json_download_button:
-                st.success("Your current Model Card (JSON) has been successfully downloaded!🎉")
+                with mid_right:
+                    mc_json_download_button = st.download_button(
+                        label="Download Model Card (JSON)",
+                        data=model_card_json_str,
+                        file_name="Model_Card.json",
+                        help="The current Model Card will be downloaded as a JSON (.json) file",
+                    )
+                if mc_html_download_button:
+                    st.success("Your current Model Card (HTML) has been successfully downloaded!🎉")
+                if mc_json_download_button:
+                    st.success("Your current Model Card (JSON) has been successfully downloaded!🎉")
 
-        components.html(html_content, scrolling=True, height=2000, width=750)
+            components.html(html_content, scrolling=True, height=2000, width=750)
 
 
 if __name__ == "__main__":
