@@ -3,10 +3,7 @@ on:
   pull_request:
     branches:
       - develop
-      - develop-ng
       - main
-      - r0.4
-      - r0.5
 
   workflow_call:
 
@@ -18,6 +15,6 @@ jobs:
       repo: frameworks.ai.explainable-ai
       refs: ${{ github.head_ref }}
       config_file: bandit.yaml
-      runners: "['gasp']"
+      runners: "['xai-tlt']"
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
