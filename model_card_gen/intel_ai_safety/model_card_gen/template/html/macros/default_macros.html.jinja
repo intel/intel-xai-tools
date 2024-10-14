@@ -51,7 +51,7 @@
       <div class="interactive-graph">{{ graph.html|safe }}</div>
     {% elif graph.image %}
       <div class="img-item">
-        <img src='data:image/jpeg;base64,{{ graph.image }}' alt='{{ graph.name }}' />
+      <img src='data:image/jpeg;base64,{{ graph.image }}' alt='{{ graph.name }}' style="max-width: 100%; max-height: 100%" />
       </div>
     {% endif %}
   </details>

@@ -37,8 +37,8 @@ def main():
     st.markdown("# Performance Quantitative Analysis")
     st.write("This section provides details regarding the model performance metrics being reported.")
     st.markdown(
-        "If you are interested in viewing examples of metric files, please [click here](https://github.com/intel/intel-xai-tools/tree/bb7b1fa008580606eac19a58020e5937a275dbf7/model_card_gen/intel_ai_safety/model_card_gen/docs/examples/csv). "
-        "To learn how to create these files or see a step-by-step example, you can follow this [link](https://github.com/intel/intel-xai-tools/blob/bb7b1fa008580606eac19a58020e5937a275dbf7/notebooks/model_card_gen/hugging_face_model_card/hugging-face-model-card.ipynb) "
+        "If you are interested in viewing examples of metric files, please [click here](https://github.com/intel/intel-xai-tools/tree/main/model_card_gen/intel_ai_safety/model_card_gen/docs/examples/csv). "
+        "To learn how to create these files or see a step-by-step example, you can follow this [link](https://github.com/intel/intel-xai-tools/blob/main/notebooks/model_card_gen/hugging_face_model_card/hugging-face-model-card.ipynb) "
         "for further guidance."
     )
     # Upload metrics by threshold

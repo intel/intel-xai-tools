@@ -34,7 +34,7 @@ class LLMExplainer(AttributionsExplainer):
       tokenizer (HF Tokenizer): Toke
 
     reference:
-    https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html
+    https://shap.readthedocs.io/en/stable/generated/shap.PartitionExplainer.html
     """
 
     def __init__(self, model, tokenizer=None) -> None:
@@ -76,7 +76,7 @@ def llm_explainer(model, target_text, tokenizer=None, max_evals=64):
       max_evals (int):
 
     Reference:
-      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html
+      https://shap.readthedocs.io/en/stable/generated/shap.PartitionExplainer.html
 
     Returns:
       LLMExplainer

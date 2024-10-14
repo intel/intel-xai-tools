@@ -66,8 +66,8 @@ def main():
     st.text_area(
         r"$\textsf{\LARGE  Model Card Overview}$",
         value=st.session_state.get("overview"),
-        placeholder="Short description of the model card.",
-        help="A brief, description of the model card.",
+        placeholder="Short description of the model card. For example, This model card provides an overview of version 1.0 of our text classification model, detailing its purpose, performance metrics, and the datasets involved.",
+        help="A brief description of the overall model card, including key details about what the model card is for, the model it describes, and any supporting information such as the datasets involved and performance metrics.",
         key=persist("overview"),
     )
     st.write("\n")

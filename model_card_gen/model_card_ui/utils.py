@@ -178,6 +178,8 @@ def generate_dynamic_form(
                     key=persist(selectbox_index_key),
                 )
     if number_of_items > 0:
+        st.warning(f"Please select '{submit_button_label}' to save the information before modifying the Number of {number_label} or moving to the next field.")
+
         with st.form(key=form_key):
             first_field_values = []
             if item_label != "Reference":

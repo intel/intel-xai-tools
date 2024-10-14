@@ -47,7 +47,7 @@ def main():
     st.text_area(
         r"$\textsf{\LARGE  Input Format Map}$",
         value=st.session_state.get("input_format_map_text"),
-        placeholder="Input data format in the form of list (comma seperated) of key-value pairs.",
+        placeholder="Input data format in the form of list (comma seperated) of key-value pairs. For example, image_data: RGB images ('PNG'), text: String data",
         help="The data format for inputs to the model, in key-value format.",
         key=persist("input_format_map_text"),
     )
@@ -62,7 +62,7 @@ def main():
     st.text_area(
         r"$\textsf{\LARGE  Output Format Map}$",
         value=st.session_state.get("output_format_map_text"),
-        placeholder="Output data format in the form of list (comma seperated) of key-value pairs.",
+        placeholder="Output data format in the form of list (comma seperated) of key-value pairs. For example, classification_probabilities: Probability (between 0 to 1) of the example belonging to each class.",
         help="The data format for outputs from the model, in key-value format.",
         key=persist("output_format_map_text"),
     )

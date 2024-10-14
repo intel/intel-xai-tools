@@ -8,7 +8,7 @@ def custom_tf_CNN():
     Creates and trains a simple TF CNN on the mnist dataset.
     Returns the model, a subset of the test dataset and the class names.
 
-    Taken from https://shap-lrjball.readthedocs.io/en/latest/example_notebooks/deep_explainer/Front%20Page%20DeepExplainer%20MNIST%20Example.html # noqa
+    Taken from https://shap.readthedocs.io/en/stable/example_notebooks/image_examples/image_classification/Front%20Page%20DeepExplainer%20MNIST%20Example.html  # noqa
     """
     import tensorflow as tf
     from tensorflow.keras.datasets import mnist

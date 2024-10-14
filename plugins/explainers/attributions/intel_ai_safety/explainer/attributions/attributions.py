@@ -66,7 +66,7 @@ class DeepExplainer(FeatureAttributions):
       labels: the class labels of the given classification problem
 
     Reference:
-      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html
+      https://shap.readthedocs.io/en/stable/generated/shap.DeepExplainer.html
     """
 
     def __init__(
@@ -118,7 +118,7 @@ class GradientExplainer(FeatureAttributions):
       labels: the class labels of the given classification problem
 
     Reference:
-      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html
+      https://shap.readthedocs.io/en/stable/generated/shap.GradientExplainer.html
     """
 
     def __init__(
@@ -172,7 +172,7 @@ class KernelExplainer(FeatureAttributions):
       shap_values: the resulting shap value estimations on the target examples
 
     Reference:
-    https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html
+    https://shap.readthedocs.io/en/stable/generated/shap.KernelExplainer.html
     """
 
     def __init__(
@@ -284,7 +284,7 @@ class PartitionTextExplainer(PartitionExplainer, FeatureAttributions):
       shap_values: the resulting shap value estimations on the target examples
 
     Reference:
-    https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html
+    https://shap.readthedocs.io/en/stable/generated/shap.PartitionExplainer.html
     """
 
     def __init__(
@@ -354,7 +354,7 @@ def kernel_explainer(model, background, targets, nsamples=500):
       KernelExplainer
 
     Reference:
-      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.KernelExplainer.html
+      https://shap.readthedocs.io/en/stable/generated/shap.KernelExplainer.html
     """
     return KernelExplainer(model, background, targets, nsamples=nsamples)
 
@@ -373,7 +373,7 @@ def deep_explainer(model, backgroundImages, targetImages, labels) -> DeepExplain
       DeepExplainer
 
     Reference:
-      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.DeepExplainer.html
+      https://shap.readthedocs.io/en/stable/generated/shap.DeepExplainer.html
     """
     return DeepExplainer(model, backgroundImages, targetImages, labels)
 
@@ -399,7 +399,7 @@ def gradient_explainer(
       GradientExplainer
 
     Reference:
-      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html
+      https://shap.readthedocs.io/en/stable/generated/shap.GradientExplainer.html
     """
     return GradientExplainer(model, background_images, target_images, labels, ranked_outputs)
 
@@ -414,7 +414,7 @@ def partition_text_explainer(model, labels, target_text, tokenizer, max_evals=64
       categories (list): the category names
 
     Reference:
-      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html
+      https://shap.readthedocs.io/en/stable/generated/shap.PartitionExplainer.html
 
     Returns:
       PartitionExplainer
@@ -434,7 +434,7 @@ def partition_image_explainer(model, labels, target_images, top_n=1, max_evals=6
       categories (list): the category names
 
     Reference:
-      https://shap-lrjball.readthedocs.io/en/latest/generated/shap.PartitionExplainer.html
+      https://shap.readthedocs.io/en/stable/generated/shap.PartitionExplainer.html
 
     Returns:
       PartitionImageExplainer

@@ -29,7 +29,7 @@ from intel_ai_safety.model_card_gen.validation import (
     _find_json_schema,
     validate_json_schema,
 )
-
+import pandas as pd
 PACKAGE = "intel_ai_safety.model_card_gen"
 JSON_FILES = ["docs/examples/json/model_card_example.json", "docs/examples/json/model_card_compas.json"]
 CSV_FILES = [("docs/examples/csv/metrics_by_group.csv",  "docs/examples/csv/metrics_by_threshold.csv")]
@@ -83,3 +83,11 @@ def test_load_template(template_type):
     """Test ModelCardGen generates a model card using the specified template type."""
     mcg = ModelCardGen.generate(template_type=template_type)
     assert mcg.model_card
+
+@pytest.mark.common
+def test_missing_threshold_column_exception():
+    """Test if the correct exception is raised when the 'threshold' column is missing in the CSV."""
+    with pytest.raises(AssertionError) as exception_error:
+        example_df = pd.DataFrame(data={'col1': [1, 2]})
+        ModelCardGen.generate(metrics_by_threshold=example_df)
+    assert "No column named 'threshold'" in str(exception_error.value)
