@@ -37,36 +37,87 @@ def add_overview_graphs(model_card: ModelCard, df: pd.DataFrame, static: bool) -
     if "dataset" in df:
         dfs = df.groupby("dataset")
         for dataset_name, df in dfs:
-            graphs = [graph.generate_figure(df) for graph in OVERVIEW_GRAPHS]
+            if "label" in df:
+                label_dfs = df.groupby("label")
+                for label_name, df_label in label_dfs:
+                    df_label.drop("label", axis=1, inplace=True)
+                    graphs = [graph.generate_figure(df_label) for graph in OVERVIEW_GRAPHS]
 
+                    if static:
+                        model_card.model_details.graphics.collection.extend(
+                            [
+                                Graphic(
+                                    name=graph.title + f" ({dataset_name} - Label : {label_name})",
+                                    image=b64encode(graph.figure.to_image(format="png")).decode(),
+                                )
+                                for graph in graphs
+                            ]
+                        )
+                    else:
+                        model_card.model_details.graphics.collection.extend(
+                            [
+                                Graphic(
+                                    name=graph.title + f" ({dataset_name} - Label : {label_name})",
+                                    html=graph.html_content,
+                                )
+                                for graph in graphs
+                            ]
+                        )
+            else:
+                graphs = [graph.generate_figure(df) for graph in OVERVIEW_GRAPHS]
+
+                if static:
+                    model_card.model_details.graphics.collection.extend(
+                        [
+                            Graphic(
+                                name=graph.title + f" ({dataset_name})",
+                                image=b64encode(graph.figure.to_image(format="png")).decode(),
+                            )
+                            for graph in graphs
+                        ]
+                    )
+                else:
+                    model_card.model_details.graphics.collection.extend(
+                        [Graphic(name=graph.title + f" ({dataset_name})", html=graph.html_content) for graph in graphs]
+                    )
+    else:
+        if "label" in df:
+            label_dfs = df.groupby("label")
+            for label_name, df_label in label_dfs:
+                df_label.drop("label", axis=1, inplace=True)
+                graphs = [graph.generate_figure(df_label) for graph in OVERVIEW_GRAPHS]
+
+                if static:
+                    model_card.model_details.graphics.collection.extend(
+                        [
+                            Graphic(
+                                name=graph.title + f" - Label : ({label_name})",
+                                image=b64encode(graph.figure.to_image(format="png")).decode(),
+                            )
+                            for graph in graphs
+                        ]
+                    )
+                else:
+                    model_card.model_details.graphics.collection.extend(
+                        [
+                            Graphic(name=graph.title + f" - Label : ({label_name})", html=graph.html_content)
+                            for graph in graphs
+                        ]
+                    )
+        else:
+            graphs = [graph.generate_figure(df) for graph in OVERVIEW_GRAPHS]
+            # Add graphs to model card
             if static:
                 model_card.model_details.graphics.collection.extend(
                     [
-                        Graphic(
-                            name=graph.title + f" ({dataset_name})",
-                            image=b64encode(graph.figure.to_image(format="png")).decode(),
-                        )
+                        Graphic(name=graph.title, image=b64encode(graph.figure.to_image(format="png")).decode())
                         for graph in graphs
                     ]
                 )
             else:
                 model_card.model_details.graphics.collection.extend(
-                    [Graphic(name=graph.title + f" ({dataset_name})", html=graph.html_content) for graph in graphs]
+                    [Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
                 )
-    else:
-        graphs = [graph.generate_figure(df) for graph in OVERVIEW_GRAPHS]
-        # Add graphs to modle card
-        if static:
-            model_card.model_details.graphics.collection.extend(
-                [
-                    Graphic(name=graph.title, image=b64encode(graph.figure.to_image(format="png")).decode())
-                    for graph in graphs
-                ]
-            )
-        else:
-            model_card.model_details.graphics.collection.extend(
-                [Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
-            )
 
 
 def add_dataset_feature_statistics_plots(
@@ -100,34 +151,84 @@ def add_eval_result_slicing_metrics(model_card: ModelCard, df: pd.DataFrame, sta
     if "dataset" in df:
         dfs = df.groupby("dataset")
         for dataset_name, df in dfs:
+            if "label" in df:
+                label_dfs = df.groupby("label")
+                for label_name, df_label in label_dfs:
+                    df_label.drop("label", axis=1, inplace=True)
+                    graphs = [graph.generate_figure(df_label) for graph in SLICING_METRIC_GRAPHS]
+                    if static:
+                        model_card.quantitative_analysis.graphics.collection.extend(
+                            [
+                                Graphic(
+                                    name=graph.title + f" ({dataset_name}) - Label : {label_name})",
+                                    image=b64encode(graph.figure.to_image(format="png")).decode(),
+                                )
+                                for graph in graphs
+                            ]
+                        )
+                    else:
+                        model_card.quantitative_analysis.graphics.collection.extend(
+                            [
+                                Graphic(
+                                    name=graph.title + f" ({dataset_name}) - Label : {label_name})",
+                                    html=graph.html_content,
+                                )
+                                for graph in graphs
+                            ]
+                        )
+            else:
+                graphs = [graph.generate_figure(df) for graph in SLICING_METRIC_GRAPHS]
+                if static:
+                    model_card.quantitative_analysis.graphics.collection.extend(
+                        [
+                            Graphic(
+                                name=graph.title + f" ({dataset_name})",
+                                image=b64encode(graph.figure.to_image(format="png")).decode(),
+                            )
+                            for graph in graphs
+                        ]
+                    )
+                else:
+                    model_card.quantitative_analysis.graphics.collection.extend(
+                        [Graphic(name=graph.title + f" ({dataset_name})", html=graph.html_content) for graph in graphs]
+                    )
+    else:
+        if "label" in df:
+            label_dfs = df.groupby("label")
+            for label_name, df_label in label_dfs:
+                df_label.drop("label", axis=1, inplace=True)
+                graphs = [graph.generate_figure(df_label) for graph in SLICING_METRIC_GRAPHS]
+                if static:
+                    model_card.quantitative_analysis.graphics.collection.extend(
+                        [
+                            Graphic(
+                                name=graph.title + f" - Label : ({label_name})",
+                                image=b64encode(graph.figure.to_image(format="png")).decode(),
+                            )
+                            for graph in graphs
+                        ]
+                    )
+                else:
+                    model_card.quantitative_analysis.graphics.collection.extend(
+                        [
+                            Graphic(name=graph.title + f" - Label : ({label_name})", html=graph.html_content)
+                            for graph in graphs
+                        ]
+                    )
+
+        else:
             graphs = [graph.generate_figure(df) for graph in SLICING_METRIC_GRAPHS]
             if static:
                 model_card.quantitative_analysis.graphics.collection.extend(
                     [
-                        Graphic(
-                            name=graph.title + f" ({dataset_name})",
-                            image=b64encode(graph.figure.to_image(format="png")).decode(),
-                        )
+                        Graphic(name=graph.title, image=b64encode(graph.figure.to_image(format="png")).decode())
                         for graph in graphs
                     ]
                 )
             else:
                 model_card.quantitative_analysis.graphics.collection.extend(
-                    [Graphic(name=graph.title + f" ({dataset_name})", html=graph.html_content) for graph in graphs]
+                    [Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
                 )
-    else:
-        graphs = [graph.generate_figure(df) for graph in SLICING_METRIC_GRAPHS]
-        if static:
-            model_card.quantitative_analysis.graphics.collection.extend(
-                [
-                    Graphic(name=graph.title, image=b64encode(graph.figure.to_image(format="png")).decode())
-                    for graph in graphs
-                ]
-            )
-        else:
-            model_card.quantitative_analysis.graphics.collection.extend(
-                [Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
-            )
 
 
 def add_eval_result_plots(model_card: ModelCard, df: pd.DataFrame, static: bool) -> None:
@@ -145,34 +246,84 @@ def add_eval_result_plots(model_card: ModelCard, df: pd.DataFrame, static: bool)
     if "dataset" in df:
         dfs = df.groupby("dataset")
         for dataset_name, df in dfs:
+            if "label" in df:
+                label_dfs = df.groupby("label")
+                for label_name, df_label in label_dfs:
+                    df_label.drop("label", axis=1, inplace=True)
+                    graphs = [graph.generate_figure(df_label) for graph in THRESHOLD_GRAPHS]
+                    if static:
+                        model_card.quantitative_analysis.graphics.collection.extend(
+                            [
+                                Graphic(
+                                    name=graph.title + f" ({dataset_name}) - Label : {label_name})",
+                                    image=b64encode(graph.figure.to_image(format="png")).decode(),
+                                )
+                                for graph in graphs
+                            ]
+                        )
+                    else:
+                        model_card.quantitative_analysis.graphics.collection.extend(
+                            [
+                                Graphic(
+                                    name=graph.title + f" ({dataset_name}) - Label : {label_name})",
+                                    html=graph.html_content,
+                                )
+                                for graph in graphs
+                            ]
+                        )
+            else:
+                graphs = [graph.generate_figure(df) for graph in THRESHOLD_GRAPHS]
+                if static:
+                    model_card.quantitative_analysis.graphics.collection.extend(
+                        [
+                            Graphic(
+                                name=graph.title + f" ({dataset_name})",
+                                image=b64encode(graph.figure.to_image(format="png")).decode(),
+                            )
+                            for graph in graphs
+                        ]
+                    )
+                else:
+                    model_card.quantitative_analysis.graphics.collection.extend(
+                        [Graphic(name=graph.title + f" ({dataset_name})", html=graph.html_content) for graph in graphs]
+                    )
+    else:
+        if "label" in df:
+            label_dfs = df.groupby("label")
+            for label_name, df_label in label_dfs:
+                df_label.drop("label", axis=1, inplace=True)
+                graphs = [graph.generate_figure(df_label) for graph in THRESHOLD_GRAPHS]
+                if static:
+                    model_card.quantitative_analysis.graphics.collection.extend(
+                        [
+                            Graphic(
+                                name=graph.title + f" - Label : ({label_name})",
+                                image=b64encode(graph.figure.to_image(format="png")).decode(),
+                            )
+                            for graph in graphs
+                        ]
+                    )
+                else:
+                    model_card.quantitative_analysis.graphics.collection.extend(
+                        [
+                            Graphic(name=graph.title + f" - Label : ({label_name})", html=graph.html_content)
+                            for graph in graphs
+                        ]
+                    )
+
+        else:
             graphs = [graph.generate_figure(df) for graph in THRESHOLD_GRAPHS]
             if static:
                 model_card.quantitative_analysis.graphics.collection.extend(
                     [
-                        Graphic(
-                            name=graph.title + f" ({dataset_name})",
-                            image=b64encode(graph.figure.to_image(format="png")).decode(),
-                        )
+                        Graphic(name=graph.title, image=b64encode(graph.figure.to_image(format="png")).decode())
                         for graph in graphs
                     ]
                 )
             else:
                 model_card.quantitative_analysis.graphics.collection.extend(
-                    [Graphic(name=graph.title + f" ({dataset_name})", html=graph.html_content) for graph in graphs]
+                    [Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
                 )
-    else:
-        graphs = [graph.generate_figure(df) for graph in THRESHOLD_GRAPHS]
-        if static:
-            model_card.quantitative_analysis.graphics.collection.extend(
-                [
-                    Graphic(name=graph.title, image=b64encode(graph.figure.to_image(format="png")).decode())
-                    for graph in graphs
-                ]
-            )
-        else:
-            model_card.quantitative_analysis.graphics.collection.extend(
-                [Graphic(name=graph.title, html=graph.html_content) for graph in graphs]
-            )
 
 
 def get_slice_key(slice_key: Union[Tuple[()], Tuple[Tuple[Text, Union[Text, int, float]], ...]]) -> Tuple[Text, Text]:
