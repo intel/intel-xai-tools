@@ -13,3 +13,5 @@ This is a comprehensive list of public datasets used by this repository.
 | [IMDB Reviews](https://ai.stanford.edu/~amaas/data/sentiment/) | PyTorch | Text Classification |
 | [MNIST (TorchVision)](https://pytorch.org/vision/main/generated/torchvision.datasets.MNIST.html) | PyTorch | Image Classification |
 | [SMS Spam Collection](https://archive.ics.uci.edu/dataset/228/sms+spam+collection) | PyTorch | Text Classification |
+| [ToxicChat](https://huggingface.co/datasets/lmsys/toxic-chat) | PyTorch | Toxicity Model Benchmarking |
+| [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | PyTorch | Toxicity Model Benchmarking |

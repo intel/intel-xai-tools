@@ -13,12 +13,10 @@ For evaluating a target toxicity detection LLM, we use the ToxicChat and Jigsaw 
     - accuracy
     - auprc (area under precision recall curve)
     - auroc
-    - auprc (area under precision recall curve)
     - f1
     - fpr (false positive rate)
     - precision
     - recall
-    - fpr (false positive rate)
 
 ## Get Started
 
