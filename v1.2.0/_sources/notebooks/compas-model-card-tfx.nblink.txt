@@ -1,0 +1,3 @@
+{
+    "path": "../../notebooks/model_card_gen/compas_with_model_card_gen/compas-model-card-tfx.ipynb"
+}
