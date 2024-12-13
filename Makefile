@@ -47,11 +47,6 @@ venv-lint:
 		flake8==7.0.0 \
 		black==24.4.2
 
-venv-test-benchmark:
-	@echo "Creating a virtualenv $(VENV_DIR) for benchmark testing..."
-	@test -d $(VENV_DIR) || python -m virtualenv $(VENV_DIR) || python3 -m virtualenv $(VENV_DIR)
-	@. $(ACTIVATE_TEST) && pip install --no-cache-dir --no-deps -r ${BENCHMARK_DIR}/classification_metrics/requirements.txt
-
 test-mcg: venv-test
 	@echo "Testing the Model Card Gen API..."
 	@. $(ACTIVATE_TEST) && pytest model_card_gen/tests
@@ -74,9 +69,9 @@ test-explainer: venv-test
 	@. $(ACTIVATE_TEST) && pytest plugins/explainers/cam-pytorch/tests
 	@. $(ACTIVATE_TEST) && pytest plugins/explainers/metrics/tests
 
-test-benchmark: venv-test-benchmark
+test-benchmark: venv-test
 	@echo "Testing Benchmarking..."
-	@. $(ACTIVATE_TEST) && pytest plugins/benchmark/classification_metrics/tests
+	@. $(ACTIVATE_TEST) && pytest plugins/benchmark/classification_metrics/classification_metrics/tests
 
 test: test-mcg test-explainer test-benchmark
 

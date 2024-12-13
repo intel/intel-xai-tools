@@ -4,7 +4,7 @@ Toxicity detection plays a critical role in guarding the inputs and outputs of l
 
 For evaluating a target toxicity detection LLM, we use the ToxicChat and Jigsaw datasets, and the most commonly used metrics in toxicity classification, to provide a comprehensive assessment. Currently, the benchmark script only supports benchmarking one dataset at a time. Future work includes enabling benchmarking on multiple datasets at a time. The Gaudi 2 accelerator is deployed in the benchmark to address the high demand of the AI workload while balancing the power efficiency. 
 
-- Supported Dataset
+- Supported Datasets
     - [ToxicChat](https://huggingface.co/datasets/lmsys/toxic-chat)
     - [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification)
     - More datasets to come...
@@ -18,8 +18,7 @@ For evaluating a target toxicity detection LLM, we use the ToxicChat and Jigsaw 
     - precision
     - recall
 
-## Get Started
-
+## Get Started on Gaudi 2 Accelerator
 ### Requirements
 If you are using an `hpu` device, then clone the `optimum-habana` repository.
 ```bash
@@ -55,32 +54,92 @@ cd optimum-habana && pip install . && cd ..
 pip install -r requirements.txt
 ```
 
-In case of [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification), make sure the datasets are downloaded and stored in current working directory.
+In case of [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification), make sure the dataset is downloaded and stored in current working directory.
 
-#### Test the model and confirm the results saved correctly
-Replace `MODEL_PATH` and `DATASETS` with the appropriate path for the model and the name of the dataset.
+#### Test the model and confirm the results are saved correctly
+Replace `MODEL_PATH` and `DATASET` with the appropriate path for the model and the name of the dataset.
 ```bash
 MODEL_PATH=Intel/toxic-prompt-roberta
-DATASETS=tc
-python ./scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASETS}
-cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASETS}_accuracy/metrics.json
+DATASET=tc
+python ./classification_metrics/scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASET}
+cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASET}_accuracy/metrics.json
 ```
 
 If you are using an `hpu` device, you can instantiate the Gaudi configuration by passing the `GAUDI_CONFIG_NAME` variable with the appropriate configuration name. The default value for the device name (`device`) is `hpu`.
 ```bash
 MODEL_PATH=Intel/toxic-prompt-roberta
-DATASETS=tc
+DATASET=tc
 GAUDI_CONFIG_NAME=Habana/roberta-base
 DEVICE_NAME=hpu
-python ./scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASETS} -g_config ${GAUDI_CONFIG_NAME} --device ${DEVICE_NAME}
-cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASETS}_accuracy/metrics.json 
+python ./classification_metrics/scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASET} -g_config ${GAUDI_CONFIG_NAME} --device ${DEVICE_NAME}
+cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASET}_accuracy/metrics.json 
 ```
 
 For the Jigsaw Unintended Bias, pass the path of the stored dataset file in place of the variable `DATASET_PATH`.
 ```bash
 MODEL_PATH=Intel/toxic-prompt-roberta
-DATASETS=jigsaw
+DATASET=jigsaw
 DATASET_PATH=/path/to/dataset
-python ./scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASETS} -p ${DATASET_PATH} 
-cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASETS}_accuracy/metrics.json
+python ./classification_metrics/scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASET} -p ${DATASET_PATH} 
+cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASET}_accuracy/metrics.json
+```
+
+## Get Started on CPU
+
+### Requirements
+* Linux system or WSL2 on Windows (validated on Ubuntu* 20.04/22.04 LTS)
+* Python 3.9, 3.10
+* Poetry
+
+### Dependencies Installation with Poetry
+Step 1: Allow poetry to create virtual envionment contained in `.venv` directory of current directory. 
+
+```bash
+poetry lock
+```
+In addition, you can explicitly tell poetry which python instance to use
+
+```bash
+poetry env use /full/path/to/python
+```
+
+Step 2: Use Poetry to install the required dependencies.
+```bash
+poetry install
+```
+
+Step 3: Running Tests (Optional)
+If you want to run the tests, you need to install the test dependencies. You can do this by specifying the --with option:
+```bash
+poetry install --with test
+```
+
+Step 4: Activate the environment:
+
+```bash
+source .venv/bin/activate
+```
+
+### Evaluation
+
+In case of [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification), make sure the dataset is downloaded and stored in current working directory. 
+
+Replace `MODEL_PATH` and `DATASET` with the appropriate path for the model and the name of the dataset. For running the script on cpu device, replace the variable `DEVICE_NAME` with `cpu`.
+```bash
+MODEL_PATH=Intel/toxic-prompt-roberta
+DATASET=tc
+DEVICE_NAME=cpu
+python ./classification_metrics/scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASET} --device ${DEVICE_NAME}
+cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASET}_accuracy/metrics.json
+```
+
+For the Jigsaw Unintended Bias, pass the path of the stored dataset file in place of the variable `DATASET_PATH`.
+
+```bash
+MODEL_PATH=Intel/toxic-prompt-roberta
+DATASET=jigsaw
+DATASET_PATH=/path/to/dataset
+DEVICE_NAME=cpu
+python ./classification_metrics/scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASET} -p ${DATASET_PATH} --device ${DEVICE_NAME}
+cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASET}_accuracy/metrics.json
 ```

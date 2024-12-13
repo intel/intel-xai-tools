@@ -16,7 +16,7 @@ python = ">=3.9, <3.11"
 "intel-ai-safety-explainer-cam-tensorflow" = {path = "plugins/explainers/cam-tensorflow", develop = true, optional=true}
 "intel-ai-safety-explainer-cam-pytorch" = {path = "plugins/explainers/cam-pytorch", develop = true, optional=true}
 "intel-ai-safety-explainer-metrics" = {path = "plugins/explainers/metrics", develop = true, optional=true}
-
+"intel-ai-safety-benchmarks-classification" = {path = "plugins/benchmark/classification_metrics", develop = true, optional = true}
 
 [tool.poetry.group.test]
 optional = true
@@ -57,6 +57,7 @@ explainer-all = ["intel-ai-safety-explainer",
                  "intel-ai-safety-explainer-cam-pytorch",
                  "intel-ai-safety-explainer-metrics",
 ]
+benchmark = ["intel-ai-safety-benchmarks-classification",]
 all = ["intel-ai-safety-model-card-gen",
        "intel-ai-safety-explainer",
        "intel-ai-safety-explainer-attributions",
@@ -64,7 +65,8 @@ all = ["intel-ai-safety-model-card-gen",
        "intel-ai-safety-explainer-captum",
        "intel-ai-safety-explainer-cam-tensorflow",
        "intel-ai-safety-explainer-cam-pytorch",
-       "intel-ai-safety-explainer-metrics"
+       "intel-ai-safety-explainer-metrics",
+       "intel-ai-safety-benchmarks-classification"
 ]
 
 [[tool.poetry.source]]
@@ -86,12 +88,14 @@ files = [
          "plugins/explainers/cam-tensorflow/pyproject.toml",
          "plugins/explainers/cam-pytorch/pyproject.toml",
          "plugins/explainers/metrics/pyproject.toml",
+         "plugins/benchmarks/classification_metrics/pyproject.toml"
          ]
 
 [[tool.poetry_bumpversion.replacements]]
 files = ["intel_ai_safety/version.py",
        "explainer/intel_ai_safety/explainer/version.py",
-       "model_card_gen/intel_ai_safety/model_card_gen/version.py"]
+       "model_card_gen/intel_ai_safety/model_card_gen/version.py",
+       "plugins/benchmark/classification_metrics/version.py"]
 search = '__version__ = "{current_version}"'
 replace = '__version__ = "{new_version}"'
 

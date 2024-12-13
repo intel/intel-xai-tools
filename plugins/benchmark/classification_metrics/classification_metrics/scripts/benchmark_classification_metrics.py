@@ -198,6 +198,8 @@ def main():
     args = parse_args()
     if args.device == "hpu":
         from optimum.habana import GaudiTrainer, GaudiTrainingArguments
+    else:
+        from transformers import Trainer, TrainingArguments
     CL = False
     if "citizenlab" in args.model_path:
         CL = True
@@ -239,19 +241,31 @@ def main():
     model, tokenizer = load_model(args.model_path)
 
     test_dataset = generate_datasets(test_texts, test_labels, tokenizer)
-    training_args = GaudiTrainingArguments(
-        output_dir=TEST_RESULTS_PATH,
-        use_habana=True,
-        use_lazy_mode=True,
-        gaudi_config_name=args.g_config,
-    )
+    if args.device == "hpu":
+        training_args = GaudiTrainingArguments(
+            output_dir=TEST_RESULTS_PATH,
+            use_habana=True,
+            use_lazy_mode=True,
+            gaudi_config_name=args.g_config,
+        )
 
-    trainer = GaudiTrainer(
-        model=model,  # the instantiated 🤗 Transformers model to be trained
-        args=training_args,  # training arguments, defined above
-        eval_dataset=test_dataset,  # evaluation dataset
-        compute_metrics=compute_metrics,
-    )
+        trainer = GaudiTrainer(
+            model=model,  # the instantiated 🤗 Transformers model to be trained
+            args=training_args,  # training arguments, defined above
+            eval_dataset=test_dataset,  # evaluation dataset
+            compute_metrics=compute_metrics
+        )
+    else:
+        training_args = TrainingArguments(
+            output_dir=TEST_RESULTS_PATH
+        )
+        trainer = Trainer(
+            model=model,  # the instantiated 🤗 Transformers model to be trained
+            args=training_args,  # training arguments, defined above
+            eval_dataset=test_dataset,  # evaluation dataset
+            compute_metrics=compute_metrics
+        )
+
 
     results = trainer.predict(test_dataset)
 
