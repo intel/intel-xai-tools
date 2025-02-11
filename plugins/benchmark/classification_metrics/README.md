@@ -2,11 +2,16 @@
 
 Toxicity detection plays a critical role in guarding the inputs and outputs of large language models (LLMs) to ensure safe, respectful, and responsible content. Given the widespread use of LLMs in applications like customer service, education, and social media, there's a significant risk that they could inadvertently produce or amplify harmful language if toxicity is not detected effectively. 
 
-For evaluating a target toxicity detection LLM, we use the ToxicChat and Jigsaw datasets, and the most commonly used metrics in toxicity classification, to provide a comprehensive assessment. Currently, the benchmark script only supports benchmarking one dataset at a time. Future work includes enabling benchmarking on multiple datasets at a time. The Gaudi 2 accelerator is deployed in the benchmark to address the high demand of the AI workload while balancing the power efficiency. 
+To evaluate a target toxicity detection LLM, we use seven datasets: BeaverTails, Jigsaw Unintended Bias, OpenAI Moderation, SurgeAI Toxicity, ToxicChat, ToxiGen, and XSTest. We also employ the most commonly used metrics in toxicity classification to provide a comprehensive assessment. Currently, the benchmark script supports benchmarking only one dataset at a time. Future work includes enabling benchmarking on multiple datasets simultaneously. The Gaudi 2 accelerator is deployed in the benchmark to address the high demand of the AI workload while balancing power efficiency.
 
 - Supported Datasets
-    - [ToxicChat](https://huggingface.co/datasets/lmsys/toxic-chat)
+    - [BeaverTails](https://huggingface.co/datasets/PKU-Alignment/BeaverTails)
     - [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification)
+    - [OpenAI Moderation](https://github.com/openai/moderation-api-release/tree/main)
+    - [SurgeAI Toxicity](https://github.com/surge-ai/toxicity)
+    - [ToxicChat](https://huggingface.co/datasets/lmsys/toxic-chat)
+    - [ToxiGen](https://huggingface.co/datasets/toxigen/toxigen-data)
+    - [XSTest](https://huggingface.co/datasets/walledai/XSTest)
     - More datasets to come...
     
 - Supported Metrics
@@ -54,7 +59,7 @@ cd optimum-habana && pip install . && cd ..
 pip install -r requirements.txt
 ```
 
-In case of [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification), make sure the dataset is downloaded and stored in current working directory.
+In case of [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification), [OpenAI Moderation](https://github.com/openai/moderation-api-release), and [Surge AI Toxicity](https://github.com/surge-ai/toxicity) datasets, make sure the datasets are downloaded and stored in current working directory.
 
 #### Test the model and confirm the results are saved correctly
 Replace `MODEL_PATH` and `DATASET` with the appropriate path for the model and the name of the dataset.
@@ -75,7 +80,7 @@ python ./classification_metrics/scripts/benchmark_classification_metrics.py -m $
 cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASET}_accuracy/metrics.json 
 ```
 
-For the Jigsaw Unintended Bias, pass the path of the stored dataset file in place of the variable `DATASET_PATH`.
+For the Jigsaw Unintended Bias, OpenAI Moderation, and Surge AI Toxicity datasets, pass the path of the stored dataset path in place of `DATASET_PATH`
 ```bash
 MODEL_PATH=Intel/toxic-prompt-roberta
 DATASET=jigsaw
@@ -122,7 +127,7 @@ source .venv/bin/activate
 
 ### Evaluation
 
-In case of [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification), make sure the dataset is downloaded and stored in current working directory. 
+In case of [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification), [OpenAI Moderation](https://github.com/openai/moderation-api-release), and [Surge AI Toxicity](https://github.com/surge-ai/toxicity), make sure the datasets are downloaded and stored in current working directory.
 
 Replace `MODEL_PATH` and `DATASET` with the appropriate path for the model and the name of the dataset. For running the script on cpu device, replace the variable `DEVICE_NAME` with `cpu`.
 ```bash
@@ -133,7 +138,7 @@ python ./classification_metrics/scripts/benchmark_classification_metrics.py -m $
 cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASET}_accuracy/metrics.json
 ```
 
-For the Jigsaw Unintended Bias, pass the path of the stored dataset file in place of the variable `DATASET_PATH`.
+For the Jigsaw Unintended Bias, OpenAI Moderation, and Surge AI Toxicity datasets, pass the path of the stored dataset path in place of `DATASET_PATH`
 
 ```bash
 MODEL_PATH=Intel/toxic-prompt-roberta
