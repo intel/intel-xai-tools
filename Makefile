@@ -18,15 +18,24 @@
 
 VENV_DIR = ".venv"
 VENV_LINT = ".venv/lint"
+VENV_BENCHMARK = ".venv/benchmark"
+VENV_EXPLAINER = ".venv/explainer"
+VENV_MCG = ".venv/mcg"
+VENV_DOCS = ".venv/docs"
+VENV_NOTEBOOK = ".venv/notebooks"
+
 ACTIVATE_TEST = "$(VENV_DIR)/bin/activate"
 ACTIVATE_LINT = "$(VENV_LINT)/bin/activate"
-ACTIVATE_DOCS = $(ACTIVATE_TEST)
-ACTIVATE_NOTEBOOK = $(ACTIVATE_TEST)
+ACTIVATE_BENCHMARK = "$(VENV_BENCHMARK)/bin/activate"
+ACTIVATE_EXPLAINER = "$(VENV_EXPLAINER)/bin/activate"
+ACTIVATE_MCG = "$(VENV_MCG)/bin/activate"
+ACTIVATE_DOCS = "$(VENV_DOCS)/bin/activate"
+ACTIVATE_NOTEBOOK = "$(VENV_NOTEBOOK)/bin/activate"
+
 
 LISTEN_IP ?= 127.0.0.1
 LISTEN_PORT ?= 9090
 DOCS_DIR ?= docs
-BENCHMARK_DIR = "plugins/benchmark/"
 
 venv-test: poetry-lock
 	@echo "Creating a virtualenv $(VENV_DIR)..."
@@ -47,9 +56,34 @@ venv-lint:
 		flake8==7.0.0 \
 		black==24.4.2
 
-test-mcg: venv-test
-	@echo "Testing the Model Card Gen API..."
-	@. $(ACTIVATE_TEST) && pytest model_card_gen/tests
+venv-mcg:
+	@echo "Setting up virtual environment and downloading dependencies for ModelCardGen $(VENV_MCG)..."
+	@test -d $(VENV_MCG) || python -m virtualenv $(VENV_MCG) || python3 -m virtualenv $(VENV_MCG)
+	@. $(ACTIVATE_MCG) && poetry install --with test --extras model-card && \
+	poetry run python -m pip install --no-cache-dir --no-deps \
+		asttokens==2.4.1 \
+		executing==2.0.1 \
+		ipython==8.10 \
+		jupyter-server==2.14.1 \
+		pure-eval==0.2.2 \
+		stack-data==0.6.3
+
+venv-benchmark:
+	@echo "Creating a virtual environment and downloading dependencies for Benchmarking $(VENV_BENCHMARK)..."
+	@test -d $(VENV_BENCHMARK) || python -m virtualenv $(VENV_BENCHMARK) || python3 -m virtualenv $(VENV_BENCHMARK)
+	@. $(ACTIVATE_BENCHMARK) && poetry install --with test --extras benchmark
+
+venv-explainer:
+	@echo "Setting up virtual environment and downloading dependencies for Explainers $(VENV_EXPLAINER)..."
+	@test -d $(VENV_EXPLAINER) || python -m virtualenv $(VENV_EXPLAINER) || python3 -m virtualenv $(VENV_EXPLAINER)
+	@. $(ACTIVATE_EXPLAINER) && poetry install --with test --extras explainer-all && \
+	poetry run python -m pip install --no-cache-dir --no-deps \
+		asttokens==2.4.1 \
+		executing==2.0.1 \
+		ipython==8.10 \
+		jupyter-server==2.14.1 \
+		pure-eval==0.2.2 \
+		stack-data==0.6.3
 
 install: poetry-lock
 	@poetry install --extras all
@@ -61,35 +95,42 @@ clean:
 	@rm -rf build dist intel_ai_safety.egg-info
 	@rm -rf $(VENV_DIR)
 
-test-explainer: venv-test
-	@echo "Testing the Explainer API..."
-	@. $(ACTIVATE_TEST) && pytest plugins/explainers/attributions/tests
-	@. $(ACTIVATE_TEST) && pytest plugins/explainers/attributions-hugging-face/tests
-	@. $(ACTIVATE_TEST) && pytest plugins/explainers/cam-tensorflow/tests
-	@. $(ACTIVATE_TEST) && pytest plugins/explainers/cam-pytorch/tests
-	@. $(ACTIVATE_TEST) && pytest plugins/explainers/metrics/tests
+test-mcg: venv-mcg
+	@echo "Testing the Model Card Gen API..."
+	@. $(ACTIVATE_MCG) && pytest model_card_gen/tests
 
-test-benchmark: venv-test
+test-explainer: venv-explainer
+	@echo "Testing the Explainer API..."
+	@. $(ACTIVATE_EXPLAINER) && pytest plugins/explainers/attributions/tests
+	@. $(ACTIVATE_EXPLAINER) && pytest plugins/explainers/attributions-hugging-face/tests
+	@. $(ACTIVATE_EXPLAINER) && pytest plugins/explainers/cam-tensorflow/tests
+	@. $(ACTIVATE_EXPLAINER) && pytest plugins/explainers/cam-pytorch/tests
+	@. $(ACTIVATE_EXPLAINER) && pytest plugins/explainers/metrics/tests
+
+test-benchmark: venv-benchmark
 	@echo "Testing Benchmarking..."
-	@. $(ACTIVATE_TEST) && pytest plugins/benchmark/classification_metrics/classification_metrics/tests
+	@. $(ACTIVATE_BENCHMARK) && pytest plugins/benchmark/classification_metrics/classification_metrics/tests
 
 test: test-mcg test-explainer test-benchmark
 
-venv-docs: venv-test ${DOCS_DIR}/requirements-docs.txt
+venv-docs: ${DOCS_DIR}/requirements-docs.txt
 	@echo "Installing docs dependencies..."
+	@test -d $(VENV_DOCS) || python -m virtualenv $(VENV_DOCS) || python3 -m virtualenv $(VENV_DOCS)
+	@. $(ACTIVATE_DOCS) && poetry install --with test
 	@. $(ACTIVATE_DOCS) && pip install -r ${DOCS_DIR}/requirements-docs.txt
 
 html: venv-docs
 	@echo "Building Sphinx documentation..."
-	@. $(ACTIVATE_DOCS) && $(MAKE) -C ${DOCS_DIR} clean html
+	@. $(ACTIVATE_DOCS) && $(MAKE) -C ${DOCS_DIR} clean html 
 
 test-docs: html
 	@echo "Testing Sphinx documentation..."
 	@. $(ACTIVATE_DOCS) && $(MAKE) -C ${DOCS_DIR} doctest
 
-test-notebook: venv-test
+test-notebook:
 	@echo "Testing Jupyter notebooks..."
-	@. $(ACTIVATE_NOTEBOOK) && \
+	@test -d $(VENV_NOTEBOOK) || python -m virtualenv $(VENV_NOTEBOOK) || python3 -m virtualenv $(VENV_NOTEBOOK)
+	@. $(ACTIVATE_NOTEBOOK) && poetry install --extras explainer-all && \
 	bash run_notebooks.sh $(CURDIR)/notebooks/explainer/imagenet_with_cam/ExplainingImageClassification.ipynb
 
 stylecheck: venv-lint
@@ -121,7 +162,6 @@ bump: venv-test
 
 poetry-lock:
 	@echo "Lock all project dependency versions"
-	@poetry update --lock
 	@cd explainer && poetry lock && cd -
 	@cd model_card_gen && poetry lock && cd -
 	@cd plugins/explainers/attributions-hugging-face && poetry lock && cd -

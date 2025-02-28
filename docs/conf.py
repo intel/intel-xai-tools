@@ -19,8 +19,8 @@
 #
 
 import sys, os
-from intel_ai_safety.explainer.version import __version__
-from intel_ai_safety import explainer
+from explainer.intel_ai_safety.explainer.version import __version__
+from explainer.intel_ai_safety import explainer
 
 project = "Intel® Explainable AI Tools"
 author = "IntelAI"
