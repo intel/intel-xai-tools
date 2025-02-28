@@ -66,13 +66,13 @@ python ./scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATAS
 cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASETS}_accuracy/metrics.json
 ```
 
-If you are using an `hpu` device, you can instantiate the Gaudi configuration by passing the `GAUDI_CONFIG_NAME` variable with the appropriate configuration name. The default value for the device name (`device`) is `hpu`.
+If you are using an `hpu` device, the default value for the device name (`device`) is `hpu`.
+
 ```bash
 MODEL_PATH=Intel/toxic-prompt-roberta
 DATASETS=tc
-GAUDI_CONFIG_NAME=Habana/roberta-base
 DEVICE_NAME=hpu
-python ./scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASETS} -g_config ${GAUDI_CONFIG_NAME} --device ${DEVICE_NAME}
+python ./scripts/benchmark_classification_metrics.py -m ${MODEL_PATH} -d ${DATASETS} --device ${DEVICE_NAME}
 cat ${MODEL_PATH%%/*}/results/${MODEL_PATH##*/}_${DATASETS}_accuracy/metrics.json 
 ```
 
