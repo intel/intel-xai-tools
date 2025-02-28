@@ -17,20 +17,33 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+import habana_frameworks.torch.core as htcore
+htcore.hpu_set_env()
+
 import os
 from pathlib import Path
 import json
 import pandas as pd
 import numpy as np
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    DataCollatorWithPadding,
+)
+
+from datasets import Dataset
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+
 import evaluate
 import torch
-from torch.utils.data import Dataset
-from torch.nn.functional import softmax
 import argparse
 from sklearn.metrics import precision_recall_curve, auc
 
-os.environ["TOKENIZERS_PARALLELISM"] = "true"
+
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def parse_args():
@@ -49,51 +62,7 @@ def parse_args():
                         testing model from hugging face hub.')
     parser.add_argument('-p', '--dataset-path', help='Required in case of Jigsaw dataset. Path of dataset file stored locally.')
     parser.add_argument('--device', type=str, default='hpu', help='Optional. Device Type: cpu or hpu. Will default to hpu.')
-    parser.add_argument('-g_config','--gaudi_config_name', type=str, default='Habana/roberta-base', help='Optional. Name of the gaudi configuration. Will Default to Habana/roberta-base.')
     return parser.parse_args()
-
-
-class BertoxDataset(Dataset):
-    def __init__(self, encodings, labels):
-        self.encodings = encodings
-        self.labels = labels
-
-    def __getitem__(self, idx):
-        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
-        item["labels"] = torch.tensor(self.labels[idx])
-        return item
-
-    def __len__(self):
-        return len(self.labels)
-
-
-def validate_metrics(predict_results):
-    roc_auc = load_metric("roc_auc")
-    n_samples = len(predict_results.label_ids)
-    probabilities = softmax(torch.Tensor(predict_results.predictions))[:, 1]
-    auroc = roc_auc.compute(prediction_scores=probabilities, references=predict_results.label_ids)
-    preds = np.argmax(predict_results.predictions, axis=-1)
-
-    n_correct = 0
-    for i in range(n_samples):
-        if preds[i] == predict_results.label_ids[i]:
-            n_correct += 1
-    accuracy = n_correct / n_samples
-
-    print(f'My accuracy: {accuracy}.\nEvaluate accuracy: {predict_results.metrics["test_accuracy"]} ')
-    print(f'My auroc: {auroc}.\nEvaluate accuracy: {predict_results.metrics["test_auroc"]} ')
-
-
-def read_test_tc_split(csv_path):
-    """
-    Reads the test split for the ToxicChat dataset.
-    """
-    df = pd.read_csv(csv_path)
-    texts = list(df.user_input)
-    labels = list(df.toxicity)
-
-    return texts, labels
-
 
 def read_test_jigsaw_split(csv_path):
     """
@@ -111,26 +80,6 @@ def read_test_jigsaw_split(csv_path):
             f"Error loading test dataset for Jigsaw Unintended Bias. Please ensure the CSV file path is correct and the file contains the required columns: 'comment_text' and 'toxicity'."
         )
 
-
-def generate_datasets(test_texts, test_labels, tokenizer):
-    test_encodings = tokenizer(test_texts, truncation=True, padding=True)
-    test_dataset = BertoxDataset(test_encodings, test_labels)
-
-    return test_dataset
-
-
-print("loading accuracy metric")
-accuracy = evaluate.load("accuracy")
-print("loading auroc metric")
-roc_auc = evaluate.load("roc_auc")
-print("loading f1 metric")
-f1_metric = evaluate.load("f1")
-print("loading precision metric")
-precision_metric = evaluate.load("precision")
-print("loading recall metric")
-recall_metric = evaluate.load("recall")
-
-
 def load_model(model_path):
     try:
         model = AutoModelForSequenceClassification.from_pretrained(model_path)
@@ -139,35 +88,49 @@ def load_model(model_path):
     except:
         raise EnvironmentError("Please make sure that a valid model path is provided.")
 
+def compute_metrics(all_preds, all_labels, all_probs):
+    logger.info("loading accuracy metric")
+    accuracy = evaluate.load("accuracy")
+    logger.info("loading auroc metric")
+    roc_auc = evaluate.load("roc_auc")
+    logger.info("loading f1 metric")
+    f1_metric = evaluate.load("f1")
+    logger.info("loading precision metric")
+    precision_metric = evaluate.load("precision")
+    logger.info("loading recall metric")
+    recall_metric = evaluate.load("recall")
 
-def compute_metrics(eval_pred):
+    acc = accuracy.compute(predictions=all_preds, references=all_labels)
+    logger.info(f"Accuracy: {acc}")
+    auroc = roc_auc.compute(prediction_scores=all_probs, references=all_labels)
+    logger.info(f"AUROC: {auroc}")
+    f1 = f1_metric.compute(predictions=all_preds, references=all_labels)
+    logger.info(f"F1: {f1}")
+    precision = precision_metric.compute(predictions=all_preds, references=all_labels)
+    logger.info(f"Precision: {precision}")
+    recall = recall_metric.compute(predictions=all_preds, references=all_labels)
+    logger.info(f"Recall: {recall}")
 
-    logits, labels = eval_pred
-    probabilities = softmax(torch.Tensor(logits))[:, 1]
-    predictions = np.argmax(logits, axis=-1)
-
-    acc = accuracy.compute(predictions=predictions, references=labels)
-    auroc = roc_auc.compute(prediction_scores=probabilities, references=labels)
-    f1 = f1_metric.compute(predictions=predictions, references=labels)
-    precision = precision_metric.compute(predictions=predictions, references=labels)
-    recall = recall_metric.compute(predictions=predictions, references=labels)
-
-    false_positives = np.sum((predictions == 1) & (labels == 0))
-    true_negatives = np.sum((predictions == 0) & (labels == 0))
+    false_positives = np.sum((np.array(all_preds) == 1) & (np.array(all_labels) == 0))
+    logger.info(f"False Positives: {false_positives}")
+    true_negatives = np.sum((np.array(all_preds) == 0) & (np.array(all_labels) == 0))
+    logger.info(f"True Negatives: {true_negatives}")
     fpr = false_positives / (false_positives + true_negatives)
+    logger.info(f"False Positive Rate: {fpr}")
 
-    precision_temp, recall_temp, thresholds = precision_recall_curve(labels, predictions)
+    precision_temp, recall_temp, thresholds = precision_recall_curve(all_labels, all_preds)
     auc_precision_recall = auc(recall_temp, precision_temp)
-    return {
-        "accuracy": acc["accuracy"],
-        "auroc": auroc["roc_auc"],
-        "f1": f1["f1"],
-        "precision": precision["precision"],
-        "recall": recall["recall"],
-        "fpr": fpr,
-        "auprc": auc_precision_recall,
-    }
+    logger.info(f"AUC Precision Recall: {auc_precision_recall}")
 
+    return {
+            "accuracy": acc["accuracy"],
+            "auroc": auroc["roc_auc"],
+            "f1": f1["f1"],
+            "precision": precision["precision"],
+            "recall": recall["recall"],
+            "fpr": fpr,
+            "auprc": auc_precision_recall,
+    }
 
 def save_predictions(prediction_results, input_texts, results_path, CL):
 
@@ -196,67 +159,74 @@ def save_predictions(prediction_results, input_texts, results_path, CL):
 
 def main():
     args = parse_args()
-    if args.device == "hpu":
-        from optimum.habana import GaudiTrainer, GaudiTrainingArguments
-    CL = False
-    if "citizenlab" in args.model_path:
-        CL = True
+    logger.info(f"Arguments: {args}")
 
     CHECKPOINT_NAME = os.path.basename(args.model_path)
-    if CL:
-        WORKFLOW_DIR = Path(args.model_path).parent.absolute()
-    elif args.results_path is None:
+    if args.results_path is None:
         WORKFLOW_DIR = Path(args.model_path).parent.absolute().parent.absolute()
     else:
         WORKFLOW_DIR = args.results_path
-
     TEST_RESULTS_PATH = os.path.join(WORKFLOW_DIR, "results", f"{CHECKPOINT_NAME}_{args.dataset_name}_accuracy")
-    print(f"Saving results in {TEST_RESULTS_PATH}")
+
+    logger.info(f"Saving results in {TEST_RESULTS_PATH}")
 
     if not os.path.exists(TEST_RESULTS_PATH):
         os.makedirs(TEST_RESULTS_PATH)
 
-    if args.dataset_name in ["jigsaw", "tc"]:
-
-        if args.dataset_name == "jigsaw":
-            DATA_PATH = args.dataset_path
-            if not DATA_PATH or not os.path.exists(DATA_PATH):
-                raise FileNotFoundError(f"The specified dataset path does not exist or is not a directory.")
-            DATA_PATH = Path(DATA_PATH)
-            test_texts, test_labels = read_test_jigsaw_split(DATA_PATH)
-        else:
-            DATA_PATH = "hf://datasets/lmsys/toxic-chat/data/0124/toxic-chat_annotation_test.csv"
-            test_texts, test_labels = read_test_tc_split(DATA_PATH)
-
+    if args.dataset_name in ["tc"]:
+        DATA_PATH = "hf://datasets/lmsys/toxic-chat/data/0124/toxic-chat_annotation_test.csv"
+        df = pd.read_csv(DATA_PATH)
+        test_dataset = Dataset.from_pandas(df)
     else:
         print(f"Support for dataset is coming soon...")
         exit(1)
 
-    if CL:
-        swap = {0: 1, 1: 0}
-        test_labels = [swap[label] for label in test_labels]
-
+    # load models
     model, tokenizer = load_model(args.model_path)
 
-    test_dataset = generate_datasets(test_texts, test_labels, tokenizer)
-    training_args = GaudiTrainingArguments(
-        output_dir=TEST_RESULTS_PATH,
-        use_habana=True,
-        use_lazy_mode=True,
-        gaudi_config_name=args.g_config,
-    )
+    # get the test dataset
+    def preprocess_function(examples):
+        return tokenizer(examples["user_input"], max_length=128)
 
-    trainer = GaudiTrainer(
-        model=model,  # the instantiated 🤗 Transformers model to be trained
-        args=training_args,  # training arguments, defined above
-        eval_dataset=test_dataset,  # evaluation dataset
-        compute_metrics=compute_metrics,
-    )
+    test_dataset = test_dataset.map(preprocess_function, batched=False, remove_columns=["conv_id", "user_input", "human_annotation", "jailbreaking", "model_output", "openai_moderation"])
 
-    results = trainer.predict(test_dataset)
+    logger.info(f"Created toxic_chat test dataset.")
 
-    save_predictions(results, test_texts, os.path.join(TEST_RESULTS_PATH, "predictions.csv"), CL)
-    json.dump(results.metrics, open(os.path.join(TEST_RESULTS_PATH, "metrics.json"), "w"))
+    collator = DataCollatorWithPadding(tokenizer)
+    test_dataloader = DataLoader(test_dataset, batch_size=64, collate_fn=collator)
+
+    device = torch.device("hpu")
+    logger.info(f"Using device: {device}")
+    model.to(device)
+    model.eval()
+
+    all_preds = []
+    all_labels = []
+    all_probs = []
+
+    with torch.no_grad():
+        for batch in tqdm(test_dataloader, desc="Evaluating", unit="batch"):
+            # Move data to Habana device
+            input_ids = torch.tensor(batch["input_ids"]).to(device)
+            attention_mask = torch.tensor(batch["attention_mask"]).to(device)
+            labels = torch.tensor(batch["toxicity"]).to(device)
+
+            # Forward pass
+            outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+            probabilities = torch.nn.functional.softmax(outputs.logits)[:, 1]
+            predictions = torch.argmax(outputs.logits, dim=-1)
+
+            all_preds.extend(predictions.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+            all_probs.extend(probabilities.cpu().numpy())
+
+    logger.info(f"Predictions: {all_preds[:20]}")
+    logger.info(f"Labels: {all_labels[:20]}")
+    logger.info(f"Probabilities: {all_probs[:20]}")
+
+    results = compute_metrics(all_preds, all_labels, all_probs)
+
+    json.dump(results, open(os.path.join(TEST_RESULTS_PATH, "metrics.json"), "w"))
 
 
 if __name__ == "__main__":
