@@ -26,7 +26,7 @@ python = ">=3.9, <3.11"
 pandas = "1.5.3"
 ipython = "*"
 dataclasses = '0.6'
-Jinja2 = '3.1.4'
+Jinja2 = "3.1.5"
 jsonschema = {version='4.17.3', extras = ['format-nongpl']}
 plotly = '5.20.0'
 semantic-version = '2.10.0'
