@@ -24,7 +24,7 @@ optional = true
 [tool.poetry.group.test.dependencies]
 pytest = '8.1.1'
 pytest-cov = '5.0.0'
-transformers = '4.39.0'
+transformers = '4.48.0'
 sentencepiece = '0.2.0'
 torch = {version = "2.2.0", source = "pytorch-cpu"}
 matplotlib = '3.8.0'
