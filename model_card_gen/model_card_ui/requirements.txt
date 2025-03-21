@@ -1,8 +1,4 @@
-streamlit==1.37.0
-numpy==1.24.4
-pandas==1.5.3
-lxml==4.9.1
-altair==5.3.0
-plotly==5.20.0
-requests==2.32.0
-git+https://github.com/intel/intel-xai-tools.git@v1.2.0#subdirectory=model_card_gen
+altair
+lxml
+streamlit
+intel-ai-safety-model-card-gen @ file:///${PWD}/../../model_card_gen

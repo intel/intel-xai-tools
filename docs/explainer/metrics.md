@@ -1,13 +1,13 @@
 
 (metrics)=
 
-```{include} ../../explainer/metrics/README.md
+```{include} ../../plugins/explainers/metrics/README.md
 ```
 ## API Refrence
 
 ```{eval-rst}
 
-.. automodule:: explainer.metrics.metrics
+.. automodule:: intel_ai_safety.explainer.metrics.metrics
    :members:
 
 ```

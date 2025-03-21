@@ -81,9 +81,13 @@ class DeepExplainer(FeatureAttributions):
         self.explainer = self.shap.DeepExplainer(model, background_images)
         self.shap_values = self.explainer.shap_values(target_images)
         self.labels = labels
-
         if is_torch_tensor(self.target_images):
-            self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
+            # old broken version
+            #self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
+            # new version for fix
+            #self.shap_values = [np.swapaxes(np.swapaxes(s, 0, 2), 0, 1) for s in self.shap_values]
+            #refactor of fix
+            self.shap_values = np.transpose(self.shap_values, (0, 2, 3, 1, 4))
             self.target_images = -np.swapaxes(np.swapaxes(self.target_images.numpy(), 1, -1), 1, 2)
 
     def visualize(self) -> None:
@@ -137,7 +141,7 @@ class GradientExplainer(FeatureAttributions):
         self.shap_values, self.indexes = self.explainer.shap_values(self.target_images, ranked_outputs=ranked_outputs)
 
         if is_torch_tensor(self.target_images):
-            self.shap_values = [np.swapaxes(np.swapaxes(s, 1, -1), 1, 2) for s in self.shap_values]
+            self.shap_values = np.transpose(self.shap_values, (0, 2, 3, 1, 4))
             self.target_images = -np.swapaxes(np.swapaxes(self.target_images.numpy(), 1, -1), 1, 2)
 
         if self.indexes.shape == (1, 1):

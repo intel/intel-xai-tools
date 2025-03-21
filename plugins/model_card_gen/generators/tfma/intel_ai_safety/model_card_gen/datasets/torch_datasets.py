@@ -20,7 +20,7 @@
 
 from numpy.typing import NDArray as Array
 from typing import Any
-from intel_ai_safety.model_card_gen.datasets import BaseDataset
+from plugins.model_card_gen.generators.tfma.intel_ai_safety.model_card_gen.datasets import BaseDataset
 import random
 import numpy as np
 

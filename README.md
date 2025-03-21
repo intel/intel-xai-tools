@@ -18,8 +18,8 @@ There are two Python* components in the repository:
 ## Get Started
 
 ### Requirements
-* Linux system or WSL2 on Windows (validated on Ubuntu* 20.04/22.04 LTS)
-* Python 3.9, 3.10
+* Linux system or WSL2 on Windows (validated on Ubuntu* 22.04/24.04 LTS)
+* Python 3.10, 3.11
 * Install required OS packages with `apt-get install build-essential python3-dev`
 * git (only required for the "Developer Installation")
 * Poetry
@@ -97,7 +97,7 @@ There are two ways to do this:
 
    b. Or `conda`:
       ```bash
-      conda create --name xai_env python=3.9
+      conda create --name xai_env python=3.10
       conda activate xai_env
       ```
 2. Install to current enviornment

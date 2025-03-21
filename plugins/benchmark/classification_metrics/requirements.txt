@@ -1,4 +1,5 @@
 evaluate
+datasets
 loguru
 pandas
 scikit-learn

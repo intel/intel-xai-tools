@@ -18,7 +18,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from intel_ai_safety.model_card_gen.datasets import BaseDataset
+from plugins.model_card_gen.generators.tfma.intel_ai_safety.model_card_gen.datasets import BaseDataset
 
 
 class TensorflowDataset(BaseDataset):
