@@ -55,23 +55,18 @@ RUN apt-get update && \
     python${PY_VER}-dev
     
 RUN python${PY_VER} -m pip install --no-cache-dir \
-    'poetry==1.8.2'
+    'poetry==2.1.1'
 
 COPY . ${APP_DIR}
 WORKDIR ${APP_DIR}
 
 RUN /usr/local/bin/poetry config virtualenvs.create false && \
     poetry install --no-root --with test --extras model-card && \
-	poetry run python -m pip install --no-cache-dir --no-deps \
-		asttokens==2.4.1 \
-		executing==2.0.1 \
-		ipython==8.10 \
-		jupyter-server==2.14.1 \
-		pure-eval==0.2.2 \
-		stack-data==0.6.3 && \
+    poetry run python -m pip install --no-cache-dir \
+    'jupyter==1.1.1' && \
     rm -rf ${HOME}/.cache/pypoetry ${HOME}/.cache/pip
 
-# Production MCG image
+# MCG base runtime image
 FROM base as runtime
 
 ARG APP_DIR=/intel-xai
@@ -96,16 +91,22 @@ COPY --from=builder --chown=${NON_ROOT_USER}:${NON_ROOT_USER} ${APP_DIR} ${APP_D
 ENV VIRTUAL_ENV="${APP_DIR}/.venv" \
     PATH="${APP_DIR}/.venv/bin:${PATH}"
 
+RUN echo "source activate ${VIRTUAL_ENV}" >> ~/.bashrc
+
+# MCG runtime image
+FROM runtime as mcg
+
 WORKDIR ${APP_DIR}/notebooks/model_card_gen
 
 EXPOSE 8888
-
-RUN echo "source activate ${VIRTUAL_ENV}" >> ~/.bashrc
 
 CMD ["bash", "-c", "source activate ${VIRTUAL_ENV} && jupyter notebook --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 HEALTHCHECK --interval=1m --timeout=5s --retries=5 \
   CMD jupyter server list || exit 1
+
+# MCG UI runtime image
+FROM runtime as mcg_ui
 
 WORKDIR ${APP_DIR}/model_card_gen/model_card_ui
 

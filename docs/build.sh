@@ -36,6 +36,7 @@ elif [[ ${COMMAND} == "html" ]]; then
 
     # Convert links to go to sphinx docs
     sed -i 's#DATASETS.md#<datasets>#g' ${TEMP_DIR}/Welcome.md
+    sed -i 's#MODELS.md#<models>#g' ${TEMP_DIR}/Welcome.md
     sed -i 's#notebooks\#model-card-generator-tutorial-notebooks#<notebooks>#g' ${TEMP_DIR}/Welcome.md
     sed -i 's#notebooks\#explainer-tutorial-notebooks#<notebooks>#g' ${TEMP_DIR}/Welcome.md
 

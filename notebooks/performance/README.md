@@ -28,18 +28,18 @@ In order to compare AI Tools and stock environments, two isolated Conda environm
 
 ### __Stock Conda environment__
 ```bash
-conda create -n stock python=3.9
+conda create -n stock python=3.10
 conda activate stock
 pip install intel-xai --no-deps
-pip install tensorflow==2.14.0 torch=2.2.0 ipywidgets notebook opencv-python shap
+pip install tensorflow==2.17.1 torch=2.5.1 ipywidgets notebook opencv-python shap
 ```
 
 ### __AI Tools Conda environment__
 ```bash
-conda create -n intel -c intel python=3.9
+conda create -n intel -c intel python=3.10
 conda activate intel
 conda install -c intel --deps-only shap
 conda install --no-deps shap
 pip install --no-deps intel-xai
-conda install -c intel pytorch=2.2.0 tensorflow=2.14.0 ipywidgets matplotlib notebook opencv
+conda install -c intel pytorch=2.5.1 tensorflow=2.17.1 ipywidgets matplotlib notebook opencv
 ```

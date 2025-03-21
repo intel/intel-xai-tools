@@ -10,7 +10,7 @@ try:
 except ImportError:
     module_logger.debug("Could not import torch, required if using a PyTorch model")
 
-MODEL_TYPE_NAMES = ["torch.nn.Module", "keras.engine.sequential.Sequential", "keras.engine.functional.Functional"]
+MODEL_TYPE_NAMES = ["torch.nn.Module", "keras.engine.sequential.Sequential", "keras.engine.functional.Functional", "keras.src.models.functional.Functional"]
 
 
 def is_tf_model(model):
@@ -19,7 +19,8 @@ def is_tf_model(model):
     is_keras_functional = str(type(model)).endswith("keras.engine.functional.Functional'>")
     is_keras_src_functional = str(type(model)).endswith("keras.src.engine.functional.Functional'>")
     is_keras_src_sequential = str(type(model)).endswith("keras.src.engine.sequential.Sequential'>")
-    return is_keras_sequential | is_keras_functional | is_keras_src_functional | is_keras_src_sequential
+    is_keras_src_models_functional = str(type(model)).endswith("keras.src.models.functional.Functional'>")
+    return is_keras_sequential | is_keras_functional | is_keras_src_functional | is_keras_src_sequential | is_keras_src_models_functional
 
 
 def is_pt_model(model):

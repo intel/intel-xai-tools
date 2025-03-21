@@ -3,7 +3,7 @@
 ## Get Started
 
 ### Requirements
-* Linux system or WSL2 on Windows (validated on Ubuntu* 20.04/22.04 LTS)
+* Linux system or WSL2 on Windows (validated on Ubuntu* 22.04/24.04 LTS)
 * Python 3.10
 * Poetry
 

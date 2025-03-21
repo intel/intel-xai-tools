@@ -1,11 +1,11 @@
 (attributions)=
 
-```{include} ../../explainer/attributions/README.md
+```{include} ../../plugins/explainers/attributions/README.md
 ```
 
 ```{eval-rst}
 
-.. automodule:: explainer.attributions.attributions
+.. automodule:: intel_ai_safety.explainer.attributions
    :members:
 
 ```

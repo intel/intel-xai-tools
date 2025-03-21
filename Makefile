@@ -40,33 +40,18 @@ DOCS_DIR ?= docs
 venv-test: poetry-lock
 	@echo "Creating a virtualenv $(VENV_DIR)..."
 	@poetry install --with test --extras all
-	@poetry run python -m pip install --no-cache-dir --no-deps \
-		asttokens==2.4.1 \
-		executing==2.0.1 \
-		ipython==8.10 \
-		jupyter-server==2.14.1 \
-		pure-eval==0.2.2 \
-		stack-data==0.6.3
 
 venv-lint: 
 	@echo "Creating a virtual environment for linting $(VENV_LINT)..."
 	@test -d $(VENV_LINT) || python -m virtualenv $(VENV_LINT) || python3 -m virtualenv $(VENV_LINT)
-	@echo "Installing lint dependencies..."
 	@. $(ACTIVATE_LINT) && pip install --no-cache-dir --no-deps \
-		flake8==7.0.0 \
-		black==24.4.2
+		black==25.1.0 \
+		flake8==7.1.2
 
 venv-mcg:
 	@echo "Setting up virtual environment and downloading dependencies for ModelCardGen $(VENV_MCG)..."
 	@test -d $(VENV_MCG) || python -m virtualenv $(VENV_MCG) || python3 -m virtualenv $(VENV_MCG)
-	@. $(ACTIVATE_MCG) && poetry install --with test --extras model-card && \
-	poetry run python -m pip install --no-cache-dir --no-deps \
-		asttokens==2.4.1 \
-		executing==2.0.1 \
-		ipython==8.10 \
-		jupyter-server==2.14.1 \
-		pure-eval==0.2.2 \
-		stack-data==0.6.3
+	@. $(ACTIVATE_MCG) && poetry install --with test --extras model-card
 
 venv-benchmark:
 	@echo "Creating a virtual environment and downloading dependencies for Benchmarking $(VENV_BENCHMARK)..."
@@ -76,14 +61,7 @@ venv-benchmark:
 venv-explainer:
 	@echo "Setting up virtual environment and downloading dependencies for Explainers $(VENV_EXPLAINER)..."
 	@test -d $(VENV_EXPLAINER) || python -m virtualenv $(VENV_EXPLAINER) || python3 -m virtualenv $(VENV_EXPLAINER)
-	@. $(ACTIVATE_EXPLAINER) && poetry install --with test --extras explainer-all && \
-	poetry run python -m pip install --no-cache-dir --no-deps \
-		asttokens==2.4.1 \
-		executing==2.0.1 \
-		ipython==8.10 \
-		jupyter-server==2.14.1 \
-		pure-eval==0.2.2 \
-		stack-data==0.6.3
+	@. $(ACTIVATE_EXPLAINER) && poetry install --with test --extras explainer-all
 
 install: poetry-lock
 	@poetry install --extras all
@@ -121,7 +99,7 @@ venv-docs: ${DOCS_DIR}/requirements-docs.txt
 
 html: venv-docs
 	@echo "Building Sphinx documentation..."
-	@. $(ACTIVATE_DOCS) && $(MAKE) -C ${DOCS_DIR} clean html 
+	@. $(ACTIVATE_DOCS) && $(MAKE) -C ${DOCS_DIR} clean html
 
 test-docs: html
 	@echo "Testing Sphinx documentation..."
@@ -131,6 +109,7 @@ test-notebook:
 	@echo "Testing Jupyter notebooks..."
 	@test -d $(VENV_NOTEBOOK) || python -m virtualenv $(VENV_NOTEBOOK) || python3 -m virtualenv $(VENV_NOTEBOOK)
 	@. $(ACTIVATE_NOTEBOOK) && poetry install --extras explainer-all && \
+		poetry run pip install --no-cache-dir jupyter && \
 	bash run_notebooks.sh $(CURDIR)/notebooks/explainer/imagenet_with_cam/ExplainingImageClassification.ipynb
 
 stylecheck: venv-lint

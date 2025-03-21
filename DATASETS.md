@@ -15,3 +15,8 @@ This is a comprehensive list of public datasets used by this repository.
 | [SMS Spam Collection](https://archive.ics.uci.edu/dataset/228/sms+spam+collection) | PyTorch | Text Classification |
 | [ToxicChat](https://huggingface.co/datasets/lmsys/toxic-chat) | PyTorch | Toxicity Model Benchmarking |
 | [Jigsaw Unintended Bias](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | PyTorch | Toxicity Model Benchmarking |
+| [OpenAI Moderation](https://github.com/openai/moderation-api-release/tree/main) | PyTorch | Toxicity Model Benchmarking |
+| [SurgeAI Toxicity](https://github.com/surge-ai/toxicity) | PyTorch | Toxicity Model Benchmarking |
+| [ToxiGen](https://huggingface.co/datasets/toxigen/toxigen-data) | PyTorch | Toxicity Model Benchmarking |
+| [XSTest](https://huggingface.co/datasets/walledai/XSTest) | PyTorch | Toxicity Model Benchmarking |
+| [BeaverTails](https://huggingface.co/datasets/PKU-Alignment/BeaverTails) | PyTorch | Toxicity Model Benchmarking |

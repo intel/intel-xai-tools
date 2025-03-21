@@ -58,17 +58,16 @@ RUN apt-get update && \
     python${PY_VER}-dev
 
 RUN python${PY_VER} -m pip install --no-cache-dir \
-    'poetry==1.8.2'
+    'poetry==2.1.1'
 
 COPY . ${APP_DIR}
 WORKDIR ${APP_DIR}
 
 RUN /usr/local/bin/poetry config virtualenvs.create false && \
     poetry install --extras explainer --extras explainer-all && \
+    poetry run python -m pip install --no-cache-dir \
+    'jupyter==1.1.1' && \
     poetry run python -m pip install --no-cache-dir -r notebooks/explainer/requirements.txt && \
-    poetry run python -m pip install \
-        'ipython==8.10' \
-        'jupyter_server==2.14.1' && \
     rm -rf ${HOME}/.cache/pypoetry ${HOME}/.cache/pip
 
 # Production Explainer image

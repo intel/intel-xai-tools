@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "intel-ai-safety-explainer-metrics"
-version = "1.2.0"
+version = "1.3.0"
 description = ""
 authors = ["IntelAI <IntelAI@intel.com>"]
 readme = "README.md"
@@ -9,16 +9,16 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9, <3.11"
+python = ">=3.10, <3.12"
 intel-ai-safety-explainer = {version = "*"}
-matplotlib = '3.8.3'
-numpy = '1.24.4'
-pandas = '1.5.3'
-plotly = '5.20.0'
-scikit-learn = '1.5.0'
-scikit-plot = '0.3.7'
-scipy = '1.12.0'
-seaborn = '0.13.2'
+matplotlib = "3.10.1"
+numpy = "1.26.4"
+pandas = "2.2.3"
+plotly = "6.0.0"
+scikit-learn = "1.6.1"
+scikit-plot = "0.3.7"
+scipy = "1.15.2"
+seaborn = "0.13.2"
 
 [tool.poetry.group.local.dependencies]
 intel-ai-safety-explainer = {path = "../../../explainer"}
@@ -28,11 +28,11 @@ intel-ai-safety = {path = "../../.."}
 optional = true
 
 [tool.poetry.group.test.dependencies]
-pytest = '8.1.1'
-pytest-cov = '5.0.0'
-torch = {version = "2.2.0", source = "pytorch-cpu"}
-torchvision = {version = "0.17.0", source = "pytorch-cpu"}
-deepdiff = '6.7.1'
+deepdiff = "8.3.0"
+pytest = "8.3.5"
+pytest-cov = "6.0.0"
+torch = {version = "2.5.1", source = "pytorch-cpu"}
+torchvision = {version = "0.20.1", source = "pytorch-cpu"}
 
 [[tool.poetry.source]]
 name = "pytorch-cpu"
@@ -42,4 +42,3 @@ priority = "explicit"
 [build-system]
 requires = ["poetry"]
 build-backend = "poetry.core.masonry.api"
-

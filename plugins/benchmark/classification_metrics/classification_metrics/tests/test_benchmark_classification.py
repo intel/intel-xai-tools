@@ -18,7 +18,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 import pytest
-from scripts.benchmark_classification_metrics import load_model, read_test_tc_split, read_test_jigsaw_split
+from scripts.benchmark_classification_metrics import load_model, read_test_split_jigsaw, read_test_split_tc
 
 MODEL_PATHS = ["dummy_model_path", "Intel/toxic-prompt-roberta"]
 
@@ -40,7 +40,7 @@ def test_model_loading(invalid_model_path, valid_model_path):
 def test_dataset_loading():
     csv_path = "dummy_path"
     with pytest.raises(Exception) as exception_error:
-        read_test_jigsaw_split(csv_path)
+        read_test_split_jigsaw(csv_path)
     assert (
         "Error loading test dataset for Jigsaw Unintended Bias. Please ensure the CSV file path is correct and the file contains the required columns: 'comment_text' and 'toxicity'."
         in str(exception_error.value)
@@ -50,4 +50,4 @@ def test_dataset_loading():
 @pytest.mark.common
 def test_tc_dataset_loading():
     csv_path = "hf://datasets/lmsys/toxic-chat/data/0124/toxic-chat_annotation_test.csv"
-    assert read_test_tc_split(csv_path)
+    assert read_test_split_tc(csv_path)

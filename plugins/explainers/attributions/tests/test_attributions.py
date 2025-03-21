@@ -41,18 +41,10 @@ def test_DeepExplainer(custom_CNN, request):
     Test every way to instantiate DeepExplainer and PTDeepExplainer objects
     """
     model, X_test, class_names, y_test = request.getfixturevalue(custom_CNN)
-    if isinstance(X_test, torch.Tensor) == True:
-        deViz = attributions.DeepExplainer(model, X_test[:2], X_test[2:4], class_names)
-        assert isinstance(deViz, attributions.DeepExplainer)
-        deViz = attributions.DeepExplainer(model, X_test[:2], X_test[2:4], class_names)
-        assert isinstance(deViz, attributions.DeepExplainer)
-        deViz = attributions.deep_explainer(model, X_test[:2], X_test[2:4], class_names)
-        assert isinstance(deViz, attributions.DeepExplainer)
-    else:
-        deViz = attributions.DeepExplainer(model, X_test[:2], X_test[2:4], class_names)
-        assert isinstance(deViz, attributions.DeepExplainer)
-        deViz = attributions.deep_explainer(model, X_test[:2], X_test[2:4], class_names)
-        assert isinstance(deViz, attributions.DeepExplainer)
+    deViz = attributions.DeepExplainer(model, X_test[:2], X_test[2:4], class_names)
+    assert isinstance(deViz, attributions.DeepExplainer)
+    deViz = attributions.deep_explainer(model, X_test[:2], X_test[2:4], class_names)
+    assert isinstance(deViz, attributions.DeepExplainer)
     deViz.visualize()
 
 
