@@ -1,6 +1,6 @@
 (cam)=
 
-```{include} ../../explainer/cam/README.md
+```{include} ../../plugins/explainers/cam-pytorch/README.md
 ```
 
 ```{eval-rst}

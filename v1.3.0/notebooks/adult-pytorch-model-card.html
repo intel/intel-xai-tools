@@ -1,0 +1,456 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generating Model Card with PyTorch &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#running-notebooks">Running Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#support">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Intel/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Generating Model Card with PyTorch</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/adult-pytorch-model-card.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Generating-Model-Card-with-PyTorch">
+<h1>Generating Model Card with PyTorch<a class="headerlink" href="#Generating-Model-Card-with-PyTorch" title="Link to this heading"></a></h1>
+<p>This notebook intends to provide an example of generating a model card for a PyTorch model using Intel Model Card Generator.</p>
+<ol class="arabic simple">
+<li><p>Data Collection and Prerpocessing from Adult Dataset</p></li>
+<li><p><a class="reference internal" href="#2.-Build-Model"><span class="std std-ref">Build Multilayer Neural NetWork using PyTorch</span></a></p></li>
+<li><p><a class="reference internal" href="#3.-Train-Model"><span class="std std-ref">Train Model</span></a></p></li>
+<li><p><a class="reference internal" href="#4.-Save-Model"><span class="std std-ref">Save Model</span></a></p></li>
+<li><p><a class="reference internal" href="#5.-Generate-Model-Card"><span class="std std-ref">Generate Model Card with Intel Model Card Generator</span></a></p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+import numpy as np
+import torch
+import torch.nn as nn
+from torch.nn.functional import relu
+import os
+from sklearn.datasets import fetch_openml
+from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
+from plugins.model_card_gen.generators.tfma.intel_ai_safety.model_card_gen.datasets import PytorchDataset
+from torch.utils.data import Dataset
+</pre></div>
+</div>
+</div>
+<section id="1.-Data-Collection-and-Preprocessing">
+<h2>1. Data Collection and Preprocessing<a class="headerlink" href="#1.-Data-Collection-and-Preprocessing" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>CATEGORICAL_FEATURE_KEYS = [
+    &#39;workclass&#39;,
+    &#39;marital-status&#39;,
+    &#39;occupation&#39;,
+    &#39;relationship&#39;,
+    &#39;race&#39;,
+    &#39;sex&#39;,
+    &#39;native-country&#39;,
+]
+
+NUMERIC_FEATURE_KEYS = [
+    &#39;age&#39;,
+    &#39;capital-gain&#39;,
+    &#39;capital-loss&#39;,
+    &#39;hours-per-week&#39;,
+    &#39;education-num&#39;
+]
+
+
+DROP_COLUMNS = [&#39;fnlwgt&#39;, &#39;education&#39;]
+
+LABEL_KEY = &#39;label&#39;
+</pre></div>
+</div>
+</div>
+<section id="Fetch-Data-from-OpenML">
+<h3>Fetch Data from OpenML<a class="headerlink" href="#Fetch-Data-from-OpenML" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data = fetch_openml(data_id=1590, as_frame=True)
+raw_data = data.data
+raw_data[&#39;label&#39;] = data.target
+adult_data = raw_data.copy()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Drop-Unneeded-Columns">
+<h3>Drop Unneeded Columns<a class="headerlink" href="#Drop-Unneeded-Columns" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>adult_data = adult_data.drop(DROP_COLUMNS, axis=1)
+adult_data = pd.get_dummies(adult_data, columns=CATEGORICAL_FEATURE_KEYS)
+adult_data[&#39;label&#39;] = adult_data[&#39;label&#39;].map({&#39;&lt;=50K&#39;: 0, &#39;&gt;50K&#39;: 1})
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Train-Test-Split">
+<h3>Train Test Split<a class="headerlink" href="#Train-Test-Split" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Convert features and labels to numpy arrays.
+labels = adult_data[&#39;label&#39;].to_numpy()
+adult_data = adult_data.drop([&#39;label&#39;], axis=1)
+feature_names = list(adult_data.columns)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class AdultDataset(Dataset):
+    &quot;&quot;&quot;Face Landmarks dataset.&quot;&quot;&quot;
+
+    def __init__(self, df, labels, transform=None):
+        self.data = self.make_input_tensor(df)
+        self.labels = self.make_label_tensor(labels)
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.adult_df)
+
+    def make_input_tensor(self, df):
+        return torch.from_numpy(df.to_numpy()).type(torch.FloatTensor)
+
+    def make_label_tensor(self, label_array):
+        return torch.from_numpy(label_array)
+
+    def __getitem__(self, idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+        sample = self.data[idx]
+        label = self.labels[idx]
+        if self.transform:
+            sample = self.transform(sample)
+        return sample, label
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>adult_dataset = AdultDataset(adult_data, labels)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="2.-Build-Model">
+<h2>2. Build Model<a class="headerlink" href="#2.-Build-Model" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class AdultNN(nn.Module):
+
+    def __init__(self, num_features, num_classes):
+        super().__init__()
+        self.num_features = num_features
+        self.num_classes = num_classes
+
+        self.lin1 = torch.nn.Linear(self.num_features,  150)
+        self.lin2 = torch.nn.Linear(50, 50)
+        self.lin3 = torch.nn.Linear(50, 50)
+
+        self.lin4 = torch.nn.Linear(150, 150)
+
+        self.lin5 = torch.nn.Linear(50, 50)
+        self.lin6 = torch.nn.Linear(50, 50)
+        self.lin10 = torch.nn.Linear(150, self.num_classes)
+
+        self.prelu = nn.PReLU()
+        self.dropout = nn.Dropout(0.25)
+
+    def forward(self, xin):
+        x = relu(self.lin1(xin))
+        x = relu(self.lin4(x))
+        x = self.dropout(x)
+        x = relu(self.lin10(x))
+        return x
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>torch.manual_seed(1)  # Set seed for reproducibility.
+
+class AdultNN(nn.Module):
+    def __init__(self, feature_size, num_labels):
+        super().__init__()
+        self.linear1 = nn.Linear(feature_size, feature_size)
+        self.sigmoid1 = nn.Sigmoid()
+        self.linear2 = nn.Linear(feature_size, 8)
+        self.sigmoid2 = nn.Sigmoid()
+        self.linear3 = nn.Linear(8, 2)
+        self.softmax = nn.Softmax(dim=1)
+
+    def forward(self, x):
+        lin1_out = self.linear1(x)
+        sigmoid_out1 = self.sigmoid1(lin1_out)
+        sigmoid_out2 = self.sigmoid2(self.linear2(sigmoid_out1))
+        return self.softmax(self.linear3(sigmoid_out2))
+</pre></div>
+</div>
+</div>
+</section>
+<section id="3.-Train-Model">
+<h2>3. Train Model<a class="headerlink" href="#3.-Train-Model" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>net = AdultNN(len(feature_names), 2)
+
+criterion = nn.CrossEntropyLoss()
+num_epochs = 500
+
+optimizer = torch.optim.Adam(net.parameters(), lr=0.001)
+input_tensor, label_tensor = adult_dataset[:]
+for epoch in range(num_epochs):
+    output = net(input_tensor)
+    loss = criterion(output, label_tensor)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+    if epoch % 20 == 0:
+        print (&#39;Epoch {}/{} =&gt; Loss: {:.2f}&#39;.format(epoch+1, num_epochs, loss.item()))
+</pre></div>
+</div>
+</div>
+</section>
+<section id="4.-Save-Model">
+<h2>4. Save Model<a class="headerlink" href="#4.-Save-Model" title="Link to this heading"></a></h2>
+<p>Save offline version of our module</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>torch.jit.save(torch.jit.script(net), &#39;adult_model.pt&#39;)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="5.-Generate-Model-Card">
+<h2>5. Generate Model Card<a class="headerlink" href="#5.-Generate-Model-Card" title="Link to this heading"></a></h2>
+<section id="EvalConfig-Input">
+<h3>EvalConfig Input<a class="headerlink" href="#EvalConfig-Input" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_eval_config = &#39;eval_config.proto&#39;
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%writefile {_eval_config}
+
+model_specs {
+    label_key: &#39;label&#39;
+    prediction_key: &#39;prediction&#39;
+  }
+metrics_specs {
+    metrics {class_name: &quot;BinaryAccuracy&quot;}
+    metrics {class_name: &quot;AUC&quot;}
+    metrics {class_name: &quot;ConfusionMatrixPlot&quot;}
+#     metrics {class_name: &quot;ConfusionMatrixAtThresholds&quot;}
+    metrics {
+      class_name: &quot;FairnessIndicators&quot;
+#       config: &#39;{&quot;thresholds&quot;: [0.25, 0.5, 0.75]}&#39;
+    }
+  }
+slicing_specs {}
+slicing_specs {
+        feature_keys: &#39;sex_Female&#39;
+#         feature_keys: &#39;sex_Male&#39;
+  }
+options {
+    include_default_metrics { value: false }
+  }
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mc = {
+    &quot;schema_version&quot;: &quot;0.0.1&quot;,
+    &quot;model_details&quot;: {
+        &quot;name&quot;: &quot;Adult Multilayer Neural Network&quot;,
+        &quot;version&quot;: {
+            &quot;name&quot;: &quot;0.1&quot;,
+            &quot;date&quot;: &quot;2022-08-01&quot;
+        },
+        &quot;graphics&quot;: {},
+
+        &quot;citations&quot;: [
+             {
+                &quot;citation&quot;: &#39;Simoudis, Evangelos, Jiawei Han, and Usama Fayyad. Proceedings of the second international conference on knowledge discovery &amp; data mining. No. CONF-960830-. AAAI Press, Menlo Park, CA (United States), 1996.&#39;
+             },
+            {
+                &quot;citation&quot;: &#39;Friedler, Sorelle A., et al. &quot;A Comparative Study of Fairness-Enhancing Interventions in Machine Learning.&quot; Proceedings of the Conference on Fairness, Accountability, and Transparency, 2019, https://doi.org/10.1145/3287560.3287589.&#39;
+            },
+            {
+                &quot;citation&quot;: &#39;Lahoti, Preethi, et al. &quot;Fairness without demographics through adversarially reweighted learning.&quot; Advances in neural information processing systems 33 (2020): 728-740.&#39;
+            }
+        ],
+        &quot;overview&quot;: &#39;This example model card is for a multilayer network trained &quot;Adult&quot; dataset from the UCI repository with the learning task of predicting whether a person has a salary greater or less than $50,000.&#39;,
+    }
+}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_dataset = PytorchDataset(AdultDataset(adult_data, labels), feature_names=adult_data.columns)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mcg = ModelCardGen.generate(data_sets={&#39;train&#39;: train_dataset},
+                      model_path=&#39;adult_model.pt&#39;,
+                      eval_config=_eval_config,
+                      model_card=mc)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mcg.export_html(&#39;census_mc.html&#39;)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,28 +1,27 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating Model Card for Toxic Comments Classification in Tensorflow &mdash; Intel® Explainable AI Tools 1.2.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Creating Model Card for Toxic Comments Classification in Tensorflow &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
   
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=6efca38a"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../_static/design-tabs.js?v=36754332"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -39,9 +38,6 @@
           <a href="../index.html" class="icon icon-home">
             Intel® Explainable AI Tools
           </a>
-              <div class="version">
-                1.2.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -96,19 +92,19 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import os
+import tempfile
+import numpy as np
+import pandas as pd
+from datetime import datetime
 
-<span class="kn">import</span> <span class="nn">tensorflow_hub</span> <span class="k">as</span> <span class="nn">hub</span>
-<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
-<span class="kn">import</span> <span class="nn">tensorflow_model_analysis</span> <span class="k">as</span> <span class="nn">tfma</span>
-<span class="kn">import</span> <span class="nn">tensorflow_data_validation</span> <span class="k">as</span> <span class="nn">tfdv</span>
+import tensorflow_hub as hub
+import tensorflow as tf
+import tensorflow_model_analysis as tfma
+import tensorflow_data_validation as tfdv
 
-<span class="kn">from</span> <span class="nn">tensorflow_model_analysis.addons.fairness.post_export_metrics</span> <span class="kn">import</span> <span class="n">fairness_indicators</span>
-<span class="kn">from</span> <span class="nn">tensorflow_model_analysis.addons.fairness.view</span> <span class="kn">import</span> <span class="n">widget_view</span>
+from tensorflow_model_analysis.addons.fairness.post_export_metrics import fairness_indicators
+from tensorflow_model_analysis.addons.fairness.view import widget_view
 </pre></div>
 </div>
 </div>
@@ -119,8 +115,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">intel_ai_safety.model_card_gen.model_card_gen</span> <span class="kn">import</span> <span class="n">ModelCardGen</span>
-<span class="kn">from</span> <span class="nn">intel_ai_safety.model_card_gen.datasets</span> <span class="kn">import</span> <span class="n">TensorflowDataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
+from intel_ai_safety.model_card_gen.datasets import TensorflowDataset
 </pre></div>
 </div>
 </div>
@@ -238,13 +234,13 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset_url</span> <span class="o">=</span> <span class="s1">&#39;https://storage.googleapis.com/civil_comments_dataset/&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset_url = &#39;https://storage.googleapis.com/civil_comments_dataset/&#39;
 
-<span class="n">train_tf_file</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_file</span><span class="p">(</span><span class="s1">&#39;train_tf_processed.tfrecord&#39;</span><span class="p">,</span>
-                                        <span class="n">dataset_url</span> <span class="o">+</span> <span class="s1">&#39;train_tf_processed.tfrecord&#39;</span><span class="p">)</span>
+train_tf_file = tf.keras.utils.get_file(&#39;train_tf_processed.tfrecord&#39;,
+                                        dataset_url + &#39;train_tf_processed.tfrecord&#39;)
 
-<span class="n">validate_tf_file</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_file</span><span class="p">(</span><span class="s1">&#39;validate_tf_processed.tfrecord&#39;</span><span class="p">,</span>
-                                           <span class="n">dataset_url</span> <span class="o">+</span> <span class="s1">&#39;validate_tf_processed.tfrecord&#39;</span><span class="p">)</span>
+validate_tf_file = tf.keras.utils.get_file(&#39;validate_tf_processed.tfrecord&#39;,
+                                           dataset_url + &#39;validate_tf_processed.tfrecord&#39;)
 </pre></div>
 </div>
 </div>
@@ -254,19 +250,19 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TEXT_FEATURE</span> <span class="o">=</span> <span class="s1">&#39;comment_text&#39;</span>
-<span class="n">LABEL</span> <span class="o">=</span> <span class="s1">&#39;toxicity&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>TEXT_FEATURE = &#39;comment_text&#39;
+LABEL = &#39;toxicity&#39;
 
-<span class="n">FEATURE_MAP</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">LABEL</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">FixedLenFeature</span><span class="p">([],</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
-    <span class="n">TEXT_FEATURE</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">FixedLenFeature</span><span class="p">([],</span> <span class="n">tf</span><span class="o">.</span><span class="n">string</span><span class="p">),</span>
+FEATURE_MAP = {
+    LABEL: tf.io.FixedLenFeature([], tf.float32),
+    TEXT_FEATURE: tf.io.FixedLenFeature([], tf.string),
 
-    <span class="s1">&#39;sexual_orientation&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">VarLenFeature</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">string</span><span class="p">),</span>
-    <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">VarLenFeature</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">string</span><span class="p">),</span>
-    <span class="s1">&#39;religion&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">VarLenFeature</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">string</span><span class="p">),</span>
-    <span class="s1">&#39;race&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">VarLenFeature</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">string</span><span class="p">),</span>
-    <span class="s1">&#39;disability&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">VarLenFeature</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
-<span class="p">}</span>
+    &#39;sexual_orientation&#39;: tf.io.VarLenFeature(tf.string),
+    &#39;gender&#39;: tf.io.VarLenFeature(tf.string),
+    &#39;religion&#39;: tf.io.VarLenFeature(tf.string),
+    &#39;race&#39;: tf.io.VarLenFeature(tf.string),
+    &#39;disability&#39;: tf.io.VarLenFeature(tf.string)
+}
 </pre></div>
 </div>
 </div>
@@ -274,18 +270,18 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_input_fn</span><span class="p">():</span>
-    <span class="k">def</span> <span class="nf">parse_function</span><span class="p">(</span><span class="n">serialized</span><span class="p">):</span>
-        <span class="c1"># parse_single_example works on tf.train.Example type</span>
-        <span class="n">parsed_example</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">parse_single_example</span><span class="p">(</span><span class="n">serialized</span><span class="o">=</span><span class="n">serialized</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">FEATURE_MAP</span><span class="p">)</span>
-        <span class="c1"># fighting the 92%-8% imbalance in the dataset</span>
-        <span class="c1"># adding `weight` label, doesn&#39;t exist already (only FEATURE_MAP keys exist)</span>
-        <span class="n">parsed_example</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">parsed_example</span><span class="p">[</span><span class="n">LABEL</span><span class="p">],</span> <span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># 0.1 for non-toxic, 1.1 for toxic</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">parsed_example</span><span class="p">,</span> <span class="n">parsed_example</span><span class="p">[</span><span class="n">LABEL</span><span class="p">])</span>  <span class="c1"># (x, y)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def train_input_fn():
+    def parse_function(serialized):
+        # parse_single_example works on tf.train.Example type
+        parsed_example = tf.io.parse_single_example(serialized=serialized, features=FEATURE_MAP)
+        # fighting the 92%-8% imbalance in the dataset
+        # adding `weight` label, doesn&#39;t exist already (only FEATURE_MAP keys exist)
+        parsed_example[&#39;weight&#39;] = tf.add(parsed_example[LABEL], 0.1)  # 0.1 for non-toxic, 1.1 for toxic
+        return (parsed_example, parsed_example[LABEL])  # (x, y)
 
 
-    <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">TFRecordDataset</span><span class="p">(</span><span class="n">filenames</span><span class="o">=</span><span class="p">[</span><span class="n">train_tf_file</span><span class="p">])</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">parse_function</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">train_dataset</span>
+    train_dataset = tf.data.TFRecordDataset(filenames=[train_tf_file]).map(parse_function).batch(512)
+    return train_dataset
 </pre></div>
 </div>
 </div>
@@ -297,18 +293,18 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># vectorizing through TFHub</span>
-<span class="n">embedded_text_feature_column</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">text_embedding_column</span><span class="p">(</span>
-    <span class="n">key</span><span class="o">=</span><span class="n">TEXT_FEATURE</span><span class="p">,</span>
-    <span class="n">module_spec</span><span class="o">=</span><span class="s1">&#39;https://tfhub.dev/google/nnlm-en-dim128/1&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># vectorizing through TFHub
+embedded_text_feature_column = hub.text_embedding_column(
+    key=TEXT_FEATURE,
+    module_spec=&#39;https://tfhub.dev/google/nnlm-en-dim128/1&#39;)
 
-<span class="n">classifier</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">DNNClassifier</span><span class="p">(</span>
-    <span class="n">hidden_units</span><span class="o">=</span><span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
-    <span class="n">weight_column</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span>
-    <span class="n">feature_columns</span><span class="o">=</span><span class="p">[</span><span class="n">embedded_text_feature_column</span><span class="p">],</span>
-    <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">legacy</span><span class="o">.</span><span class="n">Adagrad</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.003</span><span class="p">),</span>
-    <span class="n">loss_reduction</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">Reduction</span><span class="o">.</span><span class="n">SUM</span><span class="p">,</span>
-    <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+classifier = tf.estimator.DNNClassifier(
+    hidden_units=[500, 100],
+    weight_column=&#39;weight&#39;,
+    feature_columns=[embedded_text_feature_column],
+    optimizer=tf.keras.optimizers.legacy.Adagrad(learning_rate=0.003),
+    loss_reduction=tf.losses.Reduction.SUM,
+    n_classes=2)
 </pre></div>
 </div>
 </div>
@@ -319,7 +315,7 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">classifier</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">input_fn</span><span class="o">=</span><span class="n">train_input_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>classifier.train(input_fn=train_input_fn, steps=1000)
 </pre></div>
 </div>
 </div>
@@ -329,26 +325,26 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_PATH</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_PATH = tempfile.gettempdir()
 
-<span class="k">def</span> <span class="nf">eval_input_receiver_fn</span><span class="p">():</span>
-    <span class="n">serialized_tf_example</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;input_example_placeholder&#39;</span><span class="p">)</span>
+def eval_input_receiver_fn():
+    serialized_tf_example = tf.compat.v1.placeholder(dtype=tf.string, shape=[None], name=&#39;input_example_placeholder&#39;)
 
-    <span class="n">receiver_tensors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;examples&#39;</span><span class="p">:</span> <span class="n">serialized_tf_example</span><span class="p">}</span>
-    <span class="n">features</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">parse_example</span><span class="p">(</span><span class="n">serialized_tf_example</span><span class="p">,</span> <span class="n">FEATURE_MAP</span><span class="p">)</span>
-    <span class="n">features</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">LABEL</span><span class="p">])</span>
+    receiver_tensors = {&#39;examples&#39;: serialized_tf_example}
+    features = tf.io.parse_example(serialized_tf_example, FEATURE_MAP)
+    features[&#39;weight&#39;] = tf.ones_like(features[LABEL])
 
-    <span class="k">return</span> <span class="n">tfma</span><span class="o">.</span><span class="n">export</span><span class="o">.</span><span class="n">EvalInputReceiver</span><span class="p">(</span>
-        <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
-        <span class="n">receiver_tensors</span><span class="o">=</span><span class="n">receiver_tensors</span><span class="p">,</span>
-        <span class="n">labels</span><span class="o">=</span><span class="n">features</span><span class="p">[</span><span class="n">LABEL</span><span class="p">]</span>
-    <span class="p">)</span>
+    return tfma.export.EvalInputReceiver(
+        features=features,
+        receiver_tensors=receiver_tensors,
+        labels=features[LABEL]
+    )
 
-<span class="n">tfma_export_dir</span> <span class="o">=</span> <span class="n">tfma</span><span class="o">.</span><span class="n">export</span><span class="o">.</span><span class="n">export_eval_savedmodel</span><span class="p">(</span>
-    <span class="n">estimator</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">,</span>  <span class="c1"># trained model</span>
-    <span class="n">export_dir_base</span> <span class="o">=</span> <span class="n">MODEL_PATH</span><span class="p">,</span>
-    <span class="n">eval_input_receiver_fn</span> <span class="o">=</span> <span class="n">eval_input_receiver_fn</span>
-<span class="p">)</span>
+tfma_export_dir = tfma.export.export_eval_savedmodel(
+    estimator = classifier,  # trained model
+    export_dir_base = MODEL_PATH,
+    eval_input_receiver_fn = eval_input_receiver_fn
+)
 </pre></div>
 </div>
 </div>
@@ -356,12 +352,12 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># export EvalSavedModel</span>
-<span class="n">tfma_export_dir</span> <span class="o">=</span> <span class="n">tfma</span><span class="o">.</span><span class="n">export</span><span class="o">.</span><span class="n">export_eval_savedmodel</span><span class="p">(</span>
-    <span class="n">estimator</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">,</span>  <span class="c1"># trained model</span>
-    <span class="n">export_dir_base</span> <span class="o">=</span> <span class="n">MODEL_PATH</span><span class="p">,</span>
-    <span class="n">eval_input_receiver_fn</span> <span class="o">=</span> <span class="n">eval_input_receiver_fn</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># export EvalSavedModel
+tfma_export_dir = tfma.export.export_eval_savedmodel(
+    estimator = classifier,  # trained model
+    export_dir_base = MODEL_PATH,
+    eval_input_receiver_fn = eval_input_receiver_fn
+)
 </pre></div>
 </div>
 </div>
@@ -372,9 +368,9 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_model_path</span> <span class="o">=</span> <span class="n">tfma_export_dir</span>
-<span class="n">_data_paths</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;eval&#39;</span><span class="p">:</span> <span class="n">TensorflowDataset</span><span class="p">(</span><span class="n">validate_tf_file</span><span class="p">),</span>
-               <span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="n">TensorflowDataset</span><span class="p">(</span><span class="n">train_tf_file</span><span class="p">)}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_model_path = tfma_export_dir
+_data_paths = {&#39;eval&#39;: TensorflowDataset(validate_tf_file),
+               &#39;train&#39;: TensorflowDataset(train_tf_file)}
 </pre></div>
 </div>
 </div>
@@ -382,7 +378,7 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_eval_config</span> <span class="o">=</span>  <span class="s1">&#39;eval_config.proto&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_eval_config =  &#39;eval_config.proto&#39;
 </pre></div>
 </div>
 </div>
@@ -390,28 +386,28 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%writefile</span> {_eval_config}
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%writefile {_eval_config}
 
-<span class="n">model_specs</span> <span class="p">{</span>
-<span class="c1"># To use EvalSavedModel set `signature_name` to &quot;eval&quot;.</span>
-<span class="n">signature_name</span><span class="p">:</span> <span class="s2">&quot;eval&quot;</span>
-<span class="p">}</span>
+model_specs {
+# To use EvalSavedModel set `signature_name` to &quot;eval&quot;.
+signature_name: &quot;eval&quot;
+}
 
-<span class="c1">## Post training metric information. These will be merged with any built-in</span>
-<span class="c1">## metrics from training.</span>
-<span class="n">metrics_specs</span> <span class="p">{</span>
-<span class="n">metrics</span> <span class="p">{</span> <span class="n">class_name</span><span class="p">:</span> <span class="s2">&quot;BinaryAccuracy&quot;</span> <span class="p">}</span>
-<span class="n">metrics</span> <span class="p">{</span> <span class="n">class_name</span><span class="p">:</span> <span class="s2">&quot;Precision&quot;</span> <span class="p">}</span>
-<span class="n">metrics</span> <span class="p">{</span> <span class="n">class_name</span><span class="p">:</span> <span class="s2">&quot;Recall&quot;</span> <span class="p">}</span>
-<span class="n">metrics</span> <span class="p">{</span> <span class="n">class_name</span><span class="p">:</span> <span class="s2">&quot;ConfusionMatrixPlot&quot;</span> <span class="p">}</span>
-<span class="n">metrics</span> <span class="p">{</span> <span class="n">class_name</span><span class="p">:</span> <span class="s2">&quot;FairnessIndicators&quot;</span> <span class="p">}</span>
-<span class="p">}</span>
+## Post training metric information. These will be merged with any built-in
+## metrics from training.
+metrics_specs {
+metrics { class_name: &quot;BinaryAccuracy&quot; }
+metrics { class_name: &quot;Precision&quot; }
+metrics { class_name: &quot;Recall&quot; }
+metrics { class_name: &quot;ConfusionMatrixPlot&quot; }
+metrics { class_name: &quot;FairnessIndicators&quot; }
+}
 
-<span class="c1">## Slicing information</span>
-<span class="n">slicing_specs</span> <span class="p">{}</span>  <span class="c1"># overall slice</span>
-<span class="n">slicing_specs</span> <span class="p">{</span>
-<span class="n">feature_keys</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">]</span>
-<span class="p">}</span>
+## Slicing information
+slicing_specs {}  # overall slice
+slicing_specs {
+feature_keys: [&quot;gender&quot;]
+}
 </pre></div>
 </div>
 </div>
@@ -419,74 +415,74 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mc</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">&quot;model_details&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Detecting Toxic Comments&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;overview&quot;</span><span class="p">:</span>  <span class="p">(</span>
-    <span class="s1">&#39;The Conversation AI team, a research initiative founded by Jigsaw and Google &#39;</span>
-    <span class="s1">&#39;(both part of Alphabet), builds technology to protect voices in conversation. &#39;</span>
-    <span class="s1">&#39;A main area of focus is machine learning models that can identify toxicity in &#39;</span>
-    <span class="s1">&#39;online conversations, where toxicity is defined as anything *rude, disrespectful &#39;</span>
-    <span class="s1">&#39;or otherwise likely to make someone leave a discussion*. &#39;</span>
-    <span class="s1">&#39;This multi-headed model attemps to recognize toxicity and several subtypes of toxicity: &#39;</span>
-    <span class="s1">&#39;This model recognizes toxicity and minimizes this type of unintended bias &#39;</span>
-    <span class="s1">&#39;with respect to mentions of identities. Reduce unintended bias ensured we can detect toxicity &#39;</span>
-    <span class="s1">&#39; accross a wide range of conversations. &#39;</span><span class="p">),</span>
-    <span class="s2">&quot;owners&quot;</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Intel XAI Team&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;contact&quot;</span><span class="p">:</span> <span class="s2">&quot;xai@intel.com&quot;</span>
-      <span class="p">}</span>
-    <span class="p">],</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mc = {
+  &quot;model_details&quot;: {
+    &quot;name&quot;: &quot;Detecting Toxic Comments&quot;,
+    &quot;overview&quot;:  (
+    &#39;The Conversation AI team, a research initiative founded by Jigsaw and Google &#39;
+    &#39;(both part of Alphabet), builds technology to protect voices in conversation. &#39;
+    &#39;A main area of focus is machine learning models that can identify toxicity in &#39;
+    &#39;online conversations, where toxicity is defined as anything *rude, disrespectful &#39;
+    &#39;or otherwise likely to make someone leave a discussion*. &#39;
+    &#39;This multi-headed model attemps to recognize toxicity and several subtypes of toxicity: &#39;
+    &#39;This model recognizes toxicity and minimizes this type of unintended bias &#39;
+    &#39;with respect to mentions of identities. Reduce unintended bias ensured we can detect toxicity &#39;
+    &#39; accross a wide range of conversations. &#39;),
+    &quot;owners&quot;: [
+      {
+        &quot;name&quot;: &quot;Intel XAI Team&quot;,
+        &quot;contact&quot;: &quot;xai@intel.com&quot;
+      }
+    ],
 
-    <span class="s2">&quot;references&quot;</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-        <span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/data&quot;</span>
-      <span class="p">},</span>
-      <span class="p">{</span>
-        <span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="s2">&quot;https://medium.com/jigsaw/unintended-bias-and-names-of-frequently-targeted-groups-8e0b81f80a23&quot;</span>
-      <span class="p">}</span>
-    <span class="p">],</span>
-    <span class="s2">&quot;graphics&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="s2">&quot;considerations&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;limitations&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Overrepresented Identities in Data:</span><span class="se">\n</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;Identity terms for more frequently targeted groups &#39;</span>
-                   <span class="s1">&#39;(e.g. words like “black”, “muslim”, “feminist”, “woman”, “gay” etc)&#39;</span>
-                   <span class="s1">&#39; often have higher scores because comments about those groups are &#39;</span>
-                   <span class="s1">&#39;over-represented in abusive and toxic comments.&#39;</span><span class="p">)</span>
-            <span class="p">},</span>
-           <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;False Positive Rate:</span><span class="se">\n</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;The names of targeted groups appear far more often in abusive &#39;</span>
-                    <span class="s1">&#39;comments. For example, in many forums unfortunately it’s common &#39;</span>
-                    <span class="s1">&#39;to use the word “gay” as an insult, or for someone to attack a &#39;</span>
-                    <span class="s1">&#39;commenter for being gay, but it is much rarer for the word gay to &#39;</span>
-                    <span class="s1">&#39;appear in a positive, affirming statements (e.g. “I am a proud gay man”). &#39;</span>
-                    <span class="s1">&#39;When the training data used to train machine learning models contain these &#39;</span>
-                    <span class="s1">&#39;comments, ML models adopt the biases that exist in these underlying distributions, &#39;</span>
-                    <span class="s1">&#39;picking up negative connotations as they go. When there’s insufficient diversity &#39;</span>
-                    <span class="s1">&#39;in the data, the models can over-generalize and make these kinds of errors.&#39;</span><span class="p">)</span>
-            <span class="p">},</span>
-           <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Imbalenced Data:</span><span class="se">\n</span><span class="s1">&#39;</span>
-                     <span class="s1">&#39;We developed new ways to balance the training &#39;</span>
-                     <span class="s1">&#39;data so that the model sees enough toxic and non-toxic examples &#39;</span>
-                     <span class="s1">&#39;containing identity terms in such a way that it can more effectively &#39;</span>
-                     <span class="s1">&#39;learn to distinguish toxic from non-toxic uses. You can learn more &#39;</span>
-                     <span class="s1">&#39;about this in our paper published at the AI, Ethics, and Society Conference.&#39;</span><span class="p">)</span>
-            <span class="p">},</span>
-        <span class="p">]</span>
-    <span class="p">},</span>
+    &quot;references&quot;: [
+      {
+        &quot;reference&quot;: &quot;https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/data&quot;
+      },
+      {
+        &quot;reference&quot;: &quot;https://medium.com/jigsaw/unintended-bias-and-names-of-frequently-targeted-groups-8e0b81f80a23&quot;
+      }
+    ],
+    &quot;graphics&quot;: {
+      &quot;description&quot;: &quot; &quot;
+    }
+  },
+  &quot;considerations&quot;: {
+      &quot;limitations&quot;: [
+            {&quot;description&quot;: (&#39;Overrepresented Identities in Data:\n&#39;
+                    &#39;Identity terms for more frequently targeted groups &#39;
+                   &#39;(e.g. words like “black”, “muslim”, “feminist”, “woman”, “gay” etc)&#39;
+                   &#39; often have higher scores because comments about those groups are &#39;
+                   &#39;over-represented in abusive and toxic comments.&#39;)
+            },
+           {&quot;description&quot;: (&#39;False Positive Rate:\n&#39;
+                    &#39;The names of targeted groups appear far more often in abusive &#39;
+                    &#39;comments. For example, in many forums unfortunately it’s common &#39;
+                    &#39;to use the word “gay” as an insult, or for someone to attack a &#39;
+                    &#39;commenter for being gay, but it is much rarer for the word gay to &#39;
+                    &#39;appear in a positive, affirming statements (e.g. “I am a proud gay man”). &#39;
+                    &#39;When the training data used to train machine learning models contain these &#39;
+                    &#39;comments, ML models adopt the biases that exist in these underlying distributions, &#39;
+                    &#39;picking up negative connotations as they go. When there’s insufficient diversity &#39;
+                    &#39;in the data, the models can over-generalize and make these kinds of errors.&#39;)
+            },
+           {&quot;description&quot;: (&#39;Imbalenced Data:\n&#39;
+                     &#39;We developed new ways to balance the training &#39;
+                     &#39;data so that the model sees enough toxic and non-toxic examples &#39;
+                     &#39;containing identity terms in such a way that it can more effectively &#39;
+                     &#39;learn to distinguish toxic from non-toxic uses. You can learn more &#39;
+                     &#39;about this in our paper published at the AI, Ethics, and Society Conference.&#39;)
+            },
+        ]
+    },
 
-  <span class="s2">&quot;quantitative_analysis&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;graphics&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="s2">&quot;schema_version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span>
-<span class="p">}</span>
+  &quot;quantitative_analysis&quot;: {
+    &quot;graphics&quot;: {
+      &quot;description&quot;: &quot; &quot;
+    }
+  },
+  &quot;schema_version&quot;: &quot;0.0.1&quot;
+}
 </pre></div>
 </div>
 </div>
@@ -494,10 +490,10 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mcg</span> <span class="o">=</span> <span class="n">ModelCardGen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">data_sets</span><span class="o">=</span><span class="n">_data_paths</span><span class="p">,</span>
-                            <span class="n">eval_config</span><span class="o">=</span><span class="n">_eval_config</span><span class="p">,</span>
-                            <span class="n">model_path</span><span class="o">=</span><span class="n">_model_path</span><span class="p">,</span>
-                            <span class="n">model_card</span><span class="o">=</span><span class="n">mc</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mcg = ModelCardGen.generate(data_sets=_data_paths,
+                            eval_config=_eval_config,
+                            model_path=_model_path,
+                            model_card=mc)
 </pre></div>
 </div>
 </div>
@@ -505,7 +501,7 @@ metadata such as article IDs, timestamps and commenter-generated “civility” 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mcg</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mcg
 </pre></div>
 </div>
 </div>

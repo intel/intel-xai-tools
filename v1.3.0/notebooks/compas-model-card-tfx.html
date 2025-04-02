@@ -1,0 +1,949 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detecting Issues in Fairness by Generating Model Card from Tensorflow Estimators &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#running-notebooks">Running Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#support">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Intel/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Detecting Issues in Fairness by Generating Model Card from Tensorflow Estimators</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/compas-model-card-tfx.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Detecting-Issues-in-Fairness-by-Generating-Model-Card-from-Tensorflow-Estimators">
+<h1>Detecting Issues in Fairness by Generating Model Card from Tensorflow Estimators<a class="headerlink" href="#Detecting-Issues-in-Fairness-by-Generating-Model-Card-from-Tensorflow-Estimators" title="Link to this heading"></a></h1>
+<p>In this notebook we will create a TFX pipeline to create a Proxy model for COMPAS (originally published by <a class="reference external" href="https://github.com/tensorflow/fairness-indicators/blob/r0.38.0/g3doc/tutorials/Fairness_Indicators_Lineage_Case_Study.ipynb">Tensorflow Authors</a>). First, we will train a <code class="docutils literal notranslate"><span class="pre">tf.estimator</span></code> with defined <code class="docutils literal notranslate"><span class="pre">eval_input_reciever_fn</span></code>. This will allow us to run userdefined metrics with <code class="docutils literal notranslate"><span class="pre">tensorflow-model-analysis</span></code> on seralized <code class="docutils literal notranslate"><span class="pre">tf.Example</span></code>.</p>
+<p>After this pipeline has be created, we will show how Intel’s <code class="docutils literal notranslate"><span class="pre">ModelCardGen</span></code> class can take this <code class="docutils literal notranslate"><span class="pre">tf.estimator</span></code> in the form of an SavedModel and TFRecord to create a Model Card with interactive graphics.</p>
+<section id="Install-Dependencies">
+<h2>Install Dependencies<a class="headerlink" href="#Install-Dependencies" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!python -m pip install --no-cache-dir --no-deps \
+    docker==7.0.0 \
+    keras-tuner==1.4.7 \
+    kubernetes==29.0.0 \
+    ml-metadata==1.14.0 \
+    portpicker==1.6.0 \
+    tensorflow-transform==1.14.0 \
+    tfx==1.14.0
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!mkdir -p compas/data/train compas/data/eval
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Import-Libraries">
+<h2>Import Libraries<a class="headerlink" href="#Import-Libraries" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import os
+import tempfile
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Intel Model Card Genorator
+from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
+from plugins.model_card_gen.generators.tfma.intel_ai_safety.model_card_gen.datasets import TensorflowDataset
+</pre></div>
+</div>
+</div>
+<section id="Download-and-preprocess-the-dataset">
+<h3>Download and preprocess the dataset<a class="headerlink" href="#Download-and-preprocess-the-dataset" title="Link to this heading"></a></h3>
+<p>The COMPAS dataset is a common case study in the ML fairness literature1, 2, 3, where it is use to apply techniques for identifying and remediating issues around fairness. ___</p>
+<ol class="arabic simple">
+<li><p>Wadsworth, C., Vera, F., Piech, C. (2017). Achieving Fairness Through Adversarial Learning: an Application to Recidivism Prediction. <a class="reference external" href="https://arxiv.org/abs/1807.00199">https://arxiv.org/abs/1807.00199</a>.</p></li>
+<li><p>Chouldechova, A., G’Sell, M., (2017). Fairer and more accurate, but for whom? <a class="reference external" href="https://arxiv.org/abs/1707.00046">https://arxiv.org/abs/1707.00046</a>.</p></li>
+<li><p>Berk et al., (2017), Fairness in Criminal Justice Risk Assessments: The State of the Art, <a class="reference external" href="https://arxiv.org/abs/1703.09207">https://arxiv.org/abs/1703.09207</a>.</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Download the COMPAS dataset and setup the required filepaths.
+_DATA_ROOT = tempfile.mkdtemp(prefix=&#39;tfx-data&#39;)
+_DATA_PATH = &#39;https://storage.googleapis.com/compas_dataset/cox-violent-parsed.csv&#39;
+_DATA_FILEPATH = os.path.join(&#39;compas&#39;, &#39;data&#39;)
+
+_COMPAS_DF = pd.read_csv(_DATA_PATH)
+
+# To simpliy the case study, we will only use the columns that will be used for
+# our model.
+_COLUMN_NAMES = [
+  &#39;age&#39;,
+  &#39;c_charge_desc&#39;,
+  &#39;c_charge_degree&#39;,
+  &#39;c_days_from_compas&#39;,
+  &#39;is_recid&#39;,            # ground truth
+  &#39;juv_fel_count&#39;,
+  &#39;juv_misd_count&#39;,
+  &#39;juv_other_count&#39;,
+  &#39;priors_count&#39;,
+  &#39;r_days_from_arrest&#39;,
+  &#39;race&#39;,
+  &#39;sex&#39;,
+  &#39;vr_charge_desc&#39;,
+  &#39;score_text&#39;,          # COMPAS predction
+]
+
+_GROUND_TRUTH = &#39;is_recid&#39;
+_COMPAS_SCORE = &#39;score_text&#39;
+
+_COMPAS_DF = _COMPAS_DF[_COLUMN_NAMES]
+
+# We will use &#39;is_recid&#39; as our ground truth lable, which is boolean value
+# indicating if a defendant committed another crime. There are some rows with -1
+# indicating that there is no data. These rows we will drop from training.
+_COMPAS_DF = _COMPAS_DF[_COMPAS_DF[&#39;is_recid&#39;] != -1]
+_COMPAS_DF = _COMPAS_DF.dropna(subset=[&#39;score_text&#39;])
+_COMPAS_DF[&#39;score_text&#39;] = _COMPAS_DF.score_text.map({&#39;Low&#39;: 0, &#39;High&#39;: 1, &#39;Medium&#39;: 1})
+# is_recid field is ground truth to create a COMPAS proxy we will need to train on score_text
+# _COMPAS_DF = _COMPAS_DF.rename(columns={&#39;is_recid&#39;: &#39;ground_truth&#39;, &#39;score_text&#39;: &#39;compas_score&#39;})
+
+# Given the distribution between races in this dataset we will only focuse on
+# recidivism for African-Americans and Caucasians.
+_COMPAS_DF = _COMPAS_DF[
+  _COMPAS_DF[&#39;race&#39;].isin([&#39;African-American&#39;, &#39;Caucasian&#39;])]
+
+X  = _COMPAS_DF[_COLUMN_NAMES]
+# to create a COMPAS proxy we will need to train on score_text not to be confused with ground truth is_recid field
+# y = _COMPAS_DF[[_COMPAS_SCORE]]
+
+X_train, X_test = train_test_split(X, test_size=0.33, random_state=42)
+
+# Load the DataFrame back to a CSV file for our TFX model.
+X_train.to_csv(os.path.join(_DATA_FILEPATH, &#39;train&#39;, &#39;train.csv&#39;), index=False, na_rep=&#39;&#39;)
+X_test.to_csv(os.path.join(_DATA_FILEPATH, &#39;eval&#39;, &#39;eval.csv&#39;), index=False, na_rep=&#39;&#39;)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="TFX-Pipeline-Scripts">
+<h1>TFX Pipeline Scripts<a class="headerlink" href="#TFX-Pipeline-Scripts" title="Link to this heading"></a></h1>
+<p>We opt to create a custom pipeline script so that we can transform data and train a model saved as artifacts to use in as input in Model Card Generator.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_transformer_path = os.path.join(&#39;compas&#39;, &#39;transformer.py&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%writefile {_transformer_path}
+import tensorflow as tf
+import tensorflow_transform as tft
+
+CATEGORICAL_FEATURE_KEYS = [
+    &#39;sex&#39;,
+    &#39;race&#39;,
+    &#39;c_charge_desc&#39;,
+    &#39;c_charge_degree&#39;,
+]
+
+INT_FEATURE_KEYS = [
+    &#39;age&#39;,
+    &#39;c_days_from_compas&#39;,
+    &#39;juv_fel_count&#39;,
+    &#39;juv_misd_count&#39;,
+    &#39;juv_other_count&#39;,
+    &#39;priors_count&#39;,
+]
+
+LABEL_KEY = &#39;is_recid&#39;
+
+# List of the unique values for the items within CATEGORICAL_FEATURE_KEYS.
+MAX_CATEGORICAL_FEATURE_VALUES = [
+    2,
+    6,
+    513,
+    14,
+]
+
+
+def transformed_name(key):
+  return &#39;{}_xf&#39;.format(key)
+
+
+def preprocessing_fn(inputs):
+  &quot;&quot;&quot;tf.transform&#39;s callback function for preprocessing inputs.
+
+  Args:
+    inputs: Map from feature keys to raw features.
+
+  Returns:
+    Map from string feature key to transformed feature operations.
+  &quot;&quot;&quot;
+  outputs = {}
+  for key in CATEGORICAL_FEATURE_KEYS:
+    outputs[transformed_name(key)] = tft.compute_and_apply_vocabulary(
+        _fill_in_missing(inputs[key]),
+        vocab_filename=key)
+
+  for key in INT_FEATURE_KEYS:
+    outputs[transformed_name(key)] = tft.scale_to_z_score(
+        _fill_in_missing(inputs[key]))
+
+  # Target label will be to see if the defendant is charged for another crime.
+  outputs[transformed_name(LABEL_KEY)] = _fill_in_missing(inputs[LABEL_KEY])
+  return outputs
+
+
+def _fill_in_missing(tensor_value):
+  &quot;&quot;&quot;Replaces a missing values in a SparseTensor.
+
+  Fills in missing values of `tensor_value` with &#39;&#39; or 0, and converts to a
+  dense tensor.
+
+  Args:
+    tensor_value: A `SparseTensor` of rank 2. Its dense shape should have size
+      at most 1 in the second dimension.
+
+  Returns:
+    A rank 1 tensor where missing values of `tensor_value` are filled in.
+  &quot;&quot;&quot;
+  if not isinstance(tensor_value, tf.sparse.SparseTensor):
+    return tensor_value
+  default_value = &#39;&#39; if tensor_value.dtype == tf.string else 0
+  sparse_tensor = tf.SparseTensor(
+      tensor_value.indices,
+      tensor_value.values,
+      [tensor_value.dense_shape[0], 1])
+  dense_tensor = tf.sparse.to_dense(sparse_tensor, default_value)
+  return tf.squeeze(dense_tensor, axis=1)
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_trainer_path = os.path.join(&#39;compas&#39;, &#39;trainer.py&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%writefile {_trainer_path}
+
+import tensorflow as tf
+import tensorflow_model_analysis as tfma
+import tensorflow_transform as tft
+from tensorflow_transform.tf_metadata import schema_utils
+
+from transformer import *
+
+_BATCH_SIZE = 1000
+_LEARNING_RATE = 0.00001
+_MAX_CHECKPOINTS = 1
+_SAVE_CHECKPOINT_STEPS = 999
+
+
+def transformed_names(keys):
+  return [transformed_name(key) for key in keys]
+
+
+def transformed_name(key):
+  return &#39;{}_xf&#39;.format(key)
+
+
+def _gzip_reader_fn(filenames):
+  &quot;&quot;&quot;Returns a record reader that can read gzip&#39;ed files.
+
+  Args:
+    filenames: A tf.string tensor or tf.data.Dataset containing one or more
+      filenames.
+
+  Returns: A nested structure of tf.TypeSpec objects matching the structure of
+    an element of this dataset and specifying the type of individual components.
+  &quot;&quot;&quot;
+  return tf.data.TFRecordDataset(filenames, compression_type=&#39;GZIP&#39;)
+
+
+# Tf.Transform considers these features as &quot;raw&quot;.
+def _get_raw_feature_spec(schema):
+  &quot;&quot;&quot;Generates a feature spec from a Schema proto.
+
+  Args:
+    schema: A Schema proto.
+
+  Returns:
+    A feature spec defined as a dict whose keys are feature names and values are
+      instances of FixedLenFeature, VarLenFeature or SparseFeature.
+  &quot;&quot;&quot;
+  return schema_utils.schema_as_feature_spec(schema).feature_spec
+
+
+def _example_serving_receiver_fn(tf_transform_output, schema):
+  &quot;&quot;&quot;Builds the serving in inputs.
+
+  Args:
+    tf_transform_output: A TFTransformOutput.
+    schema: the schema of the input data.
+
+  Returns:
+    TensorFlow graph which parses examples, applying tf-transform to them.
+  &quot;&quot;&quot;
+  raw_feature_spec = _get_raw_feature_spec(schema)
+  raw_feature_spec.pop(LABEL_KEY)
+
+  raw_input_fn = tf.estimator.export.build_parsing_serving_input_receiver_fn(
+      raw_feature_spec)
+  serving_input_receiver = raw_input_fn()
+
+  transformed_features = tf_transform_output.transform_raw_features(
+      serving_input_receiver.features)
+  transformed_features.pop(transformed_name(LABEL_KEY))
+  return tf.estimator.export.ServingInputReceiver(
+      transformed_features, serving_input_receiver.receiver_tensors)
+
+
+def _eval_input_receiver_fn(tf_transform_output, schema):
+  &quot;&quot;&quot;Builds everything needed for the tf-model-analysis to run the model.
+
+  Args:
+    tf_transform_output: A TFTransformOutput.
+    schema: the schema of the input data.
+
+  Returns:
+    EvalInputReceiver function, which contains:
+      - TensorFlow graph which parses raw untransformed features, applies the
+          tf-transform preprocessing operators.
+      - Set of raw, untransformed features.
+      - Label against which predictions will be compared.
+  &quot;&quot;&quot;
+  # Notice that the inputs are raw features, not transformed features here.
+  raw_feature_spec = _get_raw_feature_spec(schema)
+
+  serialized_tf_example = tf.compat.v1.placeholder(
+      dtype=tf.string, shape=[None], name=&#39;input_example_tensor&#39;)
+
+  # Add a parse_example operator to the tensorflow graph, which will parse
+  # raw, untransformed, tf examples.
+  features = tf.io.parse_example(
+      serialized=serialized_tf_example, features=raw_feature_spec)
+
+  transformed_features = tf_transform_output.transform_raw_features(features)
+  labels = transformed_features.pop(transformed_name(LABEL_KEY))
+
+  receiver_tensors = {&#39;examples&#39;: serialized_tf_example}
+
+  return tfma.export.EvalInputReceiver(
+      features=transformed_features,
+      receiver_tensors=receiver_tensors,
+      labels=labels)
+
+
+def _input_fn(filenames, tf_transform_output, batch_size=200):
+  &quot;&quot;&quot;Generates features and labels for training or evaluation.
+
+  Args:
+    filenames: List of CSV files to read data from.
+    tf_transform_output: A TFTransformOutput.
+    batch_size: First dimension size of the Tensors returned by input_fn.
+
+  Returns:
+    A (features, indices) tuple where features is a dictionary of
+      Tensors, and indices is a single Tensor of label indices.
+  &quot;&quot;&quot;
+  transformed_feature_spec = (
+      tf_transform_output.transformed_feature_spec().copy())
+
+  dataset = tf.compat.v1.data.experimental.make_batched_features_dataset(
+      filenames,
+      batch_size,
+      transformed_feature_spec,
+      shuffle=False,
+      reader=_gzip_reader_fn)
+
+  transformed_features = dataset.make_one_shot_iterator().get_next()
+
+  # We pop the label because we do not want to use it as a feature while we&#39;re
+  # training.
+  return transformed_features, transformed_features.pop(
+      transformed_name(LABEL_KEY))
+
+
+def _keras_model_builder():
+  &quot;&quot;&quot;Build a keras model for COMPAS dataset classification.
+
+  Returns:
+    A compiled Keras model.
+  &quot;&quot;&quot;
+  feature_columns = []
+  feature_layer_inputs = {}
+
+  for key in transformed_names(INT_FEATURE_KEYS):
+    feature_columns.append(tf.feature_column.numeric_column(key))
+    feature_layer_inputs[key] = tf.keras.Input(shape=(1,), name=key)
+
+  for key, num_buckets in zip(transformed_names(CATEGORICAL_FEATURE_KEYS),
+                              MAX_CATEGORICAL_FEATURE_VALUES):
+    feature_columns.append(
+        tf.feature_column.indicator_column(
+            tf.feature_column.categorical_column_with_identity(
+                key, num_buckets=num_buckets)))
+    feature_layer_inputs[key] = tf.keras.Input(
+        shape=(1,), name=key, dtype=tf.dtypes.int32)
+
+  feature_columns_input = tf.keras.layers.DenseFeatures(feature_columns)
+  feature_layer_outputs = feature_columns_input(feature_layer_inputs)
+
+  dense_layers = tf.keras.layers.Dense(
+      20, activation=&#39;relu&#39;, name=&#39;dense_1&#39;)(feature_layer_outputs)
+  dense_layers = tf.keras.layers.Dense(
+      10, activation=&#39;relu&#39;, name=&#39;dense_2&#39;)(dense_layers)
+  output = tf.keras.layers.Dense(
+      1, name=&#39;predictions&#39;)(dense_layers)
+
+  model = tf.keras.Model(
+      inputs=[v for v in feature_layer_inputs.values()], outputs=output)
+
+  model.compile(
+      loss=tf.keras.losses.MeanAbsoluteError(),
+      optimizer=tf.optimizers.Adam(learning_rate=_LEARNING_RATE))
+
+  return model
+
+
+# TFX will call this function.
+def trainer_fn(hparams, schema):
+  &quot;&quot;&quot;Build the estimator using the high level API.
+
+  Args:
+    hparams: Hyperparameters used to train the model as name/value pairs.
+    schema: Holds the schema of the training examples.
+
+  Returns:
+    A dict of the following:
+      - estimator: The estimator that will be used for training and eval.
+      - train_spec: Spec for training.
+      - eval_spec: Spec for eval.
+      - eval_input_receiver_fn: Input function for eval.
+  &quot;&quot;&quot;
+  tf_transform_output = tft.TFTransformOutput(hparams.transform_output)
+
+  train_input_fn = lambda: _input_fn(
+      hparams.train_files,
+      tf_transform_output,
+      batch_size=_BATCH_SIZE)
+
+  eval_input_fn = lambda: _input_fn(
+      hparams.eval_files,
+      tf_transform_output,
+      batch_size=_BATCH_SIZE)
+
+  train_spec = tf.estimator.TrainSpec(
+      train_input_fn,
+      max_steps=hparams.train_steps)
+
+  serving_receiver_fn = lambda: _example_serving_receiver_fn(
+      tf_transform_output, schema)
+
+  exporter = tf.estimator.FinalExporter(&#39;compas&#39;, serving_receiver_fn)
+  eval_spec = tf.estimator.EvalSpec(
+      eval_input_fn,
+      steps=hparams.eval_steps,
+      exporters=[exporter],
+      name=&#39;compas-eval&#39;)
+
+  run_config = tf.estimator.RunConfig(
+      save_checkpoints_steps=_SAVE_CHECKPOINT_STEPS,
+      keep_checkpoint_max=_MAX_CHECKPOINTS)
+
+  run_config = run_config.replace(model_dir=hparams.serving_model_dir)
+
+  estimator = tf.keras.estimator.model_to_estimator(
+      keras_model=_keras_model_builder(), config=run_config)
+
+  # Create an input receiver for TFMA processing.
+  receiver_fn = lambda: _eval_input_receiver_fn(tf_transform_output, schema)
+
+  return {
+      &#39;estimator&#39;: estimator,
+      &#39;train_spec&#39;: train_spec,
+      &#39;eval_spec&#39;: eval_spec,
+      &#39;eval_input_receiver_fn&#39;: receiver_fn
+  }
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_pipelie_path = os.path.join(&#39;compas&#39;, &#39;pipeline.py&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%writefile {_pipelie_path}
+
+from typing import Optional
+import os
+
+import absl
+import tensorflow_model_analysis as tfma
+from tfx import v1 as tfx
+from tfx.components import (CsvExampleGen,
+                            Evaluator,
+                            Pusher,
+                            SchemaGen,
+                            StatisticsGen,
+                            Trainer,
+                            Transform)
+
+from tfx.components.trainer.executor import Executor
+from tfx.dsl.components.base import executor_spec
+
+from tfx.orchestration import pipeline
+from tfx.orchestration import metadata
+from tfx.proto import pusher_pb2
+from tfx.proto import trainer_pb2
+from tfx.proto import example_gen_pb2
+from tfx.orchestration.local.local_dag_runner import LocalDagRunner
+
+_pipeline_name = &#39;compas&#39;
+_compas_root = os.path.join(&#39;.&#39;, &#39;compas&#39;)
+_data_path = os.path.join(_compas_root, &#39;data&#39;)
+# Python module file to inject customized logic into the TFX components. The
+# Transform and Trainer both require user-defined functions to run successfully.
+_transformer_file = os.path.join(_compas_root, &#39;transformer.py&#39;)
+_trainer_file = os.path.join(_compas_root, &#39;trainer.py&#39;)
+# Path which can be listened to by the model server.  Pusher will output the
+# trained model here.
+_serving_model_dir = os.path.join(_compas_root, &#39;serving_model&#39;, _pipeline_name)
+
+# Directory and data locations.  This example assumes all of the chicago taxi
+# example code and metadata library is relative to $HOME, but you can store
+# these files anywhere on your local filesystem.
+_tfx_root = os.path.join(&#39;compas&#39;, &#39;tfx&#39;)
+_pipeline_root = os.path.join(_tfx_root, &#39;pipelines&#39;, _pipeline_name)
+# Sqlite ML-metadata db path.
+_metadata_path = os.path.join(_tfx_root, &#39;metadata&#39;, _pipeline_name,
+                              &#39;metadata.db&#39;)
+
+def create_pipeline(
+    pipeline_name: str,
+    pipeline_root: str,
+    data_path: str,
+    preprocessing_module_file: str,
+    trainer_module_file: str,
+    train_args: tfx.proto.TrainArgs,
+    eval_args: tfx.proto.EvalArgs,
+    serving_model_dir: str,
+    metadata_path: str,
+    schema_path: Optional[str] = None,
+) -&gt; tfx.dsl.Pipeline:
+  &quot;&quot;&quot;Implements the compass pipeline with TFX.&quot;&quot;&quot;
+
+  # Brings data into the pipeline or otherwise joins/converts training data.
+
+  input = tfx.proto.Input(splits=[
+                example_gen_pb2.Input.Split(name=&#39;train&#39;, pattern=&#39;train/*&#39;),
+                example_gen_pb2.Input.Split(name=&#39;eval&#39;, pattern=&#39;eval/*&#39;)
+            ])
+  example_gen = CsvExampleGen(input_base=data_path, input_config=input)
+
+  # Computes statistics over data for visualization and example validation.
+  statistics_gen = StatisticsGen(
+      examples=example_gen.outputs[&#39;examples&#39;])
+
+  if schema_path is None:
+    # Generates schema based on statistics files.
+    schema_gen = SchemaGen(
+        statistics=statistics_gen.outputs[&#39;statistics&#39;])
+  else:
+    # Import user provided schema into the pipeline.
+    schema_gen = tfx.components.ImportSchemaGen(schema_file=schema_path)
+
+
+  # Performs transformations and feature engineering in training and serving.
+  transform = Transform(
+      examples=example_gen.outputs[&#39;examples&#39;],
+      schema=schema_gen.outputs[&#39;schema&#39;],
+      module_file=os.path.abspath(preprocessing_module_file))
+
+  # Uses user-provided Python function that implements a model.
+  trainer_args = {
+      &#39;module_file&#39;: trainer_module_file,
+      &#39;examples&#39;: transform.outputs[&#39;transformed_examples&#39;],
+      &#39;schema&#39;: schema_gen.outputs[&#39;schema&#39;],
+      &#39;custom_executor_spec&#39; : executor_spec.ExecutorClassSpec(Executor),
+      &#39;transform_graph&#39;: transform.outputs[&#39;transform_graph&#39;],
+      &#39;train_args&#39;: train_args,
+      &#39;eval_args&#39;: eval_args,
+  }
+  trainer = Trainer(**trainer_args)
+
+  # Uses TFMA to compute a evaluation statistics over features of a model and
+  # perform quality validation of a candidate model (compared to a baseline).
+  eval_config = tfma.EvalConfig(
+      model_specs=[
+          tfma.ModelSpec(
+              label_key=&#39;is_recid&#39;)
+      ],
+      slicing_specs=[
+          tfma.SlicingSpec(
+              feature_keys=[&#39;race&#39;])
+      ],
+      metrics_specs=[
+          tfma.MetricsSpec(metrics=[
+              tfma.MetricConfig(
+                  class_name=&#39;BinaryAccuracy&#39;),
+              tfma.MetricConfig(
+                  class_name=&#39;AUC&#39;),
+              tfma.MetricConfig(
+                  class_name=&#39;FairnessIndicators&#39;,
+                  config=&#39;{&quot;thresholds&quot;: [0.25, 0.5, 0.75]}&#39;)
+
+          ])
+      ])
+  evaluator = Evaluator(examples=example_gen.outputs[&#39;examples&#39;],
+                        model=trainer.outputs[&#39;model&#39;],
+                        eval_config=eval_config)
+
+  return pipeline.Pipeline(
+      pipeline_name=pipeline_name,
+      pipeline_root=pipeline_root,
+      components=[
+          example_gen,
+          statistics_gen,
+          schema_gen,
+          transform,
+          trainer,
+          evaluator,
+      ],
+      metadata_connection_config=metadata.sqlite_metadata_connection_config(
+          metadata_path)
+  )
+
+if __name__ == &#39;__main__&#39;:
+  absl.logging.set_verbosity(absl.logging.INFO)
+
+  LocalDagRunner().run(
+      create_pipeline(
+          pipeline_name=_pipeline_name,
+          pipeline_root=_pipeline_root,
+          data_path=_data_path,
+          preprocessing_module_file= _transformer_file,
+          trainer_module_file=_trainer_file,
+          serving_model_dir=_serving_model_dir,
+          metadata_path=_metadata_path,
+          train_args=trainer_pb2.TrainArgs(num_steps=10000),
+          eval_args=trainer_pb2.EvalArgs(num_steps=5000))
+  )
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!python {_pipelie_path}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from ml_metadata.metadata_store import metadata_store
+from ml_metadata.proto import metadata_store_pb2
+
+connection_config = metadata_store_pb2.ConnectionConfig()
+connection_config.sqlite.filename_uri = &#39;./compas/tfx/metadata/compas/metadata.db&#39;
+connection_config.sqlite.connection_mode = 3 # READWRITE_OPENCREATE
+store = metadata_store.MetadataStore(connection_config)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data = store.get_artifacts_by_type(&quot;Examples&quot;)[0].uri
+evaluator = store.get_artifacts_by_type(&quot;ModelEvaluation&quot;)[-1].uri
+model = store.get_artifacts_by_type(&quot;Model&quot;)[-1].uri
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_model_path = os.path.join(model, &#39;Format-Serving&#39;)
+_data_paths = {&#39;eval&#39;: TensorflowDataset(dataset_path=os.path.join(data, &#39;Split-eval&#39;, &#39;*.gz&#39;)),
+               &#39;train&#39;: TensorflowDataset(dataset_path=os.path.join(data, &#39;Split-train&#39;, &#39;*.gz&#39;))}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_project_path = os.path.join(&#39;.&#39;, &#39;compas&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_eval_config = os.path.join(_project_path, &#39;eval_config.proto&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%writefile {_eval_config}
+
+model_specs {
+    label_key: &#39;is_recid&#39;
+  }
+metrics_specs {
+    metrics {class_name: &quot;BinaryAccuracy&quot;}
+    metrics {class_name: &quot;AUC&quot;}
+    metrics {class_name: &quot;ConfusionMatrixPlot&quot;}
+    metrics {
+      class_name: &quot;FairnessIndicators&quot;
+      config: &#39;{&quot;thresholds&quot;: [0.25, 0.5, 0.75]}&#39;
+    }
+  }
+slicing_specs {}
+slicing_specs {
+        feature_keys: &#39;race&#39;
+  }
+options {
+    include_default_metrics { value: false }
+  }
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>overview = (&quot;COMPAS (Correctional Offender Management Profiling for Alternative Sanctions)&quot;
+&quot; is a public dataset, which contains approximately 18,000 criminal cases from &quot;
+&quot;Broward County, Florida between January, 2013 and December, 2014. The data contains&quot;
+&quot; information about 11,000 unique defendants, including criminal history demographics,&quot;
+&quot; and a risk score intended to represent the defendant’s likelihood of reoffending&quot;
+&quot; (recidivism). A machine learning model trained on this data has been used by judges&quot;
+&quot; and parole officers to determine whether or not to set bail and whether or not to&quot;
+&quot; grant parole.&quot;
+
+&quot;In 2016, an article published in ProPublica found that the COMPAS model was incorrectly&quot;
+&quot; predicting that African-American defendants would recidivate at much higher rates than&quot;
+&quot; their white counterparts while Caucasian would not recidivate at a much higher rate. &quot;
+&quot;For Caucasian defendants, the model made mistakes in the opposite direction, making incorrect predictions &quot;
+&quot;that they wouldn’t commit another crime. The authors went on to show that these biases were likely due to &quot;
+&quot;an uneven distribution in the data between African-Americans and Caucasian defendants. Specifically, the &quot;
+&quot;ground truth label of a negative example (a defendant would not commit another crime) and a positive example &quot;
+&quot;(defendant would commit another crime) were disproportionate between the two races. &quot;
+&quot;Since 2016, the COMPAS dataset has appeared frequently in the ML fairness literature &quot;
+&quot;1, 2, 3, with researchers using it to demonstrate techniques for identifying and remediating &quot;
+&quot;fairness concerns.&quot;
+
+&quot;It is important to note that developing a machine learning model to predict pre-trial detention &quot;
+&quot;has a number of important ethical considerations. You can learn more about these issues in the &quot;
+&quot;Partnership on AI Report on Algorithmic Risk Assessment Tools in the U.S. Criminal Justice System.&quot;
+&quot; The Partnership on AI is a multi-stakeholder organization -- of which Google is a member -- that &quot;
+&quot;creates guidelines around AI.&quot;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mc = {
+  &quot;model_details&quot;: {
+    &quot;name&quot;: &quot;COMPAS (Correctional Offender Management Profiling for Alternative Sanctions)&quot;,
+    &quot;overview&quot;: overview,
+    &quot;owners&quot;: [
+      {
+        &quot;name&quot;: &quot;Intel XAI Team&quot;,
+        &quot;contact&quot;: &quot;xai@intel.com&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;reference&quot;: &quot;Wadsworth, C., Vera, F., Piech, C. (2017). Achieving Fairness Through Adversarial Learning: an Application to Recidivism Prediction. https://arxiv.org/abs/1807.00199.&quot;
+      },
+      {
+        &quot;reference&quot;: &quot;Chouldechova, A., G&#39;Sell, M., (2017). Fairer and more accurate, but for whom? https://arxiv.org/abs/1707.00046.&quot;
+      },
+      {
+        &quot;reference&quot;: &quot;Berk et al., (2017), Fairness in Criminal Justice Risk Assessments: The State of the Art, https://arxiv.org/abs/1703.09207.&quot;
+      }
+    ],
+    &quot;graphics&quot;: {
+      &quot;description&quot;: &quot; &quot;
+    }
+  },
+  &quot;quantitative_analysis&quot;: {
+    &quot;graphics&quot;: {
+      &quot;description&quot;: &quot; &quot;
+    }
+  },
+  &quot;schema_version&quot;: &quot;0.0.1&quot;
+}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mcg = ModelCardGen.generate(data_sets=_data_paths,
+                            eval_config=_eval_config,
+                            model_path=_model_path,
+                            model_card=mc)
+</pre></div>
+</div>
+</div>
+<section id="Display-Model-Card">
+<h2>Display Model Card<a class="headerlink" href="#Display-Model-Card" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mcg
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mcg.export_html(&#39;compas_plotly.html&#39;)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

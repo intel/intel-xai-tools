@@ -18,8 +18,8 @@ There are two Python* components in the repository:
 ## Get Started
 
 ### Requirements
-* Linux system or WSL2 on Windows (validated on Ubuntu* 20.04/22.04 LTS)
-* Python 3.9, 3.10
+* Linux system or WSL2 on Windows (validated on Ubuntu* 22.04/24.04 LTS)
+* Python 3.10, 3.11
 * Install required OS packages with `apt-get install build-essential python3-dev`
 * git (only required for the "Developer Installation")
 * Poetry
@@ -97,7 +97,7 @@ There are two ways to do this:
 
    b. Or `conda`:
       ```bash
-      conda create --name xai_env python=3.9
+      conda create --name xai_env python=3.10
       conda activate xai_env
       ```
 2. Install to current enviornment
@@ -139,6 +139,6 @@ Intel is committed to the respect of human rights and avoiding complicity in hum
 Intel® Explainable AI Tools is licensed under Apache License Version 2.0.
  
 #### Datasets and Models
-To the extent that any data, datasets, or models are referenced by Intel or accessed using tools or code on this site such data, datasets and models are provided by the third party indicated as the source of such content. Intel does not create the data, datasets, or models, provide a license to any third-party data, datasets, or models referenced, and does not warrant their accuracy or quality. By accessing such data, dataset(s) or model(s) you agree to the terms associated with that content and that your use complies with the applicable license. [DATASETS](<datasets>), [MODELS](MODELS.md)
+To the extent that any data, datasets, or models are referenced by Intel or accessed using tools or code on this site such data, datasets and models are provided by the third party indicated as the source of such content. Intel does not create the data, datasets, or models, provide a license to any third-party data, datasets, or models referenced, and does not warrant their accuracy or quality. By accessing such data, dataset(s) or model(s) you agree to the terms associated with that content and that your use complies with the applicable license. [DATASETS](<datasets>), [MODELS](<models>)
 
 Intel expressly disclaims the accuracy, adequacy, or completeness of any data, datasets or models, and is not liable for any errors, omissions, or defects in such content, or for any reliance thereon. Intel also expressly disclaims any warranty of non-infringement with respect to such data, dataset(s), or model(s). Intel is not liable for any liability or damages relating to your use of such data, datasets, or models.

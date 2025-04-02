@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explaining ResNet50 ImageNet Classification Using the CAM Explainer &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#running-notebooks">Running Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#support">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Intel/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Explaining ResNet50 ImageNet Classification Using the CAM Explainer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/ExplainingImageClassification.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Explaining-ResNet50-ImageNet-Classification-Using-the-CAM-Explainer">
+<h1>Explaining ResNet50 ImageNet Classification Using the CAM Explainer<a class="headerlink" href="#Explaining-ResNet50-ImageNet-Classification-Using-the-CAM-Explainer" title="Link to this heading"></a></h1>
+<section id="Objective">
+<h2>Objective<a class="headerlink" href="#Objective" title="Link to this heading"></a></h2>
+<p>The goal of this notebook is to explore various CAM methods for image classification models. For now, we only support XGradCAM method, which is the state-of-the-art CAM method.</p>
+</section>
+<section id="Loading-Intel-XAI-Tools-PyTorch-CAM-Module">
+<h2>Loading Intel XAI Tools PyTorch CAM Module<a class="headerlink" href="#Loading-Intel-XAI-Tools-PyTorch-CAM-Module" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer.cam import pt_cam as cam
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Loading-Notebook-Modules">
+<h2>Loading Notebook Modules<a class="headerlink" href="#Loading-Notebook-Modules" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import torch
+import numpy as np
+from torchvision.models import resnet50, ResNet50_Weights
+import matplotlib.pyplot as plt
+</pre></div>
+</div>
+</div>
+<section id="Using-XGradCAM">
+<h3>Using XGradCAM<a class="headerlink" href="#Using-XGradCAM" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="Loading-the-input-image">
+<h2>Loading the input image<a class="headerlink" href="#Loading-the-input-image" title="Link to this heading"></a></h2>
+<p>Load the input image as a numpy array in RGB order.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from PIL import Image
+import requests
+from io import BytesIO
+
+response = requests.get(&quot;https://raw.githubusercontent.com/jacobgil/pytorch-grad-cam/master/examples/both.png&quot;)
+image = np.array(Image.open(BytesIO(response.content)))
+plt.imshow(image)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Loading-the-Model">
+<h2>Loading the Model<a class="headerlink" href="#Loading-the-Model" title="Link to this heading"></a></h2>
+<p>Load the trained model depending on how the model was saved. If you have your trained model, load it from the model’s path using ‘torch.load()’.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = resnet50(weights=ResNet50_Weights.IMAGENET1K_V2) # Let&#39;s use ResNet50 trained on ImageNet as our model
+</pre></div>
+</div>
+</div>
+<p>We need to choose the target layer (normally the last convolutional layer) to compute CAM for. Simply printing the model will give you some idea about the name of layers and their specifications. Here are some common choices:</p>
+<ul class="simple">
+<li><p>FasterRCNN: model.backbone</p></li>
+<li><p>Resnet18 and 50: model.layer4</p></li>
+<li><p>VGG and densenet161: model.features</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>target_layer = model.layer4
+</pre></div>
+</div>
+</div>
+<p>We need to specify the target class as an integer to compute CAM for. This can be specified with the class index in the range [0, NUM_OF_CLASSES-1] based on the training dataset. For example, the index of the class ‘tabby cat’ is 281 in ImageNet. If targetClass is None, the highest scoring category will be used.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>target_class = 281
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Visualization">
+<h2>Visualization<a class="headerlink" href="#Visualization" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>image_dims = (224, 224)
+xgc = cam.x_gradcam(model, target_layer, target_class, image, image_dims, &#39;cpu&#39;)
+xgc.visualize()
+</pre></div>
+</div>
+</div>
+<section id="References">
+<h3>References<a class="headerlink" href="#References" title="Link to this heading"></a></h3>
+<p>pytorch-grad-cam GitHub Project - <a class="reference external" href="https://github.com/jacobgil/pytorch-grad-cam">https://github.com/jacobgil/pytorch-grad-cam</a></p>
+</section>
+</section>
+<section id="Loading-Intel-XAI-Tools-TensorFlow-CAM-Module">
+<h2>Loading Intel XAI Tools TensorFlow CAM Module<a class="headerlink" href="#Loading-Intel-XAI-Tools-TensorFlow-CAM-Module" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer.cam import tf_cam as cam
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Explaining-Image-Classification-Models-with-TensorFlow">
+<h1>Explaining Image Classification Models with TensorFlow<a class="headerlink" href="#Explaining-Image-Classification-Models-with-TensorFlow" title="Link to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from urllib.request import urlopen
+from tensorflow.keras.applications.resnet50 import ResNet50
+
+from PIL import Image
+import requests
+from io import BytesIO
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>response = requests.get(&quot;https://raw.githubusercontent.com/jacobgil/pytorch-grad-cam/master/examples/both.png&quot;)
+image = np.array(Image.open(BytesIO(response.content)))
+plt.imshow(image)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = ResNet50()
+target_layer = model.get_layer(&quot;conv5_block3_out&quot;)
+target_class = 281
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>tfgc = cam.tf_gradcam(model, target_layer, target_class, image)
+tfgc.visualize()
+</pre></div>
+</div>
+</div>
+<p><a class="reference external" href="https://github.com/ismailuddin/gradcam-tensorflow-2/blob/master/notebooks/GradCam.ipynb">https://github.com/ismailuddin/gradcam-tensorflow-2/blob/master/notebooks/GradCam.ipynb</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

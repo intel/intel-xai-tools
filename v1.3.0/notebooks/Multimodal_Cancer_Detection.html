@@ -1,0 +1,1267 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multimodal Breast Cancer Detection Explainability using the Intel® Explainable AI API &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#running-notebooks">Running Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#support">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Intel/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Multimodal Breast Cancer Detection Explainability using the Intel® Explainable AI API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/Multimodal_Cancer_Detection.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Multimodal-Breast-Cancer-Detection-Explainability-using-the-Intel®-Explainable-AI-API">
+<h1>Multimodal Breast Cancer Detection Explainability using the Intel® Explainable AI API<a class="headerlink" href="#Multimodal-Breast-Cancer-Detection-Explainability-using-the-Intel®-Explainable-AI-API" title="Link to this heading"></a></h1>
+<p>This application is a multimodal solution for predicting cancer diagnosis using categorized contrast enhanced mammography data and radiology notes. It trains two models - one for image classification and the other for text classification.</p>
+<section id="Import-Dependencies-and-Setup-Directories">
+<h2>Import Dependencies and Setup Directories<a class="headerlink" href="#Import-Dependencies-and-Setup-Directories" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># This notebook requires the latest version of intel-transfer-learning (v0.7.0)
+# The package and directions to install it can be found at its repo:
+# https://github.com/Intel/transfer-learning
+
+! pip install --no-cache-dir  nltk docx2txt openpyxl et-xmlfile schema
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import os
+import pandas as pd
+import tensorflow as tf
+import torch
+
+from transformers import EvalPrediction, TrainingArguments, pipeline
+
+# tlt imports
+from tlt.datasets import dataset_factory
+from tlt.models import model_factory
+
+# explainability imports
+import matplotlib.pyplot as plt
+import plotly.express as px
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+import nltk
+from nltk.corpus import words
+import string
+import shap
+import warnings
+warnings.filterwarnings( &quot;ignore&quot;, module = &quot;matplotlib\..*&quot; )
+
+# Specify the root directory where the images and annotations are located
+dataset_dir = os.path.join(os.environ[&quot;DATASET_DIR&quot;]) if &quot;DATASET_DIR&quot; in os.environ else \
+    os.path.join(os.environ[&quot;HOME&quot;], &quot;dataset&quot;)
+
+# Specify a directory for output
+output_dir = os.environ[&quot;OUTPUT_DIR&quot;] if &quot;OUTPUT_DIR&quot; in os.environ else \
+    os.path.join(os.environ[&quot;HOME&quot;], &quot;output&quot;)
+
+print(&quot;Dataset directory:&quot;, dataset_dir)
+print(&quot;Output directory:&quot;, output_dir)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Dataset">
+<h2>Dataset<a class="headerlink" href="#Dataset" title="Link to this heading"></a></h2>
+<p>Download the images and radiology annotations from <a class="reference external" href="https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=109379611">https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=109379611</a> and save in the path <code class="docutils literal notranslate"><span class="pre">&lt;dataset_dir&gt;/brca/data</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! python prepare_nlp_data.py --data_root {dataset_dir}/brca/data
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! python prepare_vision_data.py --data_root {dataset_dir}/brca/data
+</pre></div>
+</div>
+</div>
+<p>Image files should have the .jpg extension and be arranged in subfolders for each class. The annotation file should be a .csv. The final brca dataset directory should look something like this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>brca
+  ├── data
+  │   ├── PKG - CDD-CESM
+  │   ├── Medical reports for cases .zip
+  │   ├── Radiology manual annotations.xlsx
+  │   └── Radiology_hand_drawn_segmentations_v2.csv
+  ├── annotation
+  │   └── annotation.csv
+  └── vision_images
+      ├── Benign
+      │   ├── P100_L_CM_CC.jpg
+      │   ├── P100_L_CM_MLO.jpg
+      │   └── ...
+      ├── Malignant
+      │   ├── P102_R_CM_CC.jpg
+      │   ├── P102_R_CM_MLO.jpg
+      │   └── ...
+      └── Normal
+          ├── P100_R_CM_CC.jpg
+          ├── P100_R_CM_MLO.jpg
+          └── ...
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># User input needed - supply the path to the images in the dataset_dir according to your system
+source_image_path = os.path.join(dataset_dir, &#39;brca&#39;, &#39;data&#39;, &#39;vision_images&#39;)
+image_path = source_image_path
+
+# User input needed - supply the path and name of the annotation file in the dataset_dir
+source_annotation_path = os.path.join(dataset_dir, &#39;brca&#39;, &#39;data&#39;, &#39;annotation&#39;, &#39;annotation.csv&#39;)
+annotation_path = source_annotation_path
+</pre></div>
+</div>
+</div>
+<section id="Optional:-Group-Data-by-Patient-ID">
+<h3>Optional: Group Data by Patient ID<a class="headerlink" href="#Optional:-Group-Data-by-Patient-ID" title="Link to this heading"></a></h3>
+<p>This section is not required to run the workload, but it is helpful to assign all of a subject’s records to be entirely in the train set or test set. This section will do a random stratification based on patient ID and save new copies of the grouped data files.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from data_utils import split_images, split_annotation
+
+grouped_image_path = &#39;{}_grouped&#39;.format(source_image_path)
+
+if os.path.isdir(grouped_image_path):
+    print(&quot;Grouped directory already exists and will be used: {}&quot;.format(grouped_image_path))
+else:
+    split_images(source_image_path, grouped_image_path)
+
+train_image_path = os.path.join(grouped_image_path, &#39;train&#39;)
+test_image_path = os.path.join(grouped_image_path, &#39;test&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from data_utils import split_images, split_annotation
+
+file_dir, file_name = os.path.split(source_annotation_path)
+grouped_annotation_path = os.path.join(file_dir, &#39;{}_grouped.csv&#39;.format(os.path.splitext(file_name)[0]))
+
+if os.path.isfile(grouped_annotation_path):
+    print(&quot;Grouped annotation already exists and will be used: {}&quot;.format(grouped_annotation_path))
+else:
+    train_dataset, test_dataset = split_annotation(file_dir, file_name, train_image_path, test_image_path)
+    train_dataset.to_csv(grouped_annotation_path, index=False)
+    test_dataset.to_csv(grouped_annotation_path[:-4] + &#39;_test.csv&#39;, index=False)
+    print(&#39;Grouped training annotation saved to: {}&#39;.format(grouped_annotation_path))
+    print(&#39;Grouped testing annotation saved to: {}&#39;.format(grouped_annotation_path[:-4] + &#39;_test.csv&#39;))
+
+train_annotation_path = grouped_annotation_path
+test_annotation_path = grouped_annotation_path[:-4] + &#39;_test.csv&#39;
+label_col = 0  # Index of the label column in the grouped data file
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Model-1:-Image-Classification-with-PyTorch">
+<h2>Model 1: Image Classification with PyTorch<a class="headerlink" href="#Model-1:-Image-Classification-with-PyTorch" title="Link to this heading"></a></h2>
+<section id="Get-the-Model-and-Dataset">
+<h3>Get the Model and Dataset<a class="headerlink" href="#Get-the-Model-and-Dataset" title="Link to this heading"></a></h3>
+<p>Call the model factory to get a pretrained model from PyTorch Hub and the dataset factory to load the images from their location. The <code class="docutils literal notranslate"><span class="pre">get_model</span></code> function returns a model object that will later be used for training. We will use resnet50 by default.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>viz_model = model_factory.get_model(model_name=&quot;resnet50&quot;, framework=&#39;pytorch&#39;)
+
+# Load the dataset from the custom dataset path
+train_viz_dataset = dataset_factory.load_dataset(dataset_dir=train_image_path,
+                                       use_case=&#39;image_classification&#39;,
+                                       framework=&#39;pytorch&#39;)
+
+test_viz_dataset = dataset_factory.load_dataset(dataset_dir=test_image_path,
+                                       use_case=&#39;image_classification&#39;,
+                                       framework=&#39;pytorch&#39;)
+
+print(&quot;Class names:&quot;, str(train_viz_dataset.class_names))
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Data-Preparation">
+<h3>Data Preparation<a class="headerlink" href="#Data-Preparation" title="Link to this heading"></a></h3>
+<p>Once you have your dataset loaded, use the following cell to preprocess the dataset. We split the images into training and validation subsets, resize them to match the model, and then batch the images.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>batch_size = 16
+# shuffle split the training dataset
+train_viz_dataset.shuffle_split(train_pct=.80, val_pct=.20, seed=3)
+train_viz_dataset.preprocess(viz_model.image_size, batch_size=batch_size)
+test_viz_dataset.preprocess(viz_model.image_size, batch_size=batch_size)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Image-dataset-analysis">
+<h3>Image dataset analysis<a class="headerlink" href="#Image-dataset-analysis" title="Link to this heading"></a></h3>
+<p>Let’s take a look at the dataset and verify that we are loading the data correctly. This includes looking at the distributions amongst the training and validation and visual confirmation of the images themselves.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create a label map function and reverse label map for the dataset
+def label_map_func(label):
+        if label == &#39;Benign&#39;:
+            return 0
+        elif label == &#39;Malignant&#39;:
+            return 1
+        elif label == &#39;Normal&#39;:
+            return 2
+
+reverse_label_map = {0: &#39;Benign&#39;, 1: &#39;Malignant&#39;, 2: &#39;Normal&#39;}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
+
+for x, y in train_viz_dataset.train_subset:
+    train_label_count[reverse_label_map[y]] += 1
+
+print(&#39;Training label distribution:&#39;)
+train_label_count
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>valid_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
+
+for x, y in train_viz_dataset.validation_subset:
+    valid_label_count[reverse_label_map[y]] += 1
+
+print(&#39;Validation label distribution:&#39;)
+valid_label_count
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>test_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
+
+for x, y in test_viz_dataset.dataset:
+    test_label_count[reverse_label_map[y]] += 1
+
+print(&#39;Validation label distribution:&#39;)
+test_label_count
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get datsaet distrubtions
+form = {&#39;type&#39;:&#39;domain&#39;}
+fig = make_subplots(rows=1, cols=3, specs=[[form, form, form]], subplot_titles=[&#39;Training&#39;, &#39;Validation&#39;, &#39;Testing&#39;])
+fig.add_trace(go.Pie(values=list(train_label_count.values()), labels=list(train_label_count.keys())), 1, 1)
+fig.add_trace(go.Pie(values=list(valid_label_count.values()), labels=list(valid_label_count.keys())), 1, 2)
+fig.add_trace(go.Pie(values=list(test_label_count.values()), labels=list(valid_label_count.keys())), 1, 3)
+
+fig.update_layout(height=600, width=800, title_text=&quot;Label Distributions&quot;)
+fig.show()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_examples(dataset, reverse_label_map, n=6):
+    # get n images from each label in dataset and return as dictionary
+
+    loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size)
+
+    example_images = {&#39;Benign&#39;: [], &#39;Malignant&#39;: [], &#39;Normal&#39;: []}
+    for x, y in loader:
+        for i, label in enumerate(y):
+            label_name = reverse_label_map[int(label)]
+            if len(example_images[label_name]) &lt; n:
+                example_images[label_name].append(x[i])
+        if len(example_images[&#39;Malignant&#39;]) == n and\
+        len(example_images[&#39;Benign&#39;]) == n and\
+        len(example_images[&#39;Normal&#39;]) == n:
+            break
+    return example_images
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># plot some training examples
+fig = plt.figure(figsize=(12,6))
+columns = 6
+rows = 3
+fig.suptitle(&#39;Training Torch Tensor examples&#39;, size=16)
+
+
+train_example_images = get_examples(train_viz_dataset.train_subset, reverse_label_map)
+for i in range(1, columns*rows +1):
+    idx = i - 1
+    if idx &lt; 6:
+        img = train_example_images[&#39;Benign&#39;][idx]
+    elif idx &gt;= 6 and idx &lt; 12:
+        img = train_example_images[&#39;Malignant&#39;][idx - 6]
+    else:
+        img = train_example_images[&#39;Normal&#39;][idx - 12]
+
+    fig.add_subplot(rows, columns, i)
+    plt.axis(&#39;off&#39;)
+    plt.tight_layout()
+    if idx == 0 or idx == 6 or idx == 12:
+        plt.axis(&#39;on&#39;)
+        label_name = reverse_label_map[int(idx/6)]
+        plt.ylabel(label_name, fontsize=16)
+        plt.tick_params(axis=&#39;x&#39;, bottom=False, labelbottom=False)
+        plt.tick_params(axis=&#39;y&#39;, left=False, labelleft=False)
+
+    plt.imshow(torch.movedim(img, 0, 2).detach().cpu().numpy().astype(np.uint8))
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># plot some validation images
+fig = plt.figure(figsize=(12,6))
+columns = 6
+rows = 3
+fig.suptitle(&#39;Validation Torch Tensor examples&#39;, size=16)
+
+
+valid_example_images = get_examples(train_viz_dataset.validation_subset, reverse_label_map)
+
+for i in range(1, columns*rows +1):
+    idx = i - 1
+    if idx &lt; 6:
+        img = valid_example_images[&#39;Benign&#39;][idx]
+    elif idx &gt;= 6 and idx &lt; 12:
+        img = valid_example_images[&#39;Malignant&#39;][idx - 6]
+    else:
+        img = valid_example_images[&#39;Normal&#39;][idx - 12]
+
+    fig.add_subplot(rows, columns, i)
+    plt.axis(&#39;off&#39;)
+    plt.tight_layout()
+    if idx == 0 or idx == 6 or idx == 12:
+        plt.axis(&#39;on&#39;)
+        label_name = reverse_label_map[int(idx/6)]
+        plt.ylabel(label_name, fontsize=16)
+        plt.tick_params(axis=&#39;x&#39;, bottom=False, labelbottom=False)
+        plt.tick_params(axis=&#39;y&#39;, left=False, labelleft=False)
+
+    plt.imshow(torch.movedim(img, 0, 2).detach().cpu().numpy().astype(np.uint8))
+
+plt.show()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Transfer-Learning">
+<h3>Transfer Learning<a class="headerlink" href="#Transfer-Learning" title="Link to this heading"></a></h3>
+<p>This step calls the model’s train function with the dataset that was just prepared. The training function will get the PyTorch feature vector and add on a dense layer based on the number of classes in the dataset. The model is then compiled and trained based on the number of epochs specified in the argument. We also add two more dense layers using the <code class="docutils literal notranslate"><span class="pre">extra_layers</span></code> parameter.</p>
+<p>To optionally insert additional dense layers between the base model and output layer, <code class="docutils literal notranslate"><span class="pre">extra_layers=[1024,</span> <span class="pre">512]</span></code> will insert two dense layers, the first with 1024 neurons and the second with 512 neurons.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>viz_history = viz_model.train(train_viz_dataset, output_dir=output_dir, epochs=5, seed=10, extra_layers=[1024, 512], ipex_optimize=False)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>validation_viz_metrics = viz_model.evaluate(train_viz_dataset)
+test_viz_metrics = viz_model.evaluate(test_viz_dataset)
+print(validation_viz_metrics)
+print(test_viz_metrics)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Save-the-Computer-Vision-Model">
+<h3>Save the Computer Vision Model<a class="headerlink" href="#Save-the-Computer-Vision-Model" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>saved_model_dir = viz_model.export(output_dir)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Error-Analysis">
+<h3>Error Analysis<a class="headerlink" href="#Error-Analysis" title="Link to this heading"></a></h3>
+<p>Analyzing the errors via a confusion matrix and ROC and PR curves will help us identify if our model is exibiting any label bias</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from scipy.special import softmax
+y_pred = []
+# get the logit predictions and then convert to probabilities
+for batch in test_viz_dataset.dataset:
+    y_pred.append(softmax(viz_model._model(batch[0][None, :]).detach().numpy())[0])
+
+y_true =[y for x, y in test_viz_dataset.dataset]
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer import metrics
+viz_cm = metrics.confusion_matrix(y_true, y_pred, test_viz_dataset.class_names)
+viz_cm.visualize()
+print(viz_cm.report)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter = metrics.plot(y_true, y_pred, test_viz_dataset.class_names)
+plotter.pr_curve()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter.roc_curve()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Explainability">
+<h3>Explainability<a class="headerlink" href="#Explainability" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># convert one-hot encoded predictions to the index labels
+y_pred_labels = np.array(y_pred).argmax(axis=1)
+
+# get the malignant indexes and then the normal and benign prediction indexes
+mal_idxs = np.where(np.array(y_true) == label_map_func(&#39;Malignant&#39;))[0].tolist()
+nor_preds = np.where(np.array(y_pred_labels) == label_map_func(&#39;Normal&#39;))[0].tolist()
+ben_preds = np.where(np.array(y_pred_labels) == label_map_func(&#39;Benign&#39;))[0].tolist()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get mal examples that were misclassified as ben
+mal_classified_as_nor = list(set(mal_idxs).intersection(nor_preds))
+
+# get mal examples that were misclassified as ben
+mal_classified_as_ben = list(set(mal_idxs).intersection(ben_preds))
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get the images for all mals predicted as nors
+mal_as_nor_images = [test_viz_dataset.dataset[i][0] for i in mal_classified_as_nor]
+
+# get the images for all mals predicted as bens
+mal_as_ben_images = [test_viz_dataset.dataset[i][0] for i in mal_classified_as_ben]
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from skimage import io
+# plot 14 mal_as_nor images
+fig = plt.figure(figsize=(12,6))
+columns = 7
+rows = 2
+
+for i in range(1, columns*rows +1):
+    if i == len(mal_as_nor_images):
+        break
+    idx = i - 1
+
+    fig.add_subplot(rows, columns, i)
+    plt.axis(&#39;off&#39;)
+    plt.tight_layout()
+
+    plt.imshow(torch.movedim(mal_as_nor_images[idx], 0, 2).detach().cpu().numpy().astype(np.uint8))
+
+fig.suptitle(&#39;Malignant predicted as Normal&#39;, fontsize=18)
+plt.tight_layout()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># lets calculate gradcam on the 0th, 1st and 10th images since they
+# seem to have tnhe clearest visual of a malignant tumor
+from intel_ai_safety.explainer.cam import pt_cam as cam
+
+images = [torch.movedim(mal_as_nor_images[0], 0, 2).detach().cpu().numpy().astype(np.uint8),
+          torch.movedim(mal_as_nor_images[3], 0, 2).detach().cpu().numpy().astype(np.uint8),
+          torch.movedim(mal_as_nor_images[5], 0, 2).detach().cpu().numpy().astype(np.uint8)]
+
+
+final_image_dim = (224, 224)
+targetLayer = viz_model._model.layer4
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Normal&#39;),
+                      images[0],
+                      final_image_dim,
+                      &#39;cpu&#39;)
+
+xgc.visualize()
+
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Normal&#39;),
+                      images[1],
+                      final_image_dim,
+                      &#39;cpu&#39;)
+
+xgc.visualize()
+
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Normal&#39;),
+                      images[2],
+                      final_image_dim,
+                      &#39;cpu&#39;)
+
+xgc.visualize()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># plot 14 mal_as_ben images
+fig = plt.figure(figsize=(12,6))
+columns = 7
+rows = 2
+
+for i in range(1, columns*rows +1):
+    idx = i - 1
+    if idx == len(mal_as_ben_images):
+        break
+
+    fig.add_subplot(rows, columns, i)
+    plt.axis(&#39;off&#39;)
+    plt.tight_layout()
+
+    plt.imshow(torch.movedim(mal_as_ben_images[idx], 0, 2).detach().cpu().numpy().astype(np.uint8))
+
+fig.suptitle(&#39;Malignant predicted as Benign&#39;, fontsize=18)
+plt.tight_layout()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># lets calculate gradcam on the 5th, 10th and 11th images since they
+# seem to have tnhe clearest visual of a malignant tumor
+
+images = [torch.movedim(mal_as_ben_images[0], 0, 2).detach().cpu().numpy().astype(np.uint8),
+          torch.movedim(mal_as_ben_images[1], 0, 2).detach().cpu().numpy().astype(np.uint8),
+          torch.movedim(mal_as_ben_images[2], 0, 2).detach().cpu().numpy().astype(np.uint8)]
+
+
+
+final_image_dim = (224, 224)
+targetLayer = viz_model._model.layer4
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Benign&#39;),
+                      images[0],
+                      final_image_dim,
+                      &#39;cpu&#39;)
+
+xgc.visualize()
+
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Benign&#39;),
+                      images[1],
+                      final_image_dim,
+                      &#39;cpu&#39;)
+
+xgc.visualize()
+
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Benign&#39;),
+                      images[2],
+                      final_image_dim,
+                      &#39;cpu&#39;)
+
+xgc.visualize()
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Model-2:-Text-Classification-with-PyTorch">
+<h2>Model 2: Text Classification with PyTorch<a class="headerlink" href="#Model-2:-Text-Classification-with-PyTorch" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Get the Model and Dataset<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>Now we will call the model factory to get a pretrained model from HuggingFace and load the annotation file using the dataset factory. We will use clinical-bert for this part.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Set up NLP parameters
+model_name = &#39;clinical-bert&#39;
+seq_length = 64
+batch_size = 5
+quantization_criterion = 0.05
+quantization_max_trial = 50
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nlp_model = model_factory.get_model(model_name=model_name, framework=&#39;pytorch&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create a label map function and reverse label map for the dataset
+def label_map_func(label):
+        if label == &#39;Benign&#39;:
+            return 0
+        elif label == &#39;Malignant&#39;:
+            return 1
+        elif label == &#39;Normal&#39;:
+            return 2
+
+reverse_label_map = {0: &#39;Benign&#39;, 1: &#39;Malignant&#39;, 2: &#39;Normal&#39;}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>os.path.split(os.path.splitext(train_annotation_path)[0] + &#39;.csv&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_file_dir, train_file_name =  os.path.split(os.path.splitext(train_annotation_path)[0] +&#39;.csv&#39;)
+train_nlp_dataset = dataset_factory.load_dataset(dataset_dir=train_file_dir,
+                       use_case=&#39;text_classification&#39;,
+                       framework=&#39;pytorch&#39;,
+                       dataset_name=&#39;brca&#39;,
+                       csv_file_name=train_file_name,
+                       label_map_func=label_map_func,
+                       class_names=[&#39;Benign&#39;, &#39;Malignant&#39;, &#39;Normal&#39;],
+                       header=True,
+                       label_col=label_col,
+                       shuffle_files=True,
+                       exclude_cols=[2])
+
+test_file_dir, test_file_name =  os.path.split(os.path.splitext(test_annotation_path)[0] +&#39;.csv&#39;)
+test_nlp_dataset = dataset_factory.load_dataset(dataset_dir=test_file_dir,
+                       use_case=&#39;text_classification&#39;,
+                       framework=&#39;pytorch&#39;,
+                       dataset_name=&#39;brca&#39;,
+                       csv_file_name=test_file_name,
+                       label_map_func=label_map_func,
+                       class_names=[&#39;Benign&#39;, &#39;Malignant&#39;, &#39;Normal&#39;],
+                       header=True,
+                       label_col=label_col,
+                       shuffle_files=True,
+                       exclude_cols=[2])
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h3>Data Preparation<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_nlp_dataset.preprocess(nlp_model.hub_name, batch_size=batch_size, max_length=seq_length)
+test_nlp_dataset.preprocess(nlp_model.hub_name, batch_size=batch_size, max_length=seq_length)
+train_nlp_dataset.shuffle_split(train_pct=0.67, val_pct=0.33, shuffle_files=False)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Corpus-analysis">
+<h3>Corpus analysis<a class="headerlink" href="#Corpus-analysis" title="Link to this heading"></a></h3>
+<p>Let’s take a look at the word distribution across each label to get an idea what BERT will be training on as well make sure that our training and validation datasets are distributed similarly.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import plotly.express as px
+
+train_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
+for label in train_nlp_dataset.train_subset[&#39;label&#39;]:
+    train_label_count[reverse_label_map[int(label)]] += 1
+
+print(&#39;Training label distribution:&#39;)
+train_label_count
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>valid_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
+for label in train_nlp_dataset.validation_subset[&#39;label&#39;]:
+    valid_label_count[reverse_label_map[int(label)]] += 1
+
+print(&#39;Validation label distribution:&#39;)
+valid_label_count
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>test_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
+for label in test_nlp_dataset.dataset[&#39;label&#39;]:
+    test_label_count[reverse_label_map[int(label)]] += 1
+
+print(&#39;Validation label distribution:&#39;)
+test_label_count
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>form = {&#39;type&#39;:&#39;domain&#39;}
+
+fig = make_subplots(rows=1, cols=3, specs=[[form, form, form]], subplot_titles=[&#39;Training&#39;, &#39;Validation&#39;, &#39;Testing&#39;])
+fig.add_trace(go.Pie(values=list(train_label_count.values()), labels=list(train_label_count.keys())), 1, 1)
+fig.add_trace(go.Pie(values=list(valid_label_count.values()), labels=list(valid_label_count.keys())), 1, 2)
+fig.add_trace(go.Pie(values=list(test_label_count.values()), labels=list(test_label_count.keys())), 1, 3)
+
+
+fig.update_layout(height=600, width=800, title_text=&quot;Label Distributions&quot;)
+fig.show()
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nltk.download(&#39;punkt&#39;)
+nltk.download(&#39;words&#39;)
+
+def get_mc_df(words_list, n=50, ignored_words=[]):
+    &#39;&#39;&#39;
+    Get&#39;s the most common words from a list of words and returns a pd DataFrame for Plotly
+    &#39;&#39;&#39;
+
+    frequency_dict = nltk.FreqDist(words_list)
+    most_common = frequency_dict.most_common(n=500)
+
+
+    final_fd = pd.DataFrame({&#39;Token&#39;: [], &#39;Frequency&#39;: []})
+    cnt = 0
+    idx = 0
+    while(cnt &lt; n):
+        if most_common[idx][0] in string.punctuation:
+            print(f&#39;{most_common[idx][0]} is not a word&#39;)
+        else:
+            final_fd.loc[len(final_fd.index)] = [most_common[idx][0], most_common[idx][1]]
+            cnt += 1
+        idx += 1
+
+    return final_fd
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.read_csv(train_annotation_path)
+
+# get string arrays of symptoms for each label
+mal_text = list(df.loc[df[&#39;label&#39;] == &#39;Malignant&#39;][&#39;symptoms&#39;])
+nor_text = list(df.loc[df[&#39;label&#39;] == &#39;Normal&#39;][&#39;symptoms&#39;])
+ben_text = list(df.loc[df[&#39;label&#39;] == &#39;Benign&#39;][&#39;symptoms&#39;])
+
+# get tokenized words for each
+mal_tokenized: list[str] = nltk.word_tokenize(&quot; &quot;.join(mal_text))
+nor_tokenized: list[str] = nltk.word_tokenize(&quot; &quot;.join(nor_text))
+ben_tokenized: list[str] = nltk.word_tokenize(&quot; &quot;.join(ben_text))
+
+# generate the dataframes necesarry to plot distributions
+mal_fd = get_mc_df(mal_tokenized)
+nor_fd = get_mc_df(nor_tokenized)
+ben_fd = get_mc_df(ben_tokenized)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = px.bar(mal_fd, x=&quot;Token&quot;, y=&#39;Frequency&#39;, color=&#39;Frequency&#39;, title=&#39;Malignant word distribution&#39;)
+fig.update(layout_coloraxis_showscale=False)
+fig.show()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = px.bar(nor_fd, x=&quot;Token&quot;, y=&#39;Frequency&#39;, color=&#39;Frequency&#39;, title=&#39;Normal word distribution&#39;)
+fig.update(layout_coloraxis_showscale=False)
+fig.show()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = px.bar(ben_fd, x=&quot;Token&quot;, y=&#39;Frequency&#39;, color=&#39;Frequency&#39;, title=&#39;Benign word distribution&#39;)
+fig.update(layout_coloraxis_showscale=False)
+fig.show()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id3">
+<h3>Transfer Learning<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>This step calls the model’s train function with the dataset that was just prepared. The training function will get the pretrained model from HuggingFace and add on a dense layer based on the number of classes in the dataset. The model is then trained using an instance of HuggingFace Trainer for the number of epochs specified. If desired, a native PyTorch loop can be invoked instead of Trainer by setting <code class="docutils literal notranslate"><span class="pre">use_trainer=False</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import transformers
+transformers.set_seed(1)
+nlp_history = nlp_model.train(train_nlp_dataset, output_dir, epochs=3, use_trainer=True, seed=1)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Save-the-NLP-Model">
+<h3>Save the NLP Model<a class="headerlink" href="#Save-the-NLP-Model" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nlp_model.export(output_dir)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># This currently isn&#39;t showing the correct output for test
+train_nlp_metrics = nlp_model.evaluate(train_nlp_dataset)
+test_nlp_metrics = nlp_model.evaluate(test_nlp_dataset)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Error-analysis">
+<h3>Error analysis<a class="headerlink" href="#Error-analysis" title="Link to this heading"></a></h3>
+<p>We can see that BERT has a much better accuracy than the CNN. Nonetheless, similar to the CNN, let’s see where BERT makes mistakes across the three classes using a confusion matrix and ROC and PR curves.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get predictions in logits (one-hot-encoded)
+# NOTE: added a new flag to predict function
+logit_predictions = nlp_model.predict(test_nlp_dataset.dataset, return_raw=True)[&#39;logits&#39;]
+#convert logits to probability
+from scipy.special import softmax
+y_pred = softmax(logit_predictions.detach().numpy(), axis=1)
+y_true = test_nlp_dataset.validation_subset[&#39;label&#39;].numpy().astype(int)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer import metrics
+
+nlp_cm = metrics.confusion_matrix(y_true, y_pred, test_nlp_dataset.class_names)
+nlp_cm.visualize()
+print(nlp_cm.report)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter = metrics.plot(y_true, y_pred, test_nlp_dataset.class_names)
+plotter.pr_curve()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter.roc_curve()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Explanation">
+<h3>Explanation<a class="headerlink" href="#Explanation" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mal_idxs = np.where(test_nlp_dataset.dataset[&#39;label&#39;].numpy() == label_map_func(&#39;Malignant&#39;))[0].tolist()
+ben_preds = np.where(nlp_model.predict(test_nlp_dataset.dataset).numpy() == label_map_func(&#39;Benign&#39;))[0].tolist()
+
+# get mal examples that were misclassified as ben
+mal_classified_as_ben = list(set(mal_idxs).intersection(ben_preds))
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mal_classified_as_ben_text = test_nlp_dataset.get_text(test_nlp_dataset.dataset[mal_classified_as_ben][&#39;input_ids&#39;])
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># define a prediction function
+def f(x):
+    encoded_input = nlp_model._tokenizer(x.tolist(), padding=True, return_tensors=&#39;pt&#39;)
+    outputs = nlp_model._model(**encoded_input)
+    return softmax(outputs.logits.detach().numpy(), axis=1)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer.attributions import attributions
+partition_explainer = attributions.partition_text_explainer(f, test_nlp_dataset.class_names, np.array(mal_classified_as_ben_text), r&quot;\W+&quot;)
+partition_explainer.visualize()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Int8-Quantization">
+<h3>Int8 Quantization<a class="headerlink" href="#Int8-Quantization" title="Link to this heading"></a></h3>
+<p>We can use the <a class="reference external" href="https://github.com/intel/intel-extension-for-transformers">Intel® Extension for Transformers</a> to quantize the trained model for faster inference. If you want to run this part of the notebook, make sure you have <code class="docutils literal notranslate"><span class="pre">intel-extension-for-transformers</span></code> installed in your environment.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! pip install --no-cache-dir intel-extension-for-transformers
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_extension_for_transformers.transformers.trainer import NLPTrainer
+from intel_extension_for_transformers.transformers import objectives, OptimizedModel, QuantizationConfig
+from intel_extension_for_transformers.transformers import metrics as nlptk_metrics
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Set up quantization config
+tune_metric = nlptk_metrics.Metric(
+    name=&quot;eval_accuracy&quot;,
+    greater_is_better=True,
+    is_relative=True,
+    criterion=quantization_criterion,
+    weight_ratio=None,
+)
+
+objective = objectives.Objective(
+    name=&quot;performance&quot;, greater_is_better=True, weight_ratio=None
+)
+
+quantization_config = QuantizationConfig(
+    approach=&quot;PostTrainingDynamic&quot;,
+    max_trials=quantization_max_trial,
+    metrics=[tune_metric],
+    objectives=[objective],
+)
+
+# Set up metrics computation
+def compute_metrics(p: EvalPrediction):
+    preds = p.predictions[0] if isinstance(p.predictions, tuple) else p.predictions
+    preds = np.argmax(preds, axis=1)
+    return {&quot;accuracy&quot;: (preds == p.label_ids).astype(np.float32).mean().item()}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>quantizer = NLPTrainer(model=nlp_model._model,
+                       train_dataset=train_nlp_dataset.train_subset,
+                       eval_dataset=train_nlp_dataset.validation_subset,
+                       compute_metrics=compute_metrics,
+                       tokenizer=train_nlp_dataset._tokenizer)
+quantized_model = quantizer.quantize(quant_config=quantization_config)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>results = quantizer.evaluate()
+eval_acc = results.get(&quot;eval_accuracy&quot;)
+print(&quot;Final Eval Accuracy: {:.5f}&quot;.format(eval_acc))
+</pre></div>
+</div>
+</div>
+<section id="Save-the-Quantized-NLP-Model">
+<h4>Save the Quantized NLP Model<a class="headerlink" href="#Save-the-Quantized-NLP-Model" title="Link to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>quantizer.save_model(os.path.join(output_dir, &#39;quantized_BERT&#39;))
+nlp_model._model.config.save_pretrained(os.path.join(output_dir, &#39;quantized_BERT&#39;))
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="id5">
+<h3>Error analysis<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>The quantized BERT model has the same validation accuracy as it’s stock counterpart. This does not mean, however, that they perform the same. Let’s look at the confusion matrix and PR and ROC curves to see if the errors are different.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get predictions in logits (one-hot-encoded)
+# NOTE: added a new flag to predict function
+logit_predictions = quantizer.predict(test_nlp_dataset.dataset)[0]
+#convert logits to probability
+from scipy.special import softmax
+y_pred = softmax(logit_predictions, axis=1)
+y_true = test_nlp_dataset.dataset[&#39;label&#39;].numpy().astype(int)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>quant_cm = metrics.confusion_matrix(y_true, y_pred, test_nlp_dataset.class_names)
+quant_cm.visualize()
+print(quant_cm.report)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter = metrics.plot(y_true, y_pred, test_nlp_dataset.class_names)
+plotter.pr_curve()
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Citations">
+<h2>Citations<a class="headerlink" href="#Citations" title="Link to this heading"></a></h2>
+<section id="Data-Citation">
+<h3>Data Citation<a class="headerlink" href="#Data-Citation" title="Link to this heading"></a></h3>
+<p>Khaled R., Helal M., Alfarghaly O., Mokhtar O., Elkorany A., El Kassas H., Fahmy A. Categorized Digital Database for Low energy and Subtracted Contrast Enhanced Spectral Mammography images [Dataset]. (2021) The Cancer Imaging Archive. DOI: <a class="reference external" href="https://doi.org/10.7937/29kw-ae92">10.7937/29kw-ae92</a></p>
+</section>
+<section id="Publication-Citation">
+<h3>Publication Citation<a class="headerlink" href="#Publication-Citation" title="Link to this heading"></a></h3>
+<p>Khaled, R., Helal, M., Alfarghaly, O., Mokhtar, O., Elkorany, A., El Kassas, H., &amp; Fahmy, A. Categorized contrast enhanced mammography dataset for diagnostic and artificial intelligence research. (2022) Scientific Data, Volume 9, Issue 1. DOI: <a class="reference external" href="https://doi.org/10.1038/s41597-022-01238-0">10.1038/s41597-022-01238-0</a></p>
+</section>
+<section id="TCIA-Citation">
+<h3>TCIA Citation<a class="headerlink" href="#TCIA-Citation" title="Link to this heading"></a></h3>
+<p>Clark K, Vendt B, Smith K, Freymann J, Kirby J, Koppel P, Moore S, Phillips S, Maffitt D, Pringle M, Tarbox L, Prior F. The Cancer Imaging Archive (TCIA): Maintaining and Operating a Public Information Repository, Journal of Digital Imaging, Volume 26, Number 6, December, 2013, pp 1045-1057. DOI: <a class="reference external" href="https://doi.org/10.1007/s10278-013-9622-7">10.1007/s10278-013-9622-7</a></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

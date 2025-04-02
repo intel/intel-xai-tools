@@ -1,0 +1,872 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explaining Fine Tuned Text Classifier with PyTorch using the Intel® Explainable AI API &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#running-notebooks">Running Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#support">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Intel/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Explaining Fine Tuned Text Classifier with PyTorch using the Intel® Explainable AI API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/PyTorch_Text_Classifier_fine_tuning_with_Attributions.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Explaining-Fine-Tuned-Text-Classifier-with-PyTorch-using-the-Intel®-Explainable-AI-API">
+<h1>Explaining Fine Tuned Text Classifier with PyTorch using the Intel® Explainable AI API<a class="headerlink" href="#Explaining-Fine-Tuned-Text-Classifier-with-PyTorch-using-the-Intel®-Explainable-AI-API" title="Link to this heading"></a></h1>
+<p>This notebook demonstrates fine tuning pretrained models from <a class="reference external" href="https://huggingface.co">Hugging Face</a> using text classification datasets from the <a class="reference external" href="https://huggingface.co/datasets">Hugging Face Datasets catalog</a> or a custom dataset. The notebook uses <a class="reference external" href="https://github.com/intel/intel-extension-for-pytorch">Intel® Extension for PyTorch*</a>, which extends PyTorch with optimizations for an extra performance boost on Intel hardware.</p>
+<p>Please install the dependencies from the <a class="reference external" href="/notebooks/pytorch_requirements.txt">pytorch_requirements.txt</a> file before executing this notebook.</p>
+<p>The notebook performs the following steps:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#1.-Import-dependencies-and-setup-parameters"><span class="std std-ref">Import dependencies and setup parameters</span></a></p></li>
+<li><p><a class="reference internal" href="#2.-Prepare-the-dataset"><span class="std std-ref">Prepare the dataset</span></a></p></li>
+<li><p><a class="reference internal" href="#3.-Prepare-the-Model-for-Fine-Tuning-and-Evaluation"><span class="std std-ref">Prepare the Model for Fine Tuning and Evaluation</span></a></p></li>
+<li><p><a class="reference internal" href="#4.-Export-the-model"><span class="std std-ref">Export the model</span></a></p></li>
+<li><p><a class="reference internal" href="#5.-Reload-the-model-and-make-predictions"><span class="std std-ref">Reload the model and make predictions</span></a></p></li>
+<li><p><a class="reference internal" href="#6.-Get-Explainations-with-Intel-Explainable-AI-Tools"><span class="std std-ref">Get Explainations with Intel Explainable AI Tools</span></a></p></li>
+</ol>
+<section id="1.-Import-dependencies-and-setup-parameters">
+<h2>1. Import dependencies and setup parameters<a class="headerlink" href="#1.-Import-dependencies-and-setup-parameters" title="Link to this heading"></a></h2>
+<p>This notebook assumes that you have already followed the instructions in the <a class="reference external" href="/notebooks/README.md">README.md</a> to setup a PyTorch environment with all the dependencies required to run the notebook.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import intel_extension_for_pytorch as ipex
+import logging
+import numpy as np
+import os
+import pandas as pd
+import sys
+import torch
+import warnings
+import typing
+import pickle
+
+from tqdm.auto import tqdm
+from torch.optim import AdamW
+from torch.utils.data import DataLoader
+from datasets import ClassLabel, load_dataset, load_metric, Split
+from datasets import logging as datasets_logging
+from transformers.utils import logging as transformers_logging
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+    get_scheduler
+)
+from tlt.utils.file_utils import download_and_extract_zip_file
+
+# Set the logging stream to stdout
+for handler in transformers_logging._get_library_root_logger().handlers:
+    handler.setStream(sys.stdout)
+
+sh = datasets_logging.logging.StreamHandler(sys.stdout)
+
+datasets_logging.set_verbosity_error()
+warnings.filterwarnings(&#39;ignore&#39;)
+os.environ[&quot;TRANSFORMERS_NO_ADVISORY_WARNINGS&quot;] = &quot;1&quot;
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Specify the name of the Hugging Face pretrained model to use (https://huggingface.co/models)
+# For example:
+#   albert-base-v2
+#   bert-base-uncased
+#   distilbert-base-uncased
+#   distilbert-base-uncased-finetuned-sst-2-english
+#   roberta-base
+model_name = &quot;distilbert-base-uncased&quot;
+
+# Define an output directory
+output_dir = os.environ[&quot;OUTPUT_DIR&quot;] if &quot;OUTPUT_DIR&quot; in os.environ else \
+    os.path.join(os.environ[&quot;HOME&quot;], &quot;output&quot;, model_name)
+
+# Define a dataset directory
+dataset_dir = os.environ[&quot;DATASET_DIR&quot;] if &quot;DATASET_DIR&quot; in os.environ else \
+    os.path.join(os.environ[&quot;HOME&quot;], &quot;dataset&quot;)
+
+print(&quot;Model name:&quot;, model_name)
+print(&quot;Output directory:&quot;, output_dir)
+print(&quot;Dataset directory:&quot;, dataset_dir)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Prepare-the-dataset">
+<h2>2. Prepare the dataset<a class="headerlink" href="#2.-Prepare-the-dataset" title="Link to this heading"></a></h2>
+<p>The notebook has two options for getting a dataset:</p>
+<ul class="simple">
+<li><p>Option A: Use a dataset from the <a class="reference external" href="https://huggingface.co/datasets">Hugging Face Datasets catalog</a></p></li>
+<li><p>Option B: Use a custom dataset (downloaded from another source or from your local system)</p></li>
+</ul>
+<p>In both cases, the code ends up defining <code class="docutils literal notranslate"><span class="pre">`datasets.Dataset</span></code> &lt;<a class="reference external" href="https://huggingface.co/docs/datasets/package_reference/main_classes#datasets.Dataset">https://huggingface.co/docs/datasets/package_reference/main_classes#datasets.Dataset</a>&gt;`__ objects for the train and evaluation splits.</p>
+<p>Execute the following cell to load the tokenizer and declare the base class used for the dataset setup.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Load the tokenizer
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+class TextClassificationData():
+    &quot;&quot;&quot;
+    Base class used for defining the text classification dataset being used. Defines Hugging Face datasets.Dataset
+    objects for train and evaluations splits, along with helper functions for preprocessing the dataset.
+    &quot;&quot;&quot;
+
+    def __init__(self, dataset_name, tokenizer, sentence1_key, sentence2_key, label_key):
+        self.tokenizer = tokenizer
+        self.dataset_name = dataset_name
+        self.class_labels = None
+
+        # Tokenized train and eval ds
+        self.train_ds = None
+        self.eval_ds = None
+
+        # Column keys
+        self.sentence1_key = sentence1_key
+        self.sentence2_key = sentence2_key
+        self.label_key = label_key
+
+    def tokenize_function(self, examples):
+        # Define the tokenizer args, depending on if the data has 2 sentences or just 1
+        args = ((examples[self.sentence1_key],) if self.sentence2_key is None \
+                 else (examples[self.sentence1_key], examples[self.sentence2_key]))
+        return self.tokenizer(*args, padding=&quot;max_length&quot;, truncation=True)
+
+    def tokenize_dataset(self, dataset):
+        # Apply the tokenize function to the dataset
+        tokenized_dataset = dataset.map(self.tokenize_function, batched=True)
+
+        # Remove the raw text from the tokenized dataset
+        raw_text_columns = [self.sentence1_key, self.sentence2_key] if self.sentence2_key else [self.sentence1_key]
+        return tokenized_dataset.remove_columns(raw_text_columns)
+
+    def define_train_eval_splits(self, dataset, train_split_name, eval_split_name, train_size=None, eval_size=None):
+        self.train_ds = dataset[train_split_name].shuffle().select(range(train_size)) if train_size \
+            else tokenized_dataset[train_split_name]
+        self.eval_ds = dataset[eval_split_name].shuffle().select(range(eval_size)) if eval_size \
+            else tokenized_dataset[eval_split_name]
+
+    def get_label_names(self):
+        if self.class_labels:
+            return self.class_labels.names
+        else:
+            raise ValueError(&quot;Class labels were not defined&quot;)
+
+    def display_sample(self, split_name=&quot;train&quot;, sample_size=7):
+        # Display a sample of the raw data
+        sentence1_sample = self.dataset[split_name][self.sentence1_key][:sample_size]
+        sentence2_sample = self.dataset[split_name][self.sentence2_key][:sample_size] if self.sentence2_key else None
+        label_sample = self.dataset[split_name][self.label_key][:sample_size]
+        dataset_sample = zip(sentence1_sample, sentence2_sample, label_sample) if self.sentence2_key \
+            else zip(sentence1_sample, label_sample)
+
+        columns = [self.sentence1_key, self.sentence2_key, self.label_key] if self.sentence2_key else \
+            [self.sentence1_key, self.label_key]
+
+        # Display the sample using a dataframe
+        sample = pd.DataFrame(dataset_sample, columns=columns)
+        return sample.style.hide_index()
+</pre></div>
+</div>
+</div>
+<p>Now that the base class is defined, either run <a class="reference internal" href="#Option-A:-Use-a-Hugging-Face-dataset"><span class="std std-ref">Option A to use the Hugging Face Dataset catalog</span></a> or <a class="reference internal" href="#Option-B:-Use-a-custom-dataset"><span class="std std-ref">Option B for a custom dataset</span></a> downloaded from online or from your local system.</p>
+<section id="Option-A:-Use-a-Hugging-Face-dataset">
+<h3>Option A: Use a Hugging Face dataset<a class="headerlink" href="#Option-A:-Use-a-Hugging-Face-dataset" title="Link to this heading"></a></h3>
+<p><a class="reference external" href="https://huggingface.co/datasets">Hugging Face Datasets</a> has a catalog of datasets that can be specified by name. Information about the dataset is available in the catalog (including information on the size of the dataset and the splits).</p>
+<p>The next cell gets the <a class="reference external" href="https://huggingface.co/datasets/imdb">IMDb movie review dataset</a> using the Hugging Face datasets API. If the notebook is executed multiple times, the dataset will be used from the dataset directory, to speed up the time that it takes to run.</p>
+<p>The IMDb dataset in Hugging Face has 3 splits: <code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">test</span></code>, and <code class="docutils literal notranslate"><span class="pre">unsupervised</span></code>. This notebook will be using data from the <code class="docutils literal notranslate"><span class="pre">train</span></code> split for training and data from the <code class="docutils literal notranslate"><span class="pre">test</span></code> split for evaluation. The data has 2 columns: <code class="docutils literal notranslate"><span class="pre">text</span></code> (string with the movie review) and <code class="docutils literal notranslate"><span class="pre">label</span></code> (integer class label). The code in the next cell is setup to run using the IMDb dataset, so note that if a different dataset is being used, you may need to change the split names and/or the column names.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class HFDSTextClassificationData(TextClassificationData):
+    &quot;&quot;&quot;
+    Class used for loading and preprocessing text classification datasets from the Hugging Face datasets catalog
+    &quot;&quot;&quot;
+
+    def __init__(self, tokenizer, dataset_dir, dataset_name, train_size, eval_size, train_split_name,
+                 eval_split_name, sentence1_key, sentence2_key, label_key):
+        &quot;&quot;&quot;
+        Initialize the HFDSTextClassificationData class for a text classification dataset from Hugging Face.
+
+        :param tokenizer: Tokenizer to preprocess the dataset
+        :param dataset_dir: Cache directory used when loading the dataset
+        :param dataset_name: Name of the dataset to load from the Hugging Face catalog
+        :param train_size: Size of the training dataset. For quicker training or debug, use a subset of the data.
+                           Set to `None` to use all the data.
+        :param eval_size: Size of the evaluation dataset.
+        :param train_split_name: String specifying which split to load for training (e.g. &quot;train[:80%]&quot;). See the
+                                 https://www.tensorflow.org/datasets/splits documentation for more information on
+                                 defining splits.
+        :param eval_split_name: String specifying the split to load for evaluation.
+        :param sentence1_key: Name of the sentence1 column
+        :param sentence2_key: Name of the sentence2 column or `None` if there&#39;s only one text column
+        :param label_key: Name of the label column
+        &quot;&quot;&quot;
+
+        # Init base class
+        TextClassificationData.__init__(self, dataset_name, tokenizer, sentence1_key, sentence2_key, label_key)
+
+        # Load the dataset from the Hugging Face dataset API
+        self.dataset = load_dataset(dataset_name, cache_dir=dataset_dir)
+
+        # Tokenize the dataset
+        tokenized_dataset = self.tokenize_dataset(self.dataset)
+
+        # Get the training and eval dataset based on the specified dataset sizes
+        self.define_train_eval_splits(tokenized_dataset, train_split_name, eval_split_name, train_size, eval_size)
+
+        # Save the class label information to use later when predicting
+        self.class_labels = self.dataset[train_split_name].features[label_key]
+
+# Name of the Hugging Face dataset
+dataset_name = &quot;imdb&quot;
+
+# For quicker training and debug runs, use a subset of the dataset by specifying the size of the train/eval datasets.
+# Set the sizes `None` to use the full dataset. The full IMDb dataset has 25,000 training and 25,000 test examples.
+train_dataset_size = 1000
+eval_dataset_size = 1000
+
+# Name of the columns in the dataset (the column names may vary if you are not using the IMDb dataset)
+sentence1_key = &quot;text&quot;
+sentence2_key = None
+label_key = &quot;label&quot;
+
+dataset = HFDSTextClassificationData(tokenizer, dataset_dir, dataset_name, train_dataset_size, eval_dataset_size,
+                                     Split.TRAIN, Split.TEST, sentence1_key, sentence2_key, label_key)
+
+# Print a sample of the data
+dataset.display_sample(Split.TRAIN, sample_size=5)
+</pre></div>
+</div>
+</div>
+<p>Skip to Step 3 Get the model and setup the Trainer to continue using the dataset from the Hugging Face catalog.</p>
+</section>
+<section id="Option-B:-Use-a-custom-dataset">
+<h3>Option B: Use a custom dataset<a class="headerlink" href="#Option-B:-Use-a-custom-dataset" title="Link to this heading"></a></h3>
+<p>Instead of using a dataset from the Hugging Face dataset catalog, a custom dataset from your local system or a download can be used.</p>
+<p>In this example, we download the <a class="reference external" href="https://archive.ics.uci.edu/dataset/228/sms+spam+collection">SMS Spam Collection dataset</a>. The zip file has a single tab-separated value file with two columns. The first column is the label (<code class="docutils literal notranslate"><span class="pre">ham</span></code> or <code class="docutils literal notranslate"><span class="pre">spam</span></code>) and the second column is the text of the SMS message:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;ham or spam&gt;   &lt;text&gt;
+&lt;ham or spam&gt;   &lt;text&gt;
+&lt;ham or spam&gt;   &lt;text&gt;
+...
+</pre></div>
+</div>
+<p>If you are using a custom dataset that has a similarly formatted csv or tsv file, you can use the class defined below. Create your object by passing in custom values for csv file name, delimiter, the label map, mapping function, etc.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class CustomCsvTextClassificationData(TextClassificationData):
+    &quot;&quot;&quot;
+    Class used for loading and preprocessing text classification datasets from CSV files
+    &quot;&quot;&quot;
+
+    def __init__(self, tokenizer, dataset_name, dataset_dir, data_files, delimiter, label_names, sentence1_key, sentence2_key,
+                 label_key, train_percent=0.8, eval_percent=0.2, train_size=None, eval_size=None, map_function=None):
+        &quot;&quot;&quot;
+        Intialize the CustomCsvTextClassificationData class for a text classification
+        dataset. The classes uses the Hugging Face datasets API to load the CSV file,
+        and split it into a train and eval datasets based on the specified percentages.
+        If train_size and eval_size are also defined, the datasets are reduced to the
+        specified number of examples.
+
+        :param tokenizer: Tokenizer to preprocess the dataset
+        :param dataset_name: Dataset name for identification purposes
+        :param dataset_dir: Directory where the csv file(s) are located
+        :param data_files: List of data file names
+        :param delimiter: Delimited for the csv files
+        :param label_names: List of label names
+        :param sentence1_key: Name of the sentence1 column
+        :param sentence2_key: Name of the sentence2 column or `None` if there&#39;s only one text column
+        :param label_key: Name of the label column
+        :param train_percent: Decimal value for the percentage of the dataset that should be used for training
+                              (e.g. 0.8 for 80%)
+        :param eval_percent: Decimal value for the percentage of the dataset that should used for validation
+                             (e.g. 0.2 for 20%)
+        :param train_size: Size of the training dataset. For quicker training or debug, use a subset of the data.
+                           Set to `None` to use all the data.
+        :param eval_size: Size of the eval dataset. Set to `None` to use all the data.
+        :param map_function: (Optional) Map function to apply to the dataset. For example, if the csv file has string
+                             labels instead of numerical values, map function can do the conversion.
+        &quot;&quot;&quot;
+        # Init base class
+        TextClassificationData.__init__(self, dataset_name, tokenizer, sentence1_key, sentence2_key, label_key)
+
+        if (train_percent + eval_percent) &gt; 1:
+            raise ValueError(&quot;The combined value of the train percentage and eval percentage &quot; \
+                             &quot;cannot be greater than 1&quot;)
+
+        # Create a list of the column names
+        column_names = [label_key, sentence1_key, sentence2_key] if sentence2_key else [label_key, sentence1_key]
+
+        # Load the dataset using the Hugging Face API
+        self.dataset = load_dataset(dataset_dir, delimiter=delimiter, data_files=data_files, column_names=column_names)
+
+        # Optionally map the dataset labels using the map_function
+        if map_function:
+            self.dataset = self.dataset.map(map_function)
+
+        # Setup the class labels
+        self.class_labels = ClassLabel(num_classes=len(label_names), names=label_names)
+        self.dataset[Split.TRAIN].features[label_key] = self.class_labels
+
+        # Split the dataset based on the percentages defined
+        self.dataset = self.dataset[Split.TRAIN].train_test_split(train_size=train_percent, test_size=eval_percent)
+
+        # Tokenize the dataset
+        tokenized_dataset = self.tokenize_dataset(self.dataset)
+
+        # Get the training and eval dataset based on the specified dataset sizes
+        self.define_train_eval_splits(tokenized_dataset, Split.TRAIN, Split.TEST, train_size, eval_size)
+
+
+# Modify the variables below to use a different dataset or a csv file on your local system.
+# The csv_path variable should be pointing to a csv file with 2 columns (the label and the text)
+dataset_url = &quot;https://archive.ics.uci.edu/static/public/228/sms+spam+collection.zip&quot;
+dataset_dir = os.path.join(dataset_dir, &quot;smsspamcollection&quot;)
+csv_name = &quot;SMSSpamCollection&quot;
+delimiter = &quot;\t&quot;
+label_names = [&quot;ham&quot;, &quot;spam&quot;]
+
+# Rename the file to include the csv extension so that the dataset API knows how to load the file
+renamed_csv = &quot;{}.csv&quot;.format(csv_name)
+
+# If we don&#39;t already have the csv file, download and extract the zip file to get it.
+if not os.path.exists(os.path.join(dataset_dir, csv_name)) and \
+                      not os.path.exists(os.path.join(dataset_dir, renamed_csv)):
+    download_and_extract_zip_file(dataset_url, dataset_dir)
+
+if not os.path.exists(os.path.join(dataset_dir, renamed_csv)):
+    os.rename(os.path.join(dataset_dir, csv_name), os.path.join(dataset_dir, renamed_csv))
+
+# Columns
+sentence1_key = &quot;text&quot;
+sentence2_key = None
+label_key = &quot;label&quot;
+
+# Map function to translate labels in the csv file to numerical values when loading the dataset
+def map_spam(example):
+    example[&quot;label&quot;] = int(example[&quot;label&quot;] == &quot;spam&quot;)
+    return example
+
+dataset = CustomCsvTextClassificationData(tokenizer, &quot;smsspamcollection&quot;, dataset_dir, [renamed_csv], delimiter,
+                                          label_names, sentence1_key, sentence2_key, label_key, train_size=1000,
+                                          eval_size=1000, map_function=map_spam)
+
+# Print a sample of the data
+dataset.display_sample(Split.TRAIN, 10)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="3.-Prepare-the-Model-for-Fine-Tuning-and-Evaluation">
+<h2>3. Prepare the Model for Fine Tuning and Evaluation<a class="headerlink" href="#3.-Prepare-the-Model-for-Fine-Tuning-and-Evaluation" title="Link to this heading"></a></h2>
+<p>The notebook has two options to train the model.</p>
+<ul class="simple">
+<li><p>Option A: Use the <code class="docutils literal notranslate"><span class="pre">`Trainer</span></code> &lt;<a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer">https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer</a>&gt;`__ API from Hugging Face.</p></li>
+<li><p>Option B: Use the native PyTorch API.</p></li>
+</ul>
+<p>In both cases, the model ends up being a transformers model and depending on the class constructor arguments, the appropriate API is selected.</p>
+<p>Execute the following cell to declare the base class used for the Text Classification Model setup.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class TextClassificationModel():
+    &quot;&quot;&quot;
+    Class used for model loading, training and evaluation.
+    &quot;&quot;&quot;
+    def __init__(self,
+                 model_name: str,
+                 num_labels: int,
+                 training_args: TrainingArguments = None,
+                 ipex_optimize: bool = True,
+                 device: str = &quot;cpu&quot;):
+        &quot;&quot;&quot;
+        Initialize the TextClassificationModel class for a text classification model with
+        PyTorch. The class uses the model_name to load the pre-trained PyTorch model from
+        Hugging Face. If the training_args are given then the Trainer API is selected for
+        training and evaluation of the model otherwise native PyTorch API is selected for
+        model training and evaluation
+
+        :param model_name: Name of the pre-trained model to load from Hugging Face
+        :param num_labels: Number of class labels
+        :param training_args: A TrainingArguments object if using the Trainer API to train
+                              the model. If None, native PyTorch API is used for training.
+        :param ipex_optimize: If True, then the model is optimized to run on intel hardware.
+        :param device: Device to run on the PyTorch model.
+        &quot;&quot;&quot;
+        self.model_name = model_name
+        self.num_labels = num_labels
+        self.training_args = training_args
+        self.device = device
+        self.trainer = None
+
+        self.train_ds = dataset.train_ds
+        self.eval_ds = dataset.eval_ds
+
+        # Load the model using the pretrained weights
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=num_labels)
+
+        # Apply the ipex optimize function to the model
+        if ipex_optimize:
+            self.model = ipex.optimize(self.model)
+
+    def train(self,
+              dataset: TextClassificationData,
+              optimizers: typing.Tuple[torch.optim.Optimizer, torch.optim.lr_scheduler.LambdaLR],
+              num_train_epochs: int = 1,
+              batch_size: int = 16,
+              compute_metrics: typing.Callable = None,
+              shuffle_samples: bool = True
+             ):
+
+        # If training_args are given, we use the `Trainer` API to train the model
+        if self.training_args:
+            self.model.train()
+            self.trainer = Trainer(model=self.model,
+                                   args=self.training_args,
+                                   train_dataset=self.train_ds,
+                                   eval_dataset=self.eval_ds,
+                                   optimizers=optimizers,
+                                   compute_metrics=compute_metrics)
+            self.trainer.train()
+
+        # If training_args are not given, we use native PyTorch API to train the model
+        else:
+
+            # Rename the `label` column to `labels` because the model expects the argument to be named `labels`
+            self.train_ds = self.train_ds.rename_column(&quot;label&quot;, &quot;labels&quot;)
+
+            # Set the format of the dataset to return PyTorch tensors instead of lists
+            self.train_ds.set_format(&quot;torch&quot;)
+
+            train_dataloader = DataLoader(self.train_ds, shuffle=shuffle_samples, batch_size=batch_size)
+
+            # Unpack the `optimizers` parameter to get optimizer and lr_scheduler
+            optimizer, lr_scheduler = optimizers[0], optimizers[1]
+
+            # Define number of training steps for the training progress bar
+            num_training_steps = num_train_epochs * len(train_dataloader)
+            progress_bar = tqdm(range(num_training_steps))
+
+            # Training loop
+            self.model.to(self.device)
+            self.model.train()
+            for epoch in range(num_train_epochs):
+                for batch in train_dataloader:
+                    batch = {k: v.to(self.device) for k, v in batch.items()}
+                    outputs = self.model(**batch)
+                    loss = outputs.loss
+                    loss.backward()
+
+                    optimizer.step()
+                    lr_scheduler.step()
+                    optimizer.zero_grad()
+                    progress_bar.update(1)
+
+    def evaluate(self, batch_size=16):
+
+        if self.trainer:
+            self.model.eval()
+            metrics = self.trainer.evaluate()
+            for key in metrics.keys():
+                print(&quot;{}: {}&quot;.format(key, metrics[key]))
+        else:
+            # Rename the `label` column to `labels` because the model expects the argument to be named `labels`
+            self.eval_ds = self.eval_ds.rename_column(&quot;label&quot;, &quot;labels&quot;)
+
+            # Set the format of the dataset to return PyTorch tensors instead of lists
+            self.eval_ds.set_format(&quot;torch&quot;)
+
+            eval_dataloader = DataLoader(self.eval_ds, batch_size=batch_size)
+            progress_bar = tqdm(range(len(eval_dataloader)))
+
+            metric = load_metric(&quot;accuracy&quot;)
+            self.model.eval()
+            for batch in eval_dataloader:
+                batch = {k: v.to(self.device) for k, v in batch.items()}
+                with torch.no_grad():
+                    outputs = self.model(**batch)
+
+                logits = outputs.logits
+                predictions = torch.argmax(logits, dim=-1)
+                metric.add_batch(predictions=predictions, references=batch[&quot;labels&quot;])
+                progress_bar.update(1)
+
+            print(metric.compute())
+
+    def predict(self, raw_input_text):
+        if isinstance(raw_input_text, str):
+            raw_input_text = [raw_input_text]
+
+        # Encode the raw text using the tokenizer
+        encoded_input = tokenizer(raw_input_text, padding=True, return_tensors=&#39;pt&#39;)
+
+        # Input the encoded text(s) to the model and get the predicted results
+        output = self.model(**encoded_input)
+        _, predictions = torch.max(output.logits, dim=1)
+
+        # Translate the predictions to class label strings
+        prediction_labels = dataset.class_labels.int2str(predictions)
+
+        # Create a dataframe to display the results
+        result_list = [list(x) for x in zip(raw_text_input, prediction_labels)]
+        result_df = pd.DataFrame(result_list, columns=[&quot;Input Text&quot;, &quot;Predicted Label&quot;])
+        return result_df.style.hide_index()
+
+    def parameters(self):
+        return self.model.parameters()
+
+    def save(self, output_dir):
+        self.model.save_pretrained(output_dir)
+
+    @classmethod
+    def load(cls, output_dir):
+        return cls(output_dir, num_labels=len(dataset.get_label_names()))
+</pre></div>
+</div>
+</div>
+<p>Now that the <code class="docutils literal notranslate"><span class="pre">TextClassificationModel</span></code> class is defined, either use Option A to use the <code class="docutils literal notranslate"><span class="pre">`Trainer</span></code> &lt;<a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer">https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer</a>&gt;`__ API from Hugging Face or Option B to use the native PyTorch API.</p>
+<section id="Option-A:-Use-the-`Trainer-&lt;https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer&gt;`__-API-from-Hugging-Face">
+<h3>Option A: Use the <code class="docutils literal notranslate"><span class="pre">`Trainer</span></code> &lt;<a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer">https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer</a>&gt;`__ API from Hugging Face<a class="headerlink" href="#Option-A:-Use-the-`Trainer-<https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer>`__-API-from-Hugging-Face" title="Link to this heading"></a></h3>
+<p>This step gets the pretrained model from <a class="reference external" href="https://huggingface.co/models">Hugging Face</a> and sets up the <a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.TrainingArguments">TrainingArguments</a> and the <a class="reference external" href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/trainer#transformers.Trainer">Trainer</a>. For simplicity, this example is using default values for most of the training args, but we are specifying our output directory and the number of
+training epochs. If your output directory already has checkpoints from a previous run, training will resume from the last checkpoint. The <code class="docutils literal notranslate"><span class="pre">overwrite_output_dir</span></code> training argument can be set to <code class="docutils literal notranslate"><span class="pre">True</span></code> if you want to instead overwrite previously generated checkpoints.</p>
+<blockquote>
+<div><p>Note that it is expected to see a warning at this step about some weights not being used. This is because the pretraining head from the original model is being replaced with a classification head.</p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>num_train_epochs = 2
+batch_size = 16
+num_labels = len(dataset.get_label_names())
+
+# Define a TrainingArguments object for the Trainer API to use.
+training_args = TrainingArguments(output_dir=output_dir, num_train_epochs=num_train_epochs)
+
+# Get the model from Hugging Face. Since we are specifying training_args, the model is trained and
+# evaluated with the Trainer API.
+model = TextClassificationModel(model_name=model_name, num_labels=num_labels, training_args=training_args)
+
+# Define model training parameters
+learning_rate      = 5e-5
+optimizer          = AdamW(model.parameters(), lr=learning_rate)
+num_training_steps = num_train_epochs * len(dataset.train_ds)
+metric             = load_metric(&quot;accuracy&quot;)
+lr_scheduler       = get_scheduler(
+                        name=&quot;linear&quot;, optimizer=optimizer, num_warmup_steps=0, num_training_steps=num_training_steps
+                     )
+
+# Helper function for the Trainer API to compute metrics
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    predictions = np.argmax(logits, axis=-1)
+    return metric.compute(predictions=predictions, references=labels)
+</pre></div>
+</div>
+</div>
+<p><strong>Train and evaluate the model with the Trainer API</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.train(
+    dataset,
+    optimizers=(optimizer, lr_scheduler),
+    num_train_epochs=num_train_epochs,
+    batch_size=batch_size,
+    compute_metrics=compute_metrics
+)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.evaluate()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Option-B:-Use-the-native-PyTorch-API">
+<h3>Option B: Use the native PyTorch API<a class="headerlink" href="#Option-B:-Use-the-native-PyTorch-API" title="Link to this heading"></a></h3>
+<p>This step gets the pretrained model from <a class="reference external" href="https://huggingface.co/models">Hugging Face</a> and uses native PyTorch API to train and evaluate the model.</p>
+<blockquote>
+<div><p>Note that it is expected to see a warning at this step about some weights not being used. This is because the pretraining head from the original model is being replaced with a classification head.</p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>num_train_epochs = 2
+batch_size = 16
+num_labels = len(dataset.get_label_names())
+
+# Get the model from Hugging Face. Since we are not specifying training_args, the model is trained and
+# evaluated with the native PyTorch API.
+model = TextClassificationModel(model_name=model_name, num_labels=num_labels)
+
+# Define model training parameters
+learning_rate      = 5e-5
+optimizer          = AdamW(model.parameters(), lr=learning_rate)
+num_training_steps = num_train_epochs * len(dataset.train_ds)
+lr_scheduler       = get_scheduler(
+                        name=&quot;linear&quot;, optimizer=optimizer, num_warmup_steps=0, num_training_steps=num_training_steps
+                     )
+</pre></div>
+</div>
+</div>
+<p><strong>Train and evaluate the model with the native PyTorch API</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.train(
+    dataset,
+    optimizers=(optimizer, lr_scheduler),
+    num_train_epochs=num_train_epochs,
+    batch_size=batch_size
+)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.evaluate()
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="4.-Export-the-model">
+<h2>4. Export the model<a class="headerlink" href="#4.-Export-the-model" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save the model to our output directory
+model.save(output_dir)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="5.-Reload-the-model-and-make-predictions">
+<h2>5. Reload the model and make predictions<a class="headerlink" href="#5.-Reload-the-model-and-make-predictions" title="Link to this heading"></a></h2>
+<p>The output directory is used to reload the model. In the next cell, we evalute the reloaded model to verify that we are getting the same metrics that we saw after fine tuning.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>reloaded_model = TextClassificationModel.load(output_dir)
+
+reloaded_model.evaluate()
+</pre></div>
+</div>
+</div>
+<p>Next, we demonstrate how encode raw text input and get predictions from the reloaded model.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = reloaded_model
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Setup some raw text input
+raw_text_input = [&quot;It was okay. I finished it, but wouldn&#39;t watch it again.&quot;,
+                  &quot;So bad&quot;,
+                  &quot;Definitely not my favorite&quot;,
+                  &quot;Highly recommended&quot;]
+
+model.predict(raw_text_input)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="6.-Get-Explainations-with-Intel-Explainable-AI-Tools">
+<h2>6. Get Explainations with Intel Explainable AI Tools<a class="headerlink" href="#6.-Get-Explainations-with-Intel-Explainable-AI-Tools" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer import attributions
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from scipy.special import softmax
+# Define a prediction function
+def f(x):
+    encoded_input = tokenizer(x.tolist(), padding=&#39;max_length&#39;, max_length=512, truncation=True, return_tensors=&#39;pt&#39;)
+    outputs = model.model(**encoded_input)
+    return softmax(outputs.logits.detach().numpy(), axis=1)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer import attributions
+# Get shap values
+text_for_shap = dataset.dataset[&#39;test&#39;][:10][&#39;text&#39;]
+partition_explainer = attributions.partition_text_explainer(f, dataset.class_labels.names, text_for_shap, r&quot;\W+&quot;, )
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>partition_explainer.visualize()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Citations">
+<h2>Citations<a class="headerlink" href="#Citations" title="Link to this heading"></a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@InProceedings{maas-EtAl:2011:ACL-HLT2011,
+  author    = {Maas, Andrew L.  and  Daly, Raymond E.  and  Pham, Peter T.  and  Huang, Dan  and  Ng, Andrew Y.  and  Potts, Christopher},
+  title     = {Learning Word Vectors for Sentiment Analysis},
+  booktitle = {Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies},
+  month     = {June},
+  year      = {2011},
+  address   = {Portland, Oregon, USA},
+  publisher = {Association for Computational Linguistics},
+  pages     = {142--150},
+  url       = {http://www.aclweb.org/anthology/P11-1015}
+}
+
+@misc{misc_sms_spam_collection_228,
+  author       = {Almeida, Tiago},
+  title        = {{SMS Spam Collection}},
+  year         = {2012},
+  howpublished = {UCI Machine Learning Repository}
+}
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

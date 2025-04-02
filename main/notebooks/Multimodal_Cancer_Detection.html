@@ -1,28 +1,27 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multimodal Breast Cancer Detection Explainability using the Intel® Explainable AI API &mdash; Intel® Explainable AI Tools 1.2.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Multimodal Breast Cancer Detection Explainability using the Intel® Explainable AI API &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
   
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=6efca38a"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../_static/design-tabs.js?v=36754332"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -39,9 +38,6 @@
           <a href="../index.html" class="icon icon-home">
             Intel® Explainable AI Tools
           </a>
-              <div class="version">
-                1.2.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -96,11 +92,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This notebook requires the latest version of intel-transfer-learning (v0.7.0)</span>
-<span class="c1"># The package and directions to install it can be found at its repo:</span>
-<span class="c1"># https://github.com/Intel/transfer-learning</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># This notebook requires the latest version of intel-transfer-learning (v0.7.0)
+# The package and directions to install it can be found at its repo:
+# https://github.com/Intel/transfer-learning
 
-<span class="o">!</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w">  </span>nltk<span class="w"> </span>docx2txt<span class="w"> </span>openpyxl<span class="w"> </span>et-xmlfile<span class="w"> </span>schema
+! pip install --no-cache-dir  nltk docx2txt openpyxl et-xmlfile schema
 </pre></div>
 </div>
 </div>
@@ -108,40 +104,40 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import os
+import pandas as pd
+import tensorflow as tf
+import torch
 
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">EvalPrediction</span><span class="p">,</span> <span class="n">TrainingArguments</span><span class="p">,</span> <span class="n">pipeline</span>
+from transformers import EvalPrediction, TrainingArguments, pipeline
 
-<span class="c1"># tlt imports</span>
-<span class="kn">from</span> <span class="nn">tlt.datasets</span> <span class="kn">import</span> <span class="n">dataset_factory</span>
-<span class="kn">from</span> <span class="nn">tlt.models</span> <span class="kn">import</span> <span class="n">model_factory</span>
+# tlt imports
+from tlt.datasets import dataset_factory
+from tlt.models import model_factory
 
-<span class="c1"># explainability imports</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
-<span class="kn">from</span> <span class="nn">plotly.subplots</span> <span class="kn">import</span> <span class="n">make_subplots</span>
-<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
-<span class="kn">import</span> <span class="nn">nltk</span>
-<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">words</span>
-<span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">import</span> <span class="nn">shap</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span> <span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">module</span> <span class="o">=</span> <span class="s2">&quot;matplotlib\..*&quot;</span> <span class="p">)</span>
+# explainability imports
+import matplotlib.pyplot as plt
+import plotly.express as px
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+import nltk
+from nltk.corpus import words
+import string
+import shap
+import warnings
+warnings.filterwarnings( &quot;ignore&quot;, module = &quot;matplotlib\..*&quot; )
 
-<span class="c1"># Specify the root directory where the images and annotations are located</span>
-<span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DATASET_DIR&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="s2">&quot;DATASET_DIR&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="k">else</span> \
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;HOME&quot;</span><span class="p">],</span> <span class="s2">&quot;dataset&quot;</span><span class="p">)</span>
+# Specify the root directory where the images and annotations are located
+dataset_dir = os.path.join(os.environ[&quot;DATASET_DIR&quot;]) if &quot;DATASET_DIR&quot; in os.environ else \
+    os.path.join(os.environ[&quot;HOME&quot;], &quot;dataset&quot;)
 
-<span class="c1"># Specify a directory for output</span>
-<span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OUTPUT_DIR&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;OUTPUT_DIR&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="k">else</span> \
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;HOME&quot;</span><span class="p">],</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+# Specify a directory for output
+output_dir = os.environ[&quot;OUTPUT_DIR&quot;] if &quot;OUTPUT_DIR&quot; in os.environ else \
+    os.path.join(os.environ[&quot;HOME&quot;], &quot;output&quot;)
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset directory:&quot;</span><span class="p">,</span> <span class="n">dataset_dir</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output directory:&quot;</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+print(&quot;Dataset directory:&quot;, dataset_dir)
+print(&quot;Output directory:&quot;, output_dir)
 </pre></div>
 </div>
 </div>
@@ -153,7 +149,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>python<span class="w"> </span>prepare_nlp_data.py<span class="w"> </span>--data_root<span class="w"> </span><span class="o">{</span>dataset_dir<span class="o">}</span>/brca/data
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! python prepare_nlp_data.py --data_root {dataset_dir}/brca/data
 </pre></div>
 </div>
 </div>
@@ -161,7 +157,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>python<span class="w"> </span>prepare_vision_data.py<span class="w"> </span>--data_root<span class="w"> </span><span class="o">{</span>dataset_dir<span class="o">}</span>/brca/data
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! python prepare_vision_data.py --data_root {dataset_dir}/brca/data
 </pre></div>
 </div>
 </div>
@@ -193,13 +189,13 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># User input needed - supply the path to the images in the dataset_dir according to your system</span>
-<span class="n">source_image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;brca&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;vision_images&#39;</span><span class="p">)</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="n">source_image_path</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># User input needed - supply the path to the images in the dataset_dir according to your system
+source_image_path = os.path.join(dataset_dir, &#39;brca&#39;, &#39;data&#39;, &#39;vision_images&#39;)
+image_path = source_image_path
 
-<span class="c1"># User input needed - supply the path and name of the annotation file in the dataset_dir</span>
-<span class="n">source_annotation_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;brca&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;annotation&#39;</span><span class="p">,</span> <span class="s1">&#39;annotation.csv&#39;</span><span class="p">)</span>
-<span class="n">annotation_path</span> <span class="o">=</span> <span class="n">source_annotation_path</span>
+# User input needed - supply the path and name of the annotation file in the dataset_dir
+source_annotation_path = os.path.join(dataset_dir, &#39;brca&#39;, &#39;data&#39;, &#39;annotation&#39;, &#39;annotation.csv&#39;)
+annotation_path = source_annotation_path
 </pre></div>
 </div>
 </div>
@@ -210,17 +206,17 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">data_utils</span> <span class="kn">import</span> <span class="n">split_images</span><span class="p">,</span> <span class="n">split_annotation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from data_utils import split_images, split_annotation
 
-<span class="n">grouped_image_path</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_grouped&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_image_path</span><span class="p">)</span>
+grouped_image_path = &#39;{}_grouped&#39;.format(source_image_path)
 
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">grouped_image_path</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Grouped directory already exists and will be used: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">grouped_image_path</span><span class="p">))</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">split_images</span><span class="p">(</span><span class="n">source_image_path</span><span class="p">,</span> <span class="n">grouped_image_path</span><span class="p">)</span>
+if os.path.isdir(grouped_image_path):
+    print(&quot;Grouped directory already exists and will be used: {}&quot;.format(grouped_image_path))
+else:
+    split_images(source_image_path, grouped_image_path)
 
-<span class="n">train_image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">grouped_image_path</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">)</span>
-<span class="n">test_image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">grouped_image_path</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">)</span>
+train_image_path = os.path.join(grouped_image_path, &#39;train&#39;)
+test_image_path = os.path.join(grouped_image_path, &#39;test&#39;)
 </pre></div>
 </div>
 </div>
@@ -228,23 +224,23 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">data_utils</span> <span class="kn">import</span> <span class="n">split_images</span><span class="p">,</span> <span class="n">split_annotation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from data_utils import split_images, split_annotation
 
-<span class="n">file_dir</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">source_annotation_path</span><span class="p">)</span>
-<span class="n">grouped_annotation_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">file_dir</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_grouped.csv&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+file_dir, file_name = os.path.split(source_annotation_path)
+grouped_annotation_path = os.path.join(file_dir, &#39;{}_grouped.csv&#39;.format(os.path.splitext(file_name)[0]))
 
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">grouped_annotation_path</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Grouped annotation already exists and will be used: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">grouped_annotation_path</span><span class="p">))</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">split_annotation</span><span class="p">(</span><span class="n">file_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">train_image_path</span><span class="p">,</span> <span class="n">test_image_path</span><span class="p">)</span>
-    <span class="n">train_dataset</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">grouped_annotation_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">test_dataset</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">grouped_annotation_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_test.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Grouped training annotation saved to: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">grouped_annotation_path</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Grouped testing annotation saved to: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">grouped_annotation_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_test.csv&#39;</span><span class="p">))</span>
+if os.path.isfile(grouped_annotation_path):
+    print(&quot;Grouped annotation already exists and will be used: {}&quot;.format(grouped_annotation_path))
+else:
+    train_dataset, test_dataset = split_annotation(file_dir, file_name, train_image_path, test_image_path)
+    train_dataset.to_csv(grouped_annotation_path, index=False)
+    test_dataset.to_csv(grouped_annotation_path[:-4] + &#39;_test.csv&#39;, index=False)
+    print(&#39;Grouped training annotation saved to: {}&#39;.format(grouped_annotation_path))
+    print(&#39;Grouped testing annotation saved to: {}&#39;.format(grouped_annotation_path[:-4] + &#39;_test.csv&#39;))
 
-<span class="n">train_annotation_path</span> <span class="o">=</span> <span class="n">grouped_annotation_path</span>
-<span class="n">test_annotation_path</span> <span class="o">=</span> <span class="n">grouped_annotation_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_test.csv&#39;</span>
-<span class="n">label_col</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Index of the label column in the grouped data file</span>
+train_annotation_path = grouped_annotation_path
+test_annotation_path = grouped_annotation_path[:-4] + &#39;_test.csv&#39;
+label_col = 0  # Index of the label column in the grouped data file
 </pre></div>
 </div>
 </div>
@@ -259,18 +255,18 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">viz_model</span> <span class="o">=</span> <span class="n">model_factory</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;resnet50&quot;</span><span class="p">,</span> <span class="n">framework</span><span class="o">=</span><span class="s1">&#39;pytorch&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>viz_model = model_factory.get_model(model_name=&quot;resnet50&quot;, framework=&#39;pytorch&#39;)
 
-<span class="c1"># Load the dataset from the custom dataset path</span>
-<span class="n">train_viz_dataset</span> <span class="o">=</span> <span class="n">dataset_factory</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="n">train_image_path</span><span class="p">,</span>
-                                       <span class="n">use_case</span><span class="o">=</span><span class="s1">&#39;image_classification&#39;</span><span class="p">,</span>
-                                       <span class="n">framework</span><span class="o">=</span><span class="s1">&#39;pytorch&#39;</span><span class="p">)</span>
+# Load the dataset from the custom dataset path
+train_viz_dataset = dataset_factory.load_dataset(dataset_dir=train_image_path,
+                                       use_case=&#39;image_classification&#39;,
+                                       framework=&#39;pytorch&#39;)
 
-<span class="n">test_viz_dataset</span> <span class="o">=</span> <span class="n">dataset_factory</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="n">test_image_path</span><span class="p">,</span>
-                                       <span class="n">use_case</span><span class="o">=</span><span class="s1">&#39;image_classification&#39;</span><span class="p">,</span>
-                                       <span class="n">framework</span><span class="o">=</span><span class="s1">&#39;pytorch&#39;</span><span class="p">)</span>
+test_viz_dataset = dataset_factory.load_dataset(dataset_dir=test_image_path,
+                                       use_case=&#39;image_classification&#39;,
+                                       framework=&#39;pytorch&#39;)
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Class names:&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">train_viz_dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">))</span>
+print(&quot;Class names:&quot;, str(train_viz_dataset.class_names))
 </pre></div>
 </div>
 </div>
@@ -282,11 +278,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
-<span class="c1"># shuffle split the training dataset</span>
-<span class="n">train_viz_dataset</span><span class="o">.</span><span class="n">shuffle_split</span><span class="p">(</span><span class="n">train_pct</span><span class="o">=</span><span class="mf">.80</span><span class="p">,</span> <span class="n">val_pct</span><span class="o">=</span><span class="mf">.20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">train_viz_dataset</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">viz_model</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
-<span class="n">test_viz_dataset</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">viz_model</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>batch_size = 16
+# shuffle split the training dataset
+train_viz_dataset.shuffle_split(train_pct=.80, val_pct=.20, seed=3)
+train_viz_dataset.preprocess(viz_model.image_size, batch_size=batch_size)
+test_viz_dataset.preprocess(viz_model.image_size, batch_size=batch_size)
 </pre></div>
 </div>
 </div>
@@ -298,16 +294,16 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a label map function and reverse label map for the dataset</span>
-<span class="k">def</span> <span class="nf">label_map_func</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Benign&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create a label map function and reverse label map for the dataset
+def label_map_func(label):
+        if label == &#39;Benign&#39;:
+            return 0
+        elif label == &#39;Malignant&#39;:
+            return 1
+        elif label == &#39;Normal&#39;:
+            return 2
 
-<span class="n">reverse_label_map</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;Benign&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;Normal&#39;</span><span class="p">}</span>
+reverse_label_map = {0: &#39;Benign&#39;, 1: &#39;Malignant&#39;, 2: &#39;Normal&#39;}
 </pre></div>
 </div>
 </div>
@@ -315,13 +311,13 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_label_count</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Benign&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
 
-<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">train_viz_dataset</span><span class="o">.</span><span class="n">train_subset</span><span class="p">:</span>
-    <span class="n">train_label_count</span><span class="p">[</span><span class="n">reverse_label_map</span><span class="p">[</span><span class="n">y</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+for x, y in train_viz_dataset.train_subset:
+    train_label_count[reverse_label_map[y]] += 1
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training label distribution:&#39;</span><span class="p">)</span>
-<span class="n">train_label_count</span>
+print(&#39;Training label distribution:&#39;)
+train_label_count
 </pre></div>
 </div>
 </div>
@@ -329,13 +325,13 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">valid_label_count</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Benign&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>valid_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
 
-<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">train_viz_dataset</span><span class="o">.</span><span class="n">validation_subset</span><span class="p">:</span>
-    <span class="n">valid_label_count</span><span class="p">[</span><span class="n">reverse_label_map</span><span class="p">[</span><span class="n">y</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+for x, y in train_viz_dataset.validation_subset:
+    valid_label_count[reverse_label_map[y]] += 1
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Validation label distribution:&#39;</span><span class="p">)</span>
-<span class="n">valid_label_count</span>
+print(&#39;Validation label distribution:&#39;)
+valid_label_count
 </pre></div>
 </div>
 </div>
@@ -343,13 +339,13 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_label_count</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Benign&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>test_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
 
-<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">test_viz_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">:</span>
-    <span class="n">test_label_count</span><span class="p">[</span><span class="n">reverse_label_map</span><span class="p">[</span><span class="n">y</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+for x, y in test_viz_dataset.dataset:
+    test_label_count[reverse_label_map[y]] += 1
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Validation label distribution:&#39;</span><span class="p">)</span>
-<span class="n">test_label_count</span>
+print(&#39;Validation label distribution:&#39;)
+test_label_count
 </pre></div>
 </div>
 </div>
@@ -357,15 +353,15 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get datsaet distrubtions</span>
-<span class="n">form</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;domain&#39;</span><span class="p">}</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">specs</span><span class="o">=</span><span class="p">[[</span><span class="n">form</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">form</span><span class="p">]],</span> <span class="n">subplot_titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Training&#39;</span><span class="p">,</span> <span class="s1">&#39;Validation&#39;</span><span class="p">,</span> <span class="s1">&#39;Testing&#39;</span><span class="p">])</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Pie</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">train_label_count</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">train_label_count</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Pie</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">valid_label_count</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">valid_label_count</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Pie</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">test_label_count</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">valid_label_count</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get datsaet distrubtions
+form = {&#39;type&#39;:&#39;domain&#39;}
+fig = make_subplots(rows=1, cols=3, specs=[[form, form, form]], subplot_titles=[&#39;Training&#39;, &#39;Validation&#39;, &#39;Testing&#39;])
+fig.add_trace(go.Pie(values=list(train_label_count.values()), labels=list(train_label_count.keys())), 1, 1)
+fig.add_trace(go.Pie(values=list(valid_label_count.values()), labels=list(valid_label_count.keys())), 1, 2)
+fig.add_trace(go.Pie(values=list(test_label_count.values()), labels=list(valid_label_count.keys())), 1, 3)
 
-<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Label Distributions&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+fig.update_layout(height=600, width=800, title_text=&quot;Label Distributions&quot;)
+fig.show()
 </pre></div>
 </div>
 </div>
@@ -373,22 +369,22 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_examples</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">reverse_label_map</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
-    <span class="c1"># get n images from each label in dataset and return as dictionary</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_examples(dataset, reverse_label_map, n=6):
+    # get n images from each label in dataset and return as dictionary
 
-    <span class="n">loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+    loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size)
 
-    <span class="n">example_images</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Benign&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span> <span class="p">[]}</span>
-    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">loader</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
-            <span class="n">label_name</span> <span class="o">=</span> <span class="n">reverse_label_map</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">label</span><span class="p">)]</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">example_images</span><span class="p">[</span><span class="n">label_name</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
-                <span class="n">example_images</span><span class="p">[</span><span class="n">label_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">example_images</span><span class="p">[</span><span class="s1">&#39;Malignant&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="n">n</span> <span class="ow">and</span>\
-        <span class="nb">len</span><span class="p">(</span><span class="n">example_images</span><span class="p">[</span><span class="s1">&#39;Benign&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="n">n</span> <span class="ow">and</span>\
-        <span class="nb">len</span><span class="p">(</span><span class="n">example_images</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span>
-            <span class="k">break</span>
-    <span class="k">return</span> <span class="n">example_images</span>
+    example_images = {&#39;Benign&#39;: [], &#39;Malignant&#39;: [], &#39;Normal&#39;: []}
+    for x, y in loader:
+        for i, label in enumerate(y):
+            label_name = reverse_label_map[int(label)]
+            if len(example_images[label_name]) &lt; n:
+                example_images[label_name].append(x[i])
+        if len(example_images[&#39;Malignant&#39;]) == n and\
+        len(example_images[&#39;Benign&#39;]) == n and\
+        len(example_images[&#39;Normal&#39;]) == n:
+            break
+    return example_images
 </pre></div>
 </div>
 </div>
@@ -396,36 +392,36 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot some training examples</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">columns</span> <span class="o">=</span> <span class="mi">6</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Training Torch Tensor examples&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># plot some training examples
+fig = plt.figure(figsize=(12,6))
+columns = 6
+rows = 3
+fig.suptitle(&#39;Training Torch Tensor examples&#39;, size=16)
 
 
-<span class="n">train_example_images</span> <span class="o">=</span> <span class="n">get_examples</span><span class="p">(</span><span class="n">train_viz_dataset</span><span class="o">.</span><span class="n">train_subset</span><span class="p">,</span> <span class="n">reverse_label_map</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">columns</span><span class="o">*</span><span class="n">rows</span> <span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">train_example_images</span><span class="p">[</span><span class="s1">&#39;Benign&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="mi">6</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">train_example_images</span><span class="p">[</span><span class="s1">&#39;Malignant&#39;</span><span class="p">][</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">6</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">train_example_images</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">][</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">12</span><span class="p">]</span>
+train_example_images = get_examples(train_viz_dataset.train_subset, reverse_label_map)
+for i in range(1, columns*rows +1):
+    idx = i - 1
+    if idx &lt; 6:
+        img = train_example_images[&#39;Benign&#39;][idx]
+    elif idx &gt;= 6 and idx &lt; 12:
+        img = train_example_images[&#39;Malignant&#39;][idx - 6]
+    else:
+        img = train_example_images[&#39;Normal&#39;][idx - 12]
 
-    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">6</span> <span class="ow">or</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
-        <span class="n">label_name</span> <span class="o">=</span> <span class="n">reverse_label_map</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span><span class="o">/</span><span class="mi">6</span><span class="p">)]</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">label_name</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">labelleft</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    fig.add_subplot(rows, columns, i)
+    plt.axis(&#39;off&#39;)
+    plt.tight_layout()
+    if idx == 0 or idx == 6 or idx == 12:
+        plt.axis(&#39;on&#39;)
+        label_name = reverse_label_map[int(idx/6)]
+        plt.ylabel(label_name, fontsize=16)
+        plt.tick_params(axis=&#39;x&#39;, bottom=False, labelbottom=False)
+        plt.tick_params(axis=&#39;y&#39;, left=False, labelleft=False)
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+    plt.imshow(torch.movedim(img, 0, 2).detach().cpu().numpy().astype(np.uint8))
 
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -433,37 +429,37 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot some validation images</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">columns</span> <span class="o">=</span> <span class="mi">6</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Validation Torch Tensor examples&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># plot some validation images
+fig = plt.figure(figsize=(12,6))
+columns = 6
+rows = 3
+fig.suptitle(&#39;Validation Torch Tensor examples&#39;, size=16)
 
 
-<span class="n">valid_example_images</span> <span class="o">=</span> <span class="n">get_examples</span><span class="p">(</span><span class="n">train_viz_dataset</span><span class="o">.</span><span class="n">validation_subset</span><span class="p">,</span> <span class="n">reverse_label_map</span><span class="p">)</span>
+valid_example_images = get_examples(train_viz_dataset.validation_subset, reverse_label_map)
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">columns</span><span class="o">*</span><span class="n">rows</span> <span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">valid_example_images</span><span class="p">[</span><span class="s1">&#39;Benign&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="mi">6</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">valid_example_images</span><span class="p">[</span><span class="s1">&#39;Malignant&#39;</span><span class="p">][</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">6</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">valid_example_images</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">][</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">12</span><span class="p">]</span>
+for i in range(1, columns*rows +1):
+    idx = i - 1
+    if idx &lt; 6:
+        img = valid_example_images[&#39;Benign&#39;][idx]
+    elif idx &gt;= 6 and idx &lt; 12:
+        img = valid_example_images[&#39;Malignant&#39;][idx - 6]
+    else:
+        img = valid_example_images[&#39;Normal&#39;][idx - 12]
 
-    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">6</span> <span class="ow">or</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
-        <span class="n">label_name</span> <span class="o">=</span> <span class="n">reverse_label_map</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span><span class="o">/</span><span class="mi">6</span><span class="p">)]</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">label_name</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">labelleft</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    fig.add_subplot(rows, columns, i)
+    plt.axis(&#39;off&#39;)
+    plt.tight_layout()
+    if idx == 0 or idx == 6 or idx == 12:
+        plt.axis(&#39;on&#39;)
+        label_name = reverse_label_map[int(idx/6)]
+        plt.ylabel(label_name, fontsize=16)
+        plt.tick_params(axis=&#39;x&#39;, bottom=False, labelbottom=False)
+        plt.tick_params(axis=&#39;y&#39;, left=False, labelleft=False)
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+    plt.imshow(torch.movedim(img, 0, 2).detach().cpu().numpy().astype(np.uint8))
 
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -476,7 +472,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">viz_history</span> <span class="o">=</span> <span class="n">viz_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_viz_dataset</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">extra_layers</span><span class="o">=</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">512</span><span class="p">],</span> <span class="n">ipex_optimize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>viz_history = viz_model.train(train_viz_dataset, output_dir=output_dir, epochs=5, seed=10, extra_layers=[1024, 512], ipex_optimize=False)
 </pre></div>
 </div>
 </div>
@@ -484,10 +480,10 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">validation_viz_metrics</span> <span class="o">=</span> <span class="n">viz_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">train_viz_dataset</span><span class="p">)</span>
-<span class="n">test_viz_metrics</span> <span class="o">=</span> <span class="n">viz_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_viz_dataset</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">validation_viz_metrics</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">test_viz_metrics</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>validation_viz_metrics = viz_model.evaluate(train_viz_dataset)
+test_viz_metrics = viz_model.evaluate(test_viz_dataset)
+print(validation_viz_metrics)
+print(test_viz_metrics)
 </pre></div>
 </div>
 </div>
@@ -498,7 +494,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">saved_model_dir</span> <span class="o">=</span> <span class="n">viz_model</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>saved_model_dir = viz_model.export(output_dir)
 </pre></div>
 </div>
 </div>
@@ -510,13 +506,13 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">softmax</span>
-<span class="n">y_pred</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="c1"># get the logit predictions and then convert to probabilities</span>
-<span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">test_viz_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">:</span>
-    <span class="n">y_pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">softmax</span><span class="p">(</span><span class="n">viz_model</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from scipy.special import softmax
+y_pred = []
+# get the logit predictions and then convert to probabilities
+for batch in test_viz_dataset.dataset:
+    y_pred.append(softmax(viz_model._model(batch[0][None, :]).detach().numpy())[0])
 
-<span class="n">y_true</span> <span class="o">=</span><span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">test_viz_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">]</span>
+y_true =[y for x, y in test_viz_dataset.dataset]
 </pre></div>
 </div>
 </div>
@@ -524,10 +520,10 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">intel_ai_safety.explainer</span> <span class="kn">import</span> <span class="n">metrics</span>
-<span class="n">viz_cm</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">test_viz_dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">)</span>
-<span class="n">viz_cm</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">viz_cm</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer import metrics
+viz_cm = metrics.confusion_matrix(y_true, y_pred, test_viz_dataset.class_names)
+viz_cm.visualize()
+print(viz_cm.report)
 </pre></div>
 </div>
 </div>
@@ -535,8 +531,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">test_viz_dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">)</span>
-<span class="n">plotter</span><span class="o">.</span><span class="n">pr_curve</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter = metrics.plot(y_true, y_pred, test_viz_dataset.class_names)
+plotter.pr_curve()
 </pre></div>
 </div>
 </div>
@@ -544,7 +540,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter.roc_curve()
 </pre></div>
 </div>
 </div>
@@ -555,13 +551,13 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># convert one-hot encoded predictions to the index labels</span>
-<span class="n">y_pred_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># convert one-hot encoded predictions to the index labels
+y_pred_labels = np.array(y_pred).argmax(axis=1)
 
-<span class="c1"># get the malignant indexes and then the normal and benign prediction indexes</span>
-<span class="n">mal_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span> <span class="o">==</span> <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Malignant&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">nor_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pred_labels</span><span class="p">)</span> <span class="o">==</span> <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Normal&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">ben_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_pred_labels</span><span class="p">)</span> <span class="o">==</span> <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Benign&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+# get the malignant indexes and then the normal and benign prediction indexes
+mal_idxs = np.where(np.array(y_true) == label_map_func(&#39;Malignant&#39;))[0].tolist()
+nor_preds = np.where(np.array(y_pred_labels) == label_map_func(&#39;Normal&#39;))[0].tolist()
+ben_preds = np.where(np.array(y_pred_labels) == label_map_func(&#39;Benign&#39;))[0].tolist()
 </pre></div>
 </div>
 </div>
@@ -569,11 +565,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get mal examples that were misclassified as ben</span>
-<span class="n">mal_classified_as_nor</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mal_idxs</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">nor_preds</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get mal examples that were misclassified as ben
+mal_classified_as_nor = list(set(mal_idxs).intersection(nor_preds))
 
-<span class="c1"># get mal examples that were misclassified as ben</span>
-<span class="n">mal_classified_as_ben</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mal_idxs</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">ben_preds</span><span class="p">))</span>
+# get mal examples that were misclassified as ben
+mal_classified_as_ben = list(set(mal_idxs).intersection(ben_preds))
 </pre></div>
 </div>
 </div>
@@ -581,11 +577,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get the images for all mals predicted as nors</span>
-<span class="n">mal_as_nor_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">test_viz_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mal_classified_as_nor</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get the images for all mals predicted as nors
+mal_as_nor_images = [test_viz_dataset.dataset[i][0] for i in mal_classified_as_nor]
 
-<span class="c1"># get the images for all mals predicted as bens</span>
-<span class="n">mal_as_ben_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">test_viz_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mal_classified_as_ben</span><span class="p">]</span>
+# get the images for all mals predicted as bens
+mal_as_ben_images = [test_viz_dataset.dataset[i][0] for i in mal_classified_as_ben]
 </pre></div>
 </div>
 </div>
@@ -593,26 +589,26 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span>
-<span class="c1"># plot 14 mal_as_nor images</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">columns</span> <span class="o">=</span> <span class="mi">7</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="mi">2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from skimage import io
+# plot 14 mal_as_nor images
+fig = plt.figure(figsize=(12,6))
+columns = 7
+rows = 2
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">columns</span><span class="o">*</span><span class="n">rows</span> <span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">mal_as_nor_images</span><span class="p">):</span>
-        <span class="k">break</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+for i in range(1, columns*rows +1):
+    if i == len(mal_as_nor_images):
+        break
+    idx = i - 1
 
-    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    fig.add_subplot(rows, columns, i)
+    plt.axis(&#39;off&#39;)
+    plt.tight_layout()
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">mal_as_nor_images</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+    plt.imshow(torch.movedim(mal_as_nor_images[idx], 0, 2).detach().cpu().numpy().astype(np.uint8))
 
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Malignant predicted as Normal&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+fig.suptitle(&#39;Malignant predicted as Normal&#39;, fontsize=18)
+plt.tight_layout()
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -620,40 +616,40 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># lets calculate gradcam on the 0th, 1st and 10th images since they</span>
-<span class="c1"># seem to have tnhe clearest visual of a malignant tumor</span>
-<span class="kn">from</span> <span class="nn">intel_ai_safety.explainer.cam</span> <span class="kn">import</span> <span class="n">pt_cam</span> <span class="k">as</span> <span class="n">cam</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># lets calculate gradcam on the 0th, 1st and 10th images since they
+# seem to have tnhe clearest visual of a malignant tumor
+from intel_ai_safety.explainer.cam import pt_cam as cam
 
-<span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">mal_as_nor_images</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span>
-          <span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">mal_as_nor_images</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span>
-          <span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">mal_as_nor_images</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)]</span>
+images = [torch.movedim(mal_as_nor_images[0], 0, 2).detach().cpu().numpy().astype(np.uint8),
+          torch.movedim(mal_as_nor_images[3], 0, 2).detach().cpu().numpy().astype(np.uint8),
+          torch.movedim(mal_as_nor_images[5], 0, 2).detach().cpu().numpy().astype(np.uint8)]
 
 
-<span class="n">final_image_dim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
-<span class="n">targetLayer</span> <span class="o">=</span> <span class="n">viz_model</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">layer4</span>
-<span class="n">xgc</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">x_gradcam</span><span class="p">(</span><span class="n">viz_model</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">targetLayer</span><span class="p">,</span>
-                      <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Normal&#39;</span><span class="p">),</span>
-                      <span class="n">images</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                      <span class="n">final_image_dim</span><span class="p">,</span>
-                      <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+final_image_dim = (224, 224)
+targetLayer = viz_model._model.layer4
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Normal&#39;),
+                      images[0],
+                      final_image_dim,
+                      &#39;cpu&#39;)
 
-<span class="n">xgc</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+xgc.visualize()
 
-<span class="n">xgc</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">x_gradcam</span><span class="p">(</span><span class="n">viz_model</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">targetLayer</span><span class="p">,</span>
-                      <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Normal&#39;</span><span class="p">),</span>
-                      <span class="n">images</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                      <span class="n">final_image_dim</span><span class="p">,</span>
-                      <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Normal&#39;),
+                      images[1],
+                      final_image_dim,
+                      &#39;cpu&#39;)
 
-<span class="n">xgc</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+xgc.visualize()
 
-<span class="n">xgc</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">x_gradcam</span><span class="p">(</span><span class="n">viz_model</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">targetLayer</span><span class="p">,</span>
-                      <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Normal&#39;</span><span class="p">),</span>
-                      <span class="n">images</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                      <span class="n">final_image_dim</span><span class="p">,</span>
-                      <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Normal&#39;),
+                      images[2],
+                      final_image_dim,
+                      &#39;cpu&#39;)
 
-<span class="n">xgc</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+xgc.visualize()
 </pre></div>
 </div>
 </div>
@@ -661,25 +657,25 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot 14 mal_as_ben images</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">columns</span> <span class="o">=</span> <span class="mi">7</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="mi">2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># plot 14 mal_as_ben images
+fig = plt.figure(figsize=(12,6))
+columns = 7
+rows = 2
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">columns</span><span class="o">*</span><span class="n">rows</span> <span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">mal_as_ben_images</span><span class="p">):</span>
-        <span class="k">break</span>
+for i in range(1, columns*rows +1):
+    idx = i - 1
+    if idx == len(mal_as_ben_images):
+        break
 
-    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    fig.add_subplot(rows, columns, i)
+    plt.axis(&#39;off&#39;)
+    plt.tight_layout()
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">mal_as_ben_images</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+    plt.imshow(torch.movedim(mal_as_ben_images[idx], 0, 2).detach().cpu().numpy().astype(np.uint8))
 
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Malignant predicted as Benign&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+fig.suptitle(&#39;Malignant predicted as Benign&#39;, fontsize=18)
+plt.tight_layout()
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -687,40 +683,40 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># lets calculate gradcam on the 5th, 10th and 11th images since they</span>
-<span class="c1"># seem to have tnhe clearest visual of a malignant tumor</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># lets calculate gradcam on the 5th, 10th and 11th images since they
+# seem to have tnhe clearest visual of a malignant tumor
 
-<span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">mal_as_ben_images</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span>
-          <span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">mal_as_ben_images</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span>
-          <span class="n">torch</span><span class="o">.</span><span class="n">movedim</span><span class="p">(</span><span class="n">mal_as_ben_images</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)]</span>
+images = [torch.movedim(mal_as_ben_images[0], 0, 2).detach().cpu().numpy().astype(np.uint8),
+          torch.movedim(mal_as_ben_images[1], 0, 2).detach().cpu().numpy().astype(np.uint8),
+          torch.movedim(mal_as_ben_images[2], 0, 2).detach().cpu().numpy().astype(np.uint8)]
 
 
 
-<span class="n">final_image_dim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
-<span class="n">targetLayer</span> <span class="o">=</span> <span class="n">viz_model</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">layer4</span>
-<span class="n">xgc</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">x_gradcam</span><span class="p">(</span><span class="n">viz_model</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">targetLayer</span><span class="p">,</span>
-                      <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Benign&#39;</span><span class="p">),</span>
-                      <span class="n">images</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                      <span class="n">final_image_dim</span><span class="p">,</span>
-                      <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+final_image_dim = (224, 224)
+targetLayer = viz_model._model.layer4
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Benign&#39;),
+                      images[0],
+                      final_image_dim,
+                      &#39;cpu&#39;)
 
-<span class="n">xgc</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+xgc.visualize()
 
-<span class="n">xgc</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">x_gradcam</span><span class="p">(</span><span class="n">viz_model</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">targetLayer</span><span class="p">,</span>
-                      <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Benign&#39;</span><span class="p">),</span>
-                      <span class="n">images</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                      <span class="n">final_image_dim</span><span class="p">,</span>
-                      <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Benign&#39;),
+                      images[1],
+                      final_image_dim,
+                      &#39;cpu&#39;)
 
-<span class="n">xgc</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+xgc.visualize()
 
-<span class="n">xgc</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">x_gradcam</span><span class="p">(</span><span class="n">viz_model</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">targetLayer</span><span class="p">,</span>
-                      <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Benign&#39;</span><span class="p">),</span>
-                      <span class="n">images</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                      <span class="n">final_image_dim</span><span class="p">,</span>
-                      <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+xgc = cam.x_gradcam(viz_model._model, targetLayer,
+                      label_map_func(&#39;Benign&#39;),
+                      images[2],
+                      final_image_dim,
+                      &#39;cpu&#39;)
 
-<span class="n">xgc</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+xgc.visualize()
 </pre></div>
 </div>
 </div>
@@ -735,12 +731,12 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up NLP parameters</span>
-<span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;clinical-bert&#39;</span>
-<span class="n">seq_length</span> <span class="o">=</span> <span class="mi">64</span>
-<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">quantization_criterion</span> <span class="o">=</span> <span class="mf">0.05</span>
-<span class="n">quantization_max_trial</span> <span class="o">=</span> <span class="mi">50</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Set up NLP parameters
+model_name = &#39;clinical-bert&#39;
+seq_length = 64
+batch_size = 5
+quantization_criterion = 0.05
+quantization_max_trial = 50
 </pre></div>
 </div>
 </div>
@@ -748,7 +744,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nlp_model</span> <span class="o">=</span> <span class="n">model_factory</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">framework</span><span class="o">=</span><span class="s1">&#39;pytorch&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nlp_model = model_factory.get_model(model_name=model_name, framework=&#39;pytorch&#39;)
 </pre></div>
 </div>
 </div>
@@ -756,16 +752,16 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a label map function and reverse label map for the dataset</span>
-<span class="k">def</span> <span class="nf">label_map_func</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Benign&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create a label map function and reverse label map for the dataset
+def label_map_func(label):
+        if label == &#39;Benign&#39;:
+            return 0
+        elif label == &#39;Malignant&#39;:
+            return 1
+        elif label == &#39;Normal&#39;:
+            return 2
 
-<span class="n">reverse_label_map</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;Benign&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;Normal&#39;</span><span class="p">}</span>
+reverse_label_map = {0: &#39;Benign&#39;, 1: &#39;Malignant&#39;, 2: &#39;Normal&#39;}
 </pre></div>
 </div>
 </div>
@@ -773,7 +769,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">train_annotation_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>os.path.split(os.path.splitext(train_annotation_path)[0] + &#39;.csv&#39;)
 </pre></div>
 </div>
 </div>
@@ -781,31 +777,31 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_file_dir</span><span class="p">,</span> <span class="n">train_file_name</span> <span class="o">=</span>  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">train_annotation_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
-<span class="n">train_nlp_dataset</span> <span class="o">=</span> <span class="n">dataset_factory</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="n">train_file_dir</span><span class="p">,</span>
-                       <span class="n">use_case</span><span class="o">=</span><span class="s1">&#39;text_classification&#39;</span><span class="p">,</span>
-                       <span class="n">framework</span><span class="o">=</span><span class="s1">&#39;pytorch&#39;</span><span class="p">,</span>
-                       <span class="n">dataset_name</span><span class="o">=</span><span class="s1">&#39;brca&#39;</span><span class="p">,</span>
-                       <span class="n">csv_file_name</span><span class="o">=</span><span class="n">train_file_name</span><span class="p">,</span>
-                       <span class="n">label_map_func</span><span class="o">=</span><span class="n">label_map_func</span><span class="p">,</span>
-                       <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Benign&#39;</span><span class="p">,</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">,</span> <span class="s1">&#39;Normal&#39;</span><span class="p">],</span>
-                       <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                       <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">,</span>
-                       <span class="n">shuffle_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                       <span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_file_dir, train_file_name =  os.path.split(os.path.splitext(train_annotation_path)[0] +&#39;.csv&#39;)
+train_nlp_dataset = dataset_factory.load_dataset(dataset_dir=train_file_dir,
+                       use_case=&#39;text_classification&#39;,
+                       framework=&#39;pytorch&#39;,
+                       dataset_name=&#39;brca&#39;,
+                       csv_file_name=train_file_name,
+                       label_map_func=label_map_func,
+                       class_names=[&#39;Benign&#39;, &#39;Malignant&#39;, &#39;Normal&#39;],
+                       header=True,
+                       label_col=label_col,
+                       shuffle_files=True,
+                       exclude_cols=[2])
 
-<span class="n">test_file_dir</span><span class="p">,</span> <span class="n">test_file_name</span> <span class="o">=</span>  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">test_annotation_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
-<span class="n">test_nlp_dataset</span> <span class="o">=</span> <span class="n">dataset_factory</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="n">dataset_dir</span><span class="o">=</span><span class="n">test_file_dir</span><span class="p">,</span>
-                       <span class="n">use_case</span><span class="o">=</span><span class="s1">&#39;text_classification&#39;</span><span class="p">,</span>
-                       <span class="n">framework</span><span class="o">=</span><span class="s1">&#39;pytorch&#39;</span><span class="p">,</span>
-                       <span class="n">dataset_name</span><span class="o">=</span><span class="s1">&#39;brca&#39;</span><span class="p">,</span>
-                       <span class="n">csv_file_name</span><span class="o">=</span><span class="n">test_file_name</span><span class="p">,</span>
-                       <span class="n">label_map_func</span><span class="o">=</span><span class="n">label_map_func</span><span class="p">,</span>
-                       <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Benign&#39;</span><span class="p">,</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">,</span> <span class="s1">&#39;Normal&#39;</span><span class="p">],</span>
-                       <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                       <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">,</span>
-                       <span class="n">shuffle_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                       <span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+test_file_dir, test_file_name =  os.path.split(os.path.splitext(test_annotation_path)[0] +&#39;.csv&#39;)
+test_nlp_dataset = dataset_factory.load_dataset(dataset_dir=test_file_dir,
+                       use_case=&#39;text_classification&#39;,
+                       framework=&#39;pytorch&#39;,
+                       dataset_name=&#39;brca&#39;,
+                       csv_file_name=test_file_name,
+                       label_map_func=label_map_func,
+                       class_names=[&#39;Benign&#39;, &#39;Malignant&#39;, &#39;Normal&#39;],
+                       header=True,
+                       label_col=label_col,
+                       shuffle_files=True,
+                       exclude_cols=[2])
 </pre></div>
 </div>
 </div>
@@ -816,9 +812,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_nlp_dataset</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">nlp_model</span><span class="o">.</span><span class="n">hub_name</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">seq_length</span><span class="p">)</span>
-<span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">nlp_model</span><span class="o">.</span><span class="n">hub_name</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">seq_length</span><span class="p">)</span>
-<span class="n">train_nlp_dataset</span><span class="o">.</span><span class="n">shuffle_split</span><span class="p">(</span><span class="n">train_pct</span><span class="o">=</span><span class="mf">0.67</span><span class="p">,</span> <span class="n">val_pct</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">shuffle_files</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_nlp_dataset.preprocess(nlp_model.hub_name, batch_size=batch_size, max_length=seq_length)
+test_nlp_dataset.preprocess(nlp_model.hub_name, batch_size=batch_size, max_length=seq_length)
+train_nlp_dataset.shuffle_split(train_pct=0.67, val_pct=0.33, shuffle_files=False)
 </pre></div>
 </div>
 </div>
@@ -830,14 +826,14 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import plotly.express as px
 
-<span class="n">train_label_count</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Benign&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-<span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">train_nlp_dataset</span><span class="o">.</span><span class="n">train_subset</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]:</span>
-    <span class="n">train_label_count</span><span class="p">[</span><span class="n">reverse_label_map</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">label</span><span class="p">)]]</span> <span class="o">+=</span> <span class="mi">1</span>
+train_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
+for label in train_nlp_dataset.train_subset[&#39;label&#39;]:
+    train_label_count[reverse_label_map[int(label)]] += 1
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training label distribution:&#39;</span><span class="p">)</span>
-<span class="n">train_label_count</span>
+print(&#39;Training label distribution:&#39;)
+train_label_count
 </pre></div>
 </div>
 </div>
@@ -845,12 +841,12 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">valid_label_count</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Benign&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-<span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">train_nlp_dataset</span><span class="o">.</span><span class="n">validation_subset</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]:</span>
-    <span class="n">valid_label_count</span><span class="p">[</span><span class="n">reverse_label_map</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">label</span><span class="p">)]]</span> <span class="o">+=</span> <span class="mi">1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>valid_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
+for label in train_nlp_dataset.validation_subset[&#39;label&#39;]:
+    valid_label_count[reverse_label_map[int(label)]] += 1
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Validation label distribution:&#39;</span><span class="p">)</span>
-<span class="n">valid_label_count</span>
+print(&#39;Validation label distribution:&#39;)
+valid_label_count
 </pre></div>
 </div>
 </div>
@@ -858,12 +854,12 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_label_count</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Benign&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-<span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]:</span>
-    <span class="n">test_label_count</span><span class="p">[</span><span class="n">reverse_label_map</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">label</span><span class="p">)]]</span> <span class="o">+=</span> <span class="mi">1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>test_label_count = {&#39;Benign&#39;: 0, &#39;Malignant&#39;: 0, &#39;Normal&#39;: 0}
+for label in test_nlp_dataset.dataset[&#39;label&#39;]:
+    test_label_count[reverse_label_map[int(label)]] += 1
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Validation label distribution:&#39;</span><span class="p">)</span>
-<span class="n">test_label_count</span>
+print(&#39;Validation label distribution:&#39;)
+test_label_count
 </pre></div>
 </div>
 </div>
@@ -871,16 +867,16 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">form</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;domain&#39;</span><span class="p">}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>form = {&#39;type&#39;:&#39;domain&#39;}
 
-<span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">specs</span><span class="o">=</span><span class="p">[[</span><span class="n">form</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">form</span><span class="p">]],</span> <span class="n">subplot_titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Training&#39;</span><span class="p">,</span> <span class="s1">&#39;Validation&#39;</span><span class="p">,</span> <span class="s1">&#39;Testing&#39;</span><span class="p">])</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Pie</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">train_label_count</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">train_label_count</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Pie</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">valid_label_count</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">valid_label_count</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Pie</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">test_label_count</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">test_label_count</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+fig = make_subplots(rows=1, cols=3, specs=[[form, form, form]], subplot_titles=[&#39;Training&#39;, &#39;Validation&#39;, &#39;Testing&#39;])
+fig.add_trace(go.Pie(values=list(train_label_count.values()), labels=list(train_label_count.keys())), 1, 1)
+fig.add_trace(go.Pie(values=list(valid_label_count.values()), labels=list(valid_label_count.keys())), 1, 2)
+fig.add_trace(go.Pie(values=list(test_label_count.values()), labels=list(test_label_count.keys())), 1, 3)
 
 
-<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Label Distributions&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+fig.update_layout(height=600, width=800, title_text=&quot;Label Distributions&quot;)
+fig.show()
 <br/></pre></div>
 </div>
 </div>
@@ -888,30 +884,30 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;punkt&#39;</span><span class="p">)</span>
-<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;words&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nltk.download(&#39;punkt&#39;)
+nltk.download(&#39;words&#39;)
 
-<span class="k">def</span> <span class="nf">get_mc_df</span><span class="p">(</span><span class="n">words_list</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ignored_words</span><span class="o">=</span><span class="p">[]):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Get&#39;s the most common words from a list of words and returns a pd DataFrame for Plotly</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+def get_mc_df(words_list, n=50, ignored_words=[]):
+    &#39;&#39;&#39;
+    Get&#39;s the most common words from a list of words and returns a pd DataFrame for Plotly
+    &#39;&#39;&#39;
 
-    <span class="n">frequency_dict</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">FreqDist</span><span class="p">(</span><span class="n">words_list</span><span class="p">)</span>
-    <span class="n">most_common</span> <span class="o">=</span> <span class="n">frequency_dict</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    frequency_dict = nltk.FreqDist(words_list)
+    most_common = frequency_dict.most_common(n=500)
 
 
-    <span class="n">final_fd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Token&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;Frequency&#39;</span><span class="p">:</span> <span class="p">[]})</span>
-    <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">while</span><span class="p">(</span><span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">most_common</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">most_common</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> is not a word&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">final_fd</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">final_fd</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="n">most_common</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">most_common</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
-            <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+    final_fd = pd.DataFrame({&#39;Token&#39;: [], &#39;Frequency&#39;: []})
+    cnt = 0
+    idx = 0
+    while(cnt &lt; n):
+        if most_common[idx][0] in string.punctuation:
+            print(f&#39;{most_common[idx][0]} is not a word&#39;)
+        else:
+            final_fd.loc[len(final_fd.index)] = [most_common[idx][0], most_common[idx][1]]
+            cnt += 1
+        idx += 1
 
-    <span class="k">return</span> <span class="n">final_fd</span>
+    return final_fd
 <br/></pre></div>
 </div>
 </div>
@@ -919,22 +915,22 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">train_annotation_path</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.read_csv(train_annotation_path)
 
-<span class="c1"># get string arrays of symptoms for each label</span>
-<span class="n">mal_text</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Malignant&#39;</span><span class="p">][</span><span class="s1">&#39;symptoms&#39;</span><span class="p">])</span>
-<span class="n">nor_text</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Normal&#39;</span><span class="p">][</span><span class="s1">&#39;symptoms&#39;</span><span class="p">])</span>
-<span class="n">ben_text</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Benign&#39;</span><span class="p">][</span><span class="s1">&#39;symptoms&#39;</span><span class="p">])</span>
+# get string arrays of symptoms for each label
+mal_text = list(df.loc[df[&#39;label&#39;] == &#39;Malignant&#39;][&#39;symptoms&#39;])
+nor_text = list(df.loc[df[&#39;label&#39;] == &#39;Normal&#39;][&#39;symptoms&#39;])
+ben_text = list(df.loc[df[&#39;label&#39;] == &#39;Benign&#39;][&#39;symptoms&#39;])
 
-<span class="c1"># get tokenized words for each</span>
-<span class="n">mal_tokenized</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mal_text</span><span class="p">))</span>
-<span class="n">nor_tokenized</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nor_text</span><span class="p">))</span>
-<span class="n">ben_tokenized</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ben_text</span><span class="p">))</span>
+# get tokenized words for each
+mal_tokenized: list[str] = nltk.word_tokenize(&quot; &quot;.join(mal_text))
+nor_tokenized: list[str] = nltk.word_tokenize(&quot; &quot;.join(nor_text))
+ben_tokenized: list[str] = nltk.word_tokenize(&quot; &quot;.join(ben_text))
 
-<span class="c1"># generate the dataframes necesarry to plot distributions</span>
-<span class="n">mal_fd</span> <span class="o">=</span> <span class="n">get_mc_df</span><span class="p">(</span><span class="n">mal_tokenized</span><span class="p">)</span>
-<span class="n">nor_fd</span> <span class="o">=</span> <span class="n">get_mc_df</span><span class="p">(</span><span class="n">nor_tokenized</span><span class="p">)</span>
-<span class="n">ben_fd</span> <span class="o">=</span> <span class="n">get_mc_df</span><span class="p">(</span><span class="n">ben_tokenized</span><span class="p">)</span>
+# generate the dataframes necesarry to plot distributions
+mal_fd = get_mc_df(mal_tokenized)
+nor_fd = get_mc_df(nor_tokenized)
+ben_fd = get_mc_df(ben_tokenized)
 </pre></div>
 </div>
 </div>
@@ -942,9 +938,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">mal_fd</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Token&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Malignant word distribution&#39;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">layout_coloraxis_showscale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = px.bar(mal_fd, x=&quot;Token&quot;, y=&#39;Frequency&#39;, color=&#39;Frequency&#39;, title=&#39;Malignant word distribution&#39;)
+fig.update(layout_coloraxis_showscale=False)
+fig.show()
 </pre></div>
 </div>
 </div>
@@ -952,9 +948,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">nor_fd</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Token&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Normal word distribution&#39;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">layout_coloraxis_showscale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = px.bar(nor_fd, x=&quot;Token&quot;, y=&#39;Frequency&#39;, color=&#39;Frequency&#39;, title=&#39;Normal word distribution&#39;)
+fig.update(layout_coloraxis_showscale=False)
+fig.show()
 </pre></div>
 </div>
 </div>
@@ -962,9 +958,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ben_fd</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Token&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Benign word distribution&#39;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">layout_coloraxis_showscale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig = px.bar(ben_fd, x=&quot;Token&quot;, y=&#39;Frequency&#39;, color=&#39;Frequency&#39;, title=&#39;Benign word distribution&#39;)
+fig.update(layout_coloraxis_showscale=False)
+fig.show()
 </pre></div>
 </div>
 </div>
@@ -976,9 +972,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">transformers</span>
-<span class="n">transformers</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">nlp_history</span> <span class="o">=</span> <span class="n">nlp_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_nlp_dataset</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">use_trainer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import transformers
+transformers.set_seed(1)
+nlp_history = nlp_model.train(train_nlp_dataset, output_dir, epochs=3, use_trainer=True, seed=1)
 </pre></div>
 </div>
 </div>
@@ -989,7 +985,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nlp_model</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nlp_model.export(output_dir)
 </pre></div>
 </div>
 </div>
@@ -997,9 +993,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This currently isn&#39;t showing the correct output for test</span>
-<span class="n">train_nlp_metrics</span> <span class="o">=</span> <span class="n">nlp_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">train_nlp_dataset</span><span class="p">)</span>
-<span class="n">test_nlp_metrics</span> <span class="o">=</span> <span class="n">nlp_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_nlp_dataset</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># This currently isn&#39;t showing the correct output for test
+train_nlp_metrics = nlp_model.evaluate(train_nlp_dataset)
+test_nlp_metrics = nlp_model.evaluate(test_nlp_dataset)
 </pre></div>
 </div>
 </div>
@@ -1011,13 +1007,13 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get predictions in logits (one-hot-encoded)</span>
-<span class="c1"># NOTE: added a new flag to predict function</span>
-<span class="n">logit_predictions</span> <span class="o">=</span> <span class="n">nlp_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="n">return_raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s1">&#39;logits&#39;</span><span class="p">]</span>
-<span class="c1">#convert logits to probability</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">softmax</span>
-<span class="n">y_pred</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">logit_predictions</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">y_true</span> <span class="o">=</span> <span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">validation_subset</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get predictions in logits (one-hot-encoded)
+# NOTE: added a new flag to predict function
+logit_predictions = nlp_model.predict(test_nlp_dataset.dataset, return_raw=True)[&#39;logits&#39;]
+#convert logits to probability
+from scipy.special import softmax
+y_pred = softmax(logit_predictions.detach().numpy(), axis=1)
+y_true = test_nlp_dataset.validation_subset[&#39;label&#39;].numpy().astype(int)
 </pre></div>
 </div>
 </div>
@@ -1025,11 +1021,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">intel_ai_safety.explainer</span> <span class="kn">import</span> <span class="n">metrics</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer import metrics
 
-<span class="n">nlp_cm</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">)</span>
-<span class="n">nlp_cm</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">nlp_cm</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
+nlp_cm = metrics.confusion_matrix(y_true, y_pred, test_nlp_dataset.class_names)
+nlp_cm.visualize()
+print(nlp_cm.report)
 </pre></div>
 </div>
 </div>
@@ -1037,8 +1033,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">)</span>
-<span class="n">plotter</span><span class="o">.</span><span class="n">pr_curve</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter = metrics.plot(y_true, y_pred, test_nlp_dataset.class_names)
+plotter.pr_curve()
 </pre></div>
 </div>
 </div>
@@ -1046,7 +1042,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter.roc_curve()
 </pre></div>
 </div>
 </div>
@@ -1057,11 +1053,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mal_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="o">==</span> <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Malignant&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">ben_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nlp_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="o">==</span> <span class="n">label_map_func</span><span class="p">(</span><span class="s1">&#39;Benign&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mal_idxs = np.where(test_nlp_dataset.dataset[&#39;label&#39;].numpy() == label_map_func(&#39;Malignant&#39;))[0].tolist()
+ben_preds = np.where(nlp_model.predict(test_nlp_dataset.dataset).numpy() == label_map_func(&#39;Benign&#39;))[0].tolist()
 
-<span class="c1"># get mal examples that were misclassified as ben</span>
-<span class="n">mal_classified_as_ben</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mal_idxs</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">ben_preds</span><span class="p">))</span>
+# get mal examples that were misclassified as ben
+mal_classified_as_ben = list(set(mal_idxs).intersection(ben_preds))
 </pre></div>
 </div>
 </div>
@@ -1069,7 +1065,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mal_classified_as_ben_text</span> <span class="o">=</span> <span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">mal_classified_as_ben</span><span class="p">][</span><span class="s1">&#39;input_ids&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mal_classified_as_ben_text = test_nlp_dataset.get_text(test_nlp_dataset.dataset[mal_classified_as_ben][&#39;input_ids&#39;])
 </pre></div>
 </div>
 </div>
@@ -1077,11 +1073,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define a prediction function</span>
-<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="n">encoded_input</span> <span class="o">=</span> <span class="n">nlp_model</span><span class="o">.</span><span class="n">_tokenizer</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
-    <span class="n">outputs</span> <span class="o">=</span> <span class="n">nlp_model</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="o">**</span><span class="n">encoded_input</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">softmax</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">logits</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># define a prediction function
+def f(x):
+    encoded_input = nlp_model._tokenizer(x.tolist(), padding=True, return_tensors=&#39;pt&#39;)
+    outputs = nlp_model._model(**encoded_input)
+    return softmax(outputs.logits.detach().numpy(), axis=1)
 </pre></div>
 </div>
 </div>
@@ -1089,9 +1085,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">intel_ai_safety.explainer.attributions</span> <span class="kn">import</span> <span class="n">attributions</span>
-<span class="n">partition_explainer</span> <span class="o">=</span> <span class="n">attributions</span><span class="o">.</span><span class="n">partition_text_explainer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mal_classified_as_ben_text</span><span class="p">),</span> <span class="sa">r</span><span class="s2">&quot;\W+&quot;</span><span class="p">)</span>
-<span class="n">partition_explainer</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer.attributions import attributions
+partition_explainer = attributions.partition_text_explainer(f, test_nlp_dataset.class_names, np.array(mal_classified_as_ben_text), r&quot;\W+&quot;)
+partition_explainer.visualize()
 </pre></div>
 </div>
 </div>
@@ -1103,7 +1099,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>intel-extension-for-transformers<span class="o">==</span><span class="m">1</span>.4
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! pip install --no-cache-dir intel-extension-for-transformers
 </pre></div>
 </div>
 </div>
@@ -1111,9 +1107,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">intel_extension_for_transformers.transformers.trainer</span> <span class="kn">import</span> <span class="n">NLPTrainer</span>
-<span class="kn">from</span> <span class="nn">intel_extension_for_transformers.transformers</span> <span class="kn">import</span> <span class="n">objectives</span><span class="p">,</span> <span class="n">OptimizedModel</span><span class="p">,</span> <span class="n">QuantizationConfig</span>
-<span class="kn">from</span> <span class="nn">intel_extension_for_transformers.transformers</span> <span class="kn">import</span> <span class="n">metrics</span> <span class="k">as</span> <span class="n">nlptk_metrics</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_extension_for_transformers.transformers.trainer import NLPTrainer
+from intel_extension_for_transformers.transformers import objectives, OptimizedModel, QuantizationConfig
+from intel_extension_for_transformers.transformers import metrics as nlptk_metrics
 </pre></div>
 </div>
 </div>
@@ -1121,31 +1117,31 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up quantization config</span>
-<span class="n">tune_metric</span> <span class="o">=</span> <span class="n">nlptk_metrics</span><span class="o">.</span><span class="n">Metric</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;eval_accuracy&quot;</span><span class="p">,</span>
-    <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">is_relative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">criterion</span><span class="o">=</span><span class="n">quantization_criterion</span><span class="p">,</span>
-    <span class="n">weight_ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Set up quantization config
+tune_metric = nlptk_metrics.Metric(
+    name=&quot;eval_accuracy&quot;,
+    greater_is_better=True,
+    is_relative=True,
+    criterion=quantization_criterion,
+    weight_ratio=None,
+)
 
-<span class="n">objective</span> <span class="o">=</span> <span class="n">objectives</span><span class="o">.</span><span class="n">Objective</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;performance&quot;</span><span class="p">,</span> <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weight_ratio</span><span class="o">=</span><span class="kc">None</span>
-<span class="p">)</span>
+objective = objectives.Objective(
+    name=&quot;performance&quot;, greater_is_better=True, weight_ratio=None
+)
 
-<span class="n">quantization_config</span> <span class="o">=</span> <span class="n">QuantizationConfig</span><span class="p">(</span>
-    <span class="n">approach</span><span class="o">=</span><span class="s2">&quot;PostTrainingDynamic&quot;</span><span class="p">,</span>
-    <span class="n">max_trials</span><span class="o">=</span><span class="n">quantization_max_trial</span><span class="p">,</span>
-    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">tune_metric</span><span class="p">],</span>
-    <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective</span><span class="p">],</span>
-<span class="p">)</span>
+quantization_config = QuantizationConfig(
+    approach=&quot;PostTrainingDynamic&quot;,
+    max_trials=quantization_max_trial,
+    metrics=[tune_metric],
+    objectives=[objective],
+)
 
-<span class="c1"># Set up metrics computation</span>
-<span class="k">def</span> <span class="nf">compute_metrics</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">EvalPrediction</span><span class="p">):</span>
-    <span class="n">preds</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">predictions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">predictions</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">p</span><span class="o">.</span><span class="n">predictions</span>
-    <span class="n">preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">preds</span> <span class="o">==</span> <span class="n">p</span><span class="o">.</span><span class="n">label_ids</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()}</span>
+# Set up metrics computation
+def compute_metrics(p: EvalPrediction):
+    preds = p.predictions[0] if isinstance(p.predictions, tuple) else p.predictions
+    preds = np.argmax(preds, axis=1)
+    return {&quot;accuracy&quot;: (preds == p.label_ids).astype(np.float32).mean().item()}
 </pre></div>
 </div>
 </div>
@@ -1153,12 +1149,12 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quantizer</span> <span class="o">=</span> <span class="n">NLPTrainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">nlp_model</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span>
-                       <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_nlp_dataset</span><span class="o">.</span><span class="n">train_subset</span><span class="p">,</span>
-                       <span class="n">eval_dataset</span><span class="o">=</span><span class="n">train_nlp_dataset</span><span class="o">.</span><span class="n">validation_subset</span><span class="p">,</span>
-                       <span class="n">compute_metrics</span><span class="o">=</span><span class="n">compute_metrics</span><span class="p">,</span>
-                       <span class="n">tokenizer</span><span class="o">=</span><span class="n">train_nlp_dataset</span><span class="o">.</span><span class="n">_tokenizer</span><span class="p">)</span>
-<span class="n">quantized_model</span> <span class="o">=</span> <span class="n">quantizer</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">quant_config</span><span class="o">=</span><span class="n">quantization_config</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>quantizer = NLPTrainer(model=nlp_model._model,
+                       train_dataset=train_nlp_dataset.train_subset,
+                       eval_dataset=train_nlp_dataset.validation_subset,
+                       compute_metrics=compute_metrics,
+                       tokenizer=train_nlp_dataset._tokenizer)
+quantized_model = quantizer.quantize(quant_config=quantization_config)
 </pre></div>
 </div>
 </div>
@@ -1166,9 +1162,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">quantizer</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
-<span class="n">eval_acc</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;eval_accuracy&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final Eval Accuracy: </span><span class="si">{:.5f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">eval_acc</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>results = quantizer.evaluate()
+eval_acc = results.get(&quot;eval_accuracy&quot;)
+print(&quot;Final Eval Accuracy: {:.5f}&quot;.format(eval_acc))
 </pre></div>
 </div>
 </div>
@@ -1178,8 +1174,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quantizer</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;quantized_BERT&#39;</span><span class="p">))</span>
-<span class="n">nlp_model</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;quantized_BERT&#39;</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>quantizer.save_model(os.path.join(output_dir, &#39;quantized_BERT&#39;))
+nlp_model._model.config.save_pretrained(os.path.join(output_dir, &#39;quantized_BERT&#39;))
 </pre></div>
 </div>
 </div>
@@ -1192,13 +1188,13 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get predictions in logits (one-hot-encoded)</span>
-<span class="c1"># NOTE: added a new flag to predict function</span>
-<span class="n">logit_predictions</span> <span class="o">=</span> <span class="n">quantizer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="c1">#convert logits to probability</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">softmax</span>
-<span class="n">y_pred</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">logit_predictions</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">y_true</span> <span class="o">=</span> <span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># get predictions in logits (one-hot-encoded)
+# NOTE: added a new flag to predict function
+logit_predictions = quantizer.predict(test_nlp_dataset.dataset)[0]
+#convert logits to probability
+from scipy.special import softmax
+y_pred = softmax(logit_predictions, axis=1)
+y_true = test_nlp_dataset.dataset[&#39;label&#39;].numpy().astype(int)
 </pre></div>
 </div>
 </div>
@@ -1206,9 +1202,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quant_cm</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">)</span>
-<span class="n">quant_cm</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">quant_cm</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>quant_cm = metrics.confusion_matrix(y_true, y_pred, test_nlp_dataset.class_names)
+quant_cm.visualize()
+print(quant_cm.report)
 </pre></div>
 </div>
 </div>
@@ -1216,8 +1212,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">test_nlp_dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">)</span>
-<span class="n">plotter</span><span class="o">.</span><span class="n">pr_curve</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter = metrics.plot(y_true, y_pred, test_nlp_dataset.class_names)
+plotter.pr_curve()
 </pre></div>
 </div>
 </div>

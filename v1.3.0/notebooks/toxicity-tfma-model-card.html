@@ -1,0 +1,540 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating Model Card for Toxic Comments Classification in Tensorflow &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#running-notebooks">Running Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#support">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Intel/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Creating Model Card for Toxic Comments Classification in Tensorflow</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/toxicity-tfma-model-card.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Creating-Model-Card-for-Toxic-Comments-Classification-in-Tensorflow">
+<h1>Creating Model Card for Toxic Comments Classification in Tensorflow<a class="headerlink" href="#Creating-Model-Card-for-Toxic-Comments-Classification-in-Tensorflow" title="Link to this heading"></a></h1>
+<p>Adapted form <a class="reference external" href="https://colab.research.google.com/github/google/eng-edu/blob/main/ml/pc/exercises/fairness_text_toxicity_part1.ipynb?utm_source=practicum-fairness&amp;utm_campaign=colab-external&amp;utm_medium=referral&amp;utm_content=fairnessexercise1-colab#scrollTo=2z_xzJ40j9Q-">Tensorflow</a></p>
+<section id="Training-Dependencies">
+<h2>Training Dependencies<a class="headerlink" href="#Training-Dependencies" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import os
+import tempfile
+import numpy as np
+import pandas as pd
+from datetime import datetime
+
+import tensorflow_hub as hub
+import tensorflow as tf
+import tensorflow_model_analysis as tfma
+import tensorflow_data_validation as tfdv
+
+from tensorflow_model_analysis.addons.fairness.post_export_metrics import fairness_indicators
+from tensorflow_model_analysis.addons.fairness.view import widget_view
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Model-Card-Dependencies">
+<h2>Model Card Dependencies<a class="headerlink" href="#Model-Card-Dependencies" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.model_card_gen.model_card_gen import ModelCardGen
+from intel_ai_safety.model_card_gen.datasets import TensorflowDataset
+</pre></div>
+</div>
+</div>
+<section id="Download-Data">
+<h3>Download Data<a class="headerlink" href="#Download-Data" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="Data-Description">
+<h2>Data Description<a class="headerlink" href="#Data-Description" title="Link to this heading"></a></h2>
+<p>This version of the CivilComments Dataset provides access to the primary seven labels that were annotated by crowd workers, the toxicity and other tags are a value between 0 and 1 indicating the fraction of annotators that assigned these attributes to the comment text.</p>
+<p>The other tags are only available for a fraction of the input examples. They are currently ignored for the main dataset; the CivilCommentsIdentities set includes those labels, but only consists of the subset of the data with them. The other attributes that were part of the original CivilComments release are included only in the raw data. See the Kaggle documentation for more details about the available features.</p>
+<p>The comments in this dataset come from an archive of the Civil Comments platform, a commenting plugin for independent news sites. These public comments were created from 2015 - 2017 and appeared on approximately 50 English-language news sites across the world. When Civil Comments shut down in 2017, they chose to make the public comments available in a lasting open archive to enable future research. The original data, published on figshare, includes the public comment text, some associated
+metadata such as article IDs, timestamps and commenter-generated “civility” labels, but does not include user ids. Jigsaw extended this dataset by adding additional labels for toxicity, identity mentions, as well as covert offensiveness. This data set is an exact replica of the data released for the Jigsaw Unintended Bias in Toxicity Classification Kaggle challenge. This dataset is released under CC0, as is the underlying comment text.</p>
+<p>For comments that have a parent_id also in the civil comments data, the text of the previous comment is provided as the “parent_text” feature. Note that the splits were made without regard to this information, so using previous comments may leak some information. The annotators did not have access to the parent text when making the labels.</p>
+<p><em>source</em>: <a class="reference external" href="https://www.tensorflow.org/datasets/catalog/civil_comments">https://www.tensorflow.org/datasets/catalog/civil_comments</a></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@misc{pavlopoulos2020toxicity,
+    title={Toxicity Detection: Does Context Really Matter?},
+    author={John Pavlopoulos and Jeffrey Sorensen and Lucas Dixon and Nithum Thain and Ion Androutsopoulos},
+    year={2020}, eprint={2006.00998}, archivePrefix={arXiv}, primaryClass={cs.CL}
+}
+
+@article{DBLP:journals/corr/abs-1903-04561,
+  author    = {Daniel Borkan and
+               Lucas Dixon and
+               Jeffrey Sorensen and
+               Nithum Thain and
+               Lucy Vasserman},
+  title     = {Nuanced Metrics for Measuring Unintended Bias with Real Data for Text
+               Classification},
+  journal   = {CoRR},
+  volume    = {abs/1903.04561},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1903.04561},
+  archivePrefix = {arXiv},
+  eprint    = {1903.04561},
+  timestamp = {Sun, 31 Mar 2019 19:01:24 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1903-04561},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{pavlopoulos-etal-2021-semeval,
+    title = &quot;{S}em{E}val-2021 Task 5: Toxic Spans Detection&quot;,
+    author = &quot;Pavlopoulos, John  and Sorensen, Jeffrey  and Laugier, L{&#39;e}o and Androutsopoulos, Ion&quot;,
+    booktitle = &quot;Proceedings of the 15th International Workshop on Semantic Evaluation (SemEval-2021)&quot;,
+    month = aug,
+    year = &quot;2021&quot;,
+    address = &quot;Online&quot;,
+    publisher = &quot;Association for Computational Linguistics&quot;,
+    url = &quot;https://aclanthology.org/2021.semeval-1.6&quot;,
+    doi = &quot;10.18653/v1/2021.semeval-1.6&quot;,
+    pages = &quot;59--69&quot;,
+}
+</pre></div>
+</div>
+<p><strong>Feature documentation</strong>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Class</p></th>
+<th class="head"><p>Dtype</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>article_id</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.int32</p></td>
+</tr>
+<tr class="row-odd"><td><p>id</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.string</p></td>
+</tr>
+<tr class="row-even"><td><p>identity_attack</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.float32</p></td>
+</tr>
+<tr class="row-odd"><td><p>insult</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.float32</p></td>
+</tr>
+<tr class="row-even"><td><p>obscene</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.float32</p></td>
+</tr>
+<tr class="row-odd"><td><p>parent_id</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.int32</p></td>
+</tr>
+<tr class="row-even"><td><p>parent_text</p></td>
+<td><p>Text</p></td>
+<td><p>tf.string</p></td>
+</tr>
+<tr class="row-odd"><td><p>severe_toxicity</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.float32</p></td>
+</tr>
+<tr class="row-even"><td><p>sexual_explicit</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.float32</p></td>
+</tr>
+<tr class="row-odd"><td><p>text</p></td>
+<td><p>Text</p></td>
+<td><p>tf.string</p></td>
+</tr>
+<tr class="row-even"><td><p>threat</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.float32</p></td>
+</tr>
+<tr class="row-odd"><td><p>toxicity</p></td>
+<td><p>Tensor</p></td>
+<td><p>tf.float32</p></td>
+</tr>
+</tbody>
+</table>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset_url = &#39;https://storage.googleapis.com/civil_comments_dataset/&#39;
+
+train_tf_file = tf.keras.utils.get_file(&#39;train_tf_processed.tfrecord&#39;,
+                                        dataset_url + &#39;train_tf_processed.tfrecord&#39;)
+
+validate_tf_file = tf.keras.utils.get_file(&#39;validate_tf_processed.tfrecord&#39;,
+                                           dataset_url + &#39;validate_tf_processed.tfrecord&#39;)
+</pre></div>
+</div>
+</div>
+<section id="Train-Model">
+<h3>Train Model<a class="headerlink" href="#Train-Model" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>TEXT_FEATURE = &#39;comment_text&#39;
+LABEL = &#39;toxicity&#39;
+
+FEATURE_MAP = {
+    LABEL: tf.io.FixedLenFeature([], tf.float32),
+    TEXT_FEATURE: tf.io.FixedLenFeature([], tf.string),
+
+    &#39;sexual_orientation&#39;: tf.io.VarLenFeature(tf.string),
+    &#39;gender&#39;: tf.io.VarLenFeature(tf.string),
+    &#39;religion&#39;: tf.io.VarLenFeature(tf.string),
+    &#39;race&#39;: tf.io.VarLenFeature(tf.string),
+    &#39;disability&#39;: tf.io.VarLenFeature(tf.string)
+}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def train_input_fn():
+    def parse_function(serialized):
+        # parse_single_example works on tf.train.Example type
+        parsed_example = tf.io.parse_single_example(serialized=serialized, features=FEATURE_MAP)
+        # fighting the 92%-8% imbalance in the dataset
+        # adding `weight` label, doesn&#39;t exist already (only FEATURE_MAP keys exist)
+        parsed_example[&#39;weight&#39;] = tf.add(parsed_example[LABEL], 0.1)  # 0.1 for non-toxic, 1.1 for toxic
+        return (parsed_example, parsed_example[LABEL])  # (x, y)
+
+
+    train_dataset = tf.data.TFRecordDataset(filenames=[train_tf_file]).map(parse_function).batch(512)
+    return train_dataset
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Build-Model">
+<h2>Build Model<a class="headerlink" href="#Build-Model" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># vectorizing through TFHub
+embedded_text_feature_column = hub.text_embedding_column(
+    key=TEXT_FEATURE,
+    module_spec=&#39;https://tfhub.dev/google/nnlm-en-dim128/1&#39;)
+
+classifier = tf.estimator.DNNClassifier(
+    hidden_units=[500, 100],
+    weight_column=&#39;weight&#39;,
+    feature_columns=[embedded_text_feature_column],
+    optimizer=tf.keras.optimizers.legacy.Adagrad(learning_rate=0.003),
+    loss_reduction=tf.losses.Reduction.SUM,
+    n_classes=2)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h2>Train Model<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>classifier.train(input_fn=train_input_fn, steps=1000)
+</pre></div>
+</div>
+</div>
+<section id="Export-in-EvalSavedModel-Format">
+<h3>Export in EvalSavedModel Format<a class="headerlink" href="#Export-in-EvalSavedModel-Format" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_PATH = tempfile.gettempdir()
+
+def eval_input_receiver_fn():
+    serialized_tf_example = tf.compat.v1.placeholder(dtype=tf.string, shape=[None], name=&#39;input_example_placeholder&#39;)
+
+    receiver_tensors = {&#39;examples&#39;: serialized_tf_example}
+    features = tf.io.parse_example(serialized_tf_example, FEATURE_MAP)
+    features[&#39;weight&#39;] = tf.ones_like(features[LABEL])
+
+    return tfma.export.EvalInputReceiver(
+        features=features,
+        receiver_tensors=receiver_tensors,
+        labels=features[LABEL]
+    )
+
+tfma_export_dir = tfma.export.export_eval_savedmodel(
+    estimator = classifier,  # trained model
+    export_dir_base = MODEL_PATH,
+    eval_input_receiver_fn = eval_input_receiver_fn
+)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># export EvalSavedModel
+tfma_export_dir = tfma.export.export_eval_savedmodel(
+    estimator = classifier,  # trained model
+    export_dir_base = MODEL_PATH,
+    eval_input_receiver_fn = eval_input_receiver_fn
+)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Making-a-Model-Card">
+<h3>Making a Model Card<a class="headerlink" href="#Making-a-Model-Card" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_model_path = tfma_export_dir
+_data_paths = {&#39;eval&#39;: TensorflowDataset(validate_tf_file),
+               &#39;train&#39;: TensorflowDataset(train_tf_file)}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_eval_config =  &#39;eval_config.proto&#39;
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%writefile {_eval_config}
+
+model_specs {
+# To use EvalSavedModel set `signature_name` to &quot;eval&quot;.
+signature_name: &quot;eval&quot;
+}
+
+## Post training metric information. These will be merged with any built-in
+## metrics from training.
+metrics_specs {
+metrics { class_name: &quot;BinaryAccuracy&quot; }
+metrics { class_name: &quot;Precision&quot; }
+metrics { class_name: &quot;Recall&quot; }
+metrics { class_name: &quot;ConfusionMatrixPlot&quot; }
+metrics { class_name: &quot;FairnessIndicators&quot; }
+}
+
+## Slicing information
+slicing_specs {}  # overall slice
+slicing_specs {
+feature_keys: [&quot;gender&quot;]
+}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mc = {
+  &quot;model_details&quot;: {
+    &quot;name&quot;: &quot;Detecting Toxic Comments&quot;,
+    &quot;overview&quot;:  (
+    &#39;The Conversation AI team, a research initiative founded by Jigsaw and Google &#39;
+    &#39;(both part of Alphabet), builds technology to protect voices in conversation. &#39;
+    &#39;A main area of focus is machine learning models that can identify toxicity in &#39;
+    &#39;online conversations, where toxicity is defined as anything *rude, disrespectful &#39;
+    &#39;or otherwise likely to make someone leave a discussion*. &#39;
+    &#39;This multi-headed model attemps to recognize toxicity and several subtypes of toxicity: &#39;
+    &#39;This model recognizes toxicity and minimizes this type of unintended bias &#39;
+    &#39;with respect to mentions of identities. Reduce unintended bias ensured we can detect toxicity &#39;
+    &#39; accross a wide range of conversations. &#39;),
+    &quot;owners&quot;: [
+      {
+        &quot;name&quot;: &quot;Intel XAI Team&quot;,
+        &quot;contact&quot;: &quot;xai@intel.com&quot;
+      }
+    ],
+
+    &quot;references&quot;: [
+      {
+        &quot;reference&quot;: &quot;https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/data&quot;
+      },
+      {
+        &quot;reference&quot;: &quot;https://medium.com/jigsaw/unintended-bias-and-names-of-frequently-targeted-groups-8e0b81f80a23&quot;
+      }
+    ],
+    &quot;graphics&quot;: {
+      &quot;description&quot;: &quot; &quot;
+    }
+  },
+  &quot;considerations&quot;: {
+      &quot;limitations&quot;: [
+            {&quot;description&quot;: (&#39;Overrepresented Identities in Data:\n&#39;
+                    &#39;Identity terms for more frequently targeted groups &#39;
+                   &#39;(e.g. words like “black”, “muslim”, “feminist”, “woman”, “gay” etc)&#39;
+                   &#39; often have higher scores because comments about those groups are &#39;
+                   &#39;over-represented in abusive and toxic comments.&#39;)
+            },
+           {&quot;description&quot;: (&#39;False Positive Rate:\n&#39;
+                    &#39;The names of targeted groups appear far more often in abusive &#39;
+                    &#39;comments. For example, in many forums unfortunately it’s common &#39;
+                    &#39;to use the word “gay” as an insult, or for someone to attack a &#39;
+                    &#39;commenter for being gay, but it is much rarer for the word gay to &#39;
+                    &#39;appear in a positive, affirming statements (e.g. “I am a proud gay man”). &#39;
+                    &#39;When the training data used to train machine learning models contain these &#39;
+                    &#39;comments, ML models adopt the biases that exist in these underlying distributions, &#39;
+                    &#39;picking up negative connotations as they go. When there’s insufficient diversity &#39;
+                    &#39;in the data, the models can over-generalize and make these kinds of errors.&#39;)
+            },
+           {&quot;description&quot;: (&#39;Imbalenced Data:\n&#39;
+                     &#39;We developed new ways to balance the training &#39;
+                     &#39;data so that the model sees enough toxic and non-toxic examples &#39;
+                     &#39;containing identity terms in such a way that it can more effectively &#39;
+                     &#39;learn to distinguish toxic from non-toxic uses. You can learn more &#39;
+                     &#39;about this in our paper published at the AI, Ethics, and Society Conference.&#39;)
+            },
+        ]
+    },
+
+  &quot;quantitative_analysis&quot;: {
+    &quot;graphics&quot;: {
+      &quot;description&quot;: &quot; &quot;
+    }
+  },
+  &quot;schema_version&quot;: &quot;0.0.1&quot;
+}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mcg = ModelCardGen.generate(data_sets=_data_paths,
+                            eval_config=_eval_config,
+                            model_path=_model_path,
+                            model_card=mc)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mcg
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

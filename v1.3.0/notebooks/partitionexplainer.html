@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explaining Custom NN NewsGroups Classification Using the Attributions Explainer &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intel® Explainable AI Tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#running-notebooks">Running Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html#support">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explainer/index.html">Explainer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_card_gen/index.html">Model Card Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Example Notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../legal.html">Legal Information</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Intel/intel-xai-tools">GitHub Repository</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® Explainable AI Tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Explaining Custom NN NewsGroups Classification Using the Attributions Explainer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/partitionexplainer.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Explaining-Custom-NN-NewsGroups-Classification-Using-the-Attributions-Explainer">
+<h1><a class="reference external" href="https://coderzcolumn.com/tutorials/artificial-intelligence/explain-text-classification-models-using-shap-values-keras">Explaining Custom NN NewsGroups Classification Using the Attributions Explainer</a><a class="headerlink" href="#Explaining-Custom-NN-NewsGroups-Classification-Using-the-Attributions-Explainer" title="Link to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer.attributions import attributions
+from intel_ai_safety.explainer.metrics import metrics
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import warnings
+warnings.filterwarnings(&#39;ignore&#39;)
+import os
+os.environ[&#39;KMP_WARNINGS&#39;] = &#39;off&#39;
+
+import numpy as np
+from sklearn import datasets
+
+all_categories = [&#39;alt.atheism&#39;,&#39;comp.graphics&#39;,&#39;comp.os.ms-windows.misc&#39;,&#39;comp.sys.ibm.pc.hardware&#39;,
+                  &#39;comp.sys.mac.hardware&#39;,&#39;comp.windows.x&#39;, &#39;misc.forsale&#39;,&#39;rec.autos&#39;,&#39;rec.motorcycles&#39;,
+                  &#39;rec.sport.baseball&#39;,&#39;rec.sport.hockey&#39;,&#39;sci.crypt&#39;,&#39;sci.electronics&#39;,&#39;sci.med&#39;,
+                  &#39;sci.space&#39;,&#39;soc.religion.christian&#39;,&#39;talk.politics.guns&#39;,&#39;talk.politics.mideast&#39;,
+                  &#39;talk.politics.misc&#39;,&#39;talk.religion.misc&#39;]
+
+selected_categories = [&#39;alt.atheism&#39;,&#39;comp.graphics&#39;,&#39;rec.motorcycles&#39;,&#39;sci.space&#39;,&#39;talk.politics.misc&#39;]
+
+X_train_text, Y_train = datasets.fetch_20newsgroups(subset=&quot;train&quot;, categories=selected_categories, return_X_y=True)
+X_test_text , Y_test  = datasets.fetch_20newsgroups(subset=&quot;test&quot;, categories=selected_categories, return_X_y=True)
+
+X_train_text = np.array(X_train_text)
+X_test_text = np.array(X_test_text)
+
+classes = np.unique(Y_train)
+mapping = dict(zip(classes, selected_categories))
+
+len(X_train_text), len(X_test_text), classes, mapping
+</pre></div>
+</div>
+</div>
+<section id="Vectorize-Text-Data">
+<h2>Vectorize Text Data<a class="headerlink" href="#Vectorize-Text-Data" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import sklearn
+import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+
+vectorizer = TfidfVectorizer(max_features=50000)
+
+vectorizer.fit(np.concatenate((X_train_text, X_test_text)))
+X_train = vectorizer.transform(X_train_text)
+X_test = vectorizer.transform(X_test_text)
+
+X_train, X_test = X_train.toarray(), X_test.toarray()
+
+X_train.shape, X_test.shape
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Define-the-Model">
+<h2>Define the Model<a class="headerlink" href="#Define-the-Model" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from tensorflow.keras.models import Sequential
+from tensorflow.keras import layers
+
+def create_model():
+    return Sequential([
+                        layers.Input(shape=X_train.shape[1:]),
+                        layers.Dense(128, activation=&quot;relu&quot;),
+                        layers.Dense(64, activation=&quot;relu&quot;),
+                        layers.Dense(len(classes), activation=&quot;softmax&quot;),
+                    ])
+
+model = create_model()
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.summary()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Compile-and-Train-Model">
+<h2>Compile and Train Model<a class="headerlink" href="#Compile-and-Train-Model" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.compile(&quot;adam&quot;, &quot;sparse_categorical_crossentropy&quot;, metrics=[&quot;accuracy&quot;])
+history = model.fit(X_train, Y_train, batch_size=256, epochs=5, validation_data=(X_test, Y_test))
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Evaluate-Model-Performance">
+<h2>Evaluate Model Performance<a class="headerlink" href="#Evaluate-Model-Performance" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.metrics import accuracy_score
+train_preds = model.predict(X_train)
+test_preds = model.predict(X_test)
+
+print(&quot;Train Accuracy : {:.3f}&quot;.format(accuracy_score(Y_train, np.argmax(train_preds, axis=1))))
+print(&quot;Test  Accuracy : {:.3f}&quot;.format(accuracy_score(Y_test, np.argmax(test_preds, axis=1))))
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cm = metrics.confusion_matrix(Y_test, test_preds, selected_categories)
+cm.visualize()
+print(cm.report)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter = metrics.plot(Y_test, test_preds, selected_categories)
+plotter.pr_curve()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter.roc_curve()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import re
+
+X_batch_text = X_test_text[1:3]
+X_batch = X_test[1:3]
+
+print(&quot;Samples : &quot;)
+for text in X_batch_text:
+    print(re.split(r&quot;\W+&quot;, text))
+    print()
+
+preds_proba = model.predict(X_batch)
+preds = preds_proba.argmax(axis=1)
+
+print(&quot;Actual    Target Values : {}&quot;.format([selected_categories[target] for target in Y_test[1:3]]))
+print(&quot;Predicted Target Values : {}&quot;.format([selected_categories[target] for target in preds]))
+print(&quot;Predicted Probabilities : {}&quot;.format(preds_proba.max(axis=1)))
+</pre></div>
+</div>
+</div>
+</section>
+<section id="SHAP-Partition-Explainer">
+<h2>SHAP Partition Explainer<a class="headerlink" href="#SHAP-Partition-Explainer" title="Link to this heading"></a></h2>
+</section>
+<section id="Visualize-SHAP-Values-Correct-Predictions">
+<h2>Visualize SHAP Values Correct Predictions<a class="headerlink" href="#Visualize-SHAP-Values-Correct-Predictions" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def make_predictions(X_batch_text):
+    X_batch = vectorizer.transform(X_batch_text).toarray()
+    preds = model.predict(X_batch)
+    return preds
+
+partition_explainer = attributions.partition_text_explainer(make_predictions, selected_categories, X_batch_text, r&quot;\W+&quot;)
+</pre></div>
+</div>
+</div>
+<section id="Text-Plot">
+<h3>Text Plot<a class="headerlink" href="#Text-Plot" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>partition_explainer.visualize()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Bar-Plots">
+<h3>Bar Plots<a class="headerlink" href="#Bar-Plots" title="Link to this heading"></a></h3>
+<section id="Bar-Plot-1">
+<h4>Bar Plot 1<a class="headerlink" href="#Bar-Plot-1" title="Link to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>shap.plots.bar(shap_values[0,:, selected_categories[preds[0]]], max_display=15,
+               order=shap.Explanation.argsort.flip)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Bar-Plot-2">
+<h3>Bar Plot 2<a class="headerlink" href="#Bar-Plot-2" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>shap.plots.bar(shap_values[1,:, selected_categories[preds[1]]], max_display=15,
+               order=shap.Explanation.argsort.flip)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Waterfall-Plots">
+<h2>Waterfall Plots<a class="headerlink" href="#Waterfall-Plots" title="Link to this heading"></a></h2>
+<section id="Waterfall-Plot-1">
+<h3>Waterfall Plot 1<a class="headerlink" href="#Waterfall-Plot-1" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>shap.waterfall_plot(shap_values[0][:, selected_categories[preds[0]]], max_display=15)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Waterfall-Plot-2">
+<h3>Waterfall Plot 2<a class="headerlink" href="#Waterfall-Plot-2" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>shap.waterfall_plot(shap_values[1][:, selected_categories[preds[1]]], max_display=15)
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Force-Plot">
+<h2>Force Plot<a class="headerlink" href="#Force-Plot" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import re
+tokens = re.split(&quot;\W+&quot;, X_batch_text[0].lower())
+shap.initjs()
+shap.force_plot(shap_values.base_values[0][preds[0]], shap_values[0][:, preds[0]].values,
+                feature_names = tokens[:-1], out_names=selected_categories[preds[0]])
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

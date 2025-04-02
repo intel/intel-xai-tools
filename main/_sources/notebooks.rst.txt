@@ -26,5 +26,9 @@ Model Card Generator Notebooks
    :doc:`Generating a Model Card with PyTorch<notebooks/adult-pytorch-model-card>`, "Numerical/Categorical: Tabular Classification", "PyTorch, TensorFlow and Intel Explainable AI API"
    :doc:`Detecting Issues in Fairness by Generate Model Card from TensorFlow Estimators<notebooks/compas-model-card-tfx>`, "Numerical/Categorical: Tabular Classification", "TensorFlow & Intel Explainable AI API"
    :doc:`Creating Model Card for Toxic Comments Classification in TensorFlow<notebooks/toxicity-tfma-model-card>`, "Numerical/Categorical: Tabular Classification", "TensorFlow and Intel Explainable AI API"
+   :doc:`Creating Model Card for Hate Speech Detection using Hugging Face model<notebooks/huggingface-model-card>`, "Numerical/Categorical: Tabular Classification", "PyTorch, HuggingFace and Intel Explainable AI API"
+   :doc:`Multiclass classification of Hate Speech using Hugging Face model<notebooks/multiclass-huggingface-model-card>`, "CV: Image Classification", "PyTorch & Intel Explainable AI API"
+   :doc:`Image classification of Deepfake images using Torchvision model<notebooks/image-classification-model-card>`, "CV: Image Classification", "PyTorch and Intel Explainable AI API"
+   :doc:`Multimodal classification of Hateful Meme text and images<notebooks/multimodal-classification-model-card>`, "CV: Image Classification & NLP: Text Classification", "PyTorch, HuggingFace and Intel Explainable AI API"
 
 \*Other names and brands may be claimed as the property of others. `Trademarks <http://www.intel.com/content/www/us/en/legal/trademarks.html>`_

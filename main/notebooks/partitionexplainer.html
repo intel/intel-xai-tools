@@ -1,28 +1,27 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Explaining Custom NN NewsGroups Classification Using the Attributions Explainer &mdash; Intel® Explainable AI Tools 1.2.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Explaining Custom NN NewsGroups Classification Using the Attributions Explainer &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
   
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=6efca38a"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../_static/design-tabs.js?v=36754332"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -39,9 +38,6 @@
           <a href="../index.html" class="icon icon-home">
             Intel® Explainable AI Tools
           </a>
-              <div class="version">
-                1.2.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -93,8 +89,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">intel_ai_safety.explainer.attributions</span> <span class="kn">import</span> <span class="n">attributions</span>
-<span class="kn">from</span> <span class="nn">intel_ai_safety.explainer.metrics</span> <span class="kn">import</span> <span class="n">metrics</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from intel_ai_safety.explainer.attributions import attributions
+from intel_ai_safety.explainer.metrics import metrics
 </pre></div>
 </div>
 </div>
@@ -102,32 +98,32 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;KMP_WARNINGS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;off&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import warnings
+warnings.filterwarnings(&#39;ignore&#39;)
+import os
+os.environ[&#39;KMP_WARNINGS&#39;] = &#39;off&#39;
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+import numpy as np
+from sklearn import datasets
 
-<span class="n">all_categories</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;alt.atheism&#39;</span><span class="p">,</span><span class="s1">&#39;comp.graphics&#39;</span><span class="p">,</span><span class="s1">&#39;comp.os.ms-windows.misc&#39;</span><span class="p">,</span><span class="s1">&#39;comp.sys.ibm.pc.hardware&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;comp.sys.mac.hardware&#39;</span><span class="p">,</span><span class="s1">&#39;comp.windows.x&#39;</span><span class="p">,</span> <span class="s1">&#39;misc.forsale&#39;</span><span class="p">,</span><span class="s1">&#39;rec.autos&#39;</span><span class="p">,</span><span class="s1">&#39;rec.motorcycles&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;rec.sport.baseball&#39;</span><span class="p">,</span><span class="s1">&#39;rec.sport.hockey&#39;</span><span class="p">,</span><span class="s1">&#39;sci.crypt&#39;</span><span class="p">,</span><span class="s1">&#39;sci.electronics&#39;</span><span class="p">,</span><span class="s1">&#39;sci.med&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;sci.space&#39;</span><span class="p">,</span><span class="s1">&#39;soc.religion.christian&#39;</span><span class="p">,</span><span class="s1">&#39;talk.politics.guns&#39;</span><span class="p">,</span><span class="s1">&#39;talk.politics.mideast&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;talk.politics.misc&#39;</span><span class="p">,</span><span class="s1">&#39;talk.religion.misc&#39;</span><span class="p">]</span>
+all_categories = [&#39;alt.atheism&#39;,&#39;comp.graphics&#39;,&#39;comp.os.ms-windows.misc&#39;,&#39;comp.sys.ibm.pc.hardware&#39;,
+                  &#39;comp.sys.mac.hardware&#39;,&#39;comp.windows.x&#39;, &#39;misc.forsale&#39;,&#39;rec.autos&#39;,&#39;rec.motorcycles&#39;,
+                  &#39;rec.sport.baseball&#39;,&#39;rec.sport.hockey&#39;,&#39;sci.crypt&#39;,&#39;sci.electronics&#39;,&#39;sci.med&#39;,
+                  &#39;sci.space&#39;,&#39;soc.religion.christian&#39;,&#39;talk.politics.guns&#39;,&#39;talk.politics.mideast&#39;,
+                  &#39;talk.politics.misc&#39;,&#39;talk.religion.misc&#39;]
 
-<span class="n">selected_categories</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;alt.atheism&#39;</span><span class="p">,</span><span class="s1">&#39;comp.graphics&#39;</span><span class="p">,</span><span class="s1">&#39;rec.motorcycles&#39;</span><span class="p">,</span><span class="s1">&#39;sci.space&#39;</span><span class="p">,</span><span class="s1">&#39;talk.politics.misc&#39;</span><span class="p">]</span>
+selected_categories = [&#39;alt.atheism&#39;,&#39;comp.graphics&#39;,&#39;rec.motorcycles&#39;,&#39;sci.space&#39;,&#39;talk.politics.misc&#39;]
 
-<span class="n">X_train_text</span><span class="p">,</span> <span class="n">Y_train</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="n">selected_categories</span><span class="p">,</span> <span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">X_test_text</span> <span class="p">,</span> <span class="n">Y_test</span>  <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="n">selected_categories</span><span class="p">,</span> <span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+X_train_text, Y_train = datasets.fetch_20newsgroups(subset=&quot;train&quot;, categories=selected_categories, return_X_y=True)
+X_test_text , Y_test  = datasets.fetch_20newsgroups(subset=&quot;test&quot;, categories=selected_categories, return_X_y=True)
 
-<span class="n">X_train_text</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_train_text</span><span class="p">)</span>
-<span class="n">X_test_text</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_test_text</span><span class="p">)</span>
+X_train_text = np.array(X_train_text)
+X_test_text = np.array(X_test_text)
 
-<span class="n">classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">Y_train</span><span class="p">)</span>
-<span class="n">mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">selected_categories</span><span class="p">))</span>
+classes = np.unique(Y_train)
+mapping = dict(zip(classes, selected_categories))
 
-<span class="nb">len</span><span class="p">(</span><span class="n">X_train_text</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_test_text</span><span class="p">),</span> <span class="n">classes</span><span class="p">,</span> <span class="n">mapping</span>
+len(X_train_text), len(X_test_text), classes, mapping
 </pre></div>
 </div>
 </div>
@@ -137,19 +133,19 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sklearn</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span><span class="p">,</span> <span class="n">TfidfVectorizer</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import sklearn
+import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
-<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">max_features</span><span class="o">=</span><span class="mi">50000</span><span class="p">)</span>
+vectorizer = TfidfVectorizer(max_features=50000)
 
-<span class="n">vectorizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X_train_text</span><span class="p">,</span> <span class="n">X_test_text</span><span class="p">)))</span>
-<span class="n">X_train</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train_text</span><span class="p">)</span>
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test_text</span><span class="p">)</span>
+vectorizer.fit(np.concatenate((X_train_text, X_test_text)))
+X_train = vectorizer.transform(X_train_text)
+X_test = vectorizer.transform(X_test_text)
 
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">X_test</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+X_train, X_test = X_train.toarray(), X_test.toarray()
 
-<span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">X_test</span><span class="o">.</span><span class="n">shape</span>
+X_train.shape, X_test.shape
 </pre></div>
 </div>
 </div>
@@ -160,18 +156,18 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tensorflow.keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
-<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">layers</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from tensorflow.keras.models import Sequential
+from tensorflow.keras import layers
 
-<span class="k">def</span> <span class="nf">create_model</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">Sequential</span><span class="p">([</span>
-                        <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span>
-                        <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">),</span>
-                        <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">),</span>
-                        <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;softmax&quot;</span><span class="p">),</span>
-                    <span class="p">])</span>
+def create_model():
+    return Sequential([
+                        layers.Input(shape=X_train.shape[1:]),
+                        layers.Dense(128, activation=&quot;relu&quot;),
+                        layers.Dense(64, activation=&quot;relu&quot;),
+                        layers.Dense(len(classes), activation=&quot;softmax&quot;),
+                    ])
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">()</span>
+model = create_model()
 <br/><br/></pre></div>
 </div>
 </div>
@@ -179,7 +175,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.summary()
 </pre></div>
 </div>
 </div>
@@ -190,8 +186,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;adam&quot;</span><span class="p">,</span> <span class="s2">&quot;sparse_categorical_crossentropy&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
-<span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model.compile(&quot;adam&quot;, &quot;sparse_categorical_crossentropy&quot;, metrics=[&quot;accuracy&quot;])
+history = model.fit(X_train, Y_train, batch_size=256, epochs=5, validation_data=(X_test, Y_test))
 </pre></div>
 </div>
 </div>
@@ -202,12 +198,12 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
-<span class="n">train_preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-<span class="n">test_preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.metrics import accuracy_score
+train_preds = model.predict(X_train)
+test_preds = model.predict(X_test)
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Train Accuracy : </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">train_preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test  Accuracy : </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">test_preds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))))</span>
+print(&quot;Train Accuracy : {:.3f}&quot;.format(accuracy_score(Y_train, np.argmax(train_preds, axis=1))))
+print(&quot;Test  Accuracy : {:.3f}&quot;.format(accuracy_score(Y_test, np.argmax(test_preds, axis=1))))
 </pre></div>
 </div>
 </div>
@@ -215,9 +211,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">test_preds</span><span class="p">,</span> <span class="n">selected_categories</span><span class="p">)</span>
-<span class="n">cm</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cm = metrics.confusion_matrix(Y_test, test_preds, selected_categories)
+cm.visualize()
+print(cm.report)
 </pre></div>
 </div>
 </div>
@@ -225,8 +221,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">test_preds</span><span class="p">,</span> <span class="n">selected_categories</span><span class="p">)</span>
-<span class="n">plotter</span><span class="o">.</span><span class="n">pr_curve</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter = metrics.plot(Y_test, test_preds, selected_categories)
+plotter.pr_curve()
 </pre></div>
 </div>
 </div>
@@ -234,7 +230,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plotter.roc_curve()
 </pre></div>
 </div>
 </div>
@@ -242,22 +238,22 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import re
 
-<span class="n">X_batch_text</span> <span class="o">=</span> <span class="n">X_test_text</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-<span class="n">X_batch</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+X_batch_text = X_test_text[1:3]
+X_batch = X_test[1:3]
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Samples : &quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">X_batch_text</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W+&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">()</span>
+print(&quot;Samples : &quot;)
+for text in X_batch_text:
+    print(re.split(r&quot;\W+&quot;, text))
+    print()
 
-<span class="n">preds_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_batch</span><span class="p">)</span>
-<span class="n">preds</span> <span class="o">=</span> <span class="n">preds_proba</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+preds_proba = model.predict(X_batch)
+preds = preds_proba.argmax(axis=1)
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Actual    Target Values : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">([</span><span class="n">selected_categories</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">Y_test</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]]))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted Target Values : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">([</span><span class="n">selected_categories</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">preds</span><span class="p">]))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted Probabilities : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">preds_proba</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+print(&quot;Actual    Target Values : {}&quot;.format([selected_categories[target] for target in Y_test[1:3]]))
+print(&quot;Predicted Target Values : {}&quot;.format([selected_categories[target] for target in preds]))
+print(&quot;Predicted Probabilities : {}&quot;.format(preds_proba.max(axis=1)))
 </pre></div>
 </div>
 </div>
@@ -271,12 +267,12 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_predictions</span><span class="p">(</span><span class="n">X_batch_text</span><span class="p">):</span>
-    <span class="n">X_batch</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_batch_text</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
-    <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_batch</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">preds</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def make_predictions(X_batch_text):
+    X_batch = vectorizer.transform(X_batch_text).toarray()
+    preds = model.predict(X_batch)
+    return preds
 
-<span class="n">partition_explainer</span> <span class="o">=</span> <span class="n">attributions</span><span class="o">.</span><span class="n">partition_text_explainer</span><span class="p">(</span><span class="n">make_predictions</span><span class="p">,</span> <span class="n">selected_categories</span><span class="p">,</span> <span class="n">X_batch_text</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\W+&quot;</span><span class="p">)</span>
+partition_explainer = attributions.partition_text_explainer(make_predictions, selected_categories, X_batch_text, r&quot;\W+&quot;)
 </pre></div>
 </div>
 </div>
@@ -286,7 +282,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">partition_explainer</span><span class="o">.</span><span class="n">visualize</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>partition_explainer.visualize()
 </pre></div>
 </div>
 </div>
@@ -299,8 +295,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]],</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-               <span class="n">order</span><span class="o">=</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="o">.</span><span class="n">argsort</span><span class="o">.</span><span class="n">flip</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>shap.plots.bar(shap_values[0,:, selected_categories[preds[0]]], max_display=15,
+               order=shap.Explanation.argsort.flip)
 </pre></div>
 </div>
 </div>
@@ -312,8 +308,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">1</span><span class="p">]]],</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-               <span class="n">order</span><span class="o">=</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="o">.</span><span class="n">argsort</span><span class="o">.</span><span class="n">flip</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>shap.plots.bar(shap_values[1,:, selected_categories[preds[1]]], max_display=15,
+               order=shap.Explanation.argsort.flip)
 </pre></div>
 </div>
 </div>
@@ -327,7 +323,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]],</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>shap.waterfall_plot(shap_values[0][:, selected_categories[preds[0]]], max_display=15)
 </pre></div>
 </div>
 </div>
@@ -338,7 +334,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span> <span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">1</span><span class="p">]]],</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>shap.waterfall_plot(shap_values[1][:, selected_categories[preds[1]]], max_display=15)
 </pre></div>
 </div>
 </div>
@@ -350,11 +346,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="n">tokens</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;\W+&quot;</span><span class="p">,</span> <span class="n">X_batch_text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-<span class="n">shap</span><span class="o">.</span><span class="n">initjs</span><span class="p">()</span>
-<span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="o">.</span><span class="n">base_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-                <span class="n">feature_names</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">out_names</span><span class="o">=</span><span class="n">selected_categories</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import re
+tokens = re.split(&quot;\W+&quot;, X_batch_text[0].lower())
+shap.initjs()
+shap.force_plot(shap_values.base_values[0][preds[0]], shap_values[0][:, preds[0]].values,
+                feature_names = tokens[:-1], out_names=selected_categories[preds[0]])
 </pre></div>
 </div>
 </div>

@@ -1,25 +1,24 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Intel® Explainable AI Tools &mdash; Intel® Explainable AI Tools 1.2.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Intel® Explainable AI Tools &mdash; Intel® Explainable AI Tools 1.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=6efca38a"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/design-tabs.js?v=36754332"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,9 +36,6 @@
           <a href="#" class="icon icon-home">
             Intel® Explainable AI Tools
           </a>
-              <div class="version">
-                1.2.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -93,7 +89,7 @@
 <p>The Intel Explainable AI Tools are designed to help users detect and mitigate against issues of fairness and interpretability, while running best on Intel hardware.
 There are two Python* components in the repository:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#model_card_gen"><span class="xref myst">Model Card Generator</span></a></p>
+<li><p><a class="reference internal" href="model_card_gen/index.html"><span class="xref myst">Model Card Generator</span></a></p>
 <ul>
 <li><p>Creates interactive HTML reports containing model performance and fairness metrics</p></li>
 </ul>
@@ -102,9 +98,9 @@ There are two Python* components in the repository:</p>
 <ul>
 <li><p>Runs post-hoc model distillation and visualization methods to examine predictive behavior for both TensorFlow* and PyTorch* models via a simple Python API including the following modules:</p>
 <ul>
-<li><p><a class="reference internal" href="#plugins/explainers/attributions"><span class="xref myst">Attributions</span></a>: Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions</p></li>
-<li><p><a class="reference internal" href="#plugins/explainers/cam-pytorch"><span class="xref myst">CAM (Class Activation Mapping)</span></a>: Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping</p></li>
-<li><p><a class="reference internal" href="#plugins/explainers/metrics"><span class="xref myst">Metrics</span></a>: Gain insight into models with the measurements and visualizations needed during the machine learning workflow</p></li>
+<li><p><a class="reference internal" href="explainer/attributions.html"><span class="xref myst">Attributions</span></a>: Visualize negative and positive attributions of tabular features, pixels, and word tokens for predictions</p></li>
+<li><p><a class="reference internal" href="explainer/cam.html"><span class="xref myst">CAM (Class Activation Mapping)</span></a>: Create heatmaps for CNN image classifications using gradient-weight class activation CAM mapping</p></li>
+<li><p><a class="reference internal" href="explainer/metrics.html"><span class="xref myst">Metrics</span></a>: Gain insight into models with the measurements and visualizations needed during the machine learning workflow</p></li>
 </ul>
 </li>
 </ul>
@@ -116,8 +112,8 @@ There are two Python* components in the repository:</p>
 <section id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>Linux system or WSL2 on Windows (validated on Ubuntu* 20.04/22.04 LTS)</p></li>
-<li><p>Python 3.9, 3.10</p></li>
+<li><p>Linux system or WSL2 on Windows (validated on Ubuntu* 22.04/24.04 LTS)</p></li>
+<li><p>Python 3.10, 3.11</p></li>
 <li><p>Install required OS packages with <code class="docutils literal notranslate"><span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">build-essential</span> <span class="pre">python3-dev</span></code></p></li>
 <li><p>git (only required for the “Developer Installation”)</p></li>
 <li><p>Poetry</p></li>
@@ -186,7 +182,7 @@ a. Using <code class="docutils literal notranslate"><span class="pre">virtualenv
 </pre></div>
 </div>
 <p>b. Or <code class="docutils literal notranslate"><span class="pre">conda</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>xai_env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>xai_env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
 conda<span class="w"> </span>activate<span class="w"> </span>xai_env
 </pre></div>
 </div>
@@ -237,7 +233,7 @@ suggestion or bug report, search the existing GitHub issues to see if your issue
 </section>
 <section id="datasets-and-models">
 <h3>Datasets and Models<a class="headerlink" href="#datasets-and-models" title="Link to this heading"></a></h3>
-<p>To the extent that any data, datasets, or models are referenced by Intel or accessed using tools or code on this site such data, datasets and models are provided by the third party indicated as the source of such content. Intel does not create the data, datasets, or models, provide a license to any third-party data, datasets, or models referenced, and does not warrant their accuracy or quality. By accessing such data, dataset(s) or model(s) you agree to the terms associated with that content and that your use complies with the applicable license. <a class="reference internal" href="datasets.html"><span class="doc std std-doc">DATASETS</span></a>, <a class="reference internal" href="#MODELS.md"><span class="xref myst">MODELS</span></a></p>
+<p>To the extent that any data, datasets, or models are referenced by Intel or accessed using tools or code on this site such data, datasets and models are provided by the third party indicated as the source of such content. Intel does not create the data, datasets, or models, provide a license to any third-party data, datasets, or models referenced, and does not warrant their accuracy or quality. By accessing such data, dataset(s) or model(s) you agree to the terms associated with that content and that your use complies with the applicable license. <a class="reference internal" href="datasets.html"><span class="doc std std-doc">DATASETS</span></a>, <a class="reference internal" href="models.html"><span class="doc std std-doc">MODELS</span></a></p>
 <p>Intel expressly disclaims the accuracy, adequacy, or completeness of any data, datasets or models, and is not liable for any errors, omissions, or defects in such content, or for any reliance thereon. Intel also expressly disclaims any warranty of non-infringement with respect to such data, dataset(s), or model(s). Intel is not liable for any liability or damages relating to your use of such data, datasets, or models.</p>
 </section>
 </section>
