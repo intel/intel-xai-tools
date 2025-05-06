@@ -44,7 +44,7 @@ docker run --disable-content-trust ${DOCKER_RUN_ENVS} \
     --cap-add=sys_nice \
     --net=host \
     --ipc=host \
-    vault.habana.ai/gaudi-docker/1.19.2/ubuntu22.04/habanalabs/pytorch-installer-2.5.1
+    vault.habana.ai/gaudi-docker/1.20.1/ubuntu22.04/habanalabs/pytorch-installer-2.6.0
 ```
 
 ### Evaluation

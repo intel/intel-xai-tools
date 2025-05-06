@@ -30,8 +30,8 @@ optional = true
 pytest = "8.3.5"
 pytest-cov = "6.0.0"
 tensorflow-cpu = "2.17.1"
-torch = {version = "2.5.1", source = "pytorch-cpu"}
-torchvision = {version = "0.20.1", source = "pytorch-cpu"}
+torch = {version = "2.6.0", source = "pytorch-cpu"}
+torchvision = {version = "0.21.0", source = "pytorch-cpu"}
 
 [[tool.poetry.source]]
 name = "PyPI"

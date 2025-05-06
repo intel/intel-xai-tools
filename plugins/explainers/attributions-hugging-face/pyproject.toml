@@ -25,7 +25,7 @@ matplotlib = "*"
 pytest = "8.3.5"
 pytest-cov = "6.0.0"
 sentencepiece = "0.2.0"
-torch = {version = "2.5.1", source = "pytorch-cpu"}
+torch = {version = "2.6.0", source = "pytorch-cpu"}
 transformers = "4.49.0"
 
 [[tool.poetry.source]]
