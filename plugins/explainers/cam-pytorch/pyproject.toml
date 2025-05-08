@@ -14,7 +14,7 @@ intel-ai-safety-explainer = {version = "*"}
 grad-cam = "1.5.4"
 numpy = "1.26.4"
 opencv-python = "4.11.0.86"
-torch = {version = "2.6.0", source = "pytorch-cpu"}
+torch = {version = "2.7.0", source = "pytorch-cpu"}
 
 [tool.poetry.group.local.dependencies]
 intel-ai-safety-explainer = {path = "../../../explainer"}
@@ -26,7 +26,7 @@ optional = true
 [tool.poetry.group.test.dependencies]
 pytest = "8.3.5"
 pytest-cov = "6.0.0"
-torchvision = {version = "0.21.0", source = "pytorch-cpu"}
+torchvision = {version = "0.22.0", source = "pytorch-cpu"}
 
 [[tool.poetry.source]]
 name = "pytorch-cpu"

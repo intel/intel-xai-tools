@@ -161,3 +161,6 @@ poetry.lock
 
 # Fuzzing crash reports
 **/**crash-**
+
+# Test data files
+mnist_data
