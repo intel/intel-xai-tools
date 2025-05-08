@@ -17,7 +17,7 @@ numpy = "1.26.4"
 opencv-python = "4.11.0.86"
 plotly = "6.0.0"
 shap = "0.47.0"
-transformers = "4.49.0"
+transformers = "4.50.0"
 
 [tool.poetry.group.local.dependencies]
 intel-ai-safety-explainer = {path = "../../../explainer"}

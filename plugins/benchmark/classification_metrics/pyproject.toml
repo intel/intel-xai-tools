@@ -18,7 +18,7 @@ pandas = "2.2.3"
 scikit-learn = "1.6.1"
 torchmetrics = "*"
 torch = {version = "2.6.0", source = "pytorch-cpu"}
-transformers = "4.49.0"
+transformers = "4.50.0"
 
 [tool.poetry.group.test]
 optional = true
